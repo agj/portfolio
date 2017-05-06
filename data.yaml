@@ -1,15 +1,26 @@
 ---
+
+# Settings.
+
+settings:
+   defaultLanguageName: English
+   languages:
+      # abbr: full name         # The abbreviation will be used to identify the language throughout this document.
+      es: español
+
+#####################################################################
+
+# General values.
+
 general:
    categoryNames:
       int: interactive
       vis: static visual
-      av: audiovisual
-   filterLabel: filter works by
-   defaultLanguageName: English
-   languages:
-      es: español
+      av:  audiovisual
+   filterLabel: only show works of type
+   title: Ale Grilli's portfolio
    presentation: >
-                 I'm <span class="me">Alejandro Grilli J.</span>,
+                 I'm <span class="me">Ale Grilli</span>,
                  a Chilean visual designer and creative coder who enjoys working in cultural and educational projects.
                  Below is a selection of mostly personal projects I have worked on.
                  You may contact me via alejandro¶agj.cl
@@ -23,47 +34,76 @@ general:
                  <span class="small">(replace ¶ with @)</span>.</p>
                  <p>Oh, you may also just go back to <a href="http://www.agj.cl/">agj.cl</a>.
    readMore: Read more about it.
-   translation:
-      es:
-         general:
-            categoryNames:
-               vis: visual estático
-               int: interactivo
-            filterLabel: filtrar según
-            presentation: >
-                          Soy <span class="me">Alejandro Grilli J.</span>,
-                          diseñador visual y programador creativo chileno que gusta de participar en proyectos culturales y educativos.
-                          Aquí puedes ver una selección de proyectos que he hecho, principalmente personales.
-                          Contáctame a través de alejandro¶agj.cl
-                          <span class="small">(cambia ¶ por @)</span>.
-            closing :     >
-                          Gracias por darte el tiempo de mirar mi portafolio.
-                          Si estás interesado en ver más de lo que hago, revisa mi
-                          <a href="http://blog.agj.cl/">blog</a>
-                          o mi <a href="http://piclog.agj.cl/">piclog</a>.
-                          Vale repetir que puedes contactarme por medio de alejandro¶agj.cl
-                          <span class="small">(cambia ¶ por @)</span>.</p>
-                          <p>Ah, y también puedes simplemente volver a
-                          <a href="http://www.agj.cl/">agj.cl</a>.
-            readMore:     Lee más al respecto.
-            readMoreNonTranslated: Lee más al respecto (en inglés).
-         works:
-            type:
-               video game:               videojuego
-               animation:                animación
-               motion graphics:          gráfica animada
-               illustration:             ilustración
-               interactive piece:        pieza interactiva
-               interactive installation: instalación interactiva
-            links:
-               play:        jugar
-               watch:       ver
-               watch video: ver video
-               download:    descargar
-               view:        ver
-               view 1:      ver 1
+
+#####################################################################
+
+# Translations not specific to any work.
+
+translation:
+   
+   # langAbbr:
+   #    general:
+   #       property1: translated value a
+   #       # ...
+   #    works:      # Default translations for works. Can be overridden in work itself.
+   #       property2: translated value b
+   #       # ...
+   
+   es:
+      general:
+         categoryNames:
+            vis: visual estático
+            int: interactivo
+         filterLabel: sólo mostrar de tipo
+         title: Portafolio de Ale Grilli
+         presentation: >
+                       Soy <span class="me">Ale Grilli</span>,
+                       diseñador visual y programador creativo chileno que gusta de participar en proyectos culturales y educativos.
+                       Aquí puedes ver una selección de proyectos que he hecho, principalmente personales.
+                       Contáctame a través de alejandro¶agj.cl
+                       <span class="small">(cambia ¶ por @)</span>.
+         closing:      >
+                       Gracias por darte el tiempo de mirar mi portafolio.
+                       Si estás interesado en ver más de lo que hago, revisa mi
+                       <a href="http://blog.agj.cl/">blog</a>
+                       o mi <a href="http://piclog.agj.cl/">piclog</a>.
+                       Vale repetir que puedes contactarme por medio de alejandro¶agj.cl
+                       <span class="small">(cambia ¶ por @)</span>.</p>
+                       <p>Ah, y también puedes simplemente volver a
+                       <a href="http://www.agj.cl/">agj.cl</a>.
+         readMore:     Lee más al respecto.
+         readMoreNonTranslated: Lee más al respecto (en inglés).
+      works:
+         type:
+            video game:               videojuego
+            animation:                animación
+            motion graphics:          gráfica animada
+            illustration:             ilustración
+            interactive piece:        pieza interactiva
+            interactive installation: instalación interactiva
+         links:
+            play:        jugar
+            watch:       ver
+            watch video: ver video
+            download:    descargar
+            view:        ver
+            view 1:      ver 1
+
+#####################################################################
+
+# Works.
 
 works:
+   
+   # workID:
+   #    property1: value a
+   #    property2: value b
+   #    # ...
+   #    translation:
+   #       langAbbr:
+   #          property1: translated value a
+   #          # ...
+   
    jugosacocina:
       name:        Jugosa cocina para niños
       category:    vis

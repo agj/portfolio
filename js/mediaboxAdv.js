@@ -874,7 +874,7 @@ var Mediabox;
 			media.setStyles({backgroundImage: "none", display: ""});
 			preload.inject(media);
 //			preload;
-		} else if (mediaType == "ios" || Browser.Platform.ios) {
+		} else if (mediaType == "ios") { // || Browser.Platform.ios) {
 			media.setStyles({backgroundImage: "none", display: ""});
 			media.set('html', options.linkText.replace(/\{x\}/gi, URL));
 			mediaWidth = options.DefaultWidth;

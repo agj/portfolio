@@ -1,5 +1,8 @@
 <?php
 
+//error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_DEPRECATED | E_WARNING);
+//error_reporting(E_ALL);
+
 include 'php/spyc.php';
 include 'php/classes.php';
 include 'php/parser.php';
@@ -10,7 +13,7 @@ $language = $_REQUEST['lang'];
 
 $yaml = Spyc::YAMLLoad('data.yaml');
 
-$works = Parser::getWorks($yaml);
+$works = Parser::getWorks($yaml, $language);
 $w;
 
 // Header. Breaks stuff with the mediabox crap. :/
@@ -24,7 +27,7 @@ $w;
 <head>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 
-	<title>Alejandro Grilli J.'s portfolio</title>
+	<title><?php echo Parser::getGeneralValue($yaml, $language, 'title'); ?></title>
 	<meta name="description" content="Alejandro Grilli J.'s portfolio" />
 	<link rel="icon" type="image/gif" href="/icon.gif" />
 	
@@ -41,11 +44,11 @@ $w;
 
 <!-- Presentation -->
 <?php
-	if ($yaml["general"]["languages"]) {
+	if ($yaml["settings"]["languages"]) {
 		echo '<div id="languages">';
-		if ($language && $yaml["general"]["languages"][$language])
-			echo '<a href="./">&rarr; ' . $yaml["general"]["defaultLanguageName"] . '</a>';
-		foreach ($yaml["general"]["languages"] as $lang => $langName) {
+		if ($language && $yaml["settings"]["languages"][$language])
+			echo '<a href="./">&rarr; ' . $yaml["settings"]["defaultLanguageName"] . '</a>';
+		foreach ($yaml["settings"]["languages"] as $lang => $langName) {
 			if ($lang != $language)
 				echo '<a href="?lang=' . $lang . '">&rarr; ' . $langName . '</a>';
 		}
@@ -54,7 +57,7 @@ $w;
 ?>
 
 <div id="top" class="text">
-<p><?php echo Parser::getGeneralValue($yaml, 'presentation'); ?></p>
+<p><?php echo Parser::getGeneralValue($yaml, $language, 'presentation'); ?></p>
 </div>
 
 <!-- Filter -->
@@ -62,9 +65,9 @@ $w;
 <div id="filter" class="text">
 <?php
 	
-	echo ' ' . Parser::getGeneralValue($yaml, 'filterLabel') . $br;
+	echo ' ' . Parser::getGeneralValue($yaml, $language, 'filterLabel') . $br;
 
-	$categories = Parser::getCategories($yaml);
+	$categories = Parser::getCategories($yaml, $language);
 	
 	foreach ($categories as $cat) {
 		echo '	<label>' . $br;
@@ -114,7 +117,7 @@ foreach ($works as $w) {
 
 
 <div id="bottom" class="text">
-	<p><?php echo Parser::getGeneralValue($yaml, 'closing'); ?></p>
+	<p><?php echo Parser::getGeneralValue($yaml, $language, 'closing'); ?></p>
 </div>
 
 
