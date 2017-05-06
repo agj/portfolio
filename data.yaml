@@ -88,7 +88,15 @@ works:
       year:        2008
       image:       campodecolor.png
       readMore:    http://blog.agj.cl/tag/campodecolor/
-      description: Prototype for my undergraduate thesis project. An experimental videogame that offers the barest elements for making visual compositions, and attempts to evaluate their compositive parameters.</p><p>Click on the animated picture to start. In the center, a canvas that can be filled with the circles to the right, by drag-and-dropping them. Below, a rough (and inaccurate, in this prototype) analysis of some compositive values: color temperature, symmetry, visual rhythm, and visual accent.
+      description: >
+                   Prototype for my undergraduate thesis project.
+                   An experimental videogame that offers the barest elements for making visual compositions,
+                   and attempts to evaluate their compositive parameters.</p>
+                   <p>Click on the animated picture to start.
+                   In the center, a canvas that can be filled with the circles to the right,
+                   by drag-and-dropping them.
+                   Below, a rough (and inaccurate, in this prototype) analysis of some compositive values:
+                   color temperature, symmetry, visual rhythm, and visual accent.
       links:
          play:
             url:   http://www.agj.cl/files/games/campodecolor1/
@@ -96,7 +104,16 @@ works:
       translation:
          es:
             readMore:    http://blog.agj.cl/tag/campodecolor/
-            description: Prototipo para mi proyecto de titulación. Un videojuego experimental que entrega los más mínimos elementos para realizar una composición visual, e intenta hacer una evaluación de sus parámetros compositivos.</p><p>Primero haz click en la imagen animada para comenzar. En el centro, un lienzo que puede ser llenado con los círculos de la derecha, arrastrándolos. Abajo, un aproximado (y poco certero, en este prototipo) análisis de algunos valores compositivos: temperatura del color, simetría, ritmo visual y acento visual.
+            description: >
+                         Prototipo para mi proyecto de titulación.
+                         Un videojuego experimental que entrega los más mínimos elementos
+                         para realizar una composición visual,
+                         e intenta hacer una evaluación de sus parámetros compositivos.</p>
+                         <p>Primero haz click en la imagen animada para comenzar.
+                         En el centro, un lienzo que puede ser llenado con los círculos de la derecha,
+                         arrastrándolos. Abajo, un aproximado (y poco certero, en este prototipo)
+                         análisis de algunos valores compositivos:
+                         temperatura del color, simetría, ritmo visual y acento visual.
    woodenstill:
       name:        Wooden still
       category:    av
@@ -165,7 +182,7 @@ works:
          es:
             description: Video para una canción bastante improvisada, creada en conjunto con <a href="http://www.fireandrobot.com/">Matt Peter</a>. Hecho en dos días, utiliza fotos granulosas de álbum familiar para formar patrones que oscilan entre exhibir y ocultar a sus protagonistas, culminando en una secuencia nostálgica con características narrativas.
    doppelganger:
-      hide: Yes
+      hide: true
       name: Doppelganger
       category: int
       type: interactive piece
@@ -254,7 +271,7 @@ works:
             readMore:    http://blog.agj.cl/2008/12/illustrated-mythology/#more-52
             description: Diez ilustraciones de distintos seres mitológicos del folclor chileno, creados en la universidad para un libro titulado 'Diccionario de seres mitológicos en Chile'.
    heart:
-      hide:        Yes
+      hide:        true
       name:        Heart
       category:    int
       type:        interactive piece
@@ -289,7 +306,7 @@ works:
             readMore:    http://blog.agj.cl/2009/01/the-story-of-my-sneakers/#more-73
             description: Cortometraje sobre el ritual de una niña para lidiar con sus problemas, en donde la cámara de video hace de testigo.
    thelake:
-      hide:        Yes
+      hide:        true
       name:        The lake
       category:    int
       type:        video game

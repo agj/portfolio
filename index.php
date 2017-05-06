@@ -1,17 +1,20 @@
 <?php
 
-include 'classes.php';
-include 'parser.php';
+include 'php/spyc.php';
+include 'php/classes.php';
+include 'php/parser.php';
 
 $br = "\n";
 
 $language = $_REQUEST['lang'];
 
-$json = json_decode(file_get_contents('data.json'), false);
+$yaml = Spyc::YAMLLoad('data.yaml');
 
-$works = Parser::getWorks($json);
+$works = Parser::getWorks($yaml);
 $w;
 
+// Header. Breaks stuff with the mediabox crap. :/
+//header('Content-Type: application/xhtml+xml; charset=utf-8');
 
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -38,11 +41,11 @@ $w;
 
 <!-- Presentation -->
 <?php
-	if ($json->general->languages) {
+	if ($yaml["general"]["languages"]) {
 		echo '<div id="languages">';
-		if ($language && $json->general->languages->{$language})
-			echo '<a href="./">&rarr; ' . $json->general->defaultLanguageName . '</a>';
-		foreach ($json->general->languages as $lang => $langName) {
+		if ($language && $yaml["general"]["languages"][$language])
+			echo '<a href="./">&rarr; ' . $yaml["general"]["defaultLanguageName"] . '</a>';
+		foreach ($yaml["general"]["languages"] as $lang => $langName) {
 			if ($lang != $language)
 				echo '<a href="?lang=' . $lang . '">&rarr; ' . $langName . '</a>';
 		}
@@ -51,7 +54,7 @@ $w;
 ?>
 
 <div id="top" class="text">
-<p><?php echo Parser::getGeneralValue($json, 'presentation'); ?></p>
+<p><?php echo Parser::getGeneralValue($yaml, 'presentation'); ?></p>
 </div>
 
 <!-- Filter -->
@@ -59,9 +62,9 @@ $w;
 <div id="filter" class="text">
 <?php
 	
-	echo ' ' . Parser::getGeneralValue($json, 'filterLabel') . $br;
+	echo ' ' . Parser::getGeneralValue($yaml, 'filterLabel') . $br;
 
-	$categories = Parser::getCategories($json);
+	$categories = Parser::getCategories($yaml);
 	
 	foreach ($categories as $cat) {
 		echo '	<label>' . $br;
@@ -111,7 +114,7 @@ foreach ($works as $w) {
 
 
 <div id="bottom" class="text">
-	<p><?php echo Parser::getGeneralValue($json, 'closing'); ?></p>
+	<p><?php echo Parser::getGeneralValue($yaml, 'closing'); ?></p>
 </div>
 
 
