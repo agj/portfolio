@@ -14,43 +14,41 @@
 	<link rel="stylesheet" href="css/mediaboxAdvAgj.css" type="text/css" media="screen" />
 	<script src="js/mootools.js" type="text/javascript"></script>
 	<script src="js/mediaboxAdv.js" type="text/javascript"></script>
+	<script src="js/filter.js" type="text/javascript"></script>
 </head>
 
 <body>
 
 
 <!-- Presentation -->
-<a id="language" href="index.html">&rarr; English</a>
+<div id="languages">
+	<a href="index.html">&rarr; English</a>
+</div>
+
 <div id="top" class="text">
-<p>Soy <span class="me">Alejandro Grilli J.</span>, diseñador visual chileno que disfruta experimentando en medios audiovisuales e interactivos, y trabajando en proyectos culturales y educativos. He sido autor de videojuegos, videos y animaciones. Aquí puedes ver una selección de lo que he hecho. Contáctame a través de alejandro¶agj.cl <span class="small">(cambia ¶ por @)</span>.</p>
+<p>Soy <span class="me">Alejandro Grilli J.</span>, un diseñador visual chileno que disfruta experimentando en medios audiovisuales e interactivos, y trabajando en proyectos culturales y educativos. He sido autor de videojuegos, videos y animaciones. Aquí puedes ver una selección de proyectos que he hecho, principalmente personales. Contáctame a través de alejandro¶agj.cl <span class="small">(cambia ¶ por @)</span>.</p>
+</div>
+
+<!-- Filter -->
+<div id="filter" class="text">
+filtrar según
+<input id="check-int" type="checkbox" checked="checked" />
+	interactivo
+<input id="check-av" type="checkbox" checked="checked" />
+	audiovisual
+<input id="check-vis" type="checkbox" checked="checked" />
+	visual estática
 </div>
 
 
-<!-- PROSOPAMNESIA -->
-<div id="work-prosopamnesia" class="work">
-	<div class="name">
-		<h1>Prosopamnesia</h1>
-		<p>pieza interactiva</p>
-		<img alt="" src="img/prosopamnesia.jpg" />
-		<ul>
-			<li><a href="http://www.agj.cl/files/games/prosopamnesia/prosopamnesia.swf" rel="lightbox[prosopamnesia 360 450]">jugar</a></li>
-		</ul>
-	</div>
+<!--*************************************-->
 
-	<div class="description">
-		<p>Al mover el mouse se revela parcialmente lo que yace debajo de la imagen, pero aquello está constantemente cambiando. Utiliza Flash.</p>
-		<p>Lleva el nombre de una condición neuropsicológica, en la cual la persona carece de la capacidad de recordar rostros; mientras está en reproducción, esta obra emplea la búsqueda de imágenes de Google para hallar imágenes de rostros.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/tag/prosopamnesia/" target="_blank">Leer más al respecto (en inglés).</a></p>
-	</div>
-</div>
-
-<hr />
 
 <!-- JUGOSA COCINA -->
-<div id="work-jugosacocina" class="work">
+<div id="work-jugosacocina" class="work cat-vis">
 	<div class="name">
 		<h1>Jugosa cocina para niños</h1>
-		<p>dirección de arte</p>
+		<p>editorial <span class="year">2009</span></p>
 		<img alt="" src="img/jugosacocina.jpg" />
 		<ul>
 			<li><a href="http://piclog.agj.cl/images/20100105162252_jugosaportada.jpg" rel="lightbox[jugosa]">ver 1</a></li>
@@ -62,17 +60,97 @@
 
 	<div class="description">
 		<p>Un libro de cocina para niños, proyecto en el que ejercí como director de arte y diagramador.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/2010/01/cookbook-for-children/#language" target="_blank">Lee más al respecto.</a></p>
+		<p><a class="ext-link" href="http://blog.agj.cl/2010/01/cookbook-for-children/#language">Lee más al respecto.</a></p>
+	</div>
+</div>
+
+<hr />
+
+<!-- CAMPODECOLOR -->
+<div id="work-campodecolor" class="work cat-int">
+	<div class="name">
+		<h1>Campodecolor</h1>
+		<p>videojuego <span class="year">2008</span></p>
+		<img alt="" src="img/campodecolor.png" />
+		<ul>
+			<li><a href="http://www.agj.cl/files/games/campodecolor1/">jugar</a></li>
+		</ul>
+	</div>
+
+	<div class="description">
+		<p>Prototipo para mi proyecto de titulación. Un videojuego experimental que entrega los más mínimos elementos para realizar una composición visual, e intenta hacer una evaluación de sus parámetros compositivos.</p>
+		<p>Primero haz click en la imagen animada para comenzar. En el centro, un lienzo que puede ser llenado con los círculos de la derecha, arrastrándolos. Abajo, un aproximado (y poco certero, en este prototipo) análisis de algunos valores compositivos: temperatura del color, simetría, ritmo visual y acento visual.</p>
+		<p><a class="ext-link" href="http://blog.agj.cl/tag/campodecolor/">Lee más al respecto.</a></p>
+	</div>
+</div>
+
+<hr />
+
+<!-- WOODEN STILL -->
+<div id="work-woodenstill" class="work cat-av">
+	<div class="name">
+		<h1>Wooden still</h1>
+		<p>video <span class="year">2011</span></p>
+		<img alt="" src="img/woodenstill.jpg" />
+		<ul>
+			<li><a href="http://vimeo.com/19267207" rel="lightbox[woodenstill 640 360]">ver</a></li>
+		</ul>
+	</div>
+
+	<div class="description">
+		<p>Video atmosférico, creado a partir de secuencias de fotografías.</p>
+		<p><a class="ext-link" href="http://blog.agj.cl/2011/01/wooden-still/">Lee más al respecto (en inglés).</a></p>
+	</div>
+</div>
+
+<hr />
+
+<!-- RUNNERBY -->
+<div id="work-runnerby" class="work cat-int">
+	<div class="name">
+		<h1>Runnerby</h1>
+		<p>videojuego <span class="year">2010</span></p>
+		<img alt="" src="img/runnerby.png" />
+		<ul>
+			<li><a href="http://www.agj.cl/files/games/runnerby/">jugar</a></li>
+			<!--<li><a href="http://www.vimeo.com/9476412" rel="lightbox[runnerbyvideo 640 360]">watch video</a></li>-->
+		</ul>
+	</div>
+
+	<div class="description">
+		<p>Un juego controlado por sólo una tecla (espacio), la cual hace saltar al personaje que nunca para de correr. Utiliza Flash. En la pantalla de título, haz click dentro del juego y luego presiona espacio para comenzar.</p>
+		<p>Diseñado buscando sencillez en control, pero dificultad de ejecución.</p>
+		<p><a class="ext-link" href="http://blog.agj.cl/tag/runnerby/">Lee más al respecto (en inglés).</a></p>
+	</div>
+</div>
+
+<hr />
+
+<!-- PROSOPAMNESIA -->
+<div id="work-prosopamnesia" class="work cat-int">
+	<div class="name">
+		<h1>Prosopamnesia</h1>
+		<p>pieza interactiva <span class="year">2010</span></p>
+		<img alt="" src="img/prosopamnesia.jpg" />
+		<ul>
+			<li><a href="http://www.agj.cl/files/games/prosopamnesia/prosopamnesia.swf" rel="lightbox[prosopamnesia 360 450]">jugar</a></li>
+		</ul>
+	</div>
+
+	<div class="description">
+		<p>Al mover el mouse se revela parcialmente lo que yace debajo de la imagen, pero aquello está constantemente cambiando. Utiliza Flash.</p>
+		<p>Lleva el nombre de una condición neuropsicológica, en la cual la persona carece de la capacidad de recordar rostros. Mientras está en reproducción, esta obra emplea la búsqueda de imágenes de Google para hallar imágenes de rostros.</p>
+		<p><a class="ext-link" href="http://blog.agj.cl/tag/prosopamnesia/">Lee más al respecto (en inglés).</a></p>
 	</div>
 </div>
 
 <hr />
 
 <!-- THAT PLACE, AGAIN -->
-<div id="work-thatplace" class="work">
+<div id="work-thatplace" class="work cat-av">
 	<div class="name">
 		<h1>That place, again</h1>
-		<p>gráfica animada</p>
+		<p>gráfica animada <span class="year">2010</span></p>
 		<img alt="" src="img/thatplace.jpg" />
 		<ul>
 			<li><a href="http://www.vimeo.com/9476412" rel="lightbox[thatplace 640 360]">ver</a></li>
@@ -80,18 +158,56 @@
 	</div>
 
 	<div class="description">
-		<p>Video para una canción bastante improvisada, creada en conjunto con <a href="http://www.fireandrobot.com/" target="_blank">Matt Peter</a>. Hecho en dos días, utiliza fotos granulosas de álbum familiar para formar patrones que oscilan entre exhibir y ocultar a sus protagonistas, culminando en una secuencia nostálgica con características narrativas.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/2010/02/that-place-again/" target="_blank">Lee más al respecto (en inglés).</a></p>
+		<p>Video para una canción bastante improvisada, creada en conjunto con <a href="http://www.fireandrobot.com/">Matt Peter</a>. Hecho en dos días, utiliza fotos granulosas de álbum familiar para formar patrones que oscilan entre exhibir y ocultar a sus protagonistas, culminando en una secuencia nostálgica con características narrativas.</p>
+		<p><a class="ext-link" href="http://blog.agj.cl/2010/02/that-place-again/">Lee más al respecto (en inglés).</a></p>
+	</div>
+</div>
+
+<hr />
+
+<!-- DOPPELGANGER -->
+<div id="work-doppelganger" class="work cat-int">
+	<div class="name">
+		<h1>Doppelganger</h1>
+		<p>pieza interactiva <span class="year">2010</span></p>
+		<img alt="" src="img/doppelganger.png" />
+		<ul>
+			<li><a href="http://www.agj.cl/files/games/doppelganger/doppelganger.swf" rel="lightbox[doppelganger 640 520 ffffff]">jugar</a></li>
+		</ul>
+	</div>
+
+	<div class="description">
+		<p>Un experimento en Flash que emplea la webcam, reconocimiento de rostros, obtención aleatoria de imágenes desde la web, y una simplísima 'inteligencia artificial' de conversación.</p>
+		<p>Debido a la naturaleza de esta pieza, necesitas Flash, una webcam, estar conectado a Internet, y tener bastante luz en el rostro, todo esto para que funcione correctamente.</p>
+	</div>
+</div>
+
+<hr />
+
+<!-- VOLCANO -->
+<div id="work-volcano" class="work cat-av">
+	<div class="name">
+		<h1>Volcano</h1>
+		<p>video <span class="year">2009</span></p>
+		<img alt="" src="img/volcano2.jpg" />
+		<ul>
+			<li><a href="http://www.vimeo.com/3024136" rel="lightbox[volcano 504 380]">ver</a></li>
+		</ul>
+	</div>
+
+	<div class="description">
+		<p>Sencillo video clip para la canción de un amigo (<a href="http://www.fireandrobot.com/">Matt Peter</a>). El material fue capturado alrededor de mi barrio con una cámara digital.</p>
+		<p><a class="ext-link" href="http://blog.agj.cl/2009/01/volcano/">Lee más al respecto (en inglés).</a></p>
 	</div>
 </div>
 
 <hr />
 
 <!-- VIEWPOINTS -->
-<div id="work-viewpoints" class="work">
+<div id="work-viewpoints" class="work cat-int">
 	<div class="name">
 		<h1>Viewpoints</h1>
-		<p>videojuego</p>
+		<p>videojuego <span class="year">2009</span></p>
 		<img alt="" src="img/viewpoints.png" />
 		<ul>
 			<li><a href="http://www.agj.cl/files/games/viewpoints/viewpoints.swf" rel="lightbox[viewpoints 500 400]">jugar</a></li>
@@ -100,37 +216,17 @@
 
 	<div class="description">
 		<p>Videojuego en Flash de exploración narrativa (<b>en inglés</b>). Cliquea con el mouse para tornar la vista, y descubrir un poco acerca del personaje que encarnas y su situación (ambos cuales pueden cambiar en cada oportunidad).</p>
-		<p>Soy autor de todos los elementos integrantes del juego, incluídos su programación, narración y música. Obtuvo el décimo lugar, entre 41, de la <a href="http://tigsource.com/articles/2009/05/04/cockpit-compo-results" target="_blank">competencia de TIGSource</a> para la que fue creado.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/tag/viewpoints/" target="_blank">Lee más al respecto (en inglés).</a></p>
-	</div>
-</div>
-
-<hr />
-
-<!-- VOLCANO -->
-<div id="work-volcano" class="work">
-	<div class="name">
-		<h1>Volcano</h1>
-		<p>video</p>
-		<img alt="" src="img/volcano2.jpg" />
-		<ul>
-			<li><a href="http://www.vimeo.com/3024136" rel="lightbox[volcano 504 380]">ver</a></li>
-		</ul>
-	</div>
-
-	<div class="description">
-		<p>Sencillo video clip para la canción de un amigo (<a href="http://www.fireandrobot.com/" target="_blank">Matt Peter</a>). El material fue capturado alrededor de mi barrio con una cámara digital.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/2009/01/volcano/" target="_blank">Lee más al respecto (en inglés).</a></p>
+		<p><a class="ext-link" href="http://blog.agj.cl/tag/viewpoints/">Lee más al respecto (en inglés).</a></p>
 	</div>
 </div>
 
 <hr />
 
 <!-- PIXEVOLUCIÓN -->
-<div id="work-pixevolucion" class="work">
+<div id="work-pixevolucion" class="work cat-av">
 	<div class="name">
 		<h1>Pixevolución</h1>
-		<p>animación</p>
+		<p>animación <span class="year">2006</span></p>
 		<img alt="" src="img/pixevolucion.jpg" />
 		<ul>
 			<li><a href="http://www.vimeo.com/1259501" rel="lightbox[pixevolucion 504 360]">ver</a></li>
@@ -139,37 +235,17 @@
 
 	<div class="description">
 		<p>Corto animado sobre la relación entre la humanidad y su entorno natural, y el potencial destructivo de la tecnología.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/2009/06/pixevolucion-monkeys-and-pixels/" target="_blank">Lee más al respecto (en inglés).</a></p>
-	</div>
-</div>
-
-<hr />
-
-<!-- HEART -->
-<div id="work-heart" class="work">
-	<div class="name">
-		<h1>Heart</h1>
-		<p>pieza interactiva</p>
-		<img alt="" src="img/heart.png" />
-		<ul>
-			<li><a href="http://www.agj.cl/files/games/heart/heart.swf" rel="lightbox[heart 512 512]">jugar</a></li>
-		</ul>
-	</div>
-
-	<div class="description">
-		<p>Cínica (pero exagerada) exploración de las consecuencias del 'amor verdadero', en formato videojuego. <b>En inglés</b>; utiliza Flash. Haz click para empezar una vez que cargue, y luego usa las teclas de dirección para desplazarte.</p>
-		<p>Creado en 48 horas durante la competencia <a href="http://www.ludumdare.com/" target="_blank">Ludum Dare</a>, y refinado durante la semana siguiente. Todos sus elementos constitutivos, incluyendo la música, fueron creados por mí.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/tag/heart/" target="_blank">Lee más al respecto (en inglés).</a></p>
+		<p><a class="ext-link" href="http://blog.agj.cl/2009/06/pixevolucion-monkeys-and-pixels/">Lee más al respecto (en inglés).</a></p>
 	</div>
 </div>
 
 <hr />
 
 <!-- MYTHOLOGICAL BEINGS -->
-<div id="work-myths" class="work">
+<div id="work-myths" class="work cat-vis">
 	<div class="name">
 		<h1>Seres mitológicos chilenos</h1>
-		<p>ilustración</p>
+		<p>ilustración <span class="year">2007</span></p>
 		<img alt="" src="img/mythology.jpg" />
 		<ul>
 			<li><a href="http://piclog.agj.cl/images/20081222193509_balsero.jpg" rel="lightbox[myths]">ver 1</a></li>
@@ -187,17 +263,36 @@
 
 	<div class="description">
 		<p>Diez ilustraciones de distintos seres mitológicos del folclor chileno, creados en la universidad para un libro titulado 'Diccionario de seres mitológicos en Chile'.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/2008/12/illustrated-mythology/#more-52" target="_blank">Lee más al respecto.</a></p>
+		<p><a class="ext-link" href="http://blog.agj.cl/2008/12/illustrated-mythology/#more-52">Lee más al respecto.</a></p>
+	</div>
+</div>
+
+<hr />
+
+<!-- HEART -->
+<div id="work-heart" class="work cat-int">
+	<div class="name">
+		<h1>Heart</h1>
+		<p>pieza interactiva <span class="year">2009</span></p>
+		<img alt="" src="img/heart.png" />
+		<ul>
+			<li><a href="http://www.agj.cl/files/games/heart/heart.swf" rel="lightbox[heart 512 512]">jugar</a></li>
+		</ul>
+	</div>
+
+	<div class="description">
+		<p>Cínica (pero exagerada) exploración de las consecuencias del 'amor verdadero', en formato videojuego. <b>En inglés</b>; utiliza Flash. Haz click para empezar una vez que cargue, y luego usa las teclas de dirección para desplazarte.</p>
+		<p><a class="ext-link" href="http://blog.agj.cl/tag/heart/">Lee más al respecto (en inglés).</a></p>
 	</div>
 </div>
 
 <hr />
 
 <!-- THE STORY OF MY SNEAKERS -->
-<div id="work-zapatillas" class="work">
+<div id="work-zapatillas" class="work cat-av">
 	<div class="name">
 		<h1>La historia de mis zapatillas</h1>
-		<p>video</p>
+		<p>video <span class="year">2007</span></p>
 		<img alt="" src="img/zapatillas.jpg" />
 		<ul>
 			<li><a href="http://www.vimeo.com/1260921" rel="lightbox[zapatillas 504 380]">ver</a></li>
@@ -206,32 +301,14 @@
 
 	<div class="description">
 		<p>Cortometraje sobre el ritual de una niña para lidiar con sus problemas, en donde la cámara de video hace de testigo.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/2009/01/the-story-of-my-sneakers/#more-73" target="_blank">Lee más al respecto.</a></p>
+		<p><a class="ext-link" href="http://blog.agj.cl/2009/01/the-story-of-my-sneakers/#more-73">Lee más al respecto.</a></p>
 	</div>
 </div>
 
 <hr />
 
-<!-- THE LAKE -->
-<div id="work-lake" class="work">
-	<div class="name">
-		<h1>The lake</h1>
-		<p>videojuego</p>
-		<img alt="" src="img/lake.png" />
-		<ul>
-			<li><a href="http://www.agj.cl/files/games/lake_1_0.zip">descargar</a></li>
-			<li><a href="http://www.vimeo.com/7507486" rel="lightbox[lake 640 480]">ver video</a></li>
-		</ul>
-	</div>
 
-	<div class="description">
-		<p>Un breve y onírico juego de descubrimiento, donde el personaje es invocado por sus sueños a un lago lejano. <b>En inglés, para Windows; requiere <a href="http://www.microsoft.com/downloads/details.aspx?FamilyID=2DA43D38-DB71-4C1B-BC6A-9B6652CD92A3" target="_blank">DirectX 9</a> actualizado.</b> Usa las teclas izquierda y derecha para rotar, y presiona ambas simultáneamente para avanzar.</p>
-		<p>Creado en tres días utilizando la herramienta de creación de video juegos, <a href="http://www.scirra.com/">Construct</a>. Todos los elementos que comprende el juego son míos. Fue elegido el noveno mejor entre los 36 participantes de la <a href="http://tigsource.com/articles/2008/12/24/commonplace-book-compo-results" target="_blank">competencia de TIGSource</a> para la que fue creado.</p>
-		<p><a class="ext-link" href="http://blog.agj.cl/tag/the-lake/" target="_blank">Lee más al respecto (en inglés).</a></p>
-	</div>
-</div>
-
-<hr />
+<!--*************************************-->
 
 
 <div id="bottom" class="text">

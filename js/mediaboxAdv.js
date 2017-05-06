@@ -301,6 +301,15 @@ var Mediabox;
 // MEDIABOX FORMATING
 			WH = images[imageIndex][2].split(' ');
 			WHL = WH.length;
+			////////////////// agj mod
+			if (WHL>1) {
+				mediaWidth = (WH[1].match("%")) ? (window.getWidth()*("0."+(WH[1].replace("%", ""))))+"px" : WH[1]+"px";
+				mediaHeight = (WH[2].match("%")) ? (window.getHeight()*("0."+(WH[2].replace("%", ""))))+"px" : WH[2]+"px";
+			} else {
+				mediaWidth = "";
+				mediaHeight = "";
+			}
+		/*
 			if (WHL>1) {
 				mediaWidth = (WH[WHL-2].match("%")) ? (window.getWidth()*("0."+(WH[WHL-2].replace("%", ""))))+"px" : WH[WHL-2]+"px";
 				mediaHeight = (WH[WHL-1].match("%")) ? (window.getHeight()*("0."+(WH[WHL-1].replace("%", ""))))+"px" : WH[WHL-1]+"px";
@@ -308,6 +317,13 @@ var Mediabox;
 				mediaWidth = "";
 				mediaHeight = "";
 			}
+		*/
+			////////////////// agj mod end
+			////////////////// agj add
+			if (WHL > 3) {
+				var swfBgcolor = "#" + WH[3];
+			}
+			////////////////// agj add end
 			URL = images[imageIndex][0];
 			URL = encodeURI(URL).replace("(","%28").replace(")","%29");
 			captionSplit = images[activeImage][1].split('::');
@@ -388,7 +404,7 @@ var Mediabox;
 					id: 'MediaboxSWF',
 					width: mediaWidth,
 					height: mediaHeight,
-					params: {wmode: options.wmode, bgcolor: options.bgcolor, allowscriptaccess: options.scriptaccess, allowfullscreen: options.fullscreen}
+					params: {wmode: options.wmode, bgcolor: swfBgcolor || options.bgcolor, allowscriptaccess: options.scriptaccess, allowfullscreen: options.fullscreen}
 					});
 				startEffect();
 // SOCIAL SITES

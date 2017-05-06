@@ -32,20 +32,29 @@ hr {
 	}
 
 
-#language {
+#languages {
+	top: 0;
+	right: 0;
+	position: absolute;
+	}
+#languages a {
 	color: #000;
 	background: #cf0;
 	font-style: italic;
 	text-decoration: none;
-	top: 0;
-	right: 0;
 	padding: 5px 10px 3px 5px;
-	position: absolute;
 	outline: transparent none;
+	display: inline-block;
 	}
 #top {
 	margin-top: 30px;
+	margin-bottom: 20px;
+	}
+#filter {
 	margin-bottom: 40px;
+	}
+#filter input {
+	margin-left: 20px;
 	}
 #bottom {
 	margin-top: 40px;
@@ -101,12 +110,19 @@ hr {
 	position: absolute;
 	display: inline-block;
 	}
-.name p {
+.name p { /* TYPE OF WORK */
 	margin-top: 10px;
 	background: #111;
 	line-height: 1;
 	position: absolute;
 	display: inline-block;
+	}
+.name p span { /* YEAR OF WORK */
+	color: #999;
+	font-size: 0.9em;
+	}
+.name p span:before { /* YEAR OF WORK */
+	content: "  ";
 	}
 .name img {
 	background: #222;
