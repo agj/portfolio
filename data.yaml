@@ -1,0 +1,328 @@
+---
+general:
+   categoryNames:
+      int: interactive
+      vis: static visual
+      av: audiovisual
+   filterLabel: filter works by
+   defaultLanguageName: English
+   languages:
+      es: español
+   presentation: >
+                 I'm <span class="me">Alejandro Grilli J.</span>,
+                 a Chilean visual designer and creative coder who enjoys working in cultural and educational projects.
+                 Below is a selection of mostly personal projects I have worked on.
+                 You may contact me via alejandro¶agj.cl
+                 <span class="small">(replace ¶ with @)</span>.
+   closing:      >
+                 Thank you for taking your time to browse my portfolio.
+                 If you're interested in seeing more of what I do, let me invite you over to my
+                 <a href="http://blog.agj.cl/">blog</a>
+                 or my <a href="http://piclog.agj.cl/">piclog</a>.
+                 It bears repeating that you may contact me via alejandro¶agj.cl
+                 <span class="small">(replace ¶ with @)</span>.</p>
+                 <p>Oh, you may also just go back to <a href="http://www.agj.cl/">agj.cl</a>.
+   readMore: Read more about it.
+   translation:
+      es:
+         general:
+            categoryNames:
+               vis: visual estático
+               int: interactivo
+            filterLabel: filtrar según
+            presentation: >
+                          Soy <span class="me">Alejandro Grilli J.</span>,
+                          diseñador visual y programador creativo chileno que gusta de participar en proyectos culturales y educativos.
+                          Aquí puedes ver una selección de proyectos que he hecho, principalmente personales.
+                          Contáctame a través de alejandro¶agj.cl
+                          <span class="small">(cambia ¶ por @)</span>.
+            closing :     >
+                          Gracias por darte el tiempo de mirar mi portafolio.
+                          Si estás interesado en ver más de lo que hago, revisa mi
+                          <a href="http://blog.agj.cl/">blog</a>
+                          o mi <a href="http://piclog.agj.cl/">piclog</a>.
+                          Vale repetir que puedes contactarme por medio de alejandro¶agj.cl
+                          <span class="small">(cambia ¶ por @)</span>.</p>
+                          <p>Ah, y también puedes simplemente volver a
+                          <a href="http://www.agj.cl/">agj.cl</a>.
+            readMore:     Lee más al respecto.
+            readMoreNonTranslated: Lee más al respecto (en inglés).
+         works:
+            type:
+               video game:               videojuego
+               animation:                animación
+               motion graphics:          gráfica animada
+               illustration:             ilustración
+               interactive piece:        pieza interactiva
+               interactive installation: instalación interactiva
+            links:
+               play:        jugar
+               watch:       ver
+               watch video: ver video
+               download:    descargar
+               view:        ver
+               view 1:      ver 1
+
+works:
+   jugosacocina:
+      name:        Jugosa cocina para niños
+      category:    vis
+      type:        editorial
+      year:        2009
+      image:       jugosacocina.jpg
+      readMore:    http://blog.agj.cl/2010/01/cookbook-for-children/
+      description: A cookbook for children, project for which I worked as art director and layout designer.
+      links:
+         view 1: http://piclog.agj.cl/images/20100105162252_jugosaportada.jpg
+         2:      http://piclog.agj.cl/images/20100105162403_jugosa1.jpg
+         3:      http://piclog.agj.cl/images/20100105162432_jugosa2.jpg
+         4:      http://piclog.agj.cl/images/20100105162500_jugosa3.jpg
+      translation:
+         es:
+            readMore: http://blog.agj.cl/2010/01/cookbook-for-children/#language
+            description: Un libro de cocina para niños, proyecto en el que ejercí como director de arte y diagramador.
+   campodecolor:
+      name:        Campodecolor
+      category:    int
+      type:        video game
+      year:        2008
+      image:       campodecolor.png
+      readMore:    http://blog.agj.cl/tag/campodecolor/
+      description: Prototype for my undergraduate thesis project. An experimental videogame that offers the barest elements for making visual compositions, and attempts to evaluate their compositive parameters.</p><p>Click on the animated picture to start. In the center, a canvas that can be filled with the circles to the right, by drag-and-dropping them. Below, a rough (and inaccurate, in this prototype) analysis of some compositive values: color temperature, symmetry, visual rhythm, and visual accent.
+      links:
+         play:
+            url:   http://www.agj.cl/files/games/campodecolor1/
+            popup: false
+      translation:
+         es:
+            readMore:    http://blog.agj.cl/tag/campodecolor/
+            description: Prototipo para mi proyecto de titulación. Un videojuego experimental que entrega los más mínimos elementos para realizar una composición visual, e intenta hacer una evaluación de sus parámetros compositivos.</p><p>Primero haz click en la imagen animada para comenzar. En el centro, un lienzo que puede ser llenado con los círculos de la derecha, arrastrándolos. Abajo, un aproximado (y poco certero, en este prototipo) análisis de algunos valores compositivos: temperatura del color, simetría, ritmo visual y acento visual.
+   woodenstill:
+      name:        Wooden still
+      category:    av
+      type:        video
+      year:        2011
+      image:       woodenstill.jpg
+      readMore:    http://blog.agj.cl/2011/01/wooden-still/
+      description: A mood piece animated out of sequences of photographs.
+      links:
+         watch:
+            url:    http://vimeo.com/19267207
+            width:  640
+            height: 360
+      translation:
+         es:
+            description: Video atmosférico, creado a partir de secuencias de fotografías.
+   runnerby:
+      name:        Runnerby
+      category:    int
+      type:        video game
+      year:        2010
+      image:       runnerby.png
+      readMore:    http://blog.agj.cl/tag/runnerby/
+      description: A game controlled by a single key (spacebar), which makes a perpetually running character jump. Uses Flash.</p><p>Designed around simplicity of controls, but difficulty of execution.</p><p>(Playthrough video by <a href="http://about.me/ortoslon">Alexey Zubkov</a>.)
+      links:
+         play:
+            url:   http://www.agj.cl/files/games/runnerby/
+            popup: false
+         watch video:
+            url:    http://www.youtube.com/watch?v=Q2v2f_cp51Q
+            width:  256
+            height: 409
+      translation:
+         es:
+            description: Un juego controlado por sólo una tecla (espacio), la cual hace saltar al personaje que nunca para de correr. Utiliza Flash. En la pantalla de título, haz click dentro del juego y luego presiona espacio para comenzar.</p><p>Diseñado buscando sencillez en control, pero dificultad de ejecución.</p><p>(Video por <a href="http://about.me/ortoslon">Alexey Zubkov</a>.)
+   prosopamnesia:
+      name:        Prosopamnesia
+      category:    int
+      type:        interactive piece
+      year:        2010
+      image:       prosopamnesia.jpg
+      readMore:    http://blog.agj.cl/tag/prosopamnesia/
+      description: Moving the mouse around the image reveals portions of what's underneath, but what is there is constantly changing. Uses Flash.</p><p>An evocative piece named after a neuropsychological condition in which the person is unable to remember faces. In this work, Google Image Search is used to obtain random pictures of faces on the fly.
+      links:
+         play:
+            url:    http://www.agj.cl/files/games/prosopamnesia/prosopamnesia.swf
+            width:  360
+            height: 450
+      translation:
+         es:
+            description: Al mover el mouse se revela parcialmente lo que yace debajo de la imagen, pero aquello está constantemente cambiando. Utiliza Flash.</p><p>Lleva el nombre de una condición neuropsicológica, en la cual la persona carece de la capacidad de recordar rostros. Mientras está en reproducción, esta obra emplea la búsqueda de imágenes de Google para hallar imágenes de rostros.
+   thatplace:
+      name:        That place, again
+      category:    av
+      type:        motion graphics
+      year:        2010
+      image:       thatplace.jpg
+      readMore:    http://blog.agj.cl/2010/02/that-place-again/
+      description: Video for a rather improvised song made by me and <a href="http://www.fireandrobot.com/">Matt Peter</a>. Completed in two days, it uses old, grainy family photos to create patterns that alternately reveal and obscure their subjects, culminating with a somewhat narrative display of nostalgia.
+      links:
+         watch:
+            url:    http://www.vimeo.com/9476412
+            width:  640
+            height: 360
+      translation:
+         es:
+            description: Video para una canción bastante improvisada, creada en conjunto con <a href="http://www.fireandrobot.com/">Matt Peter</a>. Hecho en dos días, utiliza fotos granulosas de álbum familiar para formar patrones que oscilan entre exhibir y ocultar a sus protagonistas, culminando en una secuencia nostálgica con características narrativas.
+   doppelganger:
+      hide: Yes
+      name: Doppelganger
+      category: int
+      type: interactive piece
+      year: 2010
+      image: doppelganger.png
+      description: A Flash experiment involving webcam use, face recognition, random image web retrieval, and the simplest chatbot 'AI' possible.</p><p>Given the nature of this piece, you'll need Flash, a webcam, a live Internet connection, and plenty of light on your face for it to properly work.
+      links:
+         play:
+            url:    http://www.agj.cl/files/games/doppelganger/doppelganger.swf
+            width:  640
+            height: 520
+            color:  ffffff
+      translation:
+         es:
+            description: Un experimento en Flash que emplea la webcam, reconocimiento de rostros, obtención aleatoria de imágenes desde la web, y una simplísima 'inteligencia artificial' de conversación.</p><p>Debido a la naturaleza de esta pieza, necesitas Flash, una webcam, estar conectado a Internet, y tener bastante luz en el rostro, todo esto para que funcione correctamente.
+   volcano:
+      name:        Volcano
+      category:    av
+      type:        video
+      year:        2009
+      image:       volcano2.jpg
+      readMore:    http://blog.agj.cl/2009/01/volcano/
+      description: A simple music video for a friend's (<a href="http://www.fireandrobot.com/">Matt Peter</a>) song. Footage was captured around my neighborhood with a camcorder.
+      links:
+         watch:
+            url:    http://www.vimeo.com/3024136
+            width:  504
+            height: 380
+      translation:
+         es:
+            description: Sencillo video clip para la canción de un amigo (<a href="http://www.fireandrobot.com/">Matt Peter</a>). El material fue capturado alrededor de mi barrio con una cámara digital.
+   viewpoints:
+      name: Viewpoints
+      category: int
+      type: video game
+      year: 2009
+      image: viewpoints.png
+      readMore: http://blog.agj.cl/tag/viewpoints/
+      description: A Flash video game of narrative exploration. Click with the mouse to look around, and discover a bit about the character you embody and the situation they're in (both of which may change on different playthroughs).
+      links:
+         play:
+            url:    http://www.agj.cl/files/games/viewpoints/viewpoints.swf
+            width:  500
+            height: 400
+      translation:
+         es:
+            description: Videojuego en Flash de exploración narrativa (<b>en inglés</b>). Cliquea con el mouse para tornar la vista, y descubrir un poco acerca del personaje que encarnas y su situación (ambos cuales pueden cambiar en cada oportunidad).
+   pixevolucion:
+      name:        Pixevolución
+      category:    av
+      type:        animation
+      year:        2006
+      image:       pixevolucion.jpg
+      readMore:    http://blog.agj.cl/2009/06/pixevolucion-monkeys-and-pixels/
+      description: Animated short on mankind's relationship with its natural surroundings, and the destructive potential of technology.
+      links:
+         watch:
+            url:    http://www.vimeo.com/1259501
+            width:  504
+            height: 360
+      translation:
+         es:
+            description: Corto animado sobre la relación entre la humanidad y su entorno natural, y el potencial destructivo de la tecnología.
+   myths:
+      name:        Chilean mythological beings
+      category:    vis
+      type:        illustration
+      year:        2007
+      image:       mythology.jpg
+      readMore:    http://blog.agj.cl/2008/12/illustrated-mythology/
+      description: Ten illustrations of different mythical beings of Chilean folklore, created in school for a book called 'Dictionary of mythological beings in Chile'.
+      links:
+         view 1: http://piclog.agj.cl/images/20081222193509_balsero.jpg
+         2:      http://piclog.agj.cl/images/20081222194340_brujotonto.jpg
+         3:      http://piclog.agj.cl/images/20081222194639_cahuelche.jpg
+         4:      http://piclog.agj.cl/images/20081222194902_chinifilu.jpg
+         5:      http://piclog.agj.cl/images/20081222195214_den.jpg
+         6:      http://piclog.agj.cl/images/20081222195407_haucella.jpg
+         7:      http://piclog.agj.cl/images/20081222195658_huala.jpg
+         8:      http://piclog.agj.cl/images/20081222200059_piruquina.jpg
+         9:      http://piclog.agj.cl/images/20081222200354_sietecolores.jpg
+         10:     http://piclog.agj.cl/images/20081222200705_voladora.jpg
+      translation:
+         es:
+            name:        Seres mitológicos chilenos
+            readMore:    http://blog.agj.cl/2008/12/illustrated-mythology/#more-52
+            description: Diez ilustraciones de distintos seres mitológicos del folclor chileno, creados en la universidad para un libro titulado 'Diccionario de seres mitológicos en Chile'.
+   heart:
+      hide:        Yes
+      name:        Heart
+      category:    int
+      type:        interactive piece
+      year:        2009
+      image:       heart.png
+      readMore:    http://blog.agj.cl/tag/heart/
+      description: A cynical (yet hammy) exploration of the consequences of 'true love', in the guise of a video game. Uses Flash. Click to start, and use the arrow keys to move.
+      links:
+         play:
+            url:    http://www.agj.cl/files/games/heart/heart.swf
+            width:  512
+            height: 512
+      translation:
+         es:
+            description: Cínica (pero exagerada) exploración de las consecuencias del 'amor verdadero', en formato videojuego. <b>En inglés</b>; utiliza Flash. Haz click para empezar una vez que cargue, y luego usa las teclas de dirección para desplazarte.
+   sneakers:
+      name:        The story of my sneakers
+      category:    av
+      type:        video
+      year:        2007
+      image:       zapatillas.jpg
+      readMore:    http://blog.agj.cl/2009/01/the-story-of-my-sneakers/
+      description: A short film depicting a young girl's little ritual to cast away her troubles, wherein the camcorder itself serves as her witness.
+      links:
+         watch:
+            url:    http://www.vimeo.com/2729724
+            width:  504
+            height: 380
+      translation:
+         es:
+            name:        La historia de mis zapatillas
+            readMore:    http://blog.agj.cl/2009/01/the-story-of-my-sneakers/#more-73
+            description: Cortometraje sobre el ritual de una niña para lidiar con sus problemas, en donde la cámara de video hace de testigo.
+   thelake:
+      hide:        Yes
+      name:        The lake
+      category:    int
+      type:        video game
+      year:        2009
+      image:       lake.png
+      readMore:    http://blog.agj.cl/tag/the-lake/
+      description: A brief, oneiric game of discovery, wherein the character is called to a lake far away by his dreams. <b>For Windows; requires DirectX 9.</b> Use the left and right keys to rotate, and press both simultaneously to advance.</p><p>Created in three days, using the game-making tool <a href="http://www.scirra.com/">Construct</a>.
+      links:
+         download:
+            url:   http://www.agj.cl/files/games/lake_1_0.zip
+            popup: false
+         watch video:
+            url:    http://www.vimeo.com/7507486
+            width:  640
+            height: 480
+      translation:
+         es:
+            description: Un breve y onírico juego de descubrimiento, donde el personaje es invocado por sus sueños a un lago lejano. <b>En inglés, para Windows; requiere DirectX 9.</b> Usa las teclas izquierda y derecha para rotar, y presiona ambas simultáneamente para avanzar.</p><p>Creado en tres días utilizando la herramienta de creación de video juegos, <a href="http://www.scirra.com/">Construct</a>.
+   muevete:
+      name:        Muévete
+      category:    int
+      type:        interactive installation
+      year:        2011
+      image:       muevete.jpg
+      readMore:    http://blog.agj.cl/2011/11/muevete/
+      description: Interactive artwork commissioned by <a href="http://www.ccplm.cl/">Centro Cultural Palacio La Moneda</a>, project for which I was in charge of software programming. The Adobe AIR application interprets motion captured by a camera and displays reactive visuals and audio on a large projection. Design by <a href="http://skoknic.weebly.com/">Sebastián Skoknic</a>, support by Francisco Fuentes.</p><p>A web version was also developed, which is available at <a href="http://www.ccplm.cl/color/#muestra">their website</a> by clicking on the number '05' and then on 'Juega!'. Requires a webcam.
+      links:
+         watch video:
+            url:    http://vimeo.com/32240154
+            width:  640
+            height: 360
+      translation:
+         es:
+            readMore:    http://blog.agj.cl/2011/11/muevete/#language
+            description: Obra de arte interactiva, comisionada por <a href="http://www.ccplm.cl/">Centro Cultural Palacio La Moneda</a>, proyecto en el que estuve a cargo de la programación del software. La aplicación de Adobe AIR reconoce el movimiento capturado por una cámara, y en base a él despliega imágenes y audio en una proyección de gran escala. Diseñado por <a href="http://skoknic.weebly.com/">Sebastián Skoknic</a>, soporte por Francisco Fuentes.</p><p>También se desarrolló una versión web, disponible en <a href="http://www.ccplm.cl/color/#muestra">su sitio</a> cliqueando el número '05' y luego el botón 'Juega!'. Requiere una webcam instalada.
+...
