@@ -32,7 +32,6 @@ if ($yaml["settings"]["randomize"]) {
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 
 	<title><?php echo Parser::getGeneralValue($yaml, $language, 'title'); ?></title>
-	<meta name="description" content="Alejandro Grilli J.'s portfolio" />
 	<link rel="icon" type="image/gif" href="/icon.gif" />
 	
 	<link rel="stylesheet" type="text/css" href="css/style.css" />

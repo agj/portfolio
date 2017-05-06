@@ -5,8 +5,9 @@
 settings:
    defaultLanguageName: English
    languages:
-      # abbr: full name         # The abbreviation will be used to identify the language throughout this document.
+      # abbr: full description         # The abbreviation will be used to identify the language throughout this document.
       es: español
+      ja: 日本語
    randomize: false
 
 #####################################################################
@@ -16,20 +17,19 @@ settings:
 general:
    categoryNames:
       int: interactive
-      vis: static visual
       av:  audiovisual
+      vis: static visual
    filterLabel: only show works of type
    title: Ale Grilli's portfolio
    presentation: >
-                 I'm <span class="me">Ale Grilli</span>, a Chilean designer of visual and interactive media and creative coder,
-                 driven to experimenting with the expressive power of current technologies.
+                 I'm <span class="me">Ale Grilli</span>, a freelance interactive media designer and developer from Chile.
                  I like it best when making things with a cultural or educational impact.
                  Here is a selection of projects I've worked on, mostly personal, the ones closer to my heart.
-                 Contact me any time via alejandro¶agj.cl
+                 Contact me any time via ale¶agj.cl
                  <small>(just change that character for an @).</small>
    closing:      >
                  Thank you for having taken an interest in my portfolio. Maybe you want to know more;
-                 if so, I'd be happy to hear from you via alejandro¶agj.cl
+                 if so, I'd be happy to hear from you via ale¶agj.cl
                  <small>(put an @ there instead of that other thing).</small>
                  Also, I have a <a href="http://blog.agj.cl/">blog</a> that you can read, and I have
                  <a href="/games/">all my video games together in one place,</a>
@@ -44,10 +44,10 @@ translation:
    
    # langAbbr:
    #    general:
-   #       property1: translated value a
+   #       property1: translated value 1
    #       # ...
    #    works:      # Default translations for works. Can be overridden in work itself.
-   #       property2: translated value b
+   #       property2: translated value 2
    #       # ...
    
    es:
@@ -58,20 +58,19 @@ translation:
          filterLabel: sólo mostrar de tipo
          title: Portafolio de Ale Grilli
          presentation: >
-                       Soy <span class="me">Ale Grilli</span>, un diseñador chileno de medios visuales e interactivos, y programador creativo;
-                       poseedor de la necesidad de experimentar en torno al poder expresivo de las tecnologías actuales.
+                       Soy <span class="me">Ale Grilli</span>, diseñador y desarrollador chileno de medios interactivos.
                        La mayor satisfacción la obtengo al trabajar en cosas con impacto cultural o educativo.
                        Aquí, una seleccion de proyectos en que he trabajado, mayormente personales y que
                        siento más cercanos y propios.
-                       Contáctame cuando quieras por medio de alejandro¶agj.cl
+                       Contáctame cuando quieras por medio de ale¶agj.cl
                        <small>(cambia ese caracter por una @).</small>
          closing:      >
                        Gracias por haberte fijado en mi portafolio. Si acaso te despertó el interés,
-                       puedes consultarme a través de alejandro¶agj.cl
+                       puedes consultarme a través de ale¶agj.cl
                        <small>(ponle una @ en vez de ese caracter).</small>
                        También tengo un <a href="http://blog.agj.cl/">blog</a> que puedes revisar,
                        y tengo <a href="/games/">un espacio con todos mis juegos reunidos,</a>
-                       si los quieres ver. O explora mi sitio web desde <a href="/">la raiz.</a> Gracias de nuevo.
+                       si los quieres ver. O explora mi sitio web desde <a href="/">la página principal.</a> Gracias de nuevo.
          readMore:     Lee más al respecto.
          readMoreNonTranslated: Lee más al respecto (en inglés).
       works:
@@ -92,6 +91,51 @@ translation:
             view 1:      ver 1
             play large:  jugar grande
             small:       chico
+            visit:       visitar
+   ja:
+      general:
+         categoryNames:
+            av:  動映像
+            vis: 静止画像
+            int: インタラクティブ
+         filterLabel: 表示フィルター
+         title: Ale Grilliの作品集
+         presentation: >
+                       <span class="me">Ale Grilli</span>（アレ グリリ）と言うチリのインタラクティブメディア・デザイナーに開発者です。
+                       文化、教育という分野に影響できるプロジェクトは特に大切にします。
+                       主に個人的で満足感を引き起こしたプロジェクトを下記に並びましたので、どうぞご覧ください。
+                       私の活動に興味を持てばいつでも ale¶agj.cl までご連絡ください
+                       <small>（その¶を@にお取り換えください）。</small>
+         closing:      >
+                       作品集をご興味いたきありがとうございました。
+                       もっと詳しくお尋ねになりたければ、どうぞご気楽に ale¶agj.cl まで
+                       <small>（その¶を@にお取り換えください）。</small>
+                       そして個人の<a href="http://blog.agj.cl/">ブログ</a>も<a href="/games/">ゲーム置き場</a>もありますので、もしよければご覧ください。
+                       あるいはこのサイトの<a href="/">トップ</a>に戻り、他にも色々あります。
+                       どうかよろしくお願いします！
+         readMore:     更に詳しく。
+         readMoreNonTranslated: 更に詳しく（英語）。
+      works:
+         type:
+            video game:               ゲーム
+            animation:                アニメーション
+            motion graphics:          モーショングラフィックス
+            illustration:             イラスト
+            interactive piece:        インタラクティブ作品
+            interactive installation: インタラクティブ展示
+            digital toy:              デジタルおもちゃ
+            editorial:                エディトリアルデザイン
+            video:                    動画
+         links:
+            play:        プレイ
+            watch:       観覧
+            watch video: 動画
+            download:    ダウンロード
+            view:        観覧
+            view 1:      観覧 1
+            play large:  プレイ 大
+            small:       小
+            visit:       来訪
 
 #####################################################################
 
@@ -129,6 +173,10 @@ works:
             description: >
                          Un juguete de dibujo que genera bellas figuras con cada trazo, creado para pantallas táctiles (y también mouse).
                          Pruébalo en una tableta o un smartphone visitando esta dirección web: <em>http://agj.cl/ip/fp</em>
+         ja:
+            description: >
+                         きれいな模様を簡単に描けるおもちゃです。主にタッチスクリーンの為に作られましたが、マウスでの対応も可能です。
+                         タブレットまたはスマホのブラウザーでプレイする為に、このアドレスをご入力ください：<em>http://agj.cl/ip/fp</em>
    # /flowerpattern
 
 
@@ -138,8 +186,19 @@ works:
       type:        interactive installation
       year:        2011
       image:       muevete.jpg
-      readMore:    http://blog.agj.cl/2011/11/muevete/
-      description: Interactive artwork commissioned by <a href="http://www.ccplm.cl/">Centro Cultural Palacio La Moneda</a>, project for which I was in charge of software programming. The Adobe AIR application interprets motion captured by a camera and displays reactive visuals and audio on a large projection. Design by <a href="http://skoknic.weebly.com/">Sebastián Skoknic</a>, support by Francisco Fuentes.</p><p>A web version was also developed, which is available at <a href="http://www.ccplm.cl/color/#muestra">their website</a> by clicking on the number '05' and then on 'Juega!'. Requires a webcam.
+      readMore:    http://blog.agj.cl/tag/muevete/
+      description: >
+                   Interactive artwork commissioned by <a href="http://www.ccplm.cl/">Centro Cultural Palacio La Moneda</a>,
+                   project for which I was in charge of software programming,
+                   and which was featured in the 2013 <a href="http://www.bienaldediseno.cl/">Design Biennial</a> in Santiago.
+                   The Adobe AIR application interprets motion captured by a camera and displays reactive visuals
+                   and audio on a large projection.
+                   Design by <a href="http://skoknic.weebly.com/">Sebastián Skoknic</a>,
+                   support by Francisco Fuentes.</p>
+                   <p>A web version was also developed, which is available at
+                   <a href="http://www.ccplm.cl/color/#muestra">their website</a>
+                   by clicking on the number '05' and then on 'Juega!'.
+                   Requires a webcam.
       links:
          watch video:
             url:    http://vimeo.com/32240154
@@ -147,9 +206,66 @@ works:
             height: 360
       translation:
          es:
-            readMore:    http://blog.agj.cl/2011/11/muevete/#language
-            description: Obra de arte interactiva, comisionada por <a href="http://www.ccplm.cl/">Centro Cultural Palacio La Moneda</a>, proyecto en el que estuve a cargo de la programación del software. La aplicación de Adobe AIR reconoce el movimiento capturado por una cámara, y en base a él despliega imágenes y audio en una proyección de gran escala. Diseñado por <a href="http://skoknic.weebly.com/">Sebastián Skoknic</a>, soporte por Francisco Fuentes.</p><p>También se desarrolló una versión web, disponible en <a href="http://www.ccplm.cl/color/#muestra">su sitio</a> cliqueando el número '05' y luego el botón 'Juega!'. Requiere una webcam instalada.
+            readMore:    http://blog.agj.cl/tag/muevete/
+            description: >
+                         Obra de arte interactiva, comisionada por <a href="http://www.ccplm.cl/">Centro Cultural Palacio La Moneda</a>,
+                         proyecto en el que estuve a cargo de la programación del software,
+                         y el cual fue exhibido en la <a href="http://www.bienaldediseno.cl/">Bienal de Diseño</a> 2013 en Santiago.
+                         La aplicación de Adobe AIR reconoce el movimiento capturado por una cámara,
+                         y en base a él despliega imágenes y audio en una proyección de gran escala.
+                         Diseñado por <a href="http://skoknic.weebly.com/">Sebastián Skoknic</a>,
+                         soporte por Francisco Fuentes.</p>
+                         <p>También se desarrolló una versión web,
+                         disponible en <a href="http://www.ccplm.cl/color/#muestra">su sitio</a>
+                         cliqueando el número '05' y luego el botón 'Juega!'.
+                         Requiere una webcam instalada.
+         ja:
+            description: >
+                         <a href="http://www.ccplm.cl/">モネだ文化館</a>に依頼されたインタラクティブな展示品です。
+                         私はこの作品のソフトウェアのプログラミング担当でした。
+                         <a href="http://www.bienaldediseno.cl/">2013年のサンティアゴデザイン隔年大会</a>でも展示されました。
+                         Adobe AIR製ソフトがビデオカメラの前に立つお客の動きを取り込み、その反応に大規模投影を映り、音声を再生します。
+                         設計は<a href="http://skoknic.weebly.com/">Sebastián Skoknic</a>より、支援はFrancisco Fuentesよりです。</p>
+                         <p>共に開発されたウェブ版は<a href="http://www.ccplm.cl/color/#muestra">こちら</a>です。まず「05」と書いてあるところにクリック、そして右側の「Juega!」にクリックしてください。
+                         操作にはウェブカメラが必要です。
    # /muevete
+
+
+   cordilleravis:
+      name:        Tiles visualizer
+      category:    int
+      type:        web app
+      year:        2013
+      image:       cordilleravis.jpg
+      readMore:    http://blog.agj.cl/2013/10/tiles-visualizer/
+      description: >
+                   Interaction design and software programming for a floor and wall tiles in-context visualizer.
+                   Select surfaces on a photo and choose among the tiles in Cordillera's catalog to see them applied.
+                   Contract work for <a href="http://traak.cl/">Traak.</a>
+      links:
+         watch video:
+            url:    https://vimeo.com/104342129
+            width:  960
+            height: 600
+         visit:
+            url:         http://www.cordillera.cl/flash.php
+            popup:       false
+      translation:
+         es:
+            name:        Visualizador baldosas Cordillera
+            readMore:    http://blog.agj.cl/2013/10/tiles-visualizer/#language
+            description: >
+                         Diseño interactivo y programación de visualizador de baldosas en contexto.
+                         Selecciona superficies sobre una foto y elige entre los productos de Cordillera para verlos aplicados.
+                         Trabajo a contratación para <a href="http://traak.cl/">Traak.</a>
+         ja:
+            name:        タイルビジュアライザ
+            description: >
+                         タイルを現実的なコンテキストで見られる為のウェブアプリです。
+                         写真の中の壁、床をクリックしてからCordilleraの商品を選び、適用されます。
+                         インタラクションデザインとプログラミング担当でした。
+                         この作品のクライアントは<a href="http://traak.cl/">Traak</a>でした。
+   # /cordilleravis
 
 
    runnerby:
@@ -159,7 +275,10 @@ works:
       year:        2010
       image:       runnerby.png
       readMore:    http://blog.agj.cl/tag/runnerby/
-      description: A game controlled by a single key (spacebar), which makes a perpetually running character jump. Uses Flash.</p><p>Designed around simplicity of controls, but difficulty of execution.</p><p>(Playthrough video by <a href="http://about.me/ortoslon">Alexey Zubkov</a>.)
+      description: >
+                   A game controlled by a single key (spacebar), which makes a perpetually running character jump. Uses Flash.</p>
+                   <p>Designed around simplicity of controls, but difficulty of execution.</p>
+                   <p>(Playthrough video by <a href="http://about.me/ortoslon">Alexey Zubkov</a>.)
       links:
          play large:
             url:    http://www.agj.cl/files/games/runnerby/#large
@@ -175,7 +294,18 @@ works:
             height: 409
       translation:
          es:
-            description: Un juego controlado por sólo una tecla (espacio), la cual hace saltar al personaje que nunca para de correr. Utiliza Flash. En la pantalla de título, haz click dentro del juego y luego presiona espacio para comenzar.</p><p>Diseñado buscando sencillez en control, pero dificultad de ejecución.</p><p>(Video por <a href="http://about.me/ortoslon">Alexey Zubkov</a>.)
+            description: >
+                         Un juego controlado por sólo una tecla (espacio), la cual hace saltar al personaje que nunca para de correr. Utiliza Flash.
+                         En la pantalla de título, haz click dentro del juego y luego presiona espacio para comenzar.</p>
+                         <p>Diseñado buscando sencillez en control, pero dificultad de ejecución.</p>
+                         <p>(Video por <a href="http://about.me/ortoslon">Alexey Zubkov</a>.)
+         ja:
+            description: >
+                         単一のキーで動かすFlash製のゲームです。そのキー（スペースキー）を打つと、壁や天井でも止まりなく走るアバターが跳ねます。
+                         まず画面にクリックし、そしてスペースバーを打ってください。</p>
+                         <p>簡単な操作で難しい実行という目的でこのゲームを作りました。</p>
+                         <p>（プレイ動画は<a href="http://about.me/ortoslon">Alexey Zubkov氏</a>よりです）。
+
    # /runnerby
 
 
@@ -188,14 +318,18 @@ works:
       readMore:    http://blog.agj.cl/2010/01/cookbook-for-children/
       description: A cookbook for children, project for which I worked as art director and layout designer.
       links:
-         view 1: http://piclog.agj.cl/images/20100105162252_jugosaportada.jpg
-         2:      http://piclog.agj.cl/images/20100105162403_jugosa1.jpg
-         3:      http://piclog.agj.cl/images/20100105162432_jugosa2.jpg
-         4:      http://piclog.agj.cl/images/20100105162500_jugosa3.jpg
+         view 1: http://piclog.agj.cl/image/normal/20100105162252_jugosaportada.jpg
+         2:      http://piclog.agj.cl/image/normal/20100105162403_jugosa1.jpg
+         3:      http://piclog.agj.cl/image/normal/20100105162432_jugosa2.jpg
+         4:      http://piclog.agj.cl/image/normal/20100105162500_jugosa3.jpg
       translation:
          es:
             readMore: http://blog.agj.cl/2010/01/cookbook-for-children/#language
             description: Un libro de cocina para niños, proyecto en el que ejercí como director de arte y diagramador.
+         ja:
+            name:        子供向け料理本
+            description: >
+                         この子供向け料理本のアートディレクター、レイアウト設計者として支援しました。
    #/jugosacocina
 
 
@@ -206,7 +340,10 @@ works:
       year:        2010
       image:       prosopamnesia.jpg
       readMore:    http://blog.agj.cl/tag/prosopamnesia/
-      description: Moving the mouse around the image reveals portions of what's underneath, but what is there is constantly changing. Uses Flash.</p><p>An evocative piece named after a neuropsychological condition in which the person is unable to remember faces. In this work, Google Image Search is used to obtain random pictures of faces on the fly.
+      description: >
+                   Moving the mouse around the image reveals portions of what's underneath, but what is there is constantly changing. Uses Flash.</p>
+                   <p>An evocative piece named after a neuropsychological condition in which the person is unable to remember faces.
+                   In this work, Google Image Search is used to obtain random pictures of faces on the fly.
       links:
          play:
             url:    http://www.agj.cl/files/games/prosopamnesia/prosopamnesia.swf
@@ -214,7 +351,14 @@ works:
             height: 450
       translation:
          es:
-            description: Al mover el mouse se revela parcialmente lo que yace debajo de la imagen, pero aquello está constantemente cambiando. Utiliza Flash.</p><p>Lleva el nombre de una condición neuropsicológica, en la cual la persona carece de la capacidad de recordar rostros. Mientras está en reproducción, esta obra emplea la búsqueda de imágenes de Google para hallar imágenes de rostros.
+            description: >
+                         Al mover el mouse se revela parcialmente lo que yace debajo de la imagen, pero aquello está constantemente cambiando. Utiliza Flash.</p>
+                         <p>Lleva el nombre de una condición neuropsicológica, en la cual la persona carece de la capacidad de recordar rostros.
+                         Mientras está en reproducción, esta obra emplea la búsqueda de imágenes de Google para hallar imágenes de rostros.
+         ja:
+            description: >
+                         マウスの動きで映像の下層が部分的に現れますが、そこにある映像は絶えず変化しています。Flash製です。</p>
+                         <p>想像を喚起するように作られたこの作品は神経心理学的異常、「顔健忘症」で名付けました。その場Google画像の検索で釣られた多くの顔の画像を使います。
    # /prosopamnesia
 
    campodecolor:
@@ -252,6 +396,13 @@ works:
                          arrastrándolos. Abajo, un aproximado (y poco certero, en este prototipo)
                          análisis de algunos valores compositivos:
                          temperatura del color, simetría, ritmo visual y acento visual.
+         ja:
+            description: >
+                         学位研究のプロトタイプです。実験的なコンピューターゲームで、非常に単純化された構図の要素で画像を作れるソフトです。
+                         できた画像は四つの基準によって構図の判断が行われます。</p>
+                         <p>まず、中心の動画にクリック。表れる白いキャンバスに右側の円形をドラッグすることで「描く」ことができます。
+                         下に判断の結果が見られるように並んでいます：色温度、対称性、資格的リズム、強調点。
+                         残念ながら、このプロトタイプの判断は祖末で不正確です。
    # /campodecolor
 
 
@@ -271,6 +422,8 @@ works:
       translation:
          es:
             description: Video atmosférico, creado a partir de secuencias de fotografías.
+         ja:
+            description: 順番付けた写真で造られた、特別な雰囲気を呼び起こそうとする短編動画です。
    # /woodenstill
 
 
@@ -290,6 +443,8 @@ works:
       translation:
          es:
             description: Corto animado sobre la relación entre la humanidad y su entorno natural, y el potencial destructivo de la tecnología.
+         ja:
+            description: 人類の自然環境との関係、そして工業技術の潜在破壊力を描く短編アニメです。
    # /pixevolucion
 
 
@@ -302,21 +457,24 @@ works:
       readMore:    http://blog.agj.cl/2008/12/illustrated-mythology/
       description: Ten illustrations of different mythical beings of Chilean folklore, created in school for a book called 'Dictionary of mythological beings in Chile'.
       links:
-         view 1: http://piclog.agj.cl/images/20081222193509_balsero.jpg
-         2:      http://piclog.agj.cl/images/20081222194340_brujotonto.jpg
-         3:      http://piclog.agj.cl/images/20081222194639_cahuelche.jpg
-         4:      http://piclog.agj.cl/images/20081222194902_chinifilu.jpg
-         5:      http://piclog.agj.cl/images/20081222195214_den.jpg
-         6:      http://piclog.agj.cl/images/20081222195407_haucella.jpg
-         7:      http://piclog.agj.cl/images/20081222195658_huala.jpg
-         8:      http://piclog.agj.cl/images/20081222200059_piruquina.jpg
-         9:      http://piclog.agj.cl/images/20081222200354_sietecolores.jpg
-         10:     http://piclog.agj.cl/images/20081222200705_voladora.jpg
+         view 1: http://piclog.agj.cl/image/normal/20081222193509_balsero.jpg
+         2:      http://piclog.agj.cl/image/normal/20081222194340_brujotonto.jpg
+         3:      http://piclog.agj.cl/image/normal/20081222194639_cahuelche.jpg
+         4:      http://piclog.agj.cl/image/normal/20081222194902_chinifilu.jpg
+         5:      http://piclog.agj.cl/image/normal/20081222195214_den.jpg
+         6:      http://piclog.agj.cl/image/normal/20081222195407_haucella.jpg
+         7:      http://piclog.agj.cl/image/normal/20081222195658_huala.jpg
+         8:      http://piclog.agj.cl/image/normal/20081222200059_piruquina.jpg
+         9:      http://piclog.agj.cl/image/normal/20081222200354_sietecolores.jpg
+         10:     http://piclog.agj.cl/image/normal/20081222200705_voladora.jpg
       translation:
          es:
             name:        Seres mitológicos chilenos
             readMore:    http://blog.agj.cl/2008/12/illustrated-mythology/#more-52
             description: Diez ilustraciones de distintos seres mitológicos del folclor chileno, creados en la universidad para un libro titulado 'Diccionario de seres mitológicos en Chile'.
+         ja:
+            name:        チリの妖怪
+            description: チリの神話に現れる妖怪のイラストです。大学のイラスト集に加える為に描きました。
    # /myths
 
 
@@ -439,7 +597,11 @@ works:
             color:  ffffff
       translation:
          es:
-            description: Un experimento en Flash que emplea la webcam, reconocimiento de rostros, obtención aleatoria de imágenes desde la web, y una simplísima 'inteligencia artificial' de conversación.</p><p>Debido a la naturaleza de esta pieza, necesitas Flash, una webcam, estar conectado a Internet, y tener bastante luz en el rostro, todo esto para que funcione correctamente.
+            description: >
+                         Un experimento en Flash que emplea la webcam, reconocimiento de rostros, obtención aleatoria de imágenes desde la web,
+                         y una simplísima 'inteligencia artificial' de conversación.</p>
+                         <p>Debido a la naturaleza de esta pieza, necesitas Flash, una webcam, estar conectado a Internet, y tener bastante luz en el rostro,
+                         todo esto para que funcione correctamente.
    # /doppelganger
 
 
@@ -459,7 +621,9 @@ works:
             height: 512
       translation:
          es:
-            description: Cínica (pero exagerada) exploración de las consecuencias del 'amor verdadero', en formato videojuego. <b>En inglés</b>; utiliza Flash. Haz click para empezar una vez que cargue, y luego usa las teclas de dirección para desplazarte.
+            description: >
+                         Cínica (pero exagerada) exploración de las consecuencias del 'amor verdadero', en formato videojuego.
+                         <b>En inglés</b>; utiliza Flash. Haz click para empezar una vez que cargue, y luego usa las teclas de dirección para desplazarte.
    # /heart
 
 
