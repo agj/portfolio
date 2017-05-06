@@ -1,118 +1,81 @@
 
-///////////////////////////
+(function (that) {
 
-var checks = [];
-var cats = [];
-var works;
+	"use strict";
 
-///////////////////////////
+	///////////////////////////
 
-window.addEventListener("load", onLoad, false);
+	var checks = [];
+	var cats = [];
+	var works;
 
-function onLoad(e) {
-	//var nodes = document.getElementById("filter").childNodes;
-	var nodes = document.getElementById("filter").getElementsByTagName("INPUT");
-	
-	var len = nodes.length;
-	var node, nodeID;
-	for (var i = 0; i < len; i++) {
-		node = nodes.item(i);
-		checks.push(node);
+	///////////////////////////
+
+	window.addEvent("domready", onLoad, false);
+
+	function onLoad(e) {
+		//var nodes = document.getElementById("filter").childNodes;
+		var nodes = $("filter").getElements("input");
 		
-		nodeID = node.getAttribute("id");
-		if (nodeID.substr(0, 6) == "check-") {
-			cats.push(nodeID.substr(6));
+		var len = nodes.length;
+		var node, nodeID;
+		for (var i = 0; i < len; i++) {
+			node = nodes[i];
+			checks.push(node);
+			
+			nodeID = node.get("id");
+			if (nodeID.substr(0, 6) == "check-") {
+				cats.push(nodeID.substr(6));
+			}
+			
+			node.addEvent("click", onClickCheckbox, false);
 		}
 		
-		node.addEventListener("click", onClickCheckbox, false);
-	}
-	
-	// List works.
-	
-	works = getChildrenByClassName(document.body, "work");
-	
-	//alert("Loaded.");
-	
-	update();
-}
-
-
-function onClickCheckbox(e) {
-	//alert("Clicked checkbox");
-	
-	e = e || window.event;
-	
-	update();
-}
-
-function update() {
-	var activeCats = getActiveCats();
-	
-	var len = works.length;
-	var el, show, cat, vis;
-	for (var i = 0; i < len; i++) {
-		el = works[i];
-		show = false;
+		// List works.
 		
-		for (var j = 0; j < activeCats.length; j++) {
-			if (hasClassName(el, "cat-" + activeCats[j])) {
-				show = true;
+		works = $$(".work");
+		
+		update();
+	}
+
+
+	function onClickCheckbox(e) {
+		update();
+	}
+
+	function update() {
+		var activeCats = getActiveCats();
+		
+		var len = works.length;
+		var el, show, cat;
+		for (var i = 0; i < len; i++) {
+			el = works[i];
+			show = false;
+			
+			for (var j = 0; j < activeCats.length; j++) {
+				if (el.hasClass("cat-" + activeCats[j])) {
+					show = true;
+				}
+			}
+			
+			el.style.display = show ? "block" : "none";
+		}
+	}
+
+	function getActiveCats() {
+		var result = [];
+		
+		var len = checks.length;
+		for (var i = 0; i < len; i++) {
+			if (checks[i].checked) {
+				result.push(cats[i]);
 			}
 		}
 		
-		vis = show ? "block" : "none";
-		el.style.display = vis;
+		return result;
 	}
-}
 
-function getActiveCats() {
-	var result = [];
-	
-	var len = checks.length;
-	for (var i = 0; i < len; i++) {
-		if (checks[i].checked) {
-			result.push(cats[i]);
-		}
-	}
-	
-	return result;
-}
-
-
-
-
-function getChildrenByClassName(oElm, className) {
-	var nodes = oElm.childNodes;
-	var returnList = [];
-	
-	className = className.replace(/\-/g, "\\-");
-	var regex = new RegExp("(^|\\s)" + className + "(\\s|$)");
-	
-	var el;
-	for (var i = 0; i < nodes.length; i++) {
-		el = nodes.item(i);
-		if (el.hasAttribute && el.hasAttribute("class")) {
-			if (regex.test(el.getAttribute("class"))) {
-				returnList.push(el);
-			}
-		}
-	}
-	
-	return returnList;
-}
-
-function hasClassName(el, className) {
-	className = className.replace(/\-/g, "\\-");
-	var regex = new RegExp("(^|\\s)" + className + "(\\s|$)");
-	
-	if (el.hasAttribute && el.hasAttribute("class")) {
-		if (regex.test(el.getAttribute("class"))) {
-			return true;
-		}
-	}
-	
-	return false;
-}
+}(this));
 
 
 

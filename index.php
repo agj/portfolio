@@ -16,6 +16,10 @@ $yaml = Spyc::YAMLLoad('data.yaml');
 $works = Parser::getWorks($yaml, $language);
 $w;
 
+if ($yaml["settings"]["randomize"]) {
+	shuffle($works);
+}
+
 // Header. Breaks stuff with the mediabox crap. :/
 //header('Content-Type: application/xhtml+xml; charset=utf-8');
 
@@ -32,11 +36,11 @@ $w;
 	<link rel="icon" type="image/gif" href="/icon.gif" />
 	
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	<script src="js/filter.js" type="text/javascript"></script>
 	
 	<link rel="stylesheet" href="css/mediabox/mediaboxAdv-Minimal.css" type="text/css" media="screen" />
 	<script src="js/mootools.js" type="text/javascript"></script>
 	<script src="js/mediaboxAdv.js" type="text/javascript"></script>
+	<script src="js/filter.js" type="text/javascript"></script>
 </head>
 
 <body>

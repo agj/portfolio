@@ -41,8 +41,6 @@ class Parser {
 			$works[] = $w;
 		}
 		
-		shuffle($works);
-		
 		return $works;
 	}
 	
@@ -97,32 +95,32 @@ class Parser {
 	
 	private static function getWorkValueExtended($yaml, $language, $rawW, $prop) {
 		if (self::hasDeepProperty($rawW, 'translation', $language, $prop))
-			return $rawW["translation"][$language][$prop];
+			return $rawW['translation'][$language][$prop];
 		else if (self::hasDeepProperty($yaml, 'translation', $language, 'works', $prop, $rawW[$prop]))
-			return $yaml["translation"][$language]["works"][$prop][$rawW[$prop]];
+			return $yaml['translation'][$language]['works'][$prop][$rawW[$prop]];
 		return $rawW[$prop];
 	}
 	
-	private static function getLink($yaml, $language, $rawW, $prop, $value) {
+	private static function getLink($yaml, $language, $rawW, $name, $definition) {
 		$link = new Link();
 		
-		if (self::hasDeepProperty($rawW, 'translation', $language, 'links', $prop))
-			$link->name = $rawW["translation"][$language]["links"][$prop];
-		else if (self::hasDeepProperty($yaml, 'general', 'translation', $language, 'works', 'links', $prop))
-			$link->name = $yaml["general"]["translation"][$language]["works"]["links"][$prop];
+		if (self::hasDeepProperty($rawW, 'translation', $language, 'links', $name))
+			$link->name = $rawW['translation'][$language]['links'][$name];
+		else if (self::hasDeepProperty($yaml, 'translation', $language, 'works', 'links', $name))
+			$link->name = $yaml['translation'][$language]['works']['links'][$name];
 		else
-			$link->name = $prop;
+			$link->name = $name;
 		
-		if (is_string($value)) {
-			$link->url = $value;
+		if (is_string($definition)) {
+			$link->url = $definition;
 			$link->popup = true;
 		} else {
-			$link->url = $value["url"];
-			$link->popup = (!isset($value["popup"]) || $value["popup"] === true);
+			$link->url = $definition['url'];
+			$link->popup = (!isset($definition['popup']) || $definition['popup'] === true);
 			if ($link->popup) {
-				if (isset($value["width"]))	$link->width = $value["width"];
-				if (isset($value["height"]))	$link->height = $value["height"];
-				if (isset($value["color"]))	$link->color = $value["color"];
+				if (isset($definition['width']))	$link->width = $definition['width'];
+				if (isset($definition['height']))	$link->height = $definition['height'];
+				if (isset($definition['color']))	$link->color = $definition['color'];
 			}
 		}
 		
