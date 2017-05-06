@@ -1,0 +1,21 @@
+hide: true
+name: The lake
+category: int
+type: video game
+year: 2009
+image: lake.png
+readMore: 'http://blog.agj.cl/tag/the-lake/'
+description: >
+  A brief, oneiric game of discovery, wherein the character is called to a lake
+  far away by his dreams. <b>For Windows; requires DirectX 9.</b> Use the left
+  and right keys to rotate, and press both simultaneously to advance.</p>
+  <p>Created in three days, using the game-making tool <a
+  href="http://www.scirra.com/">Construct</a>.
+links:
+  download:
+    url: 'http://www.agj.cl/files/games/lake_1_0.zip'
+    popup: false
+  watch video:
+    url: 'http://www.vimeo.com/7507486'
+    width: 640
+    height: 480

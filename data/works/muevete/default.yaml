@@ -1,0 +1,22 @@
+name: Muévete
+category: int
+type: interactive installation
+year: 2011
+image: muevete.jpg
+readMore: 'http://blog.agj.cl/tag/muevete/'
+description: >
+  Interactive artwork commissioned by <a href="http://www.ccplm.cl/">Centro
+  Cultural Palacio La Moneda</a>, project for which I was in charge of software
+  programming, and which was featured in the 2013 <a
+  href="http://www.bienaldediseno.cl/">Design Biennial</a> in Santiago. The
+  Adobe AIR application interprets motion captured by a camera and displays
+  reactive visuals and audio on a large projection. Design by <a
+  href="http://skoknic.weebly.com/">Sebastián Skoknic</a>, support by Francisco
+  Fuentes.</p> <p>A web version was also developed, which is available at <a
+  href="http://www.ccplm.cl/color/#muestra">their website</a> by clicking on the
+  number '05' and then on 'Juega!'. Requires a webcam.
+links:
+  watch video:
+    url: 'http://vimeo.com/32240154'
+    width: 640
+    height: 360

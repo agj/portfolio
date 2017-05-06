@@ -1,0 +1,44 @@
+
+general:
+   categoryNames:
+      av:  動映像
+      vis: 静止画像
+      int: インタラクティブ
+   filterLabel: 表示フィルター
+   title: Ale Grilliの作品集
+   presentation: >
+                 <span class="me">Ale Grilli</span>（アレ グリリ）と言うチリのインタラクティブメディア・デザイナーに開発者です。
+                 文化、教育という分野に影響できるプロジェクトは特に大切にします。
+                 主に個人的で満足感を引き起こしたプロジェクトを下記に並びましたので、どうぞご覧ください。
+                 私の活動に興味を持てばいつでも ale¶agj.cl までご連絡ください
+                 <small>（その¶を@にお取り換えください）。</small>
+   closing:      >
+                 作品集をご興味いたきありがとうございました。
+                 もっと詳しくお尋ねになりたければ、どうぞご気楽に ale¶agj.cl まで
+                 <small>（その¶を@にお取り換えください）。</small>
+                 そして個人の<a href="http://blog.agj.cl/">ブログ</a>も<a href="/games/">ゲーム置き場</a>もありますので、もしよければご覧ください。
+                 あるいはこのサイトの<a href="/">トップ</a>に戻り、他にも色々あります。
+                 どうかよろしくお願いします！
+   readMore:     更に詳しく。
+   readMoreNonTranslated: 更に詳しく（英語）。
+works:
+   type:
+      video game:               ゲーム
+      animation:                アニメーション
+      motion graphics:          モーショングラフィックス
+      illustration:             イラスト
+      interactive piece:        インタラクティブ作品
+      interactive installation: インタラクティブ展示
+      digital toy:              デジタルおもちゃ
+      editorial:                エディトリアルデザイン
+      video:                    動画
+   links:
+      play:        プレイ
+      watch:       観覧
+      watch video: 動画
+      download:    ダウンロード
+      view:        観覧
+      view 1:      観覧 1
+      play large:  プレイ 大
+      small:       小
+      visit:       来訪

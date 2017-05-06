@@ -1,0 +1,20 @@
+name: Campodecolor
+category: int
+type: video game
+year: 2008
+image: campodecolor.png
+readMore: 'http://blog.agj.cl/tag/campodecolor/'
+description: >
+  Prototype for my undergraduate thesis project. An experimental videogame that
+  offers the barest elements for making visual compositions, and attempts to
+  evaluate their compositive parameters.</p> <p>Click on the animated picture to
+  start. In the center, a canvas that can be filled with the circles to the
+  right, by drag-and-dropping them. Below, a rough (and inaccurate, in this
+  prototype) analysis of some compositive values: color temperature, symmetry,
+  visual rhythm, and visual accent.
+links:
+  play:
+    url: 'http://www.agj.cl/files/games/campodecolor1/'
+    width: 650
+    height: 500
+    popup: true

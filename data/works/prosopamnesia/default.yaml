@@ -1,0 +1,17 @@
+name: Prosopamnesia
+category: int
+type: interactive piece
+year: 2010
+image: prosopamnesia.jpg
+readMore: 'http://blog.agj.cl/tag/prosopamnesia/'
+description: >
+  Moving the mouse around the image reveals portions of what's underneath, but
+  what is there is constantly changing. Uses Flash.</p> <p>An evocative piece
+  named after a neuropsychological condition in which the person is unable to
+  remember faces. In this work, Google Image Search is used to obtain random
+  pictures of faces on the fly.
+links:
+  play:
+    url: 'http://www.agj.cl/files/games/prosopamnesia/prosopamnesia.swf'
+    width: 360
+    height: 450

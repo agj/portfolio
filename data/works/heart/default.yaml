@@ -1,0 +1,16 @@
+hide: true
+name: Heart
+category: int
+type: interactive piece
+year: 2009
+image: heart.png
+readMore: 'http://blog.agj.cl/tag/heart/'
+description: >-
+  A cynical (yet hammy) exploration of the consequences of 'true love', in the
+  guise of a video game. Uses Flash. Click to start, and use the arrow keys to
+  move.
+links:
+  play:
+    url: 'http://www.agj.cl/files/games/heart/heart.swf'
+    width: 512
+    height: 512

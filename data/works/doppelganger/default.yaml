@@ -1,0 +1,17 @@
+hide: true
+name: Doppelganger
+category: int
+type: interactive piece
+year: 2010
+image: doppelganger.png
+description: >
+  A Flash experiment involving webcam use, face recognition, random image web
+  retrieval, and the simplest chatbot 'AI' possible. </p><p>Given the nature of
+  this piece, you'll need Flash, a webcam, a live Internet connection, and
+  plenty of light on your face for it to properly work.
+links:
+  play:
+    url: 'http://www.agj.cl/files/games/doppelganger/doppelganger.swf'
+    width: 640
+    height: 520
+    color: ffffff

@@ -1,0 +1,42 @@
+
+general:
+   categoryNames:
+      vis: visual estático
+      int: interactivo
+   filterLabel: sólo mostrar de tipo
+   title: Portafolio de Ale Grilli
+   presentation: >
+                 Soy <span class="me">Ale Grilli</span>, diseñador y desarrollador chileno de medios interactivos.
+                 La mayor satisfacción la obtengo al trabajar en cosas con impacto cultural o educativo.
+                 Aquí, una seleccion de proyectos en que he trabajado, mayormente personales y que
+                 siento más cercanos y propios.
+                 Contáctame cuando quieras por medio de ale¶agj.cl
+                 <small>(cambia ese caracter por una @).</small>
+   closing:      >
+                 Gracias por haberte fijado en mi portafolio. Si acaso te despertó el interés,
+                 puedes consultarme a través de ale¶agj.cl
+                 <small>(ponle una @ en vez de ese caracter).</small>
+                 También tengo un <a href="http://blog.agj.cl/">blog</a> que puedes revisar,
+                 y tengo <a href="/games/">un espacio con todos mis juegos reunidos,</a>
+                 si los quieres ver. O explora mi sitio web desde <a href="/">la página principal.</a> Gracias de nuevo.
+   readMore:     Lee más al respecto.
+   readMoreNonTranslated: Lee más al respecto (en inglés).
+works:
+   type:
+      video game:               videojuego
+      animation:                animación
+      motion graphics:          gráfica animada
+      illustration:             ilustración
+      interactive piece:        pieza interactiva
+      interactive installation: instalación interactiva
+      digital toy:              juguete digital
+   links:
+      play:        jugar
+      watch:       ver
+      watch video: ver video
+      download:    descargar
+      view:        ver
+      view 1:      ver 1
+      play large:  jugar grande
+      small:       chico
+      visit:       visitar

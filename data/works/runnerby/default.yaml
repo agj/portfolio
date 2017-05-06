@@ -1,0 +1,24 @@
+name: Runnerby
+category: int
+type: video game
+year: 2010
+image: runnerby.png
+readMore: 'http://blog.agj.cl/tag/runnerby/'
+description: >
+  A game controlled by a single key (spacebar), which makes a perpetually
+  running character jump. Uses Flash.</p> <p>Designed around simplicity of
+  controls, but difficulty of execution.</p> <p>(Playthrough video by <a
+  href="http://about.me/ortoslon">Alexey Zubkov</a>.)
+links:
+  play large:
+    url: 'http://www.agj.cl/files/games/runnerby/#large'
+    width: 512
+    height: 768
+  small:
+    url: 'http://www.agj.cl/files/games/runnerby/#small'
+    width: 256
+    height: 384
+  watch video:
+    url: 'http://www.youtube.com/watch?v=Q2v2f_cp51Q'
+    width: 256
+    height: 409
