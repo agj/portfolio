@@ -61,6 +61,7 @@ var Mediabox;
 		open: function(_images, startImage, _options) {
 			options = $extend({
 				loop: false,					// Allows to navigate between first and last images
+				hotkeys: false,					// Use shortcut keys for navigating and closing the mediabox.
 				stopKey: true,					// Prevents default keyboard action (such as up/down arrows), in lieu of the shortcuts
 													// Does not apply to iFrame content
 													// Does not affect mouse scrolling
@@ -258,7 +259,7 @@ var Mediabox;
 		var fn = open ? "addEvent" : "removeEvent";
 		if (iefix) window[fn]("scroll", position);
 		window[fn]("resize", size);
-		document[fn]("keydown", keyDown);
+		if (options.hotkeys) document[fn]("keydown", keyDown);
 	}
 
 	function keyDown(event) {

@@ -130,3 +130,9 @@
 	font-weight: bold;
 	text-decoration: underline;
 }
+
+/* Hack not to get dotted border around Flash stuff */
+
+#mbImage object:focus {
+	outline: transparent none;
+}

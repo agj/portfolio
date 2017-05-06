@@ -41,6 +41,7 @@ hr {
 	right: 0;
 	padding: 5px 10px 3px 5px;
 	position: absolute;
+	outline: transparent none;
 	}
 #top {
 	margin-top: 30px;
@@ -60,6 +61,7 @@ hr {
 	}
 .name {
 	width: 500px;
+	height: 300px;
 	margin-left: -30px;
 	float: left;
 	}
@@ -105,6 +107,11 @@ hr {
 	line-height: 1;
 	position: absolute;
 	display: inline-block;
+	}
+.name img {
+	background: #222;
+	width: 500px;
+	height: 300px;
 	}
 .name ul {
 	color: #000;
