@@ -32,7 +32,7 @@ class Parser {
 				$w->readMoreLabel = $yaml["general"]["readMore"];
 			}
 			
-			$srcLinks = self::getWorkValue($rawW, 'links');
+			//$srcLinks = self::getWorkValue($rawW, 'links');
 			if ($rawW["links"]) {
 				$links = array();
 				foreach ($rawW["links"] as $prop => $value) {
@@ -124,7 +124,7 @@ class Parser {
 			$link->popup = true;
 		} else {
 			$link->url = $value["url"];
-			$link->popup = ($value["popup"] == undefined || $value["popup"] === true);
+			$link->popup = (!isset($value["popup"]) || $value["popup"] === true);
 			if ($link->popup) {
 				if ($value["width"])	$link->width = $value["width"];
 				if ($value["height"])	$link->height = $value["height"];

@@ -31,7 +31,7 @@ $w;
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
 	<script src="js/filter.js" type="text/javascript"></script>
 	
-	<link rel="stylesheet" href="css/mediaboxAdvAgj.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="css/mediabox/mediaboxAdv-Minimal.css" type="text/css" media="screen" />
 	<script src="js/mootools.js" type="text/javascript"></script>
 	<script src="js/mediaboxAdv.js" type="text/javascript"></script>
 </head>
