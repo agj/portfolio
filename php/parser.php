@@ -4,8 +4,11 @@ class Parser {
 
 	public static function parseWork($id, $yaml, $language, $general) {
 		$raw = $yaml['default'];
-		if (isset($yaml[$language]))
+		$readMoreTranslated = false;
+		if (isset($yaml[$language])) {
 			$raw = array_merge($raw, $yaml[$language]);
+			$readMoreTranslated = isset($yaml[$language]['readMore']);
+		}
 
 		if (isset($raw["hide"]) && $raw["hide"] === true)
 			return null;
@@ -20,19 +23,9 @@ class Parser {
 		$w->category = $raw['category'];
 		$w->readMore = $raw['readMore'];
 
-		$w->readMoreLabel = $general['general']['readMore'];
-		// $w->readMoreLabel = (!$language || $w->readMore)
-		// 	? $general['general']['readMore']
-		// 	: $general['general']['readMoreNonTranslated'];
-
-		// if ($translation) {
-		// 	if (self::hasDeepProperty($raw, 'translation', $language, 'readMore'))
-		// 		$w->readMoreLabel = $translation["general"]["readMore"];
-		// 	else
-		// 		$w->readMoreLabel = $translation["general"]["readMoreNonTranslated"];
-		// } else {
-		// 	$w->readMoreLabel = $yaml["general"]["readMore"];
-		// }
+		$w->readMoreLabel = $readMoreTranslated
+			? $general['general']['readMore']
+			: $general['general']['readMoreNonTranslated'];
 
 		if (isset($raw["links"])) {
 			$links = array();
