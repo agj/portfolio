@@ -149,6 +149,10 @@ call_user_func( function () { // Creating a closure to prevent variable leakage.
 		return array_map($fn, $arr);
 	};
 
+	$mapIdx = function ($fn, $arr) {
+		return array_map($fn, $arr, array_keys($arr));
+	};
+
 	$filter = function ($fn, $arr) {
 		return array_filter($arr, $fn);
 	};
@@ -263,6 +267,8 @@ call_user_func( function () { // Creating a closure to prevent variable leakage.
 		'reduceOn'     => $curryTo(2, $flip($reduce)),
 		'map'          => $curry($map),
 		'mapOn'        => $curryTo(2, $flip($map)),
+		'mapIdx'       => $curry($mapIdx),
+		'mapIdxOn'     => $curryTo(2, $flip($mapIdx)),
 		'filter'       => $curry($filter),
 		'filterOn'     => $curryTo(2, $flip($filter)),
 		'find'         => $curry($find),

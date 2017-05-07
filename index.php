@@ -1,7 +1,7 @@
 <?php
 
-//error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_DEPRECATED | E_WARNING);
-//error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_DEPRECATED | E_WARNING);
+// error_reporting(E_ALL);
 
 include 'php/lambelo.php';
 include 'php/spyc.php';
@@ -16,6 +16,9 @@ $replace = L::curry(function ($match, $replacement, $string) {
 $language = $_REQUEST['lang'];
 
 $settings = Spyc::YAMLLoad('data/settings.yaml');
+$general = Spyc::YAMLLoad('data/general/default.yaml');
+if (file_exists("data/general/$language.yaml"))
+	$general = array_merge($general, Spyc::YAMLLoad("data/general/$language.yaml"));
 
 $workslist = L::map(basename, glob('data/works/*', GLOB_ONLYDIR));
 
@@ -29,8 +32,13 @@ $yamlWorks = L::foldOn($workslist, array(), function ($acc, $name) use ($toLang)
 	return $acc;
 });
 
-$works = Parser::getWorks($yamlWorks, $language);
+$works = L::filterOn(
+	L::mapIdxOn($yamlWorks, function ($w, $id) use ($language, $general) { return Parser::parseWork($id, $w, $language, $general); }),
+	function ($w) { return isset($w); }
+);
 $w;
+var_export($general);
+var_export($works);
 
 if ($settings["randomize"]) {
 	shuffle($works);

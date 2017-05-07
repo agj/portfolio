@@ -2,50 +2,47 @@
 
 class Parser {
 
-	public static function getWorks($yaml, $language) {
-		// if (self::hasDeepProperty($yaml, 'translation', $language))
-		// 	$generalTranslation = $yaml["translation"][$language];
+	public static function parseWork($id, $yaml, $language, $general) {
+		$raw = $yaml['default'];
+		if (isset($yaml[$language]))
+			$raw = array_merge($raw, $yaml[$language]);
 
-		$works = array();
-		foreach ($yaml as $id => $rawWork) {
-			$rawW = $rawWork['default'];
-			if (isset($rawWork[$language]))
-				$rawW = array_merge($rawW, $rawWork[$language]);
+		if (isset($raw["hide"]) && $raw["hide"] === true)
+			return null;
 
-			if (isset($rawW["hide"]) && $rawW["hide"] === true)
-				continue;
+		$w = new Work();
+		$w->id = $id;
+		$w->name = $raw['name'];
+		$w->type = $raw['type'];
+		$w->year = $raw['year'];
+		$w->image = $raw['image'];
+		$w->description = $raw['description'];
+		$w->category = $raw['category'];
+		$w->readMore = $raw['readMore'];
 
-			$w = new Work();
-			$w->id = $id;
-			$w->name = self::getWorkValue($language, $rawW, 'name');
-			$w->type = self::getWorkValueExtended($yaml, $language, $rawW, 'type');
-			$w->year = $rawW["year"];
-			$w->image = self::getWorkValue($language, $rawW, 'image');
-			$w->description = self::getWorkValue($language, $rawW, 'description');
-			$w->category = $rawW["category"];
-			$w->readMore = self::getWorkValue($language, $rawW, 'readMore');
+		$w->readMoreLabel = $general['general']['readMore'];
+		// $w->readMoreLabel = (!$language || $w->readMore)
+		// 	? $general['general']['readMore']
+		// 	: $general['general']['readMoreNonTranslated'];
 
-			if ($generalTranslation) {
-				if (self::hasDeepProperty($rawW, 'translation', $language, 'readMore'))
-					$w->readMoreLabel = $generalTranslation["general"]["readMore"];
-				else
-					$w->readMoreLabel = $generalTranslation["general"]["readMoreNonTranslated"];
-			} else {
-				$w->readMoreLabel = $yaml["general"]["readMore"];
+		// if ($translation) {
+		// 	if (self::hasDeepProperty($raw, 'translation', $language, 'readMore'))
+		// 		$w->readMoreLabel = $translation["general"]["readMore"];
+		// 	else
+		// 		$w->readMoreLabel = $translation["general"]["readMoreNonTranslated"];
+		// } else {
+		// 	$w->readMoreLabel = $yaml["general"]["readMore"];
+		// }
+
+		if (isset($raw["links"])) {
+			$links = array();
+			foreach ($raw["links"] as $name => $definition) {
+				$links[] = self::getLink($raw, $name, $definition);
 			}
-
-			if (isset($rawW["links"])) {
-				$links = array();
-				foreach ($rawW["links"] as $prop => $value) {
-					$links[] = self::getLink($yaml, $language, $rawW, $prop, $value);
-				}
-				$w->links = $links;
-			}
-
-			$works[] = $w;
+			$w->links = $links;
 		}
 
-		return $works;
+		return $w;
 	}
 
 	public static function getLightboxString($link, $group) {
@@ -105,15 +102,10 @@ class Parser {
 		return $rawW[$prop];
 	}
 
-	private static function getLink($yaml, $language, $rawW, $name, $definition) {
+	private static function getLink($raw, $name, $definition) {
 		$link = new Link();
 
-		if (self::hasDeepProperty($rawW, 'translation', $language, 'links', $name))
-			$link->name = $rawW['translation'][$language]['links'][$name];
-		else if (self::hasDeepProperty($yaml, 'translation', $language, 'works', 'links', $name))
-			$link->name = $yaml['translation'][$language]['works']['links'][$name];
-		else
-			$link->name = $name;
+		$link->name = $name;
 
 		if (is_string($definition)) {
 			$link->url = $definition;
@@ -151,5 +143,3 @@ class Parser {
 	}
 
 }
-
-?>
