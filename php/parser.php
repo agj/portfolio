@@ -3,16 +3,20 @@
 class Parser {
 
 	public static function getWorks($yaml, $language) {
-		if (self::hasDeepProperty($yaml, 'translation', $language))
-			$generalTranslation = $yaml["translation"][$language];
-		
+		// if (self::hasDeepProperty($yaml, 'translation', $language))
+		// 	$generalTranslation = $yaml["translation"][$language];
+
 		$works = array();
-		foreach ($yaml["works"] as $i => $rawW) {
+		foreach ($yaml as $id => $rawWork) {
+			$rawW = $rawWork['default'];
+			if (isset($rawWork[$language]))
+				$rawW = array_merge($rawW, $rawWork[$language]);
+
 			if (isset($rawW["hide"]) && $rawW["hide"] === true)
 				continue;
-			
+
 			$w = new Work();
-			$w->id = $i;
+			$w->id = $id;
 			$w->name = self::getWorkValue($language, $rawW, 'name');
 			$w->type = self::getWorkValueExtended($yaml, $language, $rawW, 'type');
 			$w->year = $rawW["year"];
@@ -20,7 +24,7 @@ class Parser {
 			$w->description = self::getWorkValue($language, $rawW, 'description');
 			$w->category = $rawW["category"];
 			$w->readMore = self::getWorkValue($language, $rawW, 'readMore');
-			
+
 			if ($generalTranslation) {
 				if (self::hasDeepProperty($rawW, 'translation', $language, 'readMore'))
 					$w->readMoreLabel = $generalTranslation["general"]["readMore"];
@@ -29,7 +33,7 @@ class Parser {
 			} else {
 				$w->readMoreLabel = $yaml["general"]["readMore"];
 			}
-			
+
 			if (isset($rawW["links"])) {
 				$links = array();
 				foreach ($rawW["links"] as $prop => $value) {
@@ -37,17 +41,17 @@ class Parser {
 				}
 				$w->links = $links;
 			}
-			
+
 			$works[] = $w;
 		}
-		
+
 		return $works;
 	}
-	
+
 	public static function getLightboxString($link, $group) {
 		if (!$link->popup)
 			return '';
-		
+
 		$result = ' rel="lightbox[work-' . $group;
 		if ($link->width)
 			$result .= ' ' . $link->width;
@@ -56,13 +60,13 @@ class Parser {
 		if ($link->color)
 			$result .= ' ' . $link->color;
 		$result .= ']"';
-		
+
 		return $result;
 	}
-	
+
 	public static function getCategories($yaml, $language) {
 		$result = array();
-		
+
 		foreach ($yaml["general"]["categoryNames"] as $id => $name) {
 			$cat = new Category;
 			$cat->id = $id;
@@ -72,19 +76,19 @@ class Parser {
 				$cat->name = $name;
 			$result[] = $cat;
 		}
-		
+
 		return $result;
 	}
-	
+
 	public static function getGeneralValue($yaml, $language, $prop) {
 		if (self::hasDeepProperty($yaml, 'translation', $language, 'general', $prop))
 			return $yaml["translation"][$language]["general"][$prop];
 		return $yaml["general"][$prop];
 	}
-	
-	
+
+
 	//////////////////////////////////////////
-	
+
 	private static function getWorkValue($language, $rawW, $prop) {
 		if (self::hasDeepProperty($rawW, 'translation', $language, $prop))
 			return $rawW["translation"][$language][$prop];
@@ -92,7 +96,7 @@ class Parser {
 			return $rawW[$prop];
 		return NULL;
 	}
-	
+
 	private static function getWorkValueExtended($yaml, $language, $rawW, $prop) {
 		if (self::hasDeepProperty($rawW, 'translation', $language, $prop))
 			return $rawW['translation'][$language][$prop];
@@ -100,17 +104,17 @@ class Parser {
 			return $yaml['translation'][$language]['works'][$prop][$rawW[$prop]];
 		return $rawW[$prop];
 	}
-	
+
 	private static function getLink($yaml, $language, $rawW, $name, $definition) {
 		$link = new Link();
-		
+
 		if (self::hasDeepProperty($rawW, 'translation', $language, 'links', $name))
 			$link->name = $rawW['translation'][$language]['links'][$name];
 		else if (self::hasDeepProperty($yaml, 'translation', $language, 'works', 'links', $name))
 			$link->name = $yaml['translation'][$language]['works']['links'][$name];
 		else
 			$link->name = $name;
-		
+
 		if (is_string($definition)) {
 			$link->url = $definition;
 			$link->popup = true;
@@ -123,15 +127,15 @@ class Parser {
 				if (isset($definition['color']))	$link->color = $definition['color'];
 			}
 		}
-		
+
 		return $link;
 	}
-	
+
 	private static function hasDeepProperty() {
 		$current = func_get_arg(0);
 		if (!$current)
 			return false;
-		
+
 		$len = func_num_args();
 		for ($i = 1; $i < $len; $i++) {
 			$arg = func_get_arg($i);
@@ -145,7 +149,7 @@ class Parser {
 		}
 		return true;
 	}
-	
+
 }
 
 ?>

@@ -3,20 +3,36 @@
 //error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_DEPRECATED | E_WARNING);
 //error_reporting(E_ALL);
 
+include 'php/lambelo.php';
 include 'php/spyc.php';
 include 'php/classes.php';
 include 'php/parser.php';
 
 $br = "\n";
+$replace = L::curry(function ($match, $replacement, $string) {
+	return preg_replace($match, $replacement, $string);
+});
 
 $language = $_REQUEST['lang'];
 
-$yaml = Spyc::YAMLLoad('data.yaml');
+$settings = Spyc::YAMLLoad('data/settings.yaml');
 
-$works = Parser::getWorks($yaml, $language);
+$workslist = L::map(basename, glob('data/works/*', GLOB_ONLYDIR));
+
+$toLang = $replace('/.*\/([^\/]+).yaml/', '$1');
+$yamlWorks = L::foldOn($workslist, array(), function ($acc, $name) use ($toLang) {
+	$langs = L::map($toLang, glob("data/works/$name/*.yaml"));
+	$acc[$name] = L::foldOn($langs, array(), function ($acc, $lang) use ($name) {
+		$acc[$lang] = Spyc::YAMLLoad("data/works/$name/$lang.yaml");
+		return $acc;
+	});
+	return $acc;
+});
+
+$works = Parser::getWorks($yamlWorks, $language);
 $w;
 
-if ($yaml["settings"]["randomize"]) {
+if ($settings["randomize"]) {
 	shuffle($works);
 }
 
@@ -31,11 +47,11 @@ if ($yaml["settings"]["randomize"]) {
 <head>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 
-	<title><?php echo Parser::getGeneralValue($yaml, $language, 'title'); ?></title>
+	<title><?= Parser::getGeneralValue($yaml, $language, 'title'); ?></title>
 	<link rel="icon" type="image/gif" href="/icon.gif" />
-	
+
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	
+
 	<link rel="stylesheet" href="css/mediabox/mediaboxAdv-Minimal.css" type="text/css" media="screen" />
 	<script src="js/mootools.js" type="text/javascript"></script>
 	<script src="js/mediaboxAdv.js" type="text/javascript"></script>
@@ -47,11 +63,11 @@ if ($yaml["settings"]["randomize"]) {
 
 <!-- Presentation -->
 <?php
-	if ($yaml["settings"]["languages"]) {
+	if ($settings["languages"]) {
 		echo '<div id="languages">';
-		if ($language && $yaml["settings"]["languages"][$language])
-			echo '<a href="./">&rarr; ' . $yaml["settings"]["defaultLanguageName"] . '</a>';
-		foreach ($yaml["settings"]["languages"] as $lang => $langName) {
+		if ($language && $settings["languages"][$language])
+			echo '<a href="./">&rarr; ' . $settings["defaultLanguageName"] . '</a>';
+		foreach ($settings["languages"] as $lang => $langName) {
 			if ($lang != $language)
 				echo '<a href="?lang=' . $lang . '">&rarr; ' . $langName . '</a>';
 		}
@@ -60,25 +76,25 @@ if ($yaml["settings"]["randomize"]) {
 ?>
 
 <div id="top" class="text">
-<p><?php echo Parser::getGeneralValue($yaml, $language, 'presentation'); ?></p>
+<p><?= Parser::getGeneralValue($yaml, $language, 'presentation'); ?></p>
 </div>
 
 <!-- Filter -->
 <hr />
 <div id="filter" class="text">
 <?php
-	
+
 	echo ' ' . Parser::getGeneralValue($yaml, $language, 'filterLabel') . $br;
 
 	$categories = Parser::getCategories($yaml, $language);
-	
+
 	foreach ($categories as $cat) {
 		echo '	<label>' . $br;
 		echo '		<input id="check-' . $cat->id . '" type="checkbox" checked="checked" />' . $br;
 		echo '		' . $cat->name . $br;
 		echo '	</label>' . $br;
 	}
-	
+
 ?>
 </div>
 <hr />
@@ -120,7 +136,7 @@ foreach ($works as $w) {
 
 
 <div id="bottom" class="text">
-	<p><?php echo Parser::getGeneralValue($yaml, $language, 'closing'); ?></p>
+	<p><?= Parser::getGeneralValue($yaml, $language, 'closing'); ?></p>
 </div>
 
 
