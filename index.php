@@ -59,12 +59,11 @@ if ($settings["randomize"]) {
 //header('Content-Type: application/xhtml+xml; charset=utf-8');
 
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+?><!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+	<meta charset="utf-8" />
 
 	<title><?= $general['title']; ?></title>
 	<link rel="icon" type="image/gif" href="/icon.gif" />
@@ -81,18 +80,18 @@ if ($settings["randomize"]) {
 
 
 <!-- Presentation -->
-<?php
-	if ($settings["languages"]) {
-		echo '<div id="languages">';
-		if ($language && $settings["languages"][$language])
-			echo '<a href="./">&rarr; ' . $settings["defaultLanguageName"] . '</a>';
-		foreach ($settings["languages"] as $lang => $langName) {
-			if ($lang != $language)
-				echo '<a href="?lang=' . $lang . '">&rarr; ' . $langName . '</a>';
-		}
-		echo '</div>';
-	}
-?>
+<?php if ($settings["languages"]): ?>
+	<div id="languages">
+		<?php if ($language && $settings["languages"][$language]): ?>
+			<a href="./">&rarr; <?= $settings["defaultLanguageName"] ?></a>
+		<?php endif ?>
+		<?php foreach ($settings["languages"] as $lang => $langName): ?>
+			<?php if ($lang != $language): ?>
+				<a href="?lang=<?= $lang ?>">&rarr; <?= $langName ?></a>
+			<?php endif ?>
+		<?php endforeach ?>
+	</div>
+<?php endif ?>
 
 <div id="top" class="text">
 <p><?= $general['presentation'] ?></p>
@@ -101,20 +100,13 @@ if ($settings["randomize"]) {
 <!-- Filter -->
 <hr />
 <div id="filter" class="text">
-<?php
-
-	echo ' ' . $general['filterLabel'] . $br;
-
-	$categories = Parser::getCategories($general, $language);
-
-	foreach ($categories as $cat) {
-		echo '	<label>' . $br;
-		echo '		<input id="check-' . $cat->id . '" type="checkbox" checked="checked" />' . $br;
-		echo '		' . $cat->name . $br;
-		echo '	</label>' . $br;
-	}
-
-?>
+	<?= $general['filterLabel'] ?>
+	<?php foreach (Parser::getCategories($general, $language) as $cat): ?>
+		<label>
+			<input id="check-<?= $cat->id ?>" type="checkbox" checked />
+			<?= $cat->name ?>
+		</label>
+	<?php endforeach ?>
 </div>
 <hr />
 
