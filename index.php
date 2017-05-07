@@ -6,20 +6,8 @@ error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERRO
 require_once 'php/lambelo.php';
 require_once 'php/spyc.php';
 require_once 'php/parser.php';
+require_once 'php/utils.php';
 
-$br = "\n";
-$replace = L::curry(function ($match, $replacement, $string) {
-	return preg_replace($match, $replacement, $string);
-});
-$deepMerge = function ($a, $b) use (&$deepMerge) {
-	$r = $a;
-	foreach ($b as $key => $value) {
-		$r[$key] = isset($r[$key]) && is_array($r[$key]) && is_array($value)
- 			? $deepMerge($r[$key], $value)
-			: $value;
-	}
-	return $r;
-};
 
 $language = $_REQUEST['lang'];
 
@@ -120,11 +108,11 @@ if ($settings["randomize"]) {
 		<div class="name">
 			<h1><?= $w->name ?></h1>
 			<p><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
-			<img alt="" src="data/works/<?= $w->id ?>/01.jpg" />
+			<img alt="" src="data/works/<?= $w->id ?>/<?= $w->image ?>" />
 			<?php if ($w->links): ?>
 				<ul>
 					<?php foreach ($w->links as $l): ?>
-						<li><a href="<?= $l->url ?>"><?= $l->name ?></a></li>
+						<li><a href="<?= $l->url ?>" <?= Parser::getLightboxString($l, $w->id) ?>><?= $l->name ?></a></li>
 					<?php endforeach ?>
 				</ul>
 			<?php endif ?>

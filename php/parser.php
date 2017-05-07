@@ -2,14 +2,17 @@
 
 require_once 'php/lambelo.php';
 require_once 'php/classes.php';
+require_once 'php/utils.php';
 
 class Parser {
 
 	public static function parseWork($id, $yaml, $language, $general, $replacements) {
+		global $deepMerge;
+
 		$raw = $yaml['default'];
-		$readMoreTranslated = false;
+		$readMoreTranslated = true;
 		if (isset($yaml[$language])) {
-			$raw = array_merge($raw, $yaml[$language]);
+			$raw = $deepMerge($raw, $yaml[$language]);
 			$readMoreTranslated = isset($yaml[$language]['readMore']);
 		}
 
@@ -21,7 +24,7 @@ class Parser {
 		$w->name = $raw['name'];
 		$w->type = self::findReplacement($raw['type'], $replacements['type']);
 		$w->year = $raw['year'];
-		$w->image = $raw['image'];
+		$w->image = self::getImageFilename($w->id);
 		$w->description = $raw['description'];
 		$w->category = $raw['category'];
 		$w->readMore = $raw['readMore'];
@@ -64,42 +67,10 @@ class Parser {
 			$cat->name = $name;
 			return $cat;
 		});
-		// $result = array();
-
-		// foreach ($general["categoryNames"] as $id => $name) {
-		// 	$cat = new Category;
-		// 	$cat->id = $id;
-		// 	$cat->name = $name;
-		// 	$result[] = $cat;
-		// }
-
-		// return $result;
-	}
-
-	public static function getGeneralValue($yaml, $language, $prop) {
-		if (self::hasDeepProperty($yaml, 'translation', $language, 'general', $prop))
-			return $yaml["translation"][$language]["general"][$prop];
-		return $yaml["general"][$prop];
 	}
 
 
 	//////////////////////////////////////////
-
-	private static function getWorkValue($language, $rawW, $prop) {
-		if (self::hasDeepProperty($rawW, 'translation', $language, $prop))
-			return $rawW["translation"][$language][$prop];
-		if (isset($rawW[$prop]))
-			return $rawW[$prop];
-		return NULL;
-	}
-
-	private static function getWorkValueExtended($yaml, $language, $rawW, $prop) {
-		if (self::hasDeepProperty($rawW, 'translation', $language, $prop))
-			return $rawW['translation'][$language][$prop];
-		else if (self::hasDeepProperty($yaml, 'translation', $language, 'works', $prop, $rawW[$prop]))
-			return $yaml['translation'][$language]['works'][$prop][$rawW[$prop]];
-		return $rawW[$prop];
-	}
 
 	private static function getLink($raw, $name, $definition, $replacements) {
 		$link = new Link();
@@ -127,23 +98,11 @@ class Parser {
 		return $string;
 	}
 
-	private static function hasDeepProperty() {
-		$current = func_get_arg(0);
-		if (!$current)
-			return false;
-
-		$len = func_num_args();
-		for ($i = 1; $i < $len; $i++) {
-			$arg = func_get_arg($i);
-			if (!$arg)
-				return false;
-			if (!isset($current[$arg]))
-				return false;
-			$current = $current[$arg];
-			if (!$current)
-				return false;
-		}
-		return true;
+	private static function getImageFilename($id) {
+		return '01.' . L::findOn(
+			array('jpg', 'png', 'gif'),
+			function ($ext) use ($id) { return file_exists("data/works/$id/01.$ext"); }
+		);
 	}
 
 }
