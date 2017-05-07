@@ -1,0 +1,10 @@
+{
+    "name": "agj/portfolio",
+    "require": {
+        "mustangostang/spyc": "^0.6.2",
+        "league/commonmark": "^0.15.3"
+    },
+    "config": {
+        "vendor-dir": "php/lib/"
+    }
+}

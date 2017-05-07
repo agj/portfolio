@@ -1,10 +1,9 @@
 <?php
 
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_DEPRECATED | E_WARNING);
-// error_reporting(E_ALL);
 
+require_once 'php/lib/autoload.php';
 require_once 'php/lambelo.php';
-require_once 'php/spyc.php';
 require_once 'php/parser.php';
 require_once 'php/utils.php';
 
@@ -118,7 +117,7 @@ if ($settings["randomize"]) {
 			<?php endif ?>
 		</div>
 		<div class="description">
-			<p><?= $w->description ?></p>
+			<?= $w->description ?>
 			<p><a class="ext-link" href="<?= $w->readMore ?>"><?= $w->readMoreLabel ?></a></p>
 		</div>
 	</div>

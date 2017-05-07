@@ -1,9 +1,11 @@
-description: >
-  <a href="http://www.ccplm.cl/">モネだ文化館</a>に依頼されたインタラクティブな展示品です。
-  私はこの作品のソフトウェアのプログラミング担当でした。 <a
-  href="http://www.bienaldediseno.cl/">2013年のサンティアゴデザイン隔年大会</a>でも展示されました。 Adobe
-  AIR製ソフトがビデオカメラの前に立つお客の動きを取り込み、その反応に大規模投影を映り、音声を再生します。 設計は<a
-  href="http://skoknic.weebly.com/">Sebastián Skoknic</a>より、支援はFrancisco
-  Fuentesよりです。</p> <p>共に開発されたウェブ版は<a
-  href="http://www.ccplm.cl/color/#muestra">こちら</a>です。まず「05」と書いてあるところにクリック、そして右側の「Juega!」にクリックしてください。
-  操作にはウェブカメラが必要です。
+description: |
+  [モネだ文化館][1]に依頼されたインタラクティブな展示品です。
+  私はこの作品のソフトウェアのプログラミング担当でした。[2013年のサンティアゴデザイン隔年大会][2]でも展示されました。 Adobe AIR製ソフトがビデオカメラの前に立つお客の動きを取り込み、その反応に大規模投影を映り、音声を再生します。設計は[Sebastián Skoknic][3]より、支援はFrancisco
+  Fuentesよりです。
+
+  共に開発されたウェブ版は[こちら][4]です。まず「05」と書いてあるところにクリック、そして右側の「Juega!」にクリックしてください。操作にはウェブカメラが必要です。
+
+  [1]: http://www.ccplm.cl/
+  [2]: http://www.bienaldediseno.cl/
+  [3]: http://skoknic.weebly.com/
+  [4]: http://www.ccplm.cl/color/#muestra
