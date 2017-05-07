@@ -3,22 +3,33 @@
 error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_DEPRECATED | E_WARNING);
 // error_reporting(E_ALL);
 
-include 'php/lambelo.php';
-include 'php/spyc.php';
-include 'php/classes.php';
-include 'php/parser.php';
+require_once 'php/lambelo.php';
+require_once 'php/spyc.php';
+require_once 'php/parser.php';
 
 $br = "\n";
 $replace = L::curry(function ($match, $replacement, $string) {
 	return preg_replace($match, $replacement, $string);
 });
+$deepMerge = function ($a, $b) use (&$deepMerge) {
+	$r = $a;
+	foreach ($b as $key => $value) {
+		$r[$key] = isset($r[$key]) && is_array($r[$key]) && is_array($value)
+ 			? $deepMerge($r[$key], $value)
+			: $value;
+	}
+	return $r;
+};
 
 $language = $_REQUEST['lang'];
 
 $settings = Spyc::YAMLLoad('data/settings.yaml');
 $general = Spyc::YAMLLoad('data/general/default.yaml');
 if (file_exists("data/general/$language.yaml"))
-	$general = array_merge($general, Spyc::YAMLLoad("data/general/$language.yaml"));
+	$general = $deepMerge($general, Spyc::YAMLLoad("data/general/$language.yaml"));
+$replacements = null;
+if ("data/general/replacements/$language.yaml")
+	$replacements = Spyc::YAMLLoad("data/general/replacements/$language.yaml");
 
 $workslist = L::map(basename, glob('data/works/*', GLOB_ONLYDIR));
 
@@ -33,12 +44,12 @@ $yamlWorks = L::foldOn($workslist, array(), function ($acc, $name) use ($toLang)
 });
 
 $works = L::filterOn(
-	L::mapIdxOn($yamlWorks, function ($w, $id) use ($language, $general) { return Parser::parseWork($id, $w, $language, $general); }),
+	L::mapIdxOn($yamlWorks, function ($w, $id) use ($language, $general, $replacements) {
+		return Parser::parseWork($id, $w, $language, $general, $replacements);
+	}),
 	function ($w) { return isset($w); }
 );
 $w;
-var_export($general);
-var_export($works);
 
 if ($settings["randomize"]) {
 	shuffle($works);
@@ -55,7 +66,7 @@ if ($settings["randomize"]) {
 <head>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 
-	<title><?= Parser::getGeneralValue($yaml, $language, 'title'); ?></title>
+	<title><?= $general['title']; ?></title>
 	<link rel="icon" type="image/gif" href="/icon.gif" />
 
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -84,7 +95,7 @@ if ($settings["randomize"]) {
 ?>
 
 <div id="top" class="text">
-<p><?= Parser::getGeneralValue($yaml, $language, 'presentation'); ?></p>
+<p><?= $general['presentation'] ?></p>
 </div>
 
 <!-- Filter -->
@@ -92,9 +103,9 @@ if ($settings["randomize"]) {
 <div id="filter" class="text">
 <?php
 
-	echo ' ' . Parser::getGeneralValue($yaml, $language, 'filterLabel') . $br;
+	echo ' ' . $general['filterLabel'] . $br;
 
-	$categories = Parser::getCategories($yaml, $language);
+	$categories = Parser::getCategories($general, $language);
 
 	foreach ($categories as $cat) {
 		echo '	<label>' . $br;
@@ -111,40 +122,37 @@ if ($settings["randomize"]) {
 <!--*************************************-->
 
 
-<?php
+<?php foreach ($works as $w): ?>
+	<!-- WORK: <?= strtoupper($w->name) ?> -->
+	<div id="work-<?= $w->id ?>" class="work cat-<?= $w->category ?>">
+		<div class="name">
+			<h1><?= $w->name ?></h1>
+			<p><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
+			<img alt="" src="data/works/<?= $w->id ?>/01.jpg" />
+			<?php if ($w->links): ?>
+				<ul>
+					<?php foreach ($w->links as $l): ?>
+						<li><a href="<?= $l->url ?>"><?= $l->name ?></a></li>
+					<?php endforeach ?>
+				</ul>
+			<?php endif ?>
+		</div>
+		<div class="description">
+			<p><?= $w->description ?></p>
+			<p><a class="ext-link" href="<?= $w->readMore ?>"><?= $w->readMoreLabel ?></a></p>
+		</div>
+	</div>
 
-foreach ($works as $w) {
-	echo '<!-- WORK: ' . strtoupper($w->name) . ' -->' . $br;
-	echo '<div id="work-' . $w->id . '" class="work cat-' . $w->category . '">' . $br;
-	echo '	<div class="name">' . $br;
-	echo '		<h1>' . $w->name . '</h1>' . $br;
-	echo '		<p>' . $w->type . ' <span class="year">' . $w->year . '</span></p>' . $br;
-	echo '		<img alt="" src="img/' . $w->image . '" />' . $br;
-	if ($w->links) {
-		echo '		<ul>' . $br;
-		foreach ($w->links as $l) {
-			echo '			<li><a href="' . $l->url . '"' . Parser::getLightboxString($l, $w->id) . '>' . $l->name . '</a></li>' . $br;
-		}
-		echo '		</ul>' . $br;
-	}
-	echo '	</div>' . $br;
-	echo '	<div class="description">' . $br;
-	echo '		<p>' . $w->description . '</p>' . $br;
-	if ($w->readMore)
-		echo '		<p><a class="ext-link" href="' . $w->readMore . '">' . $w->readMoreLabel . '</a></p>' . $br;
-	echo '	</div>' . $br;
-	echo '</div>' . $br;
-	echo $br . $br;
-	echo '<hr />';
-	echo $br . $br;
-}
+	<hr />
 
-?>
+<?php endforeach ?>
+
+
 <!--*************************************-->
 
 
 <div id="bottom" class="text">
-	<p><?= Parser::getGeneralValue($yaml, $language, 'closing'); ?></p>
+	<p><?= $general['closing']; ?></p>
 </div>
 
 

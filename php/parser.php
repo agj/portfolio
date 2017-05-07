@@ -1,8 +1,11 @@
 <?php
 
+require_once 'php/lambelo.php';
+require_once 'php/classes.php';
+
 class Parser {
 
-	public static function parseWork($id, $yaml, $language, $general) {
+	public static function parseWork($id, $yaml, $language, $general, $replacements) {
 		$raw = $yaml['default'];
 		$readMoreTranslated = false;
 		if (isset($yaml[$language])) {
@@ -16,7 +19,7 @@ class Parser {
 		$w = new Work();
 		$w->id = $id;
 		$w->name = $raw['name'];
-		$w->type = $raw['type'];
+		$w->type = self::findReplacement($raw['type'], $replacements['type']);
 		$w->year = $raw['year'];
 		$w->image = $raw['image'];
 		$w->description = $raw['description'];
@@ -24,13 +27,13 @@ class Parser {
 		$w->readMore = $raw['readMore'];
 
 		$w->readMoreLabel = $readMoreTranslated
-			? $general['general']['readMore']
-			: $general['general']['readMoreNonTranslated'];
+			? $general['readMore']
+			: $general['readMoreNonTranslated'];
 
 		if (isset($raw["links"])) {
 			$links = array();
 			foreach ($raw["links"] as $name => $definition) {
-				$links[] = self::getLink($raw, $name, $definition);
+				$links[] = self::getLink($raw, $name, $definition, $replacements);
 			}
 			$w->links = $links;
 		}
@@ -54,20 +57,23 @@ class Parser {
 		return $result;
 	}
 
-	public static function getCategories($yaml, $language) {
-		$result = array();
-
-		foreach ($yaml["general"]["categoryNames"] as $id => $name) {
+	public static function getCategories($general, $language) {
+		return L::mapIdxOn($general['categoryNames'], function ($name, $id) {
 			$cat = new Category;
 			$cat->id = $id;
-			if (self::hasDeepProperty($yaml, 'translation', $language, 'general', 'categoryNames', $id))
-				$cat->name = $yaml["translation"][$language]["general"]["categoryNames"][$id];
-			else
-				$cat->name = $name;
-			$result[] = $cat;
-		}
+			$cat->name = $name;
+			return $cat;
+		});
+		// $result = array();
 
-		return $result;
+		// foreach ($general["categoryNames"] as $id => $name) {
+		// 	$cat = new Category;
+		// 	$cat->id = $id;
+		// 	$cat->name = $name;
+		// 	$result[] = $cat;
+		// }
+
+		// return $result;
 	}
 
 	public static function getGeneralValue($yaml, $language, $prop) {
@@ -95,10 +101,10 @@ class Parser {
 		return $rawW[$prop];
 	}
 
-	private static function getLink($raw, $name, $definition) {
+	private static function getLink($raw, $name, $definition, $replacements) {
 		$link = new Link();
 
-		$link->name = $name;
+		$link->name = self::findReplacement($name, $replacements['links']);
 
 		if (is_string($definition)) {
 			$link->url = $definition;
@@ -114,6 +120,11 @@ class Parser {
 		}
 
 		return $link;
+	}
+
+	private static function findReplacement($string, $replacements) {
+		if (isset($replacements[$string])) return $replacements[$string];
+		return $string;
 	}
 
 	private static function hasDeepProperty() {

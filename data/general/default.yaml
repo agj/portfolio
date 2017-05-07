@@ -1,22 +1,21 @@
 
-general:
-   categoryNames:
-      int: interactive
-      av:  audiovisual
-      vis: static visual
-   filterLabel: only show works of type
-   title: Ale Grilli's portfolio
-   presentation: >
-                 I'm <span class="me">Ale Grilli</span>, a freelance interactive media designer and developer from Chile.
-                 I like it best when making things with a cultural or educational impact.
-                 Here is a selection of projects I've worked on, mostly personal, the ones closer to my heart.
-                 Contact me any time via ale¶agj.cl
-                 <small>(just change that character for an @).</small>
-   closing:      >
-                 Thank you for having taken an interest in my portfolio. Maybe you want to know more;
-                 if so, I'd be happy to hear from you via ale¶agj.cl
-                 <small>(put an @ there instead of that other thing).</small>
-                 Also, I have a <a href="http://blog.agj.cl/">blog</a> that you can read, and I have
-                 <a href="/games/">all my video games together in one place,</a>
-                 if you wanna look. Or check out the rest of my website from <a href="/">the top.</a> Thanks again.
-   readMore: Read more about it.
+categoryNames:
+   int: interactive
+   av:  audiovisual
+   vis: static visual
+filterLabel: only show works of type
+title: Ale Grilli's portfolio
+presentation: >
+              I'm <span class="me">Ale Grilli</span>, a freelance interactive media designer and developer from Chile.
+              I like it best when making things with a cultural or educational impact.
+              Here is a selection of projects I've worked on, mostly personal, the ones closer to my heart.
+              Contact me any time via ale¶agj.cl
+              <small>(just change that character for an @).</small>
+closing:      >
+              Thank you for having taken an interest in my portfolio. Maybe you want to know more;
+              if so, I'd be happy to hear from you via ale¶agj.cl
+              <small>(put an @ there instead of that other thing).</small>
+              Also, I have a <a href="http://blog.agj.cl/">blog</a> that you can read, and I have
+              <a href="/games/">all my video games together in one place,</a>
+              if you wanna look. Or check out the rest of my website from <a href="/">the top.</a> Thanks again.
+readMore: Read more about it.
