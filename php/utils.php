@@ -17,3 +17,10 @@ $deepMerge = function ($a, $b) use (&$deepMerge) {
 	}
 	return $r;
 };
+
+$getLanguage = function ($possibilities) {
+	$language = strtolower($_REQUEST['lang']);
+	if (in_array($language, $possibilities)) return $language;
+	return null;
+};
+

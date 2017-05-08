@@ -10,9 +10,8 @@ require_once 'php/utils.php';
 
 $markdown = new League\CommonMark\CommonMarkConverter();
 
-$language = $_REQUEST['lang'];
-
 $settings = Spyc::YAMLLoad('data/settings.yaml');
+$language = $getLanguage(array_keys($settings['languages']));
 $general = Spyc::YAMLLoad('data/general/default.yaml');
 if (file_exists("data/general/$language.yaml"))
 	$general = $deepMerge($general, Spyc::YAMLLoad("data/general/$language.yaml"));
@@ -65,7 +64,7 @@ if ($settings['shuffle']) {
 	<script src="js/filter.js" type="text/javascript"></script>
 </head>
 
-<body>
+<body class="lang-<?= (isset($language) ? $language : 'default') ?>">
 
 
 <!-- Presentation -->
