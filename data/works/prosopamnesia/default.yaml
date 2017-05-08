@@ -1,9 +1,10 @@
+
+hide: true
 name: Prosopamnesia
 category: int
 type: interactive piece
 year: 2010
-image: prosopamnesia.jpg
-readMore: 'http://blog.agj.cl/tag/prosopamnesia/'
+readMore: http://blog.agj.cl/tag/prosopamnesia/
 description: |
   Moving the mouse around the image reveals portions of what's underneath, but what is there is constantly changing. Uses Flash.
 

@@ -2,21 +2,16 @@
 categoryNames:
    vis: visual estático
    int: interactivo
+   other: otros
 filterLabel: sólo mostrar de tipo
 title: Portafolio de Ale Grilli
-presentation: >
-              Soy <span class="me">Ale Grilli</span>, diseñador y desarrollador chileno de medios interactivos.
-              La mayor satisfacción la obtengo al trabajar en cosas con impacto cultural o educativo.
-              Aquí, una seleccion de proyectos en que he trabajado, mayormente personales y que
-              siento más cercanos y propios.
-              Contáctame cuando quieras por medio de ale¶agj.cl
-              <small>(cambia ese caracter por una @).</small>
-closing:      >
-              Gracias por haberte fijado en mi portafolio. Si acaso te despertó el interés,
-              puedes consultarme a través de ale¶agj.cl
-              <small>(ponle una @ en vez de ese caracter).</small>
-              También tengo un <a href="http://blog.agj.cl/">blog</a> que puedes revisar,
-              y tengo <a href="/games/">un espacio con todos mis juegos reunidos,</a>
-              si los quieres ver. O explora mi sitio web desde <a href="/">la página principal.</a> Gracias de nuevo.
+presentation: |
+              Soy <span class="me">Ale Grilli</span>, diseñador y desarrollador chileno de medios interactivos. La mayor satisfacción la obtengo al trabajar en cosas con impacto cultural o educativo. Aquí, una seleccion de proyectos en que he trabajado, mayormente personales y que siento más cercanos y propios. Contáctame cuando quieras por medio de ale¶agj.cl <small>(cambia ese caracter por una @).</small>
+closing:      |
+              Gracias por haberte fijado en mi portafolio. Si acaso te despertó el interés, puedes consultarme a través de ale¶agj.cl <small>(ponle una @ en vez de ese caracter).</small> También tengo un [blog][1] que puedes revisar, y tengo [un espacio con todos mis juegos reunidos,][2] si los quieres ver. O explora mi sitio web desde [la página principal.][3] Gracias de nuevo.
+
+              [1]: http://blog.agj.cl/
+              [2]: /games/
+              [3]: /
 readMore:     Lee más al respecto.
 readMoreNonTranslated: Lee más al respecto (en inglés).

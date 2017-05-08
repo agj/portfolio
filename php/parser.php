@@ -30,7 +30,7 @@ class Parser {
 		$w->year = $raw['year'];
 		$w->image = self::getImageFilename($w->id);
 		$w->description = $markdown->convertToHTML($raw['description']);
-		$w->category = $raw['category'];
+		$w->category = is_array($raw['category']) ? $raw['category'] : array($raw['category']);
 		$w->readMore = $raw['readMore'];
 
 		$w->readMoreLabel = $readMoreTranslated

@@ -1,9 +1,9 @@
+
 hide: true
 name: Doppelganger
 category: int
 type: interactive piece
 year: 2010
-image: doppelganger.png
 description: >
   A Flash experiment involving webcam use, face recognition, random image web
   retrieval, and the simplest chatbot 'AI' possible. </p><p>Given the nature of

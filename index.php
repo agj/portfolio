@@ -8,6 +8,8 @@ require_once 'php/parser.php';
 require_once 'php/utils.php';
 
 
+$markdown = new League\CommonMark\CommonMarkConverter();
+
 $language = $_REQUEST['lang'];
 
 $settings = Spyc::YAMLLoad('data/settings.yaml');
@@ -38,7 +40,7 @@ $works = L::filterOn(
 );
 $w;
 
-if ($settings["randomize"]) {
+if ($settings['shuffle']) {
 	shuffle($works);
 }
 
@@ -81,7 +83,7 @@ if ($settings["randomize"]) {
 <?php endif ?>
 
 <div id="top" class="text">
-<p><?= $general['presentation'] ?></p>
+	<?= $markdown->convertToHTML($general['presentation']) ?>
 </div>
 
 <!-- Filter -->
@@ -103,7 +105,7 @@ if ($settings["randomize"]) {
 
 <?php foreach ($works as $w): ?>
 	<!-- WORK: <?= strtoupper($w->name) ?> -->
-	<div id="work-<?= $w->id ?>" class="work cat-<?= $w->category ?>">
+	<div id="work-<?= $w->id ?>" class="work <?php foreach ($w->category as $cat) echo 'cat-' . $cat . ' '; ?>">
 		<div class="name">
 			<h1><?= $w->name ?></h1>
 			<p><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
@@ -131,7 +133,7 @@ if ($settings["randomize"]) {
 
 
 <div id="bottom" class="text">
-	<p><?= $general['closing']; ?></p>
+	<?= $markdown->convertToHTML($general['closing']) ?>
 </div>
 
 
