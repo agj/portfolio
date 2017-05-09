@@ -151,13 +151,6 @@ if ($settings['shuffle']) {
 	<?= $markdown->convertToHTML($general['closing']) ?>
 </div>
 
-<div id="popup">
-	<div class="close button">×</div>
-	<div class="content"></div>
-	<div class="previous button">⟨</div>
-	<div class="next button">⟩</div>
-</div>
-
 
 </body>
 

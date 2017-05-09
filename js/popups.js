@@ -32,8 +32,7 @@
 	var isVimeo = test(/.*vimeo\.com.*/);
 	var isImage = test(/\.(jpg|jpeg|png|gif)$/);
 
-	var popup = sel('#popup');
-	var popupContent = popup.querySelector('.content');
+	var popup, popupContent;
 
 	var currentOpener, currentGroup;
 
@@ -119,6 +118,18 @@
 	}
 
 	onLoad(function () {
+		sel('body').insertAdjacentHTML('beforeend',
+			'<div id="popup">' +
+				'<div class="close button">×</div>' +
+				'<div class="content"></div>' +
+				'<div class="previous button">⟨</div>' +
+				'<div class="next button">⟩</div>' +
+			'</div>'
+		);
+
+		popup = sel('#popup');
+		popupContent = popup.querySelector('.content');
+
 		selAll('.popup-group')
 		.forEach(function (el) {
 			var group =
