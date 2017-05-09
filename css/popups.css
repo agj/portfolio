@@ -37,20 +37,47 @@
 
 
 
-#popup > .close-button {
+#popup > .button {
 	display: flex;
-	align-content: center;
 	justify-content: center;
 	align-items: center;
 	position: absolute;
+	text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	width: 80pt;
+	height: 80pt;
+	font-size: 4em;
+	cursor: pointer;
+	transition: font-size 0.1s linear;
+}
+
+#popup > .close.button {
 	top: 0;
 	right: 0;
-	font-size: 40pt;
-	text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-	width: 2em;
-	height: 2em;
-	cursor: pointer;
+	z-index: +2;
 }
+
+#popup > .previous.button,
+#popup > .next.button {
+	display: none;
+	height: 100vh;
+}
+#popup > .previous.button {
+	left: 0;
+}
+#popup > .next.button {
+	right: 0;
+}
+
+#popup > .button:hover {
+	color: #cf0;
+	font-size: 6em;
+}
+
+#popup.has-previous > .previous.button,
+#popup.has-next > .next.button {
+	display: flex;
+}
+
 
 /* Spinner */
 

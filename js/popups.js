@@ -22,6 +22,8 @@
 	};
 	var getViewportW = function () { return Math.max(document.documentElement.clientWidth, window.innerWidth || 0) };
 	var getViewportH = function () { return Math.max(document.documentElement.clientHeight, window.innerHeight || 0) };
+	var partialL = function (f, args) { return function () { return f.apply(null, args.concat(toArray(arguments))) } };
+	var eq = function (a) { return function (b) { return b === a } };
 
 
 	//
@@ -33,18 +35,22 @@
 	var popup = sel('#popup');
 	var popupContent = popup.querySelector('.content');
 
-	var popupSettings = {};
+	var currentOpener, currentGroup;
 
-	function listenPopup(el) {
-		var url = el.href;
-		var data = el.getAttribute('data-popup').split(' ');
-		var settings = {
+	function elToOpener(element) {
+		var data = element.getAttribute('data-popup').split(' ');
+		return {
+			element: element,
+			url: element.href,
 			width: parseInt(data[0]),
 			height: parseInt(data[1]),
 			color: data[2],
 		};
-		el.addEventListener('click', function (e) {
-			showPopup(url, settings);
+	}
+
+	function listenOpener(group, opener) {
+		opener.element.addEventListener('click', function (e) {
+			showPopup(opener, group);
 			e.preventDefault();
 		});
 	}
@@ -74,38 +80,64 @@
 		if (video) {
 			var vw = getViewportW();
 			var vh = getViewportH();
-			video.style.width = Math.min(popupSettings.width / popupSettings.height * vh, vw) + 'px';
-			video.style.height = Math.min(popupSettings.height / popupSettings.width * vw, vh) + 'px';
+			video.style.width = Math.min(currentOpener.width / currentOpener.height * vh, vw) + 'px';
+			video.style.height = Math.min(currentOpener.height / currentOpener.width * vw, vh) + 'px';
 		}
 	}
 
 	function resetPopup() {
 		popupContent.innerHTML = '';
 		popup.classList.remove('showing');
-		popupSettings = {};
+		currentOpener = null;
+		currentGroup = null;
+		resetNavigation();
 	}
 
-	function showPopup(url, settings) {
+	function resetNavigation() {
+		popup.classList.remove('has-previous', 'has-next');
+		if (!currentGroup) return;
+		var index = currentGroup.findIndex(eq(currentOpener));
+		if (index > 0) popup.classList.add('has-previous');
+		if (index < currentGroup.length - 1) popup.classList.add('has-next');
+	}
+
+	function showPopup(opener, group) {
 		resetPopup();
-		popupSettings = settings;
-		popupContent.innerHTML = buildHTML(url);
+		currentOpener = opener;
+		currentGroup = group;
+		popupContent.innerHTML = buildHTML(opener.url);
 		resizePopup();
+		resetNavigation();
 		popup.classList.add('showing');
 	}
 
+	function popupNavigate(offset) {
+		console.log(offset);
+		var index = currentGroup.findIndex(eq(currentOpener)) + offset;
+		if (index > -1 && index < currentGroup.length)
+			showPopup(currentGroup[index], currentGroup);
+	}
+
 	onLoad(function () {
-		selAll('.open-popup')
+		selAll('.popup-group')
 		.forEach(function (el) {
-			if (el.tagName.toLowerCase() === 'a') listenPopup(el);
-			else el.querySelectorAll('a').forEach(listenPopup);
+			var group =
+				toArray(el.querySelectorAll('a.open-popup'))
+				.map(elToOpener);
+			group.forEach(partialL(listenOpener, [group]));
 		});
-		popup.querySelector('.close-button').addEventListener('click', resetPopup);
+
+		popup.querySelector('.previous.button').addEventListener('click', partialL(popupNavigate, [-1]));
+		popup.querySelector('.next.button').addEventListener('click', partialL(popupNavigate, [1]));
+
+		popup.querySelector('.close.button').addEventListener('click', resetPopup);
 		popup.addEventListener('click', function (e) {
 			if (e.target === popup) resetPopup();
 		});
 		document.addEventListener('keyup', function (e) {
 			if (e.key === 'Escape') resetPopup();
-		})
+		});
+
 		window.addEventListener('resize', debounce(0.5, resizePopup));
 	});
 
