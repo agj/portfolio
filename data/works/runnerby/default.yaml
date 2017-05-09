@@ -11,11 +11,7 @@ description: >
 
   (Playthrough video by [Alexey Zubkov](http://about.me/ortoslon).)
 links:
-  play large:
-    url: 'http://www.agj.cl/files/games/runnerby/#large'
-    width: 512
-    height: 768
-  small:
+  play:
     url: 'http://www.agj.cl/files/games/runnerby/#small'
     width: 256
     height: 384
