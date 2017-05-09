@@ -18,6 +18,7 @@ body {
 	margin: 0;
 }
 
+
 a {
 	color: #cf0;
 	text-decoration: none;
@@ -56,6 +57,8 @@ hr {
 #languages a[href="?lang=ja"] {
 	font-style: normal;
 }
+
+
 #top {
 	margin-top: 30px;
 	margin-bottom: 20px;
@@ -66,6 +69,7 @@ hr {
 #filter input {
 	margin-left: 20px;
 }
+
 #bottom {
 	margin-top: 40px;
 	margin-bottom: 20px;
@@ -75,28 +79,6 @@ hr {
 	margin-left: 15px;
 	margin-right: 15px;
 }
-.work {
-	margin-top: 30px;
-}
-.name {
-	width: 500px;
-	height: 300px;
-	margin-left: -30px;
-	float: left;
-}
-.description {
-	width: 400px;
-	margin-left: 15px;
-	float: left;
-}
-.description code {
-	font-family: 'M+ 1m Regular';
-}
-.separator {
-	clear: both;
-}
-
-
 .text .me {
 	padding: 0 0.2em;
 	background: #cf0;
@@ -106,6 +88,22 @@ hr {
 	font-size: 10pt;
 }
 
+
+.work {
+	position: relative;
+	overflow: hidden;
+	max-height: 0;
+	margin-top: 0;
+	transition: 0.5s linear max-height, margin-top, margin-bottom;
+}
+
+
+.name {
+	width: 500px;
+	height: 300px;
+	margin-left: -30px;
+	float: left;
+}
 .name img {
 	width: 500px;
 }
@@ -162,7 +160,6 @@ body.lang-ja .name ul {
 	padding: 0;
 	display: inline-block;
 	list-style-type: none;
-/*	float: right; */
 }
 .name ul li a {
 	color: #000;
@@ -172,6 +169,12 @@ body.lang-ja .name ul {
 	padding: 0 5px 0.2em;
 }
 
+
+.description {
+	width: 400px;
+	margin-left: 15px;
+	float: left;
+}
 .description p {
 	clear: both;
 }
@@ -182,3 +185,8 @@ body.lang-ja .name ul {
 body.lang-ja .description a.ext-link {
 	font-style: normal;
 }
+.description code {
+	font-family: 'M+ 1m Regular';
+}
+
+

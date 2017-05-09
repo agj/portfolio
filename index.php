@@ -18,6 +18,7 @@ if (file_exists("data/general/$language.yaml"))
 $replacements = null;
 if ("data/general/replacements/$language.yaml")
 	$replacements = Spyc::YAMLLoad("data/general/replacements/$language.yaml");
+$categories = Parser::getCategories($general, $language);
 
 $workslist = L::map(basename, glob('data/works/*', GLOB_ONLYDIR));
 
@@ -43,9 +44,6 @@ if ($settings['shuffle']) {
 	shuffle($works);
 }
 
-// Header. Breaks stuff with the mediabox crap. :/
-//header('Content-Type: application/xhtml+xml; charset=utf-8');
-
 
 ?><!DOCTYPE html>
 
@@ -56,12 +54,17 @@ if ($settings['shuffle']) {
 	<title><?= $general['title']; ?></title>
 	<link rel="icon" type="image/gif" href="/icon.gif" />
 
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link href="css/popups.css" rel="stylesheet" type="text/css" />
 
-	<link rel="stylesheet" href="css/mediabox/mediaboxAdv-Minimal.css" type="text/css" media="screen" />
-	<script src="js/mootools.js" type="text/javascript"></script>
-	<script src="js/mediaboxAdv.js" type="text/javascript"></script>
-	<script src="js/filter.js" type="text/javascript"></script>
+	<style>
+		<?php foreach ($categories as $cat): ?>
+		#works.visible-cat-<?= $cat->id ?> .work.cat-<?= $cat->id ?> {
+			max-height: 50em;
+			margin-top: 30px;
+		}
+		<?php endforeach ?>
+	</style>
 </head>
 
 <body class="lang-<?= (isset($language) ? $language : 'default') ?>">
@@ -89,7 +92,7 @@ if ($settings['shuffle']) {
 <hr />
 <div id="filter" class="text">
 	<?= $general['filterLabel'] ?>
-	<?php foreach (Parser::getCategories($general, $language) as $cat): ?>
+	<?php foreach ($categories as $cat): ?>
 		<label>
 			<input id="check-<?= $cat->id ?>" type="checkbox" checked />
 			<?= $cat->name ?>
@@ -101,31 +104,44 @@ if ($settings['shuffle']) {
 
 <!--*************************************-->
 
-
-<?php foreach ($works as $w): ?>
-	<!-- WORK: <?= strtoupper($w->name) ?> -->
-	<div id="work-<?= $w->id ?>" class="work <?php foreach ($w->category as $cat) echo 'cat-' . $cat . ' '; ?>">
-		<div class="name">
-			<h1><?= $w->name ?></h1>
-			<p><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
-			<img alt="" src="data/works/<?= $w->id ?>/<?= $w->image ?>" />
-			<?php if ($w->links): ?>
-				<ul>
-					<?php foreach ($w->links as $l): ?>
-						<li><a href="<?= $l->url ?>" <?= Parser::getLightboxString($l, $w->id) ?>><?= $l->name ?></a></li>
-					<?php endforeach ?>
-				</ul>
-			<?php endif ?>
+<section id="works" class="<?php foreach ($categories as $cat) { echo 'visible-cat-' . $cat->id; } ?>">
+	<?php foreach ($works as $w): ?>
+		<!-- WORK: <?= strtoupper($w->name) ?> -->
+		<div id="work-<?= $w->id ?>" class="work <?php foreach ($w->category as $cat) echo 'cat-' . $cat . ' '; ?>">
+			<div class="name">
+				<h1><?= $w->name ?></h1>
+				<p><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
+				<img alt="" src="data/works/<?= $w->id ?>/<?= $w->image ?>" />
+				<?php if ($w->links): ?>
+					<ul class="popup-group">
+						<?php foreach ($w->links as $l): ?>
+							<li>
+								<a
+									href="<?= $l->url ?>"
+									<?php if ($l->popup): ?>
+										class="open-popup"
+										data-popup="{
+											width:  <?= $l->width ?>,
+											height: <?= $l->height ?>,
+											color: <?= $l->color ?>
+										}"
+									<?php endif ?>
+								>
+									<?= $l->name ?>
+								</a>
+							</li>
+						<?php endforeach ?>
+					</ul>
+				<?php endif ?>
+			</div>
+			<div class="description">
+				<?= $w->description ?>
+				<p><a class="ext-link" href="<?= $w->readMore ?>"><?= $w->readMoreLabel ?></a></p>
+			</div>
 		</div>
-		<div class="description">
-			<?= $w->description ?>
-			<p><a class="ext-link" href="<?= $w->readMore ?>"><?= $w->readMoreLabel ?></a></p>
-		</div>
-	</div>
-
-	<hr />
-
-<?php endforeach ?>
+		<hr />
+	<?php endforeach ?>
+</section>
 
 
 <!--*************************************-->
@@ -135,7 +151,15 @@ if ($settings['shuffle']) {
 	<?= $markdown->convertToHTML($general['closing']) ?>
 </div>
 
+<div id="popup">
+	<div class="close-button">×</div>
+	<div class="content"></div>
+</div>
+
 
 </body>
+
+<script src="js/filter.js"></script>
+<script src="js/popups.js"></script>
 
 </html>
