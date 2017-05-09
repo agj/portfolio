@@ -20,6 +20,9 @@
 			timeoutID = setTimeout(exec, delay, this, toArray(arguments));
 		};
 	};
+	var getViewportW = function () { return Math.max(document.documentElement.clientWidth, window.innerWidth || 0) };
+	var getViewportH = function () { return Math.max(document.documentElement.clientHeight, window.innerHeight || 0) };
+
 
 	//
 
@@ -30,9 +33,18 @@
 	var popup = sel('#popup');
 	var popupContent = popup.querySelector('.content');
 
+	var popupSettings = {};
+
 	function listenPopup(el) {
+		var url = el.href;
+		var data = el.getAttribute('data-popup').split(' ');
+		var settings = {
+			width: parseInt(data[0]),
+			height: parseInt(data[1]),
+			color: data[2],
+		};
 		el.addEventListener('click', function (e) {
-			showPopup(el.href);
+			showPopup(url, settings);
 			e.preventDefault();
 		});
 	}
@@ -51,28 +63,33 @@
 			var id = url.match(/watch\?v=(.+)$/)[1];
 			return '<iframe class="video" src="https://www.youtube-nocookie.com/embed/' + id + '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>';
 		} else if (isImage(url)) {
-			return '<img src="' + url + '" />';
+			return '<img class="image" src="' + url + '" />';
 		} else {
-			return '<iframe src="' + url + '" />';
+			return '<iframe class="other" src="' + url + '" />';
 		}
 	}
 
-	function autoResizePopup() {
-		var video = popup.querySelector('.content > .video');
+	function resizePopup() {
+		var video = popup.querySelector('.content > .video, .content > .other');
 		if (video) {
-			video.style.height = '500px';
+			var vw = getViewportW();
+			var vh = getViewportH();
+			video.style.width = Math.min(popupSettings.width / popupSettings.height * vh, vw) + 'px';
+			video.style.height = Math.min(popupSettings.height / popupSettings.width * vw, vh) + 'px';
 		}
 	}
 
 	function resetPopup() {
 		popupContent.innerHTML = '';
 		popup.classList.remove('showing');
+		popupSettings = {};
 	}
 
-	function showPopup(url) {
+	function showPopup(url, settings) {
 		resetPopup();
+		popupSettings = settings;
 		popupContent.innerHTML = buildHTML(url);
-		setAutoResizer();
+		resizePopup();
 		popup.classList.add('showing');
 	}
 
@@ -89,7 +106,7 @@
 		document.addEventListener('keyup', function (e) {
 			if (e.key === 'Escape') resetPopup();
 		})
-		window.addEventListener('resize', debounce(0.5, autoResizePopup));
+		window.addEventListener('resize', debounce(0.5, resizePopup));
 	});
 
 })();

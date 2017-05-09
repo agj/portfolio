@@ -29,9 +29,10 @@
 	max-height: 100vh;
 }
 
-#popup .content > iframe {
-	width: 100vw;
+#popup .content > .video,
+#popup .content > .other {
 	border: none;
+	margin: auto;
 }
 
 

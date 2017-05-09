@@ -120,11 +120,10 @@ if ($settings['shuffle']) {
 									href="<?= $l->url ?>"
 									<?php if ($l->popup): ?>
 										class="open-popup"
-										data-popup="{
-											width:  <?= $l->width ?>,
-											height: <?= $l->height ?>,
-											color: <?= $l->color ?>
-										}"
+										data-popup="<?php
+											if (isset($l->width))  echo "$l->width $l->height ";
+											if (isset($l->color))  echo $l->color;
+										?>"
 									<?php endif ?>
 								>
 									<?= $l->name ?>

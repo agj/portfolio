@@ -48,22 +48,6 @@ class Parser {
 		return $w;
 	}
 
-	public static function getLightboxString($link, $group) {
-		if (!$link->popup)
-			return '';
-
-		$result = ' rel="lightbox[work-' . $group;
-		if ($link->width)
-			$result .= ' ' . $link->width;
-		if ($link->height)
-			$result .= ' ' . $link->height;
-		if ($link->color)
-			$result .= ' ' . $link->color;
-		$result .= ']"';
-
-		return $result;
-	}
-
 	public static function getCategories($general, $language) {
 		return L::mapIdxOn($general['categoryNames'], function ($name, $id) {
 			$cat = new Category;
