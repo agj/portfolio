@@ -13,31 +13,31 @@
 	cursor: pointer;
 }
 
-#popup .content {
+#popup > .content {
 	display: flex;
 	margin: auto;
 	min-width: 200px;
 	min-height: 200px;
-	background: red;
+	background: black;
 	cursor: initial;
 }
 
 
 
-#popup .content > * {
+#popup > .content > * {
 	max-width: 100vw;
 	max-height: 100vh;
 }
 
-#popup .content > .video,
-#popup .content > .other {
+#popup > .content > .video,
+#popup > .content > .other {
 	border: none;
 	margin: auto;
 }
 
 
 
-#popup .close-button {
+#popup > .close-button {
 	display: flex;
 	align-content: center;
 	justify-content: center;
@@ -51,4 +51,3 @@
 	height: 2em;
 	cursor: pointer;
 }
-

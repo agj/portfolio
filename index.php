@@ -54,6 +54,7 @@ if ($settings['shuffle']) {
 	<title><?= $general['title']; ?></title>
 	<link rel="icon" type="image/gif" href="/icon.gif" />
 
+	<link href="css/reset.css" rel="stylesheet" type="text/css" />
 	<link href="css/style.css" rel="stylesheet" type="text/css" />
 	<link href="css/popups.css" rel="stylesheet" type="text/css" />
 
