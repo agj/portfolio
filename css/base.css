@@ -112,70 +112,81 @@ hr {
 }
 
 
-.work .name {
-	width: 500px;
-	height: 300px;
-	margin-right: 15px;
+.work .head {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	max-width: 500px;
+/* 	height: 300px; */
+/* 	margin-right: 15px; */
 }
-.work .name img {
-	width: 500px;
+
+
+.work .head img {
+	flex: 1 1 auto;
+	max-width: 500px;
+	background: #222;
+/* 	position: absolute; */
 }
-.work .name h1,
-.work .name p {
-	margin: 0 0 0 40px;
+
+
+.work .head .title,
+.work .head .type {
+	position: absolute;
+	margin-left: 45px;
 	padding: 0 5px 0.2em;
 }
-.work .name h1 {
+.work .head .title {
 	color: #cf0;
 	font-size: 20pt;
 	font-weight: normal;
 	margin-top: 25px;
 	line-height: 1;
 	background: #111;
-	position: absolute;
+/* 	position: absolute; */
 	display: inline-block;
 }
-.work .name p { /* TYPE OF WORK */
+
+
+.work .head .type {
 	margin-top: 6px;
 	background: #111;
 	line-height: 1.3;
-	position: absolute;
+/* 	position: absolute; */
 	display: inline-block;
 }
-.work .name p span { /* YEAR OF WORK */
+.work .head .type .year {
 	color: #999;
 	font-size: 0.9em;
 }
-.work .name p span:before { /* YEAR OF WORK */
+.work .head .type .year:before {
 	content: "  ";
 }
-.work .name img {
-	background: #222;
-	width: 500px;
-	height: 300px;
-}
-.work .name ul {
+
+
+.work .head .links {
 	color: #000;
 	font-style: italic;
 	font-size: 14pt;
-	width: 490px;
-	margin: -43px 0 0 0;
-	padding: 0;
+/* 	width: 490px; */
+	margin-top: -43px;
+	margin-right: 10px;
+/* 	padding: 0; */
 	text-align: right;
-	list-style-type: none;
-	position: absolute;
+/* 	list-style-type: none; */
+/* 	position: absolute; */
 }
-body.lang-ja .work .name ul {
+body.lang-ja .work .head .links {
 	font-style: normal;
 }
-.work .name ul li {
+.work .head .links .link {
 	font-weight: bold;
 	margin: 0;
 	padding: 0;
 	display: inline-block;
-	list-style-type: none;
+/* 	list-style-type: none; */
 }
-.work .name ul li a {
+.work .head .links .link a {
 	color: #000;
 	background: #cf0;
 	line-height: 1;

@@ -112,14 +112,14 @@ if ($settings['shuffle']) {
 	<?php foreach ($works as $w): ?>
 		<!-- WORK: <?= strtoupper($w->name) ?> -->
 		<div id="work-<?= $w->id ?>" class="work <?php foreach ($w->category as $cat) echo 'cat-' . $cat . ' '; ?>">
-			<div class="name">
-				<h1><?= $w->name ?></h1>
-				<p><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
+			<div class="head">
+				<h1 class="title"><?= $w->name ?></h1>
+				<p class="type"><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
 				<img alt="" src="data/works/<?= $w->id ?>/<?= $w->image ?>" />
 				<?php if ($w->links): ?>
-					<ul class="popup-group">
+					<ul class="links popup-group">
 						<?php foreach ($w->links as $l): ?>
-							<li>
+							<li class="link">
 								<a
 									href="<?= $l->url ?>"
 									<?php if ($l->popup): ?>

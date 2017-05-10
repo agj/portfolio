@@ -3,8 +3,13 @@
 	.work {
 		flex-direction: column;
 	}
+
 	.work .description {
 		margin-left: 45px;
 		margin-top: 15px;
+	}
+
+	.work .name {
+
 	}
 }
