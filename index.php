@@ -95,12 +95,13 @@ if ($settings['shuffle']) {
 <!-- Filter -->
 <hr />
 <div id="filter" class="text">
-	<?= $general['filterLabel'] ?>
+	<span>
+		<?= $general['filterLabel'] ?>
+	</span>
 	<?php foreach ($categories as $cat): ?>
-		<label>
-			<input id="check-<?= $cat->id ?>" type="checkbox" checked />
-			<?= $cat->name ?>
-		</label>
+		<span class="check check-<?= $cat->id ?>">
+			<input id="check-<?= $cat->id ?>" type="checkbox" checked /><label for="check-<?= $cat->id ?>"><?= $cat->name ?></label>
+		</span>
 	<?php endforeach ?>
 </div>
 <hr />
@@ -108,14 +109,14 @@ if ($settings['shuffle']) {
 
 <!--*************************************-->
 
-<section id="works" class="<?php foreach ($categories as $cat) { echo 'visible-cat-' . $cat->id; } ?>">
+<section id="works" class="<?php foreach ($categories as $cat) { echo ' visible-cat-' . $cat->id; } ?>">
 	<?php foreach ($works as $w): ?>
 		<!-- WORK: <?= strtoupper($w->name) ?> -->
 		<div id="work-<?= $w->id ?>" class="work <?php foreach ($w->category as $cat) echo 'cat-' . $cat . ' '; ?>">
 			<div class="head">
 				<h1 class="title"><?= $w->name ?></h1>
 				<p class="type"><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
-				<img alt="" src="data/works/<?= $w->id ?>/<?= $w->image ?>" />
+				<div class="image"><img alt="" src="data/works/<?= $w->id ?>/<?= $w->image ?>" /></div>
 				<?php if ($w->links): ?>
 					<ul class="links popup-group">
 						<?php foreach ($w->links as $l): ?>

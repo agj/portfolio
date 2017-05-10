@@ -62,16 +62,48 @@ hr {
 }
 
 
-#top {
-	margin-bottom: 20px;
-}
 #filter {
 	margin-bottom: 40px;
 }
+#filter span:first-child {
+	margin-right: 1em;
+}
+#filter .check {
+	white-space: nowrap;
+	padding: 0;
+}
 #filter input {
-	margin-left: 20px;
+	visibility: hidden;
+	position: absolute;
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+#filter label {
+  text-decoration: line-through;
+}
+#filter label::after {
+	content: "✔️";
+	position: relative;
+	top: 0.1em;
+}
+#filter input:checked + label {
+	color: #cf0;
+  text-decoration: none;
+}
+#filter input + label::after {
+	visibility: hidden;
+}
+#filter input:checked + label::after {
+	visibility: visible;
 }
 
+
+#top {
+	margin-bottom: 20px;
+}
 #bottom {
 	margin-top: 40px;
 	margin-bottom: 20px;
@@ -118,13 +150,14 @@ hr {
 	position: relative;
 	width: 500px;
 	min-width: 500px;
-	min-height: 300px;
-	background: #222;
 }
 
 
-.work .head img {
-/* 	flex: 0 0 auto; */
+.work .head .image {
+	min-height: 300px;
+	background: #222;
+}
+.work .head .image img {
 	width: 100%;
 }
 
@@ -141,7 +174,7 @@ hr {
 	color: #cf0;
 	font-size: 20pt;
 	font-weight: normal;
-	line-height: 1;
+	line-height: 1.1;
 	background: #111;
 }
 
@@ -156,7 +189,7 @@ hr {
 	color: #999;
 	font-size: 0.9em;
 }
-.work .head .type .year:before {
+.work .head .type .year::before {
 	content: "  ";
 }
 

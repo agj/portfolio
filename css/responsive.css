@@ -26,6 +26,14 @@
 		margin-left: 20px;
 	}
 
+	.work .head .image {
+		min-height: 150px;
+	}
+
+	.work .head .links {
+		font-size: 1em;
+	}
+
 	.work .description {
 /* 		flex: 1 3 auto; */
 		width: 50%;
@@ -44,22 +52,31 @@
 	.work .head {
 		width: 100%;
 		max-width: 500px;
-		min-height: 150px;
 	}
+
 	.work .head .title,
 	.work .head .type {
-		position: relative;
+		position: static;
+		width: auto;
 		margin-top: 0;
 		margin-bottom: 0;
+		order: 1;
+		padding: 0;
 		background-color: transparent;
-		order: 1;
 	}
+
+	.work .head .image {
+		min-height: 0;
+		margin-bottom: 10px;
+	}
+
 	.work .head .links {
-		position: relative;
+		position: static;
+		width: auto;
 		order: 1;
-/* 		height: 0; */
-/* 		margin: 0; */
-/* 		margin-right: 5px; */
+		margin-left: 20px;
+		margin-top: 10px;
+		text-align: left;
 	}
 
 	.work .description {
