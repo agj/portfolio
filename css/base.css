@@ -9,12 +9,16 @@
 }
 
 
+html {
+	margin: 0;
+	padding: 0;
+}
 body {
 	background: #111;
 	color: #eee;
 	font: 10pt/1.6 'M+ 1p Regular', 'Helvetica', 'Arial', sans-serif;
 	letter-spacing: 0.05em;
-	padding: 0 30px 50px;
+	padding: 50px 45px 50px;
 	margin: 0;
 }
 
@@ -33,7 +37,6 @@ p {
 	margin: 0 0 0.6em 0;
 }
 hr {
-	clear: both;
 	height: 0;
 	margin: 0;
 	border: none;
@@ -60,7 +63,7 @@ hr {
 
 
 #top {
-	margin-top: 30px;
+/* 	margin-top: 30px; */
 	margin-bottom: 20px;
 }
 #filter {
@@ -76,8 +79,8 @@ hr {
 }
 .text {
 	font-size: 14pt;
-	margin-left: 15px;
-	margin-right: 15px;
+/* 	margin-left: 15px; */
+/* 	margin-right: 15px; */
 }
 .text .me {
 	padding: 0 0.2em;
@@ -89,29 +92,40 @@ hr {
 }
 
 
+#works {
+	display: flex;
+	flex-direction: column;
+	margin-left: -45px;
+	margin-right: -45px;
+}
+
+
 .work {
+	display: flex;
+	flex-direction: row;
 	position: relative;
 	overflow: hidden;
-	margin-left: -30px;
+/* 	margin-left: -30px; */
 	max-height: 0;
 	margin-top: 0;
 	transition: 0.5s linear max-height, margin-top, margin-bottom;
 }
 
 
-.name {
+.work .name {
 	width: 500px;
 	height: 300px;
-	float: left;
+	margin-right: 15px;
 }
-.name img {
+.work .name img {
 	width: 500px;
 }
-.name h1, .name p {
+.work .name h1,
+.work .name p {
 	margin: 0 0 0 40px;
 	padding: 0 5px 0.2em;
 }
-.name h1 {
+.work .name h1 {
 	color: #cf0;
 	font-size: 20pt;
 	font-weight: normal;
@@ -121,26 +135,26 @@ hr {
 	position: absolute;
 	display: inline-block;
 }
-.name p { /* TYPE OF WORK */
+.work .name p { /* TYPE OF WORK */
 	margin-top: 6px;
 	background: #111;
 	line-height: 1.3;
 	position: absolute;
 	display: inline-block;
 }
-.name p span { /* YEAR OF WORK */
+.work .name p span { /* YEAR OF WORK */
 	color: #999;
 	font-size: 0.9em;
 }
-.name p span:before { /* YEAR OF WORK */
-	content: "  ";
+.work .name p span:before { /* YEAR OF WORK */
+	content: "  ";
 }
-.name img {
+.work .name img {
 	background: #222;
 	width: 500px;
 	height: 300px;
 }
-.name ul {
+.work .name ul {
 	color: #000;
 	font-style: italic;
 	font-size: 14pt;
@@ -151,17 +165,17 @@ hr {
 	list-style-type: none;
 	position: absolute;
 }
-body.lang-ja .name ul {
+body.lang-ja .work .name ul {
 	font-style: normal;
 }
-.name ul li {
+.work .name ul li {
 	font-weight: bold;
 	margin: 0;
 	padding: 0;
 	display: inline-block;
 	list-style-type: none;
 }
-.name ul li a {
+.work .name ul li a {
 	color: #000;
 	background: #cf0;
 	line-height: 1;
@@ -170,22 +184,19 @@ body.lang-ja .name ul {
 }
 
 
-.description {
-	width: 400px;
-	margin-left: 15px;
-	float: left;
+.work .description {
+	max-width: 600px;
+ 	margin-left: 15px;
+	margin-right: 45px;
 }
-.description p {
-	clear: both;
-}
-.description a.ext-link {
+.work .description a.ext-link {
 	font-style: italic;
 	white-space: nowrap;
 }
-body.lang-ja .description a.ext-link {
+body.lang-ja .work .description a.ext-link {
 	font-style: normal;
 }
-.description code {
+.work .description code {
 	font-family: 'M+ 1m Regular';
 }
 

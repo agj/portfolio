@@ -142,7 +142,6 @@ if ($settings['shuffle']) {
 				<p><a class="ext-link" href="<?= $w->readMore ?>"><?= $w->readMoreLabel ?></a></p>
 			</div>
 		</div>
-		<hr />
 	<?php endforeach ?>
 </section>
 

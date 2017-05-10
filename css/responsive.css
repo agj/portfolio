@@ -1,2 +1,10 @@
 
-/* temp */
+@media (max-width: 850px) {
+	.work {
+		flex-direction: column;
+	}
+	.work .description {
+		margin-left: 45px;
+		margin-top: 15px;
+	}
+}
