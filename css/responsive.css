@@ -9,7 +9,8 @@
 		margin-top: 15px;
 	}
 
-	.work .name {
-
+	.work .head {
+		min-height: 100px;
 	}
+
 }

@@ -114,6 +114,7 @@ hr {
 .work .head {
 	display: flex;
 	flex-direction: column;
+	position: relative;
 	max-width: 500px;
 	min-height: 200px;
 	background: #222;
@@ -134,21 +135,21 @@ hr {
 	padding: 0 5px 0.2em;
 }
 .work .head .title {
+	display: inline-block;
+	margin-top: 25px;
 	color: #cf0;
 	font-size: 20pt;
 	font-weight: normal;
-	margin-top: 25px;
 	line-height: 1;
 	background: #111;
-	display: inline-block;
 }
 
 
 .work .head .type {
+	display: inline-block;
 	margin-top: 6px;
 	background: #111;
 	line-height: 1.3;
-	display: inline-block;
 }
 .work .head .type .year {
 	color: #999;
@@ -160,12 +161,16 @@ hr {
 
 
 .work .head .links {
+	width: 100%;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
 	color: #000;
 	font-style: italic;
 	font-size: 14pt;
-	margin-top: -43px;
-	margin-right: 10px;
 	text-align: right;
+/* 	margin-top: -43px; */
+/* 	margin-right: 10px; */
 }
 body.lang-ja .work .head .links {
 	font-style: normal;
@@ -177,11 +182,11 @@ body.lang-ja .work .head .links {
 	display: inline-block;
 }
 .work .head .links .link a {
+	padding: 0 5px 0.2em;
 	color: #000;
 	background: #cf0;
 	line-height: 1;
 	text-decoration: none;
-	padding: 0 5px 0.2em;
 }
 
 
