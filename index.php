@@ -54,8 +54,11 @@ if ($settings['shuffle']) {
 	<title><?= $general['title']; ?></title>
 	<link rel="icon" type="image/gif" href="/icon.gif" />
 
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
 	<link href="css/reset.css" rel="stylesheet" type="text/css" />
-	<link href="css/style.css" rel="stylesheet" type="text/css" />
+	<link href="css/base.css" rel="stylesheet" type="text/css" />
+	<link href="css/responsive.css" rel="stylesheet" type="text/css" />
 	<link href="css/popups.css" rel="stylesheet" type="text/css" />
 
 	<style>

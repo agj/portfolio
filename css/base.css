@@ -92,6 +92,7 @@ hr {
 .work {
 	position: relative;
 	overflow: hidden;
+	margin-left: -30px;
 	max-height: 0;
 	margin-top: 0;
 	transition: 0.5s linear max-height, margin-top, margin-bottom;
@@ -101,7 +102,6 @@ hr {
 .name {
 	width: 500px;
 	height: 300px;
-	margin-left: -30px;
 	float: left;
 }
 .name img {

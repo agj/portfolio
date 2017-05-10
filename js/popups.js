@@ -49,6 +49,7 @@
 
 	function listenOpener(group, opener) {
 		opener.element.addEventListener('click', function (e) {
+			if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
 			showPopup(opener, group);
 			e.preventDefault();
 		});

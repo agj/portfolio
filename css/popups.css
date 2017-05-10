@@ -72,6 +72,12 @@
 	color: #cf0;
 	font-size: 6em;
 }
+@media (pointer: coarse) { /* For touch input */
+	#popup > .button:hover {
+		color: inherit;
+		font-size: none;
+	}
+}
 
 #popup.has-previous > .previous.button,
 #popup.has-next > .next.button {
