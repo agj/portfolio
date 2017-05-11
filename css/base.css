@@ -1,0 +1,248 @@
+
+@font-face {
+	font-family: 'M+ 1p Regular';
+	src: url('font/mplus-1p-regular.woff') format('woff');
+}
+@font-face {
+	font-family: 'M+ 1m Regular';
+	src: url('font/mplus-1m-regular.woff') format('woff');
+}
+
+
+body {
+	background: #111;
+	color: #eee;
+	font-size: 11pt;
+	line-height: 1.9em;
+	font-family: 'M+ 1p Regular', 'Helvetica', 'Arial', sans-serif;
+	letter-spacing: 0.05em;
+	padding: 50px 45px;
+	margin: 0;
+}
+
+
+a {
+	color: #cf0;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+img {
+	display: block;
+}
+p {
+	margin: 0 0 0.6em 0;
+}
+hr {
+	background-color: transparent;
+	height: 10px;
+	margin: 20px auto;
+	border: none;
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50"><circle cx="25" cy="25" r="25" fill="rgb(100, 100, 100)" /></svg>');
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+
+#languages {
+	top: 0;
+	right: 0;
+	position: absolute;
+}
+#languages a {
+	color: #000;
+	background: #cf0;
+	font-style: italic;
+	text-decoration: none;
+	padding: 5px 10px 3px 5px;
+	outline: transparent none;
+	display: inline-block;
+}
+#languages a[href="?lang=ja"] {
+	font-style: normal;
+}
+
+
+#filter {
+/* 	margin-bottom: 40px; */
+}
+#filter span:first-child {
+	margin-right: 1em;
+}
+#filter .check {
+	white-space: nowrap;
+	padding: 0;
+}
+#filter input {
+	visibility: hidden;
+	position: absolute;
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+#filter label {
+  text-decoration: line-through;
+}
+#filter label::after {
+	content: "✓";
+	position: relative;
+	top: 0.1em;
+	font-size: 1.3em;
+}
+#filter input:checked + label {
+	color: #cf0;
+  text-decoration: none;
+}
+#filter input + label::after {
+	visibility: hidden;
+}
+#filter input:checked + label::after {
+	visibility: visible;
+}
+
+
+.text {
+	font-size: 14pt;
+	line-height: 1.9em;
+}
+.text .me {
+	padding: 0 0.2em;
+	background: #cf0;
+	color: #000;
+}
+.text small {
+	font-size: 10pt;
+}
+#top {
+/* 	margin-bottom: 20px; */
+}
+#bottom {
+	margin-top: 40px;
+/* 	margin-bottom: 20px; */
+}
+
+
+#works {
+	display: flex;
+	flex-direction: column;
+	margin-left: -45px;
+	margin-right: -45px;
+}
+
+
+.work {
+	display: none;
+	flex-direction: row;
+	align-items: flex-start;
+	position: relative;
+	overflow: hidden;
+	margin-top: 15px;
+	margin-bottom: 15px;
+/* 	transition:
+		max-height 0.5s linear 0s,
+		margin-top 0.5s linear,
+		margin-bottom 0.5s linear; */
+}
+
+
+.work .head {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	width: 500px;
+	min-width: 500px;
+}
+
+
+.work .head .image {
+	min-height: 300px;
+	background: #222;
+}
+.work .head .image img {
+	width: 100%;
+	height: 100%;
+}
+
+
+.work .head .title,
+.work .head .type {
+	position: absolute;
+	margin-left: 45px;
+	padding: 0 5px 0.2em;
+}
+.work .head .title {
+	display: inline-block;
+	margin-top: 25px;
+	color: #cf0;
+	font-size: 20pt;
+	font-weight: normal;
+	line-height: 1.1;
+	background: #111;
+}
+
+
+.work .head .type {
+	display: inline-block;
+	margin-top: 6px;
+	background: #111;
+	line-height: 1.3;
+}
+.work .head .type .year {
+	color: #999;
+	font-size: 0.9em;
+}
+.work .head .type .year::before {
+	content: "  ";
+}
+
+
+.work .head .links {
+	width: 100%;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	color: #000;
+	font-style: italic;
+	font-size: 14pt;
+	text-align: right;
+}
+body.lang-ja .work .head .links {
+	font-style: normal;
+}
+.work .head .links .link {
+	font-weight: bold;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+}
+.work .head .links .link a {
+	padding: 0 5px 0.2em;
+	color: #000;
+	background: #cf0;
+	line-height: 1;
+	text-decoration: none;
+}
+
+
+.work .description {
+	max-width: 600px;
+ 	margin-left: 15px;
+	margin-right: 45px;
+}
+.work .description a.ext-link {
+	font-style: italic;
+	white-space: nowrap;
+}
+body.lang-ja .work .description a.ext-link {
+	font-style: normal;
+}
+.work .description code {
+	font-family: 'M+ 1m Regular';
+	font-size: 1.1em;
+}
+
+

@@ -1,116 +1,70 @@
 <?php
 
+require_once 'php/lib/autoload.php';
+require_once 'php/lambelo.php';
+require_once 'php/classes.php';
+require_once 'php/utils.php';
+
+$markdown = new League\CommonMark\CommonMarkConverter();
+
 class Parser {
 
-	public static function getWorks($yaml, $language) {
-		if (self::hasDeepProperty($yaml, 'translation', $language))
-			$generalTranslation = $yaml["translation"][$language];
-		
-		$works = array();
-		foreach ($yaml["works"] as $i => $rawW) {
-			if (isset($rawW["hide"]) && $rawW["hide"] === true)
-				continue;
-			
-			$w = new Work();
-			$w->id = $i;
-			$w->name = self::getWorkValue($language, $rawW, 'name');
-			$w->type = self::getWorkValueExtended($yaml, $language, $rawW, 'type');
-			$w->year = $rawW["year"];
-			$w->image = self::getWorkValue($language, $rawW, 'image');
-			$w->description = self::getWorkValue($language, $rawW, 'description');
-			$w->category = $rawW["category"];
-			$w->readMore = self::getWorkValue($language, $rawW, 'readMore');
-			
-			if ($generalTranslation) {
-				if (self::hasDeepProperty($rawW, 'translation', $language, 'readMore'))
-					$w->readMoreLabel = $generalTranslation["general"]["readMore"];
-				else
-					$w->readMoreLabel = $generalTranslation["general"]["readMoreNonTranslated"];
-			} else {
-				$w->readMoreLabel = $yaml["general"]["readMore"];
-			}
-			
-			if (isset($rawW["links"])) {
-				$links = array();
-				foreach ($rawW["links"] as $prop => $value) {
-					$links[] = self::getLink($yaml, $language, $rawW, $prop, $value);
-				}
-				$w->links = $links;
-			}
-			
-			$works[] = $w;
+	public static function parseWork($id, $yaml, $language, $general, $replacements) {
+		global $deepMerge;
+		global $markdown;
+
+		$raw = $yaml['default'];
+		$readMoreTranslated = true;
+		if (isset($yaml[$language])) {
+			$raw = $deepMerge($raw, $yaml[$language]);
+			$readMoreTranslated = isset($yaml[$language]['readMore']);
 		}
-		
-		return $works;
+
+		if (isset($raw["hide"]) && $raw["hide"] === true)
+			return null;
+
+		$w = new Work();
+		$w->id = $id;
+		$w->name = $raw['name'];
+		$w->type = self::findReplacement($raw['type'], $replacements['type']);
+		$w->year = $raw['year'];
+		$w->image = self::getImageFilename($w->id);
+		$w->description = $markdown->convertToHTML($raw['description']);
+		$w->category = is_array($raw['category']) ? $raw['category'] : array($raw['category']);
+		$w->readMore = $raw['readMore'];
+
+		$w->readMoreLabel = $readMoreTranslated
+			? $general['readMore']
+			: $general['readMoreNonTranslated'];
+
+		if (isset($raw["links"])) {
+			$links = array();
+			foreach ($raw["links"] as $name => $definition) {
+				$links[] = self::getLink($raw, $name, $definition, $replacements);
+			}
+			$w->links = $links;
+		}
+
+		return $w;
 	}
-	
-	public static function getLightboxString($link, $group) {
-		if (!$link->popup)
-			return '';
-		
-		$result = ' rel="lightbox[work-' . $group;
-		if ($link->width)
-			$result .= ' ' . $link->width;
-		if ($link->height)
-			$result .= ' ' . $link->height;
-		if ($link->color)
-			$result .= ' ' . $link->color;
-		$result .= ']"';
-		
-		return $result;
-	}
-	
-	public static function getCategories($yaml, $language) {
-		$result = array();
-		
-		foreach ($yaml["general"]["categoryNames"] as $id => $name) {
+
+	public static function getCategories($general, $language) {
+		return L::mapIdxOn($general['categoryNames'], function ($name, $id) {
 			$cat = new Category;
 			$cat->id = $id;
-			if (self::hasDeepProperty($yaml, 'translation', $language, 'general', 'categoryNames', $id))
-				$cat->name = $yaml["translation"][$language]["general"]["categoryNames"][$id];
-			else
-				$cat->name = $name;
-			$result[] = $cat;
-		}
-		
-		return $result;
+			$cat->name = $name;
+			return $cat;
+		});
 	}
-	
-	public static function getGeneralValue($yaml, $language, $prop) {
-		if (self::hasDeepProperty($yaml, 'translation', $language, 'general', $prop))
-			return $yaml["translation"][$language]["general"][$prop];
-		return $yaml["general"][$prop];
-	}
-	
-	
+
+
 	//////////////////////////////////////////
-	
-	private static function getWorkValue($language, $rawW, $prop) {
-		if (self::hasDeepProperty($rawW, 'translation', $language, $prop))
-			return $rawW["translation"][$language][$prop];
-		if (isset($rawW[$prop]))
-			return $rawW[$prop];
-		return NULL;
-	}
-	
-	private static function getWorkValueExtended($yaml, $language, $rawW, $prop) {
-		if (self::hasDeepProperty($rawW, 'translation', $language, $prop))
-			return $rawW['translation'][$language][$prop];
-		else if (self::hasDeepProperty($yaml, 'translation', $language, 'works', $prop, $rawW[$prop]))
-			return $yaml['translation'][$language]['works'][$prop][$rawW[$prop]];
-		return $rawW[$prop];
-	}
-	
-	private static function getLink($yaml, $language, $rawW, $name, $definition) {
+
+	private static function getLink($raw, $name, $definition, $replacements) {
 		$link = new Link();
-		
-		if (self::hasDeepProperty($rawW, 'translation', $language, 'links', $name))
-			$link->name = $rawW['translation'][$language]['links'][$name];
-		else if (self::hasDeepProperty($yaml, 'translation', $language, 'works', 'links', $name))
-			$link->name = $yaml['translation'][$language]['works']['links'][$name];
-		else
-			$link->name = $name;
-		
+
+		$link->name = self::findReplacement($name, $replacements['links']);
+
 		if (is_string($definition)) {
 			$link->url = $definition;
 			$link->popup = true;
@@ -123,29 +77,20 @@ class Parser {
 				if (isset($definition['color']))	$link->color = $definition['color'];
 			}
 		}
-		
+
 		return $link;
 	}
-	
-	private static function hasDeepProperty() {
-		$current = func_get_arg(0);
-		if (!$current)
-			return false;
-		
-		$len = func_num_args();
-		for ($i = 1; $i < $len; $i++) {
-			$arg = func_get_arg($i);
-			if (!$arg)
-				return false;
-			if (!isset($current[$arg]))
-				return false;
-			$current = $current[$arg];
-			if (!$current)
-				return false;
-		}
-		return true;
-	}
-	
-}
 
-?>
+	private static function findReplacement($string, $replacements) {
+		if (isset($replacements[$string])) return $replacements[$string];
+		return $string;
+	}
+
+	private static function getImageFilename($id) {
+		return '01.' . L::findOn(
+			array('jpg', 'png', 'gif'),
+			function ($ext) use ($id) { return file_exists("data/works/$id/01.$ext"); }
+		);
+	}
+
+}

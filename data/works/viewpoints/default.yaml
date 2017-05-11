@@ -1,0 +1,16 @@
+hide: true
+name: Viewpoints
+category: int
+type: video game
+year: 2009
+image: viewpoints.png
+readMore: 'http://blog.agj.cl/tag/viewpoints/'
+description: >
+  A Flash video game of narrative exploration. Click with the mouse to look
+  around, and discover a bit about the character you embody and the situation
+  they're in (both of which may change on different playthroughs).
+links:
+  play:
+    url: 'http://www.agj.cl/files/games/viewpoints/viewpoints.swf'
+    width: 500
+    height: 400

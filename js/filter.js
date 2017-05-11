@@ -1,79 +1,42 @@
 
 (function (that) {
 
-	"use strict";
+	'use strict';
+
+	var onLoad = function (cb) { /interactive|complete/.test(document.readyState) ? setTimeout(cb, 0) : document.addEventListener('DOMContentLoaded', cb); };
+	var selAll = document.querySelectorAll.bind(document);
+	var sel = document.querySelector.bind(document);
+	var toArray = Function.prototype.call.bind([].slice);
+	var prepend = function (a) { return function (b) { return a + b } };
+	var not = function (f) { return function () { return !f.apply(this, toArray(arguments)) } };
+	var test = function (regex) { return function (text) { return regex.test(text) } };
 
 	///////////////////////////
 
-	var checks = [];
-	var cats = [];
-	var works;
+	var checks;
 
-	///////////////////////////
-
-	window.addEvent("domready", onLoad, false);
-
-	function onLoad(e) {
-		//var nodes = document.getElementById("filter").childNodes;
-		var nodes = $("filter").getElements("input");
-		
-		var len = nodes.length;
-		var node, nodeID;
-		for (var i = 0; i < len; i++) {
-			node = nodes[i];
-			checks.push(node);
-			
-			nodeID = node.get("id");
-			if (nodeID.substr(0, 6) == "check-") {
-				cats.push(nodeID.substr(6));
-			}
-			
-			node.addEvent("click", onClickCheckbox, false);
-		}
-		
-		// List works.
-		
-		works = $$(".work");
-		
-		update();
+	function updateVisibility() {
+		var works = sel('#works');
+		var unrelatedClasses = toArray(works.classList).filter(not(test(/visible-cat-.*/)));
+		var enabledCategoryClasses = checks.filter(checkIsChecked).map(checkToCategory).map(prepend('visible-cat-'));
+		works.className = unrelatedClasses.concat(enabledCategoryClasses).join(' ');
 	}
 
-
-	function onClickCheckbox(e) {
-		update();
+	function checkToCategory(checkEl) {
+		return checkEl.id.replace(/check-(.*)/, '$1');
 	}
 
-	function update() {
-		var activeCats = getActiveCats();
-		
-		var len = works.length;
-		var el, show, cat;
-		for (var i = 0; i < len; i++) {
-			el = works[i];
-			show = false;
-			
-			for (var j = 0; j < activeCats.length; j++) {
-				if (el.hasClass("cat-" + activeCats[j])) {
-					show = true;
-				}
-			}
-			
-			el.style.display = show ? "block" : "none";
-		}
+	function checkIsChecked(checkEl) {
+		return checkEl.checked;
 	}
 
-	function getActiveCats() {
-		var result = [];
-		
-		var len = checks.length;
-		for (var i = 0; i < len; i++) {
-			if (checks[i].checked) {
-				result.push(cats[i]);
-			}
-		}
-		
-		return result;
-	}
+	onLoad(function () {
+		checks = toArray(selAll('#filter input'));
+		checks.forEach(function (el) {
+			el.addEventListener('click', updateVisibility);
+		});
+		updateVisibility();
+	});
 
 }(this));
 

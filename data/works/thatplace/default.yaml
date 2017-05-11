@@ -1,0 +1,18 @@
+hide: true
+name: 'That place, again'
+category: av
+type: motion graphics
+year: 2010
+image: thatplace.jpg
+readMore: 'http://blog.agj.cl/2010/02/that-place-again/'
+description: >
+  Video for a rather improvised song made by me and <a
+  href="http://www.fireandrobot.com/">Matt Peter</a>. Completed in two days, it
+  uses old, grainy family photos to create patterns that alternately reveal and
+  obscure their subjects, culminating with a somewhat narrative display of
+  nostalgia.
+links:
+  watch:
+    url: 'http://www.vimeo.com/9476412'
+    width: 640
+    height: 360

@@ -1,129 +1,168 @@
 <?php
 
-//error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_DEPRECATED | E_WARNING);
-//error_reporting(E_ALL);
+error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_DEPRECATED | E_WARNING);
 
-include 'php/spyc.php';
-include 'php/classes.php';
-include 'php/parser.php';
+require_once 'php/lib/autoload.php';
+require_once 'php/lambelo.php';
+require_once 'php/parser.php';
+require_once 'php/utils.php';
 
-$br = "\n";
 
-$language = $_REQUEST['lang'];
+$markdown = new League\CommonMark\CommonMarkConverter();
 
-$yaml = Spyc::YAMLLoad('data.yaml');
+$settings = Spyc::YAMLLoad('data/settings.yaml');
+$language = $getLanguage(array_keys($settings['languages']));
+$general = Spyc::YAMLLoad('data/general/default.yaml');
+if (file_exists("data/general/$language.yaml"))
+	$general = $deepMerge($general, Spyc::YAMLLoad("data/general/$language.yaml"));
+$replacements = null;
+if ("data/general/replacements/$language.yaml")
+	$replacements = Spyc::YAMLLoad("data/general/replacements/$language.yaml");
+$categories = Parser::getCategories($general, $language);
 
-$works = Parser::getWorks($yaml, $language);
+$workslist = L::map(basename, glob('data/works/*', GLOB_ONLYDIR));
+
+$toLang = $replace('/.*\/([^\/]+).yaml/', '$1');
+$yamlWorks = L::foldOn($workslist, array(), function ($acc, $name) use ($toLang) {
+	$langs = L::map($toLang, glob("data/works/$name/*.yaml"));
+	$acc[$name] = L::foldOn($langs, array(), function ($acc, $lang) use ($name) {
+		$acc[$lang] = Spyc::YAMLLoad("data/works/$name/$lang.yaml");
+		return $acc;
+	});
+	return $acc;
+});
+
+$works = L::filterOn(
+	L::mapIdxOn($yamlWorks, function ($w, $id) use ($language, $general, $replacements) {
+		return Parser::parseWork($id, $w, $language, $general, $replacements);
+	}),
+	function ($w) { return isset($w); }
+);
 $w;
 
-if ($yaml["settings"]["randomize"]) {
+if ($settings['shuffle']) {
 	shuffle($works);
 }
 
-// Header. Breaks stuff with the mediabox crap. :/
-//header('Content-Type: application/xhtml+xml; charset=utf-8');
 
+?><!DOCTYPE html>
 
-?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
 <head>
-	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+	<meta charset="utf-8" />
 
-	<title><?php echo Parser::getGeneralValue($yaml, $language, 'title'); ?></title>
+	<title><?= $general['title']; ?></title>
 	<link rel="icon" type="image/gif" href="/icon.gif" />
-	
-	<link rel="stylesheet" type="text/css" href="css/style.css" />
-	
-	<link rel="stylesheet" href="css/mediabox/mediaboxAdv-Minimal.css" type="text/css" media="screen" />
-	<script src="js/mootools.js" type="text/javascript"></script>
-	<script src="js/mediaboxAdv.js" type="text/javascript"></script>
-	<script src="js/filter.js" type="text/javascript"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+
+	<link href="css/reset.css" rel="stylesheet" type="text/css" />
+	<link href="css/base.css" rel="stylesheet" type="text/css" />
+	<link href="css/responsive.css" rel="stylesheet" type="text/css" />
+	<link href="css/popups.css" rel="stylesheet" type="text/css" />
+
+	<style>
+		<?php foreach ($categories as $cat): ?>
+		#works.visible-cat-<?= $cat->id ?> .work.cat-<?= $cat->id ?> {
+			/* max-height: 50em; */
+			display: flex;
+			/* margin-top: 15px; */
+			/* margin-bottom: 15px; */
+		}
+		<?php endforeach ?>
+	</style>
 </head>
 
-<body>
+<body class="lang-<?= (isset($language) ? $language : 'default') ?>">
 
 
 <!-- Presentation -->
-<?php
-	if ($yaml["settings"]["languages"]) {
-		echo '<div id="languages">';
-		if ($language && $yaml["settings"]["languages"][$language])
-			echo '<a href="./">&rarr; ' . $yaml["settings"]["defaultLanguageName"] . '</a>';
-		foreach ($yaml["settings"]["languages"] as $lang => $langName) {
-			if ($lang != $language)
-				echo '<a href="?lang=' . $lang . '">&rarr; ' . $langName . '</a>';
-		}
-		echo '</div>';
-	}
-?>
+<?php if ($settings["languages"]): ?>
+	<div id="languages">
+		<?php if ($language && $settings["languages"][$language]): ?>
+			<a href="./">&rarr; <?= $settings["defaultLanguageName"] ?></a>
+		<?php endif ?>
+		<?php foreach ($settings["languages"] as $lang => $langName): ?>
+			<?php if ($lang != $language): ?>
+				<a href="?lang=<?= $lang ?>">&rarr; <?= $langName ?></a>
+			<?php endif ?>
+		<?php endforeach ?>
+	</div>
+<?php endif ?>
 
 <div id="top" class="text">
-<p><?php echo Parser::getGeneralValue($yaml, $language, 'presentation'); ?></p>
+	<?= $markdown->convertToHTML($general['presentation']) ?>
 </div>
 
 <!-- Filter -->
 <hr />
-<div id="filter" class="text">
-<?php
-	
-	echo ' ' . Parser::getGeneralValue($yaml, $language, 'filterLabel') . $br;
 
-	$categories = Parser::getCategories($yaml, $language);
-	
-	foreach ($categories as $cat) {
-		echo '	<label>' . $br;
-		echo '		<input id="check-' . $cat->id . '" type="checkbox" checked="checked" />' . $br;
-		echo '		' . $cat->name . $br;
-		echo '	</label>' . $br;
-	}
-	
-?>
+<div id="filter" class="text">
+	<span>
+		<?= $general['filterLabel'] ?>
+	</span>
+	<?php foreach ($categories as $cat): ?>
+		<span class="check check-<?= $cat->id ?>">
+			<input id="check-<?= $cat->id ?>" type="checkbox" checked /><label for="check-<?= $cat->id ?>"><?= $cat->name ?></label>
+		</span>
+	<?php endforeach ?>
 </div>
+
 <hr />
 
 
 <!--*************************************-->
 
+<section id="works" class="<?php foreach ($categories as $cat) { echo ' visible-cat-' . $cat->id; } ?>">
+	<?php foreach ($works as $w): ?>
+		<!-- WORK: <?= strtoupper($w->name) ?> -->
+		<div id="work-<?= $w->id ?>" class="work <?php foreach ($w->category as $cat) echo 'cat-' . $cat . ' '; ?>">
+			<div class="head">
+				<h1 class="title"><?= $w->name ?></h1>
+				<p class="type"><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
+				<div class="image"><img alt="" src="data/works/<?= $w->id ?>/<?= $w->image ?>" /></div>
+				<?php if ($w->links): ?>
+					<ul class="links popup-group">
+						<?php foreach ($w->links as $l): ?>
+							<li class="link">
+								<a
+									href="<?= $l->url ?>"
+									<?php if ($l->popup): ?>
+										class="open-popup"
+										data-popup="<?php
+											if (isset($l->width))  echo "$l->width $l->height ";
+											if (isset($l->color))  echo $l->color;
+										?>"
+									<?php endif ?>
+								>
+									<?= $l->name ?>
+								</a>
+							</li>
+						<?php endforeach ?>
+					</ul>
+				<?php endif ?>
+			</div>
+			<div class="description">
+				<?= $w->description ?>
+				<p><a class="ext-link" href="<?= $w->readMore ?>"><?= $w->readMoreLabel ?></a></p>
+			</div>
+		</div>
+	<?php endforeach ?>
+</section>
 
-<?php
 
-foreach ($works as $w) {
-	echo '<!-- WORK: ' . strtoupper($w->name) . ' -->' . $br;
-	echo '<div id="work-' . $w->id . '" class="work cat-' . $w->category . '">' . $br;
-	echo '	<div class="name">' . $br;
-	echo '		<h1>' . $w->name . '</h1>' . $br;
-	echo '		<p>' . $w->type . ' <span class="year">' . $w->year . '</span></p>' . $br;
-	echo '		<img alt="" src="img/' . $w->image . '" />' . $br;
-	if ($w->links) {
-		echo '		<ul>' . $br;
-		foreach ($w->links as $l) {
-			echo '			<li><a href="' . $l->url . '"' . Parser::getLightboxString($l, $w->id) . '>' . $l->name . '</a></li>' . $br;
-		}
-		echo '		</ul>' . $br;
-	}
-	echo '	</div>' . $br;
-	echo '	<div class="description">' . $br;
-	echo '		<p>' . $w->description . '</p>' . $br;
-	if ($w->readMore)
-		echo '		<p><a class="ext-link" href="' . $w->readMore . '">' . $w->readMoreLabel . '</a></p>' . $br;
-	echo '	</div>' . $br;
-	echo '</div>' . $br;
-	echo $br . $br;
-	echo '<hr />';
-	echo $br . $br;
-}
-
-?>
 <!--*************************************-->
 
+<hr />
 
 <div id="bottom" class="text">
-	<p><?php echo Parser::getGeneralValue($yaml, $language, 'closing'); ?></p>
+	<?= $markdown->convertToHTML($general['closing']) ?>
 </div>
 
 
 </body>
+
+<script src="js/filter.js"></script>
+<script src="js/popups.js"></script>
 
 </html>
