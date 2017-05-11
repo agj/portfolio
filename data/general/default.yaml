@@ -4,14 +4,15 @@ categoryNames:
    av:  audiovisual
    vis: static visual
    other: other
-filterLabel: only show works of type
+filterLabel: Only showing works of type
 title: Ale Grilli's portfolio
 presentation: |
-              I'm <span class="me">Ale Grilli</span>, a freelance interactive media designer and developer from Chile. I like it best when making things with a cultural or educational impact. Here is a selection of projects I've worked on, mostly personal, the ones closer to my heart. Contact me any time via ale¶agj.cl <small>(just change that character for an @).</small>
-closing:      |
-              I appreciate your taking a peek at my works. Maybe you'd like to know more; if so, I'd be happy to hear from you via ale¶agj.cl <small>(put an @ there instead of that other thing).</small> Also, I have a [blog][1] that you can read, and I have [all my video games together in one place,][2] if you wanna look. Or check out the rest of my website from [the top.][3] Thanks again.
+   This is <span class="me">Ale Grilli</span>'s portfolio, a cross-media designer, developer and creator based in Chile. My interests are wide-ranging, including interactive media, video, language, and education. My formal education is in graphic design in Chile (Universidad Diego Portales, graduated 2009,) and in new media in Japan (Tokyo University of the Arts, graduated 2017.) My programming knowledge is self-taught, and I have studied languages in different schools.
 
-              [1]: http://blog.agj.cl/
-              [2]: /games/
-              [3]: /
+   You may contact me via ale¶agj.cl <small>(replace ¶ for @)</small>.
+closing: |
+   Thank you for your time. Feel free to contact me by email at ale¶agj.cl <small>(replace ¶ for @)</small>. If you wish you may visit as well my [personal blog,][1] or go to this site's [home page.][2] Have a great day.
+
+   [1]: http://blog.agj.cl/
+   [2]: /
 readMore: Read more about it.
