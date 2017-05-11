@@ -9,16 +9,14 @@
 }
 
 
-html {
-	margin: 0;
-	padding: 0;
-}
 body {
 	background: #111;
 	color: #eee;
-	font: 10pt/1.6 'M+ 1p Regular', 'Helvetica', 'Arial', sans-serif;
+	font-size: 10pt;
+	line-height: 1.9em;
+	font-family: 'M+ 1p Regular', 'Helvetica', 'Arial', sans-serif;
 	letter-spacing: 0.05em;
-	padding: 50px 45px 50px;
+	padding: 50px 45px;
 	margin: 0;
 }
 
@@ -37,9 +35,14 @@ p {
 	margin: 0 0 0.6em 0;
 }
 hr {
-	height: 0;
-	margin: 0;
+	background-color: transparent;
+	height: 10px;
+	margin: 20px auto;
 	border: none;
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50"><circle cx="25" cy="25" r="25" fill="rgb(100, 100, 100)" /></svg>');
+	background-position: center;
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 
 
@@ -63,7 +66,7 @@ hr {
 
 
 #filter {
-	margin-bottom: 40px;
+/* 	margin-bottom: 40px; */
 }
 #filter span:first-child {
 	margin-right: 1em;
@@ -85,9 +88,10 @@ hr {
   text-decoration: line-through;
 }
 #filter label::after {
-	content: "✔️";
+	content: "✓";
 	position: relative;
 	top: 0.1em;
+	font-size: 1.3em;
 }
 #filter input:checked + label {
 	color: #cf0;
@@ -101,15 +105,9 @@ hr {
 }
 
 
-#top {
-	margin-bottom: 20px;
-}
-#bottom {
-	margin-top: 40px;
-	margin-bottom: 20px;
-}
 .text {
 	font-size: 14pt;
+	line-height: 1.9em;
 }
 .text .me {
 	padding: 0 0.2em;
@@ -118,6 +116,13 @@ hr {
 }
 .text small {
 	font-size: 10pt;
+}
+#top {
+/* 	margin-bottom: 20px; */
+}
+#bottom {
+	margin-top: 40px;
+/* 	margin-bottom: 20px; */
 }
 
 
@@ -130,17 +135,17 @@ hr {
 
 
 .work {
-	display: flex;
+	display: none;
 	flex-direction: row;
 	align-items: flex-start;
 	position: relative;
 	overflow: hidden;
-	max-height: 0;
-	margin-top: 0;
-	transition:
-		max-height 0.5s linear,
+	margin-top: 15px;
+	margin-bottom: 15px;
+/* 	transition:
+		max-height 0.5s linear 0s,
 		margin-top 0.5s linear,
-		margin-bottom 0.5s linear;
+		margin-bottom 0.5s linear; */
 }
 
 
@@ -159,6 +164,7 @@ hr {
 }
 .work .head .image img {
 	width: 100%;
+	height: 100%;
 }
 
 
@@ -236,6 +242,7 @@ body.lang-ja .work .description a.ext-link {
 }
 .work .description code {
 	font-family: 'M+ 1m Regular';
+	font-size: 1.1em;
 }
 
 

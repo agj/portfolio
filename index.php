@@ -64,8 +64,10 @@ if ($settings['shuffle']) {
 	<style>
 		<?php foreach ($categories as $cat): ?>
 		#works.visible-cat-<?= $cat->id ?> .work.cat-<?= $cat->id ?> {
-			max-height: 50em;
-			margin-top: 30px;
+			/* max-height: 50em; */
+			display: flex;
+			/* margin-top: 15px; */
+			/* margin-bottom: 15px; */
 		}
 		<?php endforeach ?>
 	</style>
@@ -94,6 +96,7 @@ if ($settings['shuffle']) {
 
 <!-- Filter -->
 <hr />
+
 <div id="filter" class="text">
 	<span>
 		<?= $general['filterLabel'] ?>
@@ -104,6 +107,7 @@ if ($settings['shuffle']) {
 		</span>
 	<?php endforeach ?>
 </div>
+
 <hr />
 
 
@@ -149,6 +153,7 @@ if ($settings['shuffle']) {
 
 <!--*************************************-->
 
+<hr />
 
 <div id="bottom" class="text">
 	<?= $markdown->convertToHTML($general['closing']) ?>
