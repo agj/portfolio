@@ -160,9 +160,8 @@ if ($settings['shuffle']) {
 </div>
 
 
-</body>
-
 <script src="js/filter.js"></script>
 <script src="js/popups.js"></script>
 
+</body>
 </html>

@@ -80,8 +80,13 @@
 		if (video) {
 			var vw = getViewportW();
 			var vh = getViewportH();
-			video.style.width = Math.min(currentOpener.width / currentOpener.height * vh, vw) + 'px';
-			video.style.height = Math.min(currentOpener.height / currentOpener.width * vw, vh) + 'px';
+			if (currentOpener.width && currentOpener.height) {
+				video.style.width = Math.min(currentOpener.width / currentOpener.height * vh, vw) + 'px';
+				video.style.height = Math.min(currentOpener.height / currentOpener.width * vw, vh) + 'px';
+			} else {
+				video.style.width = vw + 'px';
+				video.style.height = vh + 'px';
+			}
 		}
 	}
 
