@@ -162,6 +162,7 @@ if ($settings['shuffle']) {
 
 <script src="js/filter.js"></script>
 <script src="js/popups.js"></script>
+<script src="js/modernizr.js"></script>
 
 </body>
 </html>

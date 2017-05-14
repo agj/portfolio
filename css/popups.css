@@ -42,9 +42,9 @@
 	justify-content: center;
 	align-items: center;
 	position: absolute;
-	text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-	width: 80pt;
-	height: 80pt;
+	text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+	width: 80px;
+	height: 80px;
 	font-size: 4em;
 	cursor: pointer;
 	transition: font-size 0.1s linear;
@@ -72,11 +72,11 @@
 	color: #cf0;
 	font-size: 6em;
 }
-@media (pointer: coarse) { /* For touch input */
-	#popup > .button:hover {
-		color: inherit;
-		font-size: none;
-	}
+
+/* For touch input */
+html.touchevents #popup > .button:hover {
+	color: inherit;
+	font-size: 4em;
 }
 
 #popup.has-previous > .previous.button,
@@ -84,6 +84,20 @@
 	display: flex;
 }
 
+@media (max-width: 600px), (max-height: 600px) {
+	#popup > .button {
+		width: 40px;
+		height: 40px;
+		font-size: 2em;
+	}
+	#popup > .button:hover {
+		font-size: 3em;
+	}
+	/* For touch input */
+	html.touchevents #popup > .button:hover {
+		font-size: 2em;
+	}
+}
 
 /* Spinner */
 
