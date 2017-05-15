@@ -14,3 +14,4 @@ links:
   visit:
     url: http://www.cordillera.cl/flash.php
     popup: false
+    type: flash

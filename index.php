@@ -124,7 +124,7 @@ if ($settings['shuffle']) {
 				<?php if ($w->links): ?>
 					<ul class="links popup-group">
 						<?php foreach ($w->links as $l): ?>
-							<li class="link">
+							<li class="link <?= isset($l->type) ? 'type-' . $l->type : '' ?>">
 								<a
 									href="<?= $l->url ?>"
 									<?php if ($l->popup): ?>
@@ -137,6 +137,9 @@ if ($settings['shuffle']) {
 								>
 									<?= $l->name ?>
 								</a>
+								<?php if ($l->type == 'flash'): ?>
+									<span class="no-flash-warning"><?= $general['noFlash'] ?></span>
+								<?php endif ?>
 							</li>
 						<?php endforeach ?>
 					</ul>

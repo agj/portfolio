@@ -117,6 +117,14 @@
 		margin-top: 5px;
 		text-align: left;
 	}
+  .work .head .links .link .no-flash-warning {
+		left: 0;
+		bottom: 2.2em;
+		width: auto;
+    max-width: 15em;
+		top: auto;
+		height: auto;
+	}
 
 	.work .description {
 		width: auto;

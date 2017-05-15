@@ -139,13 +139,9 @@ hr {
 	flex-direction: row;
 	align-items: flex-start;
 	position: relative;
-	overflow: hidden;
+	/* overflow: hidden; */
 	margin-top: 15px;
 	margin-bottom: 15px;
-/* 	transition:
-		max-height 0.5s linear 0s,
-		margin-top 0.5s linear,
-		margin-bottom 0.5s linear; */
 }
 
 
@@ -214,17 +210,43 @@ body.lang-ja .work .head .links {
 	font-style: normal;
 }
 .work .head .links .link {
-	font-weight: bold;
+	/* font-weight: bold; */
 	margin: 0;
 	padding: 0;
 	display: inline-block;
+	line-height: 1;
 }
 .work .head .links .link a {
-	padding: 0 5px 0.2em;
+	background-color: #cf0;
 	color: #000;
-	background: #cf0;
-	line-height: 1;
+	padding: 0 5px 0.2em;
 	text-decoration: none;
+}
+
+/* In case of no Flash installed */
+html.no-flash .work .head .links .link.type-flash a {
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="50" height="50"><line x1="0" y1="0" x2="50" y2="50" stroke-width="7" stroke="rgb(190, 190, 190)" /><line x1="0" y1="50" x2="50" y2="0" stroke-width="7" stroke="rgb(190, 190, 190)" /></svg>');
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.work .head .links .link .no-flash-warning {
+	display: none;
+	position: absolute;
+	width: 15em;
+	bottom: -30px;
+	left: 100%;
+	left: calc(100% + 20px);
+	padding: 0.5em 0.7em 0.7em 1.2em;
+	text-align: left;
+	font-size: 11pt;
+	line-height: 1.6em;
+	color: #111;
+	background-color: #eee;
+	font-style: normal;
+	border: 1px solid black;
+}
+html.no-flash .work .head .links .link a:hover + .no-flash-warning {
+	display: block;
 }
 
 

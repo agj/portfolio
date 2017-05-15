@@ -15,6 +15,7 @@ links:
     url: 'http://www.agj.cl/files/games/runnerby/#small'
     width: 256
     height: 384
+    type: flash
   watch video:
     url: 'http://www.youtube.com/watch?v=Q2v2f_cp51Q'
     width: 256

@@ -71,6 +71,7 @@ class Parser {
 		} else {
 			$link->url = $definition['url'];
 			$link->popup = (!isset($definition['popup']) || $definition['popup'] === true);
+			$link->type = $definition['type'];
 			if ($link->popup) {
 				if (isset($definition['width']))	$link->width = $definition['width'];
 				if (isset($definition['height']))	$link->height = $definition['height'];

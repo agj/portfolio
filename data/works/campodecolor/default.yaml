@@ -14,3 +14,4 @@ links:
     width: 650
     height: 500
     popup: true
+    type: flash

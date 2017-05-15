@@ -13,3 +13,5 @@ links:
     url: http://www.agj.cl/files/games/flowerpattern/
     width: 640
     height: 480
+    type: touch
+    popup: false

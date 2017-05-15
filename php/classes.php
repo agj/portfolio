@@ -20,6 +20,7 @@ class Link {
 	public $width;
 	public $height;
 	public $color;
+	public $type;
 }
 
 class Category {
