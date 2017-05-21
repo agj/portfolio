@@ -9,15 +9,16 @@ type:
    digital toy:              juguete digital
    VR experience:            experiencia de realidad virtual
 links:
-   play:        jugar
-   watch:       ver
-   watch video: ver video
-   download:    descargar
-   view:        ver
-   view 1:      ver 1
-   play large:  jugar grande
-   small:       chico
-   visit:       visitar
-   exhibition:  exhibición
-   book:        libro
-   postcards:   postales
+   play:           jugar
+   watch:          ver
+   watch video:    ver video
+   download:       descargar
+   view:           ver
+   view 1:         ver 1
+   play large:     jugar grande
+   small:          chico
+   visit:          visitar
+   exhibition:     exhibición
+   book:           libro
+   postcards:      postales
+   playtest video: video playtest
