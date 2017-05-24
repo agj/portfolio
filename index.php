@@ -4,29 +4,30 @@ error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERRO
 
 require_once 'php/lib/autoload.php';
 require_once 'php/lambelo.php';
-require_once 'php/parser.php';
 require_once 'php/utils.php';
+require_once 'php/parser.php';
 
 
-$markdown = new League\CommonMark\CommonMarkConverter();
-
-$settings = Spyc::YAMLLoad('data/settings.yaml');
+$settings = $fromYaml(file_get_contents('data/settings.yaml'));
 $language = $getLanguage(array_keys($settings['languages']));
-$general = Spyc::YAMLLoad('data/general/default.yaml');
+$general = $fromYaml(file_get_contents('data/general/default.yaml'));
+
 if (file_exists("data/general/$language.yaml"))
-	$general = $deepMerge($general, Spyc::YAMLLoad("data/general/$language.yaml"));
+	$general = $deepMerge($general, $fromYaml(file_get_contents("data/general/$language.yaml")));
 $replacements = null;
-if ("data/general/replacements/$language.yaml")
-	$replacements = Spyc::YAMLLoad("data/general/replacements/$language.yaml");
+if (file_exists("data/general/replacements/$language.yaml"))
+	$replacements = $fromYaml(file_get_contents("data/general/replacements/$language.yaml"));
 $categories = Parser::getCategories($general, $language);
 
 $workslist = L::map(basename, glob('data/works/*', GLOB_ONLYDIR));
 
-$toLang = $replace('/.*\/([^\/]+).yaml/', '$1');
-$yamlWorks = L::foldOn($workslist, array(), function ($acc, $name) use ($toLang) {
-	$langs = L::map($toLang, glob("data/works/$name/*.yaml"));
-	$acc[$name] = L::foldOn($langs, array(), function ($acc, $lang) use ($name) {
-		$acc[$lang] = Spyc::YAMLLoad("data/works/$name/$lang.yaml");
+$toLang = $replace('/.*\/([^\/]+).md/', '$1');
+$yamlWorks = L::foldOn($workslist, array(), function ($acc, $name) use ($toLang, $fromFrontMatter) {
+	$langs = L::map($toLang, glob("data/works/$name/*.md"));
+	$acc[$name] = L::foldOn($langs, array(), function ($acc, $lang) use ($name, $fromFrontMatter) {
+		$fm = $fromFrontMatter(file_get_contents("data/works/$name/$lang.md"));
+		$acc[$lang] = $fm->getYAML();
+		$acc[$lang]['description'] = $fm->getContent();
 		return $acc;
 	});
 	return $acc;
@@ -91,7 +92,7 @@ if ($settings['shuffle']) {
 <?php endif ?>
 
 <div id="top" class="text">
-	<?= $markdown->convertToHTML($general['presentation']) ?>
+	<?= $fromMarkdown($general['presentation']) ?>
 </div>
 
 <!-- Filter -->
@@ -159,7 +160,7 @@ if ($settings['shuffle']) {
 <hr />
 
 <div id="bottom" class="text">
-	<?= $markdown->convertToHTML($general['closing']) ?>
+	<?= $fromMarkdown($general['closing']) ?>
 </div>
 
 

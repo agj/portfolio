@@ -5,13 +5,10 @@ require_once 'php/lambelo.php';
 require_once 'php/classes.php';
 require_once 'php/utils.php';
 
-$markdown = new League\CommonMark\CommonMarkConverter();
-
 class Parser {
 
 	public static function parseWork($id, $yaml, $language, $general, $replacements) {
 		global $deepMerge;
-		global $markdown;
 
 		$raw = $yaml['default'];
 		$readMoreTranslated = true;
@@ -29,7 +26,7 @@ class Parser {
 		$w->type = self::findReplacement($raw['type'], $replacements['type']);
 		$w->year = $raw['year'];
 		$w->image = self::getImageFilename($w->id);
-		$w->description = $markdown->convertToHTML($raw['description']);
+		$w->description = $raw['description'];
 		$w->category = is_array($raw['category']) ? $raw['category'] : array($raw['category']);
 		$w->readMore = $raw['readMore'];
 

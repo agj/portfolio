@@ -24,3 +24,14 @@ $getLanguage = function ($possibilities) {
 	return null;
 };
 
+$markdownParser = new Parsedown();
+$fromMarkdown = function ($text) use ($markdownParser) {
+	return $markdownParser->text($text);
+};
+$fromYaml = function ($text) {
+	return Symfony\Component\Yaml\Yaml::parse($text);
+};
+$frontMatterParser = new Mni\FrontYAML\Parser();
+$fromFrontMatter = function ($text) use ($frontMatterParser) {
+	return $frontMatterParser->parse($text);
+};

@@ -1,0 +1,8 @@
+---
+readMore: http://blog.agj.cl/tag/campodecolor/
+---
+
+
+Prototipo para mi proyecto de titulación. Un videojuego experimental que entrega los más mínimos elementos para realizar una composición visual, e intenta hacer una evaluación de sus parámetros compositivos.
+
+Primero haz click en la imagen animada para comenzar. En el centro, un lienzo que puede ser llenado con los círculos de la derecha, arrastrándolos. Abajo, un aproximado (y poco certero, en este prototipo) análisis de algunos valores compositivos: temperatura del color, simetría, ritmo visual y acento visual.
