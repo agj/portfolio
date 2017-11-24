@@ -1,12 +1,12 @@
 
 categoryNames:
-   vis: visual estático
+   vis: gráfica
    int: interactivo
    other: otros
-filterLabel: Mostrando sólo de tipo
+filterLabel: Mostrar sólo de tipo
 title: Portafolio de Ale Grilli
 presentation: |
-   Estás viendo el portafolio de <span class="me">Ale Grilli</span>, diseñador transmedial y desarrollador basado en Chile. Mis intereses son variados, entre los cuales enumero medios interactivos y audiovisuales, el lenguaje, y la educación. Estudié diseño gráfico en Universidad Diego Portales (Chile, promoción 2009), y luego un magíster en nuevos medios en Universidad Nacional de Bellas Artes y Música de Tokyo (Japón, promoción 2017). Soy autodidacta en programación, y he estudiado idiomas en distintas instituciones.
+   Estás viendo el portafolio de <span class="me">Ale Grilli</span>, diseñador transmedial, programador y videógrafo basado en Chile. Mis intereses se extienden sobre varias esferas, entre ellas el lenguaje, la matemática y la educación. Estudié diseño gráfico (_U. Diego Portales;_ Chile, promoción 2008), y luego un magíster en artes mediales (_U. Nacional de Bellas Artes y Música de Tokyo;_ Japón, promoción 2017). Soy autodidacta en programación, y hablo inglés y japonés.
 
    Contáctame cuando quieras por medio de ale¶agj.cl <small>(cambia ¶ por @)</small>.
 closing: |

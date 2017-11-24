@@ -2,12 +2,12 @@
 categoryNames:
    int: interactive
    av:  audiovisual
-   vis: static visual
+   vis: graphics
    other: other
-filterLabel: Only showing works of type
+filterLabel: Only show works of type
 title: Ale Grilli's portfolio
 presentation: |
-   This is <span class="me">Ale Grilli</span>'s portfolio, a cross-media designer, developer and creator based in Chile. My interests are wide-ranging, including interactive media, video, language, and education. My formal education is in graphic design in Chile (Universidad Diego Portales, graduated 2009,) and in new media in Japan (Tokyo University of the Arts, graduated 2017.) My programming knowledge is self-taught, and I have studied languages in different schools.
+   This is <span class="me">Ale Grilli</span>'s portfolio, a cross-media designer, programmer and videographer based in Chile. My interests range across various fields, among which are language, maths, and education. My formal studies are graphic design (_Universidad Diego Portales;_ Chile, graduated 2009,) and media arts (_Tokyo University of the Arts;_ Japan, graduated 2017.) My programming knowledge is self-taught, and other than English I speak Spanish (native) and Japanese.
 
    You may contact me via ale¶agj.cl <small>(replace ¶ for @)</small>.
 closing: |

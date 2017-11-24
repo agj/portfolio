@@ -44,6 +44,9 @@ hr {
 	background-size: contain;
 	background-repeat: no-repeat;
 }
+em {
+	font-style: italic;
+}
 
 
 #languages {
