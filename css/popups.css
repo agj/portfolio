@@ -14,7 +14,7 @@
 }
 
 #popup > .content {
-	display: flex;
+	display: block;
 	margin: auto;
 	min-width: 200px;
 	min-height: 200px;
