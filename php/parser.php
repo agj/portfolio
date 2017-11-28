@@ -34,10 +34,10 @@ class Parser {
 			? $general['readMore']
 			: $general['readMoreNonTranslated'];
 
-		if (isset($raw["links"])) {
+		if (isset($raw['links'])) {
 			$links = array();
-			foreach ($raw["links"] as $name => $definition) {
-				$links[] = self::getLink($raw, $name, $definition, $replacements);
+			foreach ($raw['links'] as $name => $definition) {
+				$links[] = self::getLink($name, $definition, $replacements);
 			}
 			$w->links = $links;
 		}
@@ -57,7 +57,15 @@ class Parser {
 
 	//////////////////////////////////////////
 
-	private static function getLink($raw, $name, $definition, $replacements) {
+	private static function getLink($name, $definition, $replacements) {
+		if (!is_string($definition) && isset($definition['links'])) {
+			$links = array();
+			foreach ($definition['links'] as $n => $d) {
+				$links[] = self::getLink($n, $d, $replacements);
+			}
+			return $links;
+		}
+
 		$link = new Link();
 
 		$link->name = self::findReplacement($name, $replacements['links']);
@@ -65,7 +73,7 @@ class Parser {
 		if (is_string($definition)) {
 			$link->url = $definition;
 			$link->popup = true;
-		} else {
+		}  else {
 			$link->url = $definition['url'];
 			$link->popup = (!isset($definition['popup']) || $definition['popup'] === true);
 			$link->type = $definition['type'];

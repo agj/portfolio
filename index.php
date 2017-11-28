@@ -114,6 +114,43 @@ if ($settings['shuffle']) {
 
 <!--*************************************-->
 
+<?php
+
+function linksToHTML($links, $asGroup = false) {
+	if (!$links) return;
+	?>
+		<ul <?= $asGroup ? 'class="popup-group"' : '' ?>>
+			<?php foreach ($links as $l): ?>
+				<?php if (is_array($l)): ?>
+					<li>
+						<?php linksToHTML($l, true); ?>
+					</li>
+				<?php else: ?>
+					<li class="link <?= !$asGroup ? 'popup-group' : '' ?> <?= isset($l->type) ? 'type-' . $l->type : '' ?>">
+						<a
+							href="<?= $l->url ?>"
+							<?php if ($l->popup): ?>
+								class="open-popup"
+								data-popup="<?php
+									if (isset($l->width))  echo "$l->width $l->height ";
+									if (isset($l->color))  echo $l->color;
+								?>"
+							<?php endif ?>
+						>
+							<?= $l->name ?>
+						</a>
+						<?php if ($l->type == 'flash'): ?>
+							<span class="no-flash-warning"><?= $general['noFlash'] ?></span>
+						<?php endif ?>
+					</li>
+				<?php endif ?>
+			<?php endforeach ?>
+		</ul>
+	<?php
+}
+
+?>
+
 <section id="works" class="<?php foreach ($categories as $cat) { echo ' visible-cat-' . $cat->id; } ?>">
 	<?php foreach ($works as $w): ?>
 		<!-- WORK: <?= strtoupper($w->name) ?> -->
@@ -123,27 +160,9 @@ if ($settings['shuffle']) {
 				<p class="type"><?= $w->type ?> <span class="year"><?= $w->year ?></span></p>
 				<div class="image"><img alt="" src="data/works/<?= $w->id ?>/<?= $w->image ?>" /></div>
 				<?php if ($w->links): ?>
-					<ul class="links popup-group">
-						<?php foreach ($w->links as $l): ?>
-							<li class="link <?= isset($l->type) ? 'type-' . $l->type : '' ?>">
-								<a
-									href="<?= $l->url ?>"
-									<?php if ($l->popup): ?>
-										class="open-popup"
-										data-popup="<?php
-											if (isset($l->width))  echo "$l->width $l->height ";
-											if (isset($l->color))  echo $l->color;
-										?>"
-									<?php endif ?>
-								>
-									<?= $l->name ?>
-								</a>
-								<?php if ($l->type == 'flash'): ?>
-									<span class="no-flash-warning"><?= $general['noFlash'] ?></span>
-								<?php endif ?>
-							</li>
-						<?php endforeach ?>
-					</ul>
+					<div class="links">
+						<?php linksToHTML($w->links) ?>
+					</div>
 				<?php endif ?>
 			</div>
 			<div class="description">

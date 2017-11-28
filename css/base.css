@@ -44,9 +44,6 @@ hr {
 	background-size: contain;
 	background-repeat: no-repeat;
 }
-em {
-	font-style: italic;
-}
 
 
 #languages {
@@ -212,11 +209,13 @@ em {
 body.lang-ja .work .head .links {
 	font-style: normal;
 }
+.work .head .links ul,
+.work .head .links li {
+	display: inline-block;
+}
 .work .head .links .link {
-	/* font-weight: bold; */
 	margin: 0;
 	padding: 0;
-	display: inline-block;
 	line-height: 1;
 }
 .work .head .links .link a {
