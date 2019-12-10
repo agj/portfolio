@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dot-into": "^1.0.2",
+    "fs-extra": "^8.1.0",
+    "glob": "^7.1.2",
+    "glob-promise": "^3.3.0",
+    "mkdirp": "^0.5.1",
+    "node-watch": "^0.6.3",
+    "ramda": "^0.26.1",
+    "xregexp": "^4.0.0"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.1",
+    "gulp-elm": "^0.8.1",
+    "gulp-rename": "^2.0.0"
+  }
+}
