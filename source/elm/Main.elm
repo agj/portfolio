@@ -2,10 +2,23 @@ module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
 import Browser
 import Dict
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Element exposing (..)
+import Element.Background as Background
+import Element.Border as Border
+import Element.Font as Font
+import Html exposing (Html)
 import List.Extra exposing (..)
+import Palette
+import Utils exposing (..)
+import Work exposing (Work)
+
+
+type Msg
+    = SetLanguage String
+
+
+type alias Flags =
+    { languages : List String }
 
 
 
@@ -27,43 +40,21 @@ main =
 
 
 type alias Model =
-    { }
-
-
-type alias Flags =
-    { languages : List String }
-
-
-languageCodes =
-    Dict.fromList
-        [ ( "en", English )
-        ]
+    { selection : Maybe String
+    , works : List Work
+    }
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    let
-        systemLanguage =
-            flags.languages
-                |> List.map (String.left 2)
-                |> find (\s -> Dict.member s languageCodes)
-                |> Maybe.andThen (\lc -> Dict.get lc languageCodes)
-                |> Maybe.withDefault English
-    in
-    ( Model systemLanguage systemLanguage, Cmd.none )
+    ( { selection = Nothing, works = [] }
+    , Cmd.none
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        SetLanguage newLanguage ->
-            ( if newLanguage /= model.language then
-                Model newLanguage model.language
-
-              else
-                model
-            , Cmd.none
-            )
+    ( model, Cmd.none )
 
 
 
@@ -78,65 +69,112 @@ type alias Document msg =
 
 view : Model -> Document Msg
 view model =
-    let
-        content = getContent model.language
-    in
-    { title = content.title
+    { title = "Portfolio"
     , body =
-        [ article [ class "container", lang "en" ]
-            [ nav [ class "language-selection" ]
-                [ languageButton model English "english"
-                , languageButton model Spanish "spanish"
-                , languageButton model Japanese "japanese"
-                ]
-            , content.intro
-            ]
-        ]
+        [ layout [] (viewMain model) ]
     }
 
 
-languageButton : Model -> Language -> String -> Html Msg
-languageButton model language languageName =
-    let
-        exits =
-            model.language
-
-        enters =
-            model.previousLanguage
-
-        position =
-            case language of
-                English ->
-                    1
-
-                Spanish ->
-                    if (exits == Japanese) || ((exits == Spanish) && (enters == Japanese)) then
-                        0
-
-                    else
-                        1
-
-                Japanese ->
-                    0
-
-        adjusted =
-            (language == Spanish)
-                && ((enters == English && exits == Japanese)
-                        || (enters == Japanese && exits == English)
-                   )
-    in
-    div
-        [ classList
-            [ ( "language", True )
-            , ( "language-" ++ languageName, True )
-            , ( "selected", model.language == language )
-            , ( "adjusted", adjusted )
-            , ( "position-" ++ String.fromInt position, True )
+viewMain : Model -> Element Msg
+viewMain model =
+    column
+        [ width (px 500)
+        , centerX
+        , padding 20
+        , Font.color Palette.light
+        , Background.color Palette.dark
+        , Font.size Palette.textSizeNormal
+        , Border.rounded (fraction 1 Palette.textSizeNormal)
+        ]
+        [ standardP []
+            [ text "My name is "
+            , el [ Font.bold ] (text "Ale Grilli")
+            , text ". I’m based in Santiago, Chile. My work is concerned with various intersections of the following four areas."
             ]
-        , onClick (SetLanguage language)
+        , list []
+            [ linkWork "/" <| text "Visual communication"
+            , linkWork "/" <| text "Programming"
+            , linkWork "/" <| text "Language"
+            , linkWork "/" <| text "Learning"
+            ]
+        , standardP []
+            [ text "I’m a creator. I make "
+            , linkWork "/" <| text "digital things"
+            , text ", such as "
+            , linkWork "/" <| text "games"
+            , text " and "
+            , linkWork "/" <| text "web stuff"
+            , text ". I design "
+            , linkWork "/" <| text "user interfaces"
+            , text " and "
+            , linkWork "/" <| text "graphics"
+            , text ". I shoot and edit "
+            , linkWork "/" <| text "videos"
+            , text " on occasion."
+            ]
+        , standardP []
+            [ text "I’m a languages nerd. I am fluent in three (Spanish, English, Japanese) and am working on a fourth (Chinese Mandarin). I do "
+            , linkWork "/" <| text "translation"
+            , text " work, subtitling too."
+            ]
+        , standardP []
+            [ text "I think a lot about learning. I’ve worked for ed-tech companies programming "
+            , linkWork "/" <| text "educational software"
+            , text ". I occasionally "
+            , linkWork "/" <| text "teach languages"
+            , text "."
+            ]
+        , standardP []
+            [ text "Select any highlighted keyword above to see examples of my work."
+            ]
         ]
-        [ text ""
+
+
+standardP : List (Attribute Msg) -> List (Element Msg) -> Element Msg
+standardP attrs children =
+    paragraph
+        (attrs
+            ++ [ paddingXY 0 10
+               , spacing <| Palette.textLineSpacing Palette.textSizeNormal
+               ]
+        )
+        children
+
+
+list : List (Attribute Msg) -> List (Element Msg) -> Element Msg
+list attrs children =
+    let
+        toRow : Element Msg -> Element Msg
+        toRow child =
+            row [ spacing (fraction 0.3 Palette.textSizeNormal) ]
+                [ text "→"
+                , child
+                ]
+
+        rows : List (Element Msg)
+        rows =
+            List.map toRow children
+    in
+    column
+        (attrs
+            ++ [ paddingXY 0 10
+               , spacing <| Palette.textLineSpacing Palette.textSizeNormal
+               ]
+        )
+        rows
+
+
+linkWork : String -> Element Msg -> Element Msg
+linkWork url child =
+    link
+        [ Background.color Palette.highlightDark
+        , Font.color Palette.light
+        , paddingXY 11 3
+        , Border.rounded 15
         ]
+        { url = url
+        , label = child
+        }
 
 
 
