@@ -1,8 +1,10 @@
 module Work exposing (Work)
 
+import Element exposing (..)
 
-type alias Work =
+
+type alias Work msg =
     { name : String
-    , description : String
+    , description : Element msg
     , tags : List String
     }
