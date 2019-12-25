@@ -1,4 +1,4 @@
-module Palette exposing (dark, highlightDark, highlightLight, light, textLineSpacing, textSizeNormal)
+module Palette exposing (..)
 
 import Element exposing (..)
 
@@ -26,6 +26,11 @@ highlightDark =
 textSizeNormal : Int
 textSizeNormal =
     18
+
+
+textSizeLarge : Int
+textSizeLarge =
+    24
 
 
 textLineSpacing : Int -> Int

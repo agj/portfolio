@@ -1,6 +1,7 @@
 module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
 import Browser
+import Browser.Events
 import Dict
 import Element exposing (..)
 import Element.Background as Background
@@ -8,24 +9,23 @@ import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
+import Language exposing (Language(..))
 import List.Extra exposing (..)
 import Palette
+import Tag exposing (Tag)
 import Utils exposing (..)
-import Work exposing (Work)
+import Work exposing (..)
 import Works
-
-
-type Msg
-    = SetLanguage String
-    | SetTag String
-
-
-type alias Flags =
-    { languages : List String }
 
 
 
 -- MAIN
+
+
+type alias Flags =
+    { languages : List String
+    , viewport : { width : Int, height : Int }
+    }
 
 
 main : Program Flags Model Msg
@@ -43,26 +43,69 @@ main =
 
 
 type alias Model =
-    { selection : Maybe String
+    { language : Language
+    , tag : Maybe Tag
     , works : List (Work Msg)
+    , layoutSize : LayoutSize
     }
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( { selection = Nothing, works = [] }
+    ( { language = English
+      , tag = Nothing
+      , works = Works.all
+      , layoutSize = getLayoutSize flags.viewport
+      }
     , Cmd.none
     )
+
+
+getLayoutSize : Viewport -> LayoutSize
+getLayoutSize viewport =
+    if viewport.width < 600 then
+        PhoneSize
+
+    else
+        DesktopSize
+
+
+type LayoutSize
+    = PhoneSize
+    | DesktopSize
+
+
+
+-- UPDATE
+
+
+type Msg
+    = SelectedLanguage Language
+    | SelectedTag Tag
+    | GotViewport Viewport
+
+
+type alias Viewport =
+    { width : Int
+    , height : Int
+    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SetTag tag ->
-            ( { model | selection = Just tag }, Cmd.none )
+        SelectedTag tag ->
+            ( { model | tag = Just tag }
+            , Cmd.none
+            )
 
-        SetLanguage language ->
+        SelectedLanguage language ->
             ( model, Cmd.none )
+
+        GotViewport viewport ->
+            ( { model | layoutSize = getLayoutSize viewport }
+            , Cmd.none
+            )
 
 
 
@@ -85,81 +128,134 @@ view model =
 
 viewMain : Model -> Element Msg
 viewMain model =
-    column []
-        [ column
-            [ width (px 500)
-            , centerX
-            , padding 20
-            , Font.color Palette.light
-            , Background.color Palette.dark
-            , Font.size Palette.textSizeNormal
-            , Border.rounded (fraction 1 Palette.textSizeNormal)
-            ]
-            [ standardP []
-                [ text "My name is "
-                , el [ Font.bold ] (text "Ale Grilli")
-                , text ". I’m based in Santiago, Chile. My work is concerned with various intersections of the following four areas."
-                ]
-            , list []
-                [ linkWork "/" <| text "Visual communication"
-                , linkWork "/" <| text "Programming"
-                , linkWork "/" <| text "Language"
-                , linkWork "/" <| text "Learning"
-                ]
-            , standardP []
-                [ text "I’m a creator. I make "
-                , linkWork "/" <| text "digital things"
-                , text ", such as "
-                , linkWork "/" <| text "games"
-                , text " and "
-                , linkWork "/" <| text "web stuff"
-                , text ". I design "
-                , linkWork "/" <| text "user interfaces"
-                , text " and "
-                , linkWork "/" <| text "graphics"
-                , text ". I shoot and edit "
-                , linkWork "/" <| text "videos"
-                , text " on occasion."
-                ]
-            , standardP []
-                [ text "I’m a languages nerd. I am fluent in three (Spanish, English, Japanese) and am working on a fourth (Chinese Mandarin). I do "
-                , linkWork "/" <| text "translation"
-                , text " work, subtitling too."
-                ]
-            , standardP []
-                [ text "I think a lot about learning. I’ve worked for ed-tech companies programming "
-                , linkWork "/" <| text "educational software"
-                , text ". I occasionally "
-                , linkWork "/" <| text "teach languages"
-                , text "."
-                ]
-            , standardP []
-                [ text "Select any highlighted keyword above to see examples of my work."
-                ]
-            ]
+    column
+        [ width <|
+            if model.layoutSize == PhoneSize then
+                fill
+
+            else
+                px 600
+        , centerX
+        ]
+        [ viewIntroduction
         , viewWorks model
         ]
 
 
-viewWorks model =
+viewIntroduction : Element Msg
+viewIntroduction =
     column
-        [ width (px 500)
-        , centerX
+        [ width fill
         , padding 20
         , Font.color Palette.light
         , Background.color Palette.dark
         , Font.size Palette.textSizeNormal
         , Border.rounded (fraction 1 Palette.textSizeNormal)
         ]
-        (List.map viewWork Works.all)
+        [ standardP []
+            [ text "My name is "
+            , el [ Font.bold ] (text "Ale Grilli")
+            , text ". I’m based in Santiago, Chile. My work is concerned with various intersections of the following four areas."
+            ]
+        , list []
+            [ linkTag Tag.VisualCommunication <| text "Visual communication"
+            , linkTag Tag.Programming <| text "Programming"
+            , linkTag Tag.Language <| text "Language"
+            , linkTag Tag.Learning <| text "Learning"
+            ]
+        , standardP []
+            [ text "I’m a creator. I make "
+            , linkTag Tag.Digital <| text "digital things"
+            , text ", such as "
+            , linkTag Tag.VideoGame <| text "games"
+            , text " and "
+            , linkTag Tag.Web <| text "web stuff"
+            , text ". I design "
+            , linkTag Tag.UserInterface <| text "user interfaces"
+            , text " and "
+            , linkTag Tag.Graphic <| text "graphics"
+            , text ". I shoot and edit "
+            , linkTag Tag.Video <| text "videos"
+            , text " on occasion."
+            ]
+        , standardP []
+            [ text "I’m a languages nerd. I am fluent in three (Spanish, English, Japanese) and am working on a fourth (Chinese Mandarin). I do "
+            , linkTag Tag.Translation <| text "translation"
+            , text " work, subtitling too."
+            ]
+        , standardP []
+            [ text "I think a lot about learning. I’ve worked for ed-tech companies programming "
+            , linkTag Tag.EducationalSoftware <| text "educational software"
+            , text ". I occasionally "
+            , linkTag Tag.LanguageTeaching <| text "teach languages"
+            , text "."
+            ]
+        , standardP []
+            [ text "Select any highlighted keyword above to see examples of my work."
+            ]
+        ]
+
+
+viewWorks : Model -> Element Msg
+viewWorks model =
+    column
+        [ width fill
+        , padding 20
+        , Font.color Palette.light
+        , Background.color Palette.dark
+        , Font.size Palette.textSizeNormal
+        , Border.rounded (fraction 1 Palette.textSizeNormal)
+        ]
+        (List.map viewWork model.works)
 
 
 viewWork : Work Msg -> Element Msg
 viewWork work =
     column []
-        [ text work.name
+        [ viewWorkTitle work.name
+        , viewWorkVisuals work.visuals
         , work.description
         ]
+
+
+viewWorkTitle : String -> Element Msg
+viewWorkTitle title =
+    el
+        [ Font.size Palette.textSizeLarge
+        ]
+        (text title)
+
+
+viewWorkVisuals : List Visual -> Element Msg
+viewWorkVisuals visuals =
+    row []
+        (List.map viewVisualThumbnail visuals)
+
+
+viewVisualThumbnail : Visual -> Element Msg
+viewVisualThumbnail visual =
+    let
+        thumbnail src =
+            image
+                [ width (px 40)
+                , spacing 5
+                ]
+                { src = "works/" ++ src
+                , description = "thumbnail"
+                }
+    in
+    case visual of
+        Image desc ->
+            link []
+                { url = desc.url
+                , label = thumbnail desc.thumbnailUrl
+                }
+
+        Video desc ->
+            link []
+                { url = desc.url
+                , label = thumbnail desc.thumbnailUrl
+                }
 
 
 standardP : List (Attribute Msg) -> List (Element Msg) -> Element Msg
@@ -171,10 +267,6 @@ standardP attrs children =
                ]
         )
         children
-
-
-
--- standardLink : String ->
 
 
 list : List (Attribute Msg) -> List (Element Msg) -> Element Msg
@@ -200,14 +292,14 @@ list attrs children =
         rows
 
 
-linkWork : String -> Element Msg -> Element Msg
-linkWork tag child =
+linkTag : Tag -> Element Msg -> Element Msg
+linkTag tag child =
     el
         [ Background.color Palette.highlightDark
         , Font.color Palette.light
         , paddingXY 11 3
         , Border.rounded 15
-        , onClick (SetTag tag)
+        , onClick (SelectedTag tag)
         ]
         child
 
@@ -218,4 +310,6 @@ linkWork tag child =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Browser.Events.onResize <|
+        \w h ->
+            GotViewport { width = w, height = h }

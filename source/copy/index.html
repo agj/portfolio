@@ -20,6 +20,10 @@
 				node: document.getElementById('elm'),
 				flags: {
 					languages: window.navigator.languages || window.navigator.language ? [window.navigator.language] : [],
+					viewport: {
+						width: window.innerWidth,
+						height: window.innerHeight,
+					},
 				},
 			});
 		</script>

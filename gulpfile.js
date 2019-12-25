@@ -23,7 +23,7 @@ const debugElm = () =>
 	doElm({ optimize: false, debug: false }); // Temporarily using `debug: false` due to Elm compiler bug.
 
 const formatElm = () =>
-	exec('elm-format source/elm/ --yes');
+	exec('npx elm-format source/elm/ --yes');
 
 const watchElm = () =>
 	gulp.watch('source/elm/**/*.elm', gulp.series(formatElm, debugElm));
