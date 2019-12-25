@@ -94,13 +94,13 @@ type alias Viewport =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        SelectedLanguage language ->
+            ( model, Cmd.none )
+
         SelectedTag tag ->
             ( { model | tag = Just tag }
             , Cmd.none
             )
-
-        SelectedLanguage language ->
-            ( model, Cmd.none )
 
         GotViewport viewport ->
             ( { model | layoutSize = getLayoutSize viewport }
@@ -196,8 +196,19 @@ viewIntroduction =
         ]
 
 
-viewWorks : Model -> Element Msg
+viewWorks : { a | tag : Maybe Tag, works : List (Work Msg) } -> Element Msg
 viewWorks model =
+    let
+        works =
+            case model.tag of
+                Nothing ->
+                    []
+
+                Just tag ->
+                    List.filter
+                        (\w -> List.member tag w.tags)
+                        model.works
+    in
     column
         [ width fill
         , padding 20
@@ -206,7 +217,7 @@ viewWorks model =
         , Font.size Palette.textSizeNormal
         , Border.rounded (fraction 1 Palette.textSizeNormal)
         ]
-        (List.map viewWork model.works)
+        (List.map viewWork works)
 
 
 viewWork : Work Msg -> Element Msg
