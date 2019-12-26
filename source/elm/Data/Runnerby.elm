@@ -22,7 +22,7 @@ data =
                 , t ".)"
                 ]
             ]
-    , mainVisualUrl = "runnerby/main.jpg"
+    , mainVisualUrl = "runnerby/main.png"
     , date = Date "2010"
     , tags =
         [ Tag.VisualCommunication

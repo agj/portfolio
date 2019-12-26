@@ -146,11 +146,10 @@ viewIntroduction : Element Msg
 viewIntroduction =
     column
         [ width fill
-        , padding 20
+        , padding Palette.spaceNormal
         , Font.color Palette.light
         , Background.color Palette.dark
         , Font.size Palette.textSizeNormal
-        , Border.rounded (fraction 1 Palette.textSizeNormal)
         ]
         [ standardP []
             [ text "My name is "
@@ -190,9 +189,6 @@ viewIntroduction =
             , linkTag Tag.LanguageTeaching <| text "teach languages"
             , text "."
             ]
-        , standardP []
-            [ text "Select any highlighted keyword above to see examples of my work."
-            ]
         ]
 
 
@@ -209,37 +205,92 @@ viewWorks model =
                         (\w -> List.member tag w.tags)
                         model.works
     in
+    el
+        [ padding Palette.spaceShort
+        , width fill
+        ]
+    <|
+        if List.length works == 0 then
+            viewWorkBlock <|
+                [ standardP
+                    []
+                    [ text "Select any highlighted keyword above to see examples of my work."
+                    ]
+                ]
+
+        else
+            column
+                [ width fill
+                , spacing Palette.spaceShort
+                ]
+                (List.map viewWork works)
+
+
+viewWorkBlock : List (Element Msg) -> Element Msg
+viewWorkBlock children =
     column
         [ width fill
-        , padding 20
         , Font.color Palette.light
         , Background.color Palette.dark
         , Font.size Palette.textSizeNormal
-        , Border.rounded (fraction 1 Palette.textSizeNormal)
         ]
-        (List.map viewWork works)
+        children
 
 
 viewWork : Work Msg -> Element Msg
 viewWork work =
-    column []
-        [ viewWorkTitle work.name
+    viewWorkBlock
+        [ viewWorkTitle work.name work.mainVisualUrl
         , viewWorkVisuals work.visuals
-        , work.description
+        , viewWorkDescription work.description
         ]
 
 
-viewWorkTitle : String -> Element Msg
-viewWorkTitle title =
+viewWorkDescription : Element Msg -> Element Msg
+viewWorkDescription child =
+    el [ padding Palette.spaceNormal ]
+        child
+
+
+viewWorkTitle : String -> String -> Element Msg
+viewWorkTitle title mainVisualUrl =
     el
         [ Font.size Palette.textSizeLarge
+        , width fill
+        , height (px 200)
+        , Background.image ("works/" ++ mainVisualUrl)
+        , Font.shadow
+            { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
+            , blur = 0
+            , color = rgb 0 0 0
+            }
         ]
-        (text title)
+    <|
+        el
+            [ height (px <| Palette.textSizeLarge * 2)
+            , width fill
+            , alignBottom
+            , paddingXY Palette.spaceNormal 0
+            , Background.gradient
+                { angle = 0
+                , steps =
+                    [ rgba 0 0 0 0.7
+                    , rgba 0 0 0 0.3
+                    , rgba 0 0 0 0
+                    ]
+                }
+            ]
+        <|
+            el
+                [ alignBottom ]
+                (text title)
 
 
 viewWorkVisuals : List Visual -> Element Msg
 viewWorkVisuals visuals =
-    row []
+    wrappedRow
+        [ spacing 5
+        ]
         (List.map viewVisualThumbnail visuals)
 
 
@@ -248,8 +299,7 @@ viewVisualThumbnail visual =
     let
         thumbnail src =
             image
-                [ width (px 40)
-                , spacing 5
+                [ width (px 100)
                 ]
                 { src = "works/" ++ src
                 , description = "thumbnail"
