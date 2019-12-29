@@ -46,7 +46,7 @@ type alias Model =
     { language : Language
     , tag : Maybe Tag
     , works : List (Work Msg)
-    , layoutSize : LayoutSize
+    , viewport : Viewport
     }
 
 
@@ -55,7 +55,7 @@ init flags =
     ( { language = English
       , tag = Nothing
       , works = Works.all
-      , layoutSize = getLayoutSize flags.viewport
+      , viewport = flags.viewport
       }
     , Cmd.none
     )
@@ -103,7 +103,7 @@ update msg model =
             )
 
         GotViewport viewport ->
-            ( { model | layoutSize = getLayoutSize viewport }
+            ( { model | viewport = viewport }
             , Cmd.none
             )
 
@@ -128,9 +128,20 @@ view model =
 
 viewMain : Model -> Element Msg
 viewMain model =
+    let
+        layoutSize =
+            getLayoutSize model.viewport
+
+        worksBlockWidth =
+            if layoutSize == PhoneSize then
+                model.viewport.width
+
+            else
+                600
+    in
     column
         [ width <|
-            if model.layoutSize == PhoneSize then
+            if layoutSize == PhoneSize then
                 fill
 
             else
@@ -138,7 +149,7 @@ viewMain model =
         , centerX
         ]
         [ viewIntroduction
-        , viewWorks model
+        , viewWorks worksBlockWidth model
         ]
 
 
@@ -192,8 +203,8 @@ viewIntroduction =
         ]
 
 
-viewWorks : { a | tag : Maybe Tag, works : List (Work Msg) } -> Element Msg
-viewWorks model =
+viewWorks : Int -> { a | tag : Maybe Tag, works : List (Work Msg) } -> Element Msg
+viewWorks blockWidth model =
     let
         works =
             case model.tag of
@@ -204,9 +215,12 @@ viewWorks model =
                     List.filter
                         (\w -> List.member tag w.tags)
                         model.works
+
+        paddingAmount =
+            Palette.spaceSmall
     in
     el
-        [ padding Palette.spaceShort
+        [ padding paddingAmount
         , width fill
         ]
     <|
@@ -221,9 +235,9 @@ viewWorks model =
         else
             column
                 [ width fill
-                , spacing Palette.spaceShort
+                , spacing Palette.spaceSmall
                 ]
-                (List.map viewWork works)
+                (List.map (viewWork (blockWidth - (paddingAmount * 2))) works)
 
 
 viewWorkBlock : List (Element Msg) -> Element Msg
@@ -237,11 +251,11 @@ viewWorkBlock children =
         children
 
 
-viewWork : Work Msg -> Element Msg
-viewWork work =
+viewWork : Int -> Work Msg -> Element Msg
+viewWork blockWidth work =
     viewWorkBlock
         [ viewWorkTitle work.name work.mainVisualUrl
-        , viewWorkVisuals work.visuals
+        , viewWorkVisuals blockWidth work.visuals
         , viewWorkDescription work.description
         ]
 
@@ -286,20 +300,30 @@ viewWorkTitle title mainVisualUrl =
                 (text title)
 
 
-viewWorkVisuals : List Visual -> Element Msg
-viewWorkVisuals visuals =
+viewWorkVisuals : Int -> List Visual -> Element Msg
+viewWorkVisuals blockWidth visuals =
+    let
+        perRow =
+            4
+
+        thumbnailSize =
+            toFloat (blockWidth - (Palette.spaceSmaller * (perRow - 1)))
+                / perRow
+                |> floor
+    in
     wrappedRow
-        [ spacing 5
+        [ spacing Palette.spaceSmaller
         ]
-        (List.map viewVisualThumbnail visuals)
+        (List.map (viewVisualThumbnail thumbnailSize) visuals)
 
 
-viewVisualThumbnail : Visual -> Element Msg
-viewVisualThumbnail visual =
+viewVisualThumbnail : Int -> Visual -> Element Msg
+viewVisualThumbnail size visual =
     let
         thumbnail src =
             image
-                [ width (px 100)
+                [ width (px size)
+                , height (px size)
                 ]
                 { src = "works/" ++ src
                 , description = "thumbnail"

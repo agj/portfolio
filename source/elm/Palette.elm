@@ -55,5 +55,9 @@ spaceNormal =
     20
 
 
-spaceShort =
+spaceSmall =
     10
+
+
+spaceSmaller =
+    5
