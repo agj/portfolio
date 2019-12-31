@@ -12,7 +12,7 @@ links:
     height: 384
     type: flash
   watch video:
-    url: 'http://www.youtube.com/watch?v=Q2v2f_cp51Q'
+    url: 'http://www.youtube.com/watch?v=n5uQDt5hXDQ'
     width: 256
     height: 409
 ---

@@ -31,9 +31,14 @@ highlightDark =
 -- TEXT
 
 
+textSizeSmall : Int
+textSizeSmall =
+    11
+
+
 textSizeNormal : Int
 textSizeNormal =
-    18
+    14
 
 
 textSizeLarge : Int

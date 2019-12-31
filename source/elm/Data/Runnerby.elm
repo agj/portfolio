@@ -18,7 +18,7 @@ data =
                 ]
             , p
                 [ t "(Playthrough video by "
-                , l "Alexey Zubkov" "https://twitter.com/ortoslon"
+                , l "moshboy" "https://twitter.com/moshboy"
                 , t ".)"
                 ]
             ]
@@ -32,15 +32,15 @@ data =
         ]
     , visuals =
         [ Video
-            { id = "Q2v2f_cp51Q"
-            , thumbnailUrl = "runnerby/thumb01.jpg"
+            { id = "n5uQDt5hXDQ"
+            , thumbnailUrl = "runnerby/video1-thumb.jpg"
             , aspectRatio = 256 / 409
-            , host = Vimeo
+            , host = Youtube
             }
         ]
     , links =
         [ { label = "Play"
-          , url = "http://www.agj.cl/files/games/runnerby/#small"
+          , url = "http://www.agj.cl/files/games/runnerby/"
           }
         ]
     , readMoreUrl = Just "http://blog.agj.cl/tag/runnerby/"

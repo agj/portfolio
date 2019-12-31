@@ -274,50 +274,92 @@ viewWork blockWidth work =
     viewWorkBlock
         [ viewWorkTitle blockWidth work.name work.mainVisualUrl
         , viewWorkVisuals blockWidth work.visuals
+        , viewWorkLinks work.links
         , viewWorkDescription work.description
         ]
 
 
 viewWorkDescription : Element Msg -> Element Msg
 viewWorkDescription child =
-    el [ padding Palette.spaceNormal ]
+    el [ paddingXY Palette.spaceNormal 0 ]
         child
+
+
+viewWorkLinks : List Link -> Element Msg
+viewWorkLinks links =
+    let
+        makeLink link =
+            newTabLink
+                [ Background.color Palette.highlightDark
+                , Border.rounded (fraction 0.2 Palette.textSizeNormal)
+                , paddingXY
+                    (fraction 0.6 Palette.textSizeNormal)
+                    (fraction 0.4 Palette.textSizeNormal)
+                , centerX
+                ]
+                { url = link.url
+                , label = text link.label
+                }
+    in
+    wrappedRow
+        [ paddingXY Palette.spaceNormal Palette.spaceSmall
+        , width fill
+        ]
+    <|
+        List.map makeLink links
 
 
 viewWorkTitle : Int -> String -> String -> Element Msg
 viewWorkTitle blockWidth title mainVisualUrl =
-    el
-        [ Font.size Palette.textSizeLarge
-        , width (px blockWidth)
-        , height (px blockWidth)
-        , Background.image ("works/" ++ mainVisualUrl)
-        , Font.shadow
-            { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
-            , blur = 0
-            , color = rgb 0 0 0
-            }
-        ]
-    <|
-        el
-            [ height (px <| Palette.textSizeLarge * 2)
-            , width fill
-            , alignBottom
-            , paddingXY Palette.spaceNormal 0
-            , Background.gradient
-                { angle = 0
-                , steps =
-                    [ rgba 0 0 0 0.7
-                    , rgba 0 0 0 0.3
-                    , rgba 0 0 0 0
-                    ]
-                }
-            ]
-        <|
+    let
+        mainBlock =
+            el
+                [ width (px blockWidth)
+                , height (px blockWidth)
+                , Background.image ("works/" ++ mainVisualUrl)
+                , Font.shadow
+                    { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
+                    , blur = 0
+                    , color = rgb 0 0 0
+                    }
+                ]
+
+        gradientBlock =
+            column
+                [ height (px <| Palette.textSizeLarge * 2)
+                , width fill
+                , alignBottom
+                , paddingXY Palette.spaceNormal 0
+                , Background.gradient
+                    { angle = 0
+                    , steps =
+                        [ rgba 0 0 0 0.7
+                        , rgba 0 0 0 0.3
+                        , rgba 0 0 0 0
+                        ]
+                    }
+                ]
+
+        yearBlock =
+            el
+                [ alignBottom
+                , paddingXY 0 0
+                , Font.size Palette.textSizeSmall
+                ]
+
+        titleBlock =
             el
                 [ alignBottom
                 , paddingXY 0 Palette.spaceSmaller
+                , Font.size Palette.textSizeLarge
                 ]
-                (text title)
+    in
+    mainBlock
+        (gradientBlock
+            [ yearBlock (text "2010")
+            , titleBlock (text title)
+            ]
+        )
 
 
 viewWorkVisuals : Int -> List Visual -> Element Msg
