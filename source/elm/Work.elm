@@ -24,13 +24,17 @@ type Visual
     = Image
         { thumbnailUrl : String
         , url : String
-        }
-    | Video
-        { thumbnailUrl : String
-        , url : String
         , aspectRatio : Float
-        , host : VideoHost
         }
+    | Video VideoDescription
+
+
+type alias VideoDescription =
+    { thumbnailUrl : String
+    , id : String
+    , aspectRatio : Float
+    , host : VideoHost
+    }
 
 
 type VideoHost

@@ -24,7 +24,7 @@ data =
         ]
     , visuals =
         [ Video
-            { url = "https://vimeo.com/216446958"
+            { id = "216446958"
             , thumbnailUrl = "tearoom/thumb01.jpg"
             , aspectRatio = 640 / 360
             , host = Vimeo

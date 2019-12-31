@@ -14,18 +14,13 @@ import List.Extra exposing (..)
 import Palette
 import Tag exposing (Tag)
 import Utils exposing (..)
+import VideoEmbed
 import Work exposing (..)
 import Works
 
 
 
 -- MAIN
-
-
-type alias Flags =
-    { languages : List String
-    , viewport : { width : Int, height : Int }
-    }
 
 
 main : Program Flags Model Msg
@@ -47,6 +42,13 @@ type alias Model =
     , tag : Maybe Tag
     , works : List (Work Msg)
     , viewport : Viewport
+    , popupVisual : Maybe Visual
+    }
+
+
+type alias Flags =
+    { languages : List String
+    , viewport : { width : Int, height : Int }
     }
 
 
@@ -56,6 +58,7 @@ init flags =
       , tag = Nothing
       , works = Works.all
       , viewport = flags.viewport
+      , popupVisual = Nothing
       }
     , Cmd.none
     )
@@ -82,6 +85,7 @@ type LayoutSize
 type Msg
     = SelectedLanguage Language
     | SelectedTag Tag
+    | SelectedVisual (Maybe Visual)
     | GotViewport Viewport
 
 
@@ -99,6 +103,11 @@ update msg model =
 
         SelectedTag tag ->
             ( { model | tag = Just tag }
+            , Cmd.none
+            )
+
+        SelectedVisual selection ->
+            ( { model | popupVisual = selection }
             , Cmd.none
             )
 
@@ -122,7 +131,16 @@ view : Model -> Document Msg
 view model =
     { title = "Portfolio"
     , body =
-        [ layout [] (viewMain model) ]
+        [ layout
+            (case model.popupVisual of
+                Just visual ->
+                    [ inFront (viewPopupVisual model.viewport visual) ]
+
+                Nothing ->
+                    []
+            )
+            (viewMain model)
+        ]
     }
 
 
@@ -220,8 +238,8 @@ viewWorks blockWidth model =
             Palette.spaceSmall
     in
     el
-        [ padding paddingAmount
-        , width fill
+        [ width (px blockWidth)
+        , padding paddingAmount
         ]
     <|
         if List.length works == 0 then
@@ -254,7 +272,7 @@ viewWorkBlock children =
 viewWork : Int -> Work Msg -> Element Msg
 viewWork blockWidth work =
     viewWorkBlock
-        [ viewWorkTitle work.name work.mainVisualUrl
+        [ viewWorkTitle blockWidth work.name work.mainVisualUrl
         , viewWorkVisuals blockWidth work.visuals
         , viewWorkDescription work.description
         ]
@@ -266,12 +284,12 @@ viewWorkDescription child =
         child
 
 
-viewWorkTitle : String -> String -> Element Msg
-viewWorkTitle title mainVisualUrl =
+viewWorkTitle : Int -> String -> String -> Element Msg
+viewWorkTitle blockWidth title mainVisualUrl =
     el
         [ Font.size Palette.textSizeLarge
-        , width fill
-        , height (px 200)
+        , width (px blockWidth)
+        , height (px blockWidth)
         , Background.image ("works/" ++ mainVisualUrl)
         , Font.shadow
             { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
@@ -296,7 +314,9 @@ viewWorkTitle title mainVisualUrl =
             ]
         <|
             el
-                [ alignBottom ]
+                [ alignBottom
+                , paddingXY 0 Palette.spaceSmaller
+                ]
                 (text title)
 
 
@@ -306,13 +326,17 @@ viewWorkVisuals blockWidth visuals =
         perRow =
             4
 
+        spaceBetween =
+            Palette.spaceSmallest
+
         thumbnailSize =
-            toFloat (blockWidth - (Palette.spaceSmaller * (perRow - 1)))
+            toFloat (blockWidth - (spaceBetween * (perRow - 1)))
                 / perRow
                 |> floor
     in
     wrappedRow
-        [ spacing Palette.spaceSmaller
+        [ spacing spaceBetween
+        , paddingEach { top = spaceBetween, bottom = 0, left = 0, right = 0 }
         ]
         (List.map (viewVisualThumbnail thumbnailSize) visuals)
 
@@ -320,27 +344,123 @@ viewWorkVisuals blockWidth visuals =
 viewVisualThumbnail : Int -> Visual -> Element Msg
 viewVisualThumbnail size visual =
     let
-        thumbnail src =
-            image
-                [ width (px size)
-                , height (px size)
-                ]
-                { src = "works/" ++ src
-                , description = "thumbnail"
-                }
-    in
-    case visual of
-        Image desc ->
-            link []
-                { url = desc.url
-                , label = thumbnail desc.thumbnailUrl
-                }
+        thumbnailUrl =
+            case visual of
+                Image desc ->
+                    desc.thumbnailUrl
 
-        Video desc ->
-            link []
-                { url = desc.url
-                , label = thumbnail desc.thumbnailUrl
-                }
+                Video desc ->
+                    desc.thumbnailUrl
+    in
+    image
+        [ width (px size)
+        , height (px size)
+        , onClick (SelectedVisual (Just visual))
+        ]
+        { src = "works/" ++ thumbnailUrl
+        , description = "(thumbnail)"
+        }
+
+
+viewPopupVisual : Viewport -> Visual -> Element Msg
+viewPopupVisual viewport visual =
+    let
+        reservedSpace =
+            50
+
+        viewportVertical =
+            toFloat viewport.width / toFloat viewport.height < 1
+
+        usableWidth =
+            if viewportVertical then
+                viewport.width
+
+            else
+                viewport.width - reservedSpace
+
+        usableHeight =
+            if viewportVertical then
+                viewport.height - reservedSpace
+
+            else
+                viewport.height
+
+        usableAR =
+            toFloat usableWidth / toFloat usableHeight
+
+        visualAR =
+            case visual of
+                Image desc ->
+                    desc.aspectRatio
+
+                Video desc ->
+                    desc.aspectRatio
+
+        visualVertical =
+            visualAR > 1
+
+        visualWidth =
+            if visualAR > usableAR then
+                usableWidth
+
+            else
+                floor (toFloat usableHeight * visualAR)
+
+        visualHeight =
+            if visualAR < usableAR then
+                usableHeight
+
+            else
+                floor (toFloat usableWidth * (1 / visualAR))
+
+        visualEl =
+            case visual of
+                Image desc ->
+                    image
+                        [ width (px visualWidth)
+                        , height (px visualHeight)
+                        , centerX
+                        , centerY
+                        ]
+                        { src = "works/" ++ desc.url
+                        , description = "(image)"
+                        }
+
+                Video desc ->
+                    VideoEmbed.get desc visualWidth visualHeight
+
+        closeButton =
+            el
+                [ width (px reservedSpace)
+                , height (px reservedSpace)
+                , Font.color (rgb 1 1 1)
+                , onClick (SelectedVisual Nothing)
+                ]
+                (text "CLOSE")
+    in
+    el
+        [ width fill
+        , height fill
+        , Background.color (rgba 0 0 0 0.3)
+        ]
+    <|
+        if viewportVertical then
+            column
+                [ width fill
+                , height fill
+                ]
+                [ closeButton
+                , visualEl
+                ]
+
+        else
+            row
+                [ width fill
+                , height fill
+                ]
+                [ visualEl
+                , closeButton
+                ]
 
 
 standardP : List (Attribute Msg) -> List (Element Msg) -> Element Msg

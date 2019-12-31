@@ -27,7 +27,7 @@ data =
         ]
     , visuals =
         [ Video
-            { url = "https://vimeo.com/201826714"
+            { id = "201826714"
             , thumbnailUrl = "kotokan/video1-thumb.jpg"
             , aspectRatio = 640 / 360
             , host = Vimeo
@@ -35,21 +35,25 @@ data =
         , Image
             { url = "kotokan/book01.jpg"
             , thumbnailUrl = "kotokan/book01-thumb.jpg"
+            , aspectRatio = 3693 / 2294
             }
         , Image
             { url = "kotokan/book02.jpg"
             , thumbnailUrl = "kotokan/book02-thumb.jpg"
+            , aspectRatio = 3693 / 2294
             }
         , Image
             { url = "kotokan/book03.jpg"
             , thumbnailUrl = "kotokan/book03-thumb.jpg"
+            , aspectRatio = 3693 / 2294
             }
         , Image
             { url = "kotokan/postcards01.jpg"
             , thumbnailUrl = "kotokan/postcards01-thumb.jpg"
+            , aspectRatio = 1920 / 1090
             }
         , Video
-            { url = "https://vimeo.com/199388496"
+            { id = "199388496"
             , thumbnailUrl = "kotokan/video2-thumb.jpg"
             , aspectRatio = 640 / 360
             , host = Vimeo

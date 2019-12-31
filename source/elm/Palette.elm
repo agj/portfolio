@@ -61,3 +61,7 @@ spaceSmall =
 
 spaceSmaller =
     5
+
+
+spaceSmallest =
+    2

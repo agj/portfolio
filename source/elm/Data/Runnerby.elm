@@ -32,7 +32,7 @@ data =
         ]
     , visuals =
         [ Video
-            { url = "http://www.youtube.com/watch?v=Q2v2f_cp51Q"
+            { id = "Q2v2f_cp51Q"
             , thumbnailUrl = "runnerby/thumb01.jpg"
             , aspectRatio = 256 / 409
             , host = Vimeo
