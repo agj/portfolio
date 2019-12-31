@@ -20,7 +20,7 @@ const buildElm = () =>
 	doElm({ optimize: true, debug: false });
 
 const debugElm = () =>
-	doElm({ optimize: false, debug: false }); // Temporarily using `debug: false` due to Elm compiler bug.
+	doElm({ optimize: false, debug: true });
 
 const formatElm = () =>
 	exec('npx elm-format source/elm/ --yes');
@@ -59,6 +59,6 @@ module.exports = {
 	debug,
 	watch,
 	// json,
-	formatElm,
+	format: formatElm,
 };
 
