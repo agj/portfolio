@@ -168,36 +168,68 @@ viewMain model =
                 px 600
         , centerX
         ]
-        [ viewLanguageSelector model.language
-        , viewIntroduction (Introduction.ofLanguage SelectedTag model.language)
+        [ viewTop model.language (Introduction.ofLanguage SelectedTag model.language)
         , viewWorks worksBlockWidth model.tag (Works.ofLanguage model.language model.works)
+        ]
+
+
+viewTop : Language -> Element Msg -> Element Msg
+viewTop language introductionText =
+    column
+        [ Font.color Palette.light
+        , Background.color Palette.dark
+        ]
+        [ viewLanguageSelector language
+        , viewIntroduction introductionText
         ]
 
 
 viewLanguageSelector : Language -> Element Msg
 viewLanguageSelector language =
-    row []
-        [ viewLanguageButton "ES" Spanish
-        , viewLanguageButton "EN" English
-        , viewLanguageButton "日" Japanese
+    row
+        [ spacing Palette.spaceSmallest
+        , alignRight
+        , paddingEach { right = Palette.spaceSmall, left = 0, top = 0, bottom = 0 }
+        ]
+        [ viewLanguageButton "EN" English language
+        , viewLanguageButton "ES" Spanish language
+        , viewLanguageButton "日" Japanese language
         ]
 
 
-viewLanguageButton : String -> Language -> Element Msg
-viewLanguageButton label language =
+viewLanguageButton : String -> Language -> Language -> Element Msg
+viewLanguageButton label language selectedLanguage =
     el
-        [ onClick (SelectedLanguage language)
-        ]
-        (text label)
+        ([ onClick (SelectedLanguage language)
+         , Font.size Palette.textSizeNormal
+         , width (px (fraction 2.9 Palette.textSizeNormal))
+         , height (px (fraction 2.3 Palette.textSizeNormal))
+         , pointer
+         ]
+            ++ (if language == selectedLanguage then
+                    [ Background.color Palette.light
+                    , Font.color Palette.dark
+                    ]
+
+                else
+                    [ Background.color Palette.highlightDark
+                    , Font.color Palette.light
+                    ]
+               )
+        )
+        (el
+            [ centerX
+            , centerY
+            ]
+            (text label)
+        )
 
 
 viewIntroduction : Element Msg -> Element Msg
 viewIntroduction introductionText =
     el
         [ width fill
-        , padding Palette.spaceNormal
-        , Font.color Palette.light
-        , Background.color Palette.dark
+        , paddingXY Palette.spaceNormal Palette.spaceSmaller
         , Font.size Palette.textSizeNormal
         ]
         introductionText
@@ -397,6 +429,7 @@ viewVisualThumbnail size visual =
         [ width (px size)
         , height (px size)
         , onClick (SelectedVisual (Just visual))
+        , pointer
         ]
         { src = "works/" ++ thumbnailUrl
         , description = "(thumbnail)"

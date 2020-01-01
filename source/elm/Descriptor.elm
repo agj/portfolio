@@ -21,8 +21,9 @@ p children =
 
 l : String -> String -> Element msg
 l label url =
-    link
+    newTabLink
         [ Font.underline
+        , pointer
         ]
         { label = text label
         , url = url
@@ -37,6 +38,7 @@ makeTag messenger theTag label =
         , paddingXY 11 3
         , Border.rounded 15
         , onClick (messenger theTag)
+        , pointer
         ]
         (text label)
 
