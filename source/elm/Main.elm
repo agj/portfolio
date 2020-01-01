@@ -1,7 +1,9 @@
 module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
+import AssocList as Dict exposing (Dict)
 import Browser
 import Browser.Events
+import Data.Introduction as Introduction
 import Dict
 import Element exposing (..)
 import Element.Background as Background
@@ -40,7 +42,7 @@ main =
 type alias Model =
     { language : Language
     , tag : Maybe Tag
-    , works : List (Work Msg)
+    , works : List (Dict Language (Work Msg))
     , viewport : Viewport
     , popupVisual : Maybe Visual
     }
@@ -99,7 +101,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SelectedLanguage language ->
-            ( model, Cmd.none )
+            ( { model | language = language }, Cmd.none )
 
         SelectedTag tag ->
             ( { model | tag = Just tag }
@@ -166,73 +168,53 @@ viewMain model =
                 px 600
         , centerX
         ]
-        [ viewIntroduction
-        , viewWorks worksBlockWidth model
+        [ viewLanguageSelector model.language
+        , viewIntroduction (Introduction.ofLanguage SelectedTag model.language)
+        , viewWorks worksBlockWidth model.tag (Works.ofLanguage model.language model.works)
         ]
 
 
-viewIntroduction : Element Msg
-viewIntroduction =
-    column
+viewLanguageSelector : Language -> Element Msg
+viewLanguageSelector language =
+    row []
+        [ viewLanguageButton "ES" Spanish
+        , viewLanguageButton "EN" English
+        , viewLanguageButton "日" Japanese
+        ]
+
+
+viewLanguageButton : String -> Language -> Element Msg
+viewLanguageButton label language =
+    el
+        [ onClick (SelectedLanguage language)
+        ]
+        (text label)
+
+
+viewIntroduction : Element Msg -> Element Msg
+viewIntroduction introductionText =
+    el
         [ width fill
         , padding Palette.spaceNormal
         , Font.color Palette.light
         , Background.color Palette.dark
         , Font.size Palette.textSizeNormal
         ]
-        [ standardP []
-            [ text "My name is "
-            , el [ Font.bold ] (text "Ale Grilli")
-            , text ". I’m based in Santiago, Chile. My work is concerned with various intersections of the following four areas."
-            ]
-        , list []
-            [ linkTag Tag.VisualCommunication <| text "Visual communication"
-            , linkTag Tag.Programming <| text "Programming"
-            , linkTag Tag.Language <| text "Language"
-            , linkTag Tag.Learning <| text "Learning"
-            ]
-        , standardP []
-            [ text "I’m a creator. I make "
-            , linkTag Tag.Digital <| text "digital things"
-            , text ", such as "
-            , linkTag Tag.VideoGame <| text "games"
-            , text " and "
-            , linkTag Tag.Web <| text "web stuff"
-            , text ". I design "
-            , linkTag Tag.UserInterface <| text "user interfaces"
-            , text " and "
-            , linkTag Tag.Graphic <| text "graphics"
-            , text ". I shoot and edit "
-            , linkTag Tag.Video <| text "videos"
-            , text " on occasion."
-            ]
-        , standardP []
-            [ text "I’m a languages nerd. I am fluent in three (Spanish, English, Japanese) and am working on a fourth (Chinese Mandarin). I do "
-            , linkTag Tag.Translation <| text "translation"
-            , text " work, subtitling too."
-            ]
-        , standardP []
-            [ text "I think a lot about learning. I’ve worked for ed-tech companies programming "
-            , linkTag Tag.EducationalSoftware <| text "educational software"
-            , text ". I occasionally "
-            , linkTag Tag.LanguageTeaching <| text "teach languages"
-            , text "."
-            ]
-        ]
+        introductionText
 
 
-viewWorks : Int -> { a | tag : Maybe Tag, works : List (Work Msg) } -> Element Msg
-viewWorks blockWidth model =
+viewWorks : Int -> Maybe Tag -> List (Work Msg) -> Element Msg
+viewWorks blockWidth maybeTag works =
     let
-        works =
-            case model.tag of
+        filteredWorks =
+            case maybeTag of
                 Nothing ->
                     []
 
                 Just tag ->
                     List.filter
                         (\w -> List.member tag w.tags)
-                        model.works
+                        works
 
         paddingAmount =
             Palette.spaceSmall
@@ -242,7 +224,7 @@ viewWorks blockWidth model =
         , padding paddingAmount
         ]
     <|
-        if List.length works == 0 then
+        if List.length filteredWorks == 0 then
             viewWorkBlock <|
                 [ standardP
                     []
@@ -255,7 +237,7 @@ viewWorks blockWidth model =
                 [ width fill
                 , spacing Palette.spaceSmall
                 ]
-                (List.map (viewWork (blockWidth - (paddingAmount * 2))) works)
+                (List.map (viewWork (blockWidth - (paddingAmount * 2))) filteredWorks)
 
 
 viewWorkBlock : List (Element Msg) -> Element Msg
@@ -271,12 +253,35 @@ viewWorkBlock children =
 
 viewWork : Int -> Work Msg -> Element Msg
 viewWork blockWidth work =
+    let
+        readMore =
+            case work.readMoreUrl of
+                Just url ->
+                    [ viewWorkReadMore url ]
+
+                Nothing ->
+                    []
+    in
     viewWorkBlock
-        [ viewWorkTitle blockWidth work.name work.mainVisualUrl
-        , viewWorkVisuals blockWidth work.visuals
-        , viewWorkLinks work.links
-        , viewWorkDescription work.description
-        ]
+        ([ viewWorkTitle blockWidth work.name work.mainVisualUrl
+         , viewWorkVisuals blockWidth work.visuals
+         , viewWorkLinks work.links
+         , viewWorkDescription work.description
+         ]
+            ++ readMore
+        )
+
+
+viewWorkReadMore : String -> Element Msg
+viewWorkReadMore url =
+    el [ paddingXY Palette.spaceNormal 0 ] <|
+        standardP
+            []
+            [ link linkStyle
+                { url = url
+                , label = text "Read more."
+                }
+            ]
 
 
 viewWorkDescription : Element Msg -> Element Msg
@@ -290,13 +295,7 @@ viewWorkLinks links =
     let
         makeLink link =
             newTabLink
-                [ Background.color Palette.highlightDark
-                , Border.rounded (fraction 0.2 Palette.textSizeNormal)
-                , paddingXY
-                    (fraction 0.6 Palette.textSizeNormal)
-                    (fraction 0.4 Palette.textSizeNormal)
-                , centerX
-                ]
+                ([ centerX ] ++ linkStyle)
                 { url = link.url
                 , label = text link.label
                 }
@@ -516,39 +515,19 @@ standardP attrs children =
         children
 
 
-list : List (Attribute Msg) -> List (Element Msg) -> Element Msg
-list attrs children =
-    let
-        toRow : Element Msg -> Element Msg
-        toRow child =
-            row [ spacing (fraction 0.3 Palette.textSizeNormal) ]
-                [ text "→"
-                , child
-                ]
 
-        rows : List (Element Msg)
-        rows =
-            List.map toRow children
-    in
-    column
-        (attrs
-            ++ [ paddingXY 0 10
-               , spacing <| Palette.textLineSpacing Palette.textSizeNormal
-               ]
-        )
-        rows
+-- UTILS
 
 
-linkTag : Tag -> Element Msg -> Element Msg
-linkTag tag child =
-    el
-        [ Background.color Palette.highlightDark
-        , Font.color Palette.light
-        , paddingXY 11 3
-        , Border.rounded 15
-        , onClick (SelectedTag tag)
-        ]
-        child
+linkStyle : List (Element.Attribute Msg)
+linkStyle =
+    [ Background.color Palette.highlightDark
+    , Border.rounded (fraction 0.2 Palette.textSizeNormal)
+    , paddingXY
+        (fraction 0.6 Palette.textSizeNormal)
+        (fraction 0.4 Palette.textSizeNormal)
+    , centerX
+    ]
 
 
 

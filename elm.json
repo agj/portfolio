@@ -11,8 +11,10 @@
             "elm/html": "1.0.0",
             "elm/url": "1.0.0",
             "elm-community/list-extra": "8.2.2",
+            "elm-community/maybe-extra": "5.1.0",
             "mdgriffith/elm-ui": "1.1.5",
-            "pablohirafuji/elm-markdown": "2.0.5"
+            "pablohirafuji/elm-markdown": "2.0.5",
+            "pzp1997/assoc-list": "1.0.0"
         },
         "indirect": {
             "elm/json": "1.1.3",
