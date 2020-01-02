@@ -1,6 +1,5 @@
 module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
-import AssocList as Dict exposing (Dict)
 import Browser
 import Browser.Events
 import Data exposing (Data)

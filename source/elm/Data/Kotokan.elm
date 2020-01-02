@@ -1,6 +1,5 @@
 module Data.Kotokan exposing (data)
 
-import AssocList as Dict exposing (Dict)
 import Descriptor exposing (..)
 import Language exposing (..)
 import Tag

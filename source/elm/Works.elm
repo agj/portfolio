@@ -1,6 +1,5 @@
 module Works exposing (all, ofLanguage)
 
-import AssocList as Dict exposing (Dict)
 import Data.Kotokan
 import Data.Runnerby
 import Data.TeaRoom

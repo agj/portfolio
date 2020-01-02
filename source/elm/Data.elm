@@ -1,6 +1,5 @@
 module Data exposing (All, Data, all, ofLanguage)
 
-import AssocList as Dict exposing (Dict)
 import Data.Introduction as Introduction
 import Element exposing (Element)
 import Language exposing (..)
