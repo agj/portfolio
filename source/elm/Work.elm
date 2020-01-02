@@ -1,7 +1,16 @@
-module Work exposing (..)
+module Work exposing (Date(..), Link, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, languages, ofLanguage)
 
 import Element exposing (Element)
+import Language exposing (..)
 import Tag exposing (Tag)
+
+
+type WorkLanguages msg
+    = WorkLanguages
+        { english : Work msg
+        , japanese : Work msg
+        , spanish : Work msg
+        }
 
 
 type alias Work msg =
@@ -46,3 +55,31 @@ type alias Link =
     { label : String
     , url : String
     }
+
+
+
+-- ACCESSORS
+
+
+languages : { english : Work msg, japanese : Work msg, spanish : Work msg } -> WorkLanguages msg
+languages data =
+    WorkLanguages data
+
+
+ofLanguage : Language -> WorkLanguages msg -> Work msg
+ofLanguage language workLanguages =
+    let
+        data =
+            case workLanguages of
+                WorkLanguages d ->
+                    d
+    in
+    case language of
+        English ->
+            data.english
+
+        Japanese ->
+            data.japanese
+
+        Spanish ->
+            data.spanish

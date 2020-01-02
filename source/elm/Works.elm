@@ -8,7 +8,7 @@ import Language exposing (..)
 import Work exposing (..)
 
 
-all : List (Dict Language (Work msg))
+all : List (WorkLanguages msg)
 all =
     [ Data.Runnerby.data
     , Data.TeaRoom.data
@@ -16,11 +16,10 @@ all =
     ]
 
 
-ofLanguage : Language -> List (Dict Language (Work msg)) -> List (Work msg)
+ofLanguage : Language -> List (WorkLanguages msg) -> List (Work msg)
 ofLanguage language data =
     let
-        getLanguage workData =
-            Dict.get language workData
+        getLanguage workLanguage =
+            Work.ofLanguage language workLanguage
     in
     List.map getLanguage data
-        |> List.filterMap identity

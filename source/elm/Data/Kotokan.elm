@@ -7,13 +7,13 @@ import Tag
 import Work exposing (..)
 
 
-data : Dict Language (Work msg)
+data : WorkLanguages msg
 data =
-    Dict.fromList
-        [ ( English, english )
-        , ( Japanese, japanese )
-        , ( Spanish, spanish )
-        ]
+    Work.languages
+        { english = english
+        , japanese = japanese
+        , spanish = spanish
+        }
 
 
 english =
