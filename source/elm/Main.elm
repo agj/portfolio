@@ -3,7 +3,7 @@ module Main exposing (Document, Model, init, main, subscriptions, update, view)
 import AssocList as Dict exposing (Dict)
 import Browser
 import Browser.Events
-import Data.Introduction as Introduction
+import Data exposing (Data)
 import Dict
 import Element exposing (..)
 import Element.Background as Background
@@ -12,13 +12,11 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
 import Language exposing (Language(..))
-import List.Extra exposing (..)
 import Palette
 import Tag exposing (Tag)
 import Utils exposing (..)
 import VideoEmbed
 import Work exposing (..)
-import Works
 
 
 
@@ -42,9 +40,9 @@ main =
 type alias Model =
     { language : Language
     , tag : Maybe Tag
-    , works : List (Dict Language (Work Msg))
     , viewport : Viewport
     , popupVisual : Maybe Visual
+    , data : Data.All Msg
     }
 
 
@@ -58,9 +56,9 @@ init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( { language = English
       , tag = Nothing
-      , works = Works.all
       , viewport = flags.viewport
       , popupVisual = Nothing
+      , data = Data.all SelectedTag
       }
     , Cmd.none
     )
@@ -149,6 +147,9 @@ view model =
 viewMain : Model -> Element Msg
 viewMain model =
     let
+        data =
+            Data.ofLanguage model.language model.data
+
         layoutSize =
             getLayoutSize model.viewport
 
@@ -168,8 +169,8 @@ viewMain model =
                 px 600
         , centerX
         ]
-        [ viewTop model.language (Introduction.ofLanguage SelectedTag model.language)
-        , viewWorks worksBlockWidth model.tag (Works.ofLanguage model.language model.works)
+        [ viewTop model.language data.introduction
+        , viewWorks worksBlockWidth model.tag data.works
         ]
 
 
