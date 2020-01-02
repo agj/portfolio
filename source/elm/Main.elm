@@ -2,7 +2,7 @@ module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
 import Browser
 import Browser.Events
-import Data exposing (Data)
+import Data exposing (Data, Labels)
 import Dict
 import Element exposing (..)
 import Element.Background as Background
@@ -128,7 +128,11 @@ type alias Document msg =
 
 view : Model -> Document Msg
 view model =
-    { title = "Portfolio"
+    let
+        data =
+            Data.ofLanguage model.language model.data
+    in
+    { title = data.labels.title
     , body =
         [ layout
             (case model.popupVisual of
@@ -169,7 +173,7 @@ viewMain model =
         , centerX
         ]
         [ viewTop model.language data.introduction
-        , viewWorks worksBlockWidth model.tag data.works
+        , viewWorks worksBlockWidth data.labels model.tag data.works
         ]
 
 
@@ -235,8 +239,8 @@ viewIntroduction introductionText =
         introductionText
 
 
-viewWorks : Int -> Maybe Tag -> List (Work Msg) -> Element Msg
-viewWorks blockWidth maybeTag works =
+viewWorks : Int -> Labels -> Maybe Tag -> List (Work Msg) -> Element Msg
+viewWorks blockWidth labels maybeTag works =
     let
         filteredWorks =
             case maybeTag of
@@ -269,7 +273,7 @@ viewWorks blockWidth maybeTag works =
                 [ width fill
                 , spacing Palette.spaceSmall
                 ]
-                (List.map (viewWork (blockWidth - (paddingAmount * 2))) filteredWorks)
+                (List.map (viewWork (blockWidth - (paddingAmount * 2)) labels) filteredWorks)
 
 
 viewWorkBlock : List (Element Msg) -> Element Msg
@@ -283,13 +287,13 @@ viewWorkBlock children =
         children
 
 
-viewWork : Int -> Work Msg -> Element Msg
-viewWork blockWidth work =
+viewWork : Int -> Labels -> Work Msg -> Element Msg
+viewWork blockWidth labels work =
     let
         readMore =
-            case work.readMoreUrl of
-                Just url ->
-                    [ viewWorkReadMore url ]
+            case work.readMore of
+                Just desc ->
+                    [ viewWorkReadMore labels desc ]
 
                 Nothing ->
                     []
@@ -304,14 +308,26 @@ viewWork blockWidth work =
         )
 
 
-viewWorkReadMore : String -> Element Msg
-viewWorkReadMore url =
+viewWorkReadMore : Data.Labels -> Work.ReadMore -> Element Msg
+viewWorkReadMore labels desc =
+    let
+        label =
+            case desc.language of
+                English ->
+                    labels.readMoreEnglish
+
+                Japanese ->
+                    labels.readMoreJapanese
+
+                Spanish ->
+                    labels.readMoreSpanish
+    in
     el [ paddingXY Palette.spaceNormal 0 ] <|
         standardP
             []
-            [ link linkStyle
-                { url = url
-                , label = text "Read more."
+            [ newTabLink linkStyle
+                { url = desc.url
+                , label = text label
                 }
             ]
 
@@ -560,6 +576,7 @@ linkStyle =
         (fraction 0.6 Palette.textSizeNormal)
         (fraction 0.4 Palette.textSizeNormal)
     , centerX
+    , pointer
     ]
 
 

@@ -52,7 +52,11 @@ english =
           , url = "http://www.agj.cl/files/games/runnerby/"
           }
         ]
-    , readMoreUrl = Just "http://blog.agj.cl/tag/runnerby/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/tag/runnerby/"
+            , language = English
+            }
     }
 
 
@@ -90,7 +94,11 @@ japanese =
           , url = "http://www.agj.cl/files/games/runnerby/"
           }
         ]
-    , readMoreUrl = Just "http://blog.agj.cl/tag/runnerby/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/tag/runnerby/"
+            , language = English
+            }
     }
 
 
@@ -131,5 +139,9 @@ spanish =
           , url = "http://www.agj.cl/files/games/runnerby/"
           }
         ]
-    , readMoreUrl = Just "http://blog.agj.cl/tag/runnerby/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/tag/runnerby/"
+            , language = English
+            }
     }

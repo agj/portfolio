@@ -1,4 +1,4 @@
-module Work exposing (Date(..), Link, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, languages, ofLanguage)
+module Work exposing (Date(..), Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, languages, ofLanguage)
 
 import Element exposing (Element)
 import Language exposing (..)
@@ -21,7 +21,13 @@ type alias Work msg =
     , tags : List Tag
     , visuals : List Visual
     , links : List Link
-    , readMoreUrl : Maybe String
+    , readMore : Maybe ReadMore
+    }
+
+
+type alias ReadMore =
+    { url : String
+    , language : Language
     }
 
 

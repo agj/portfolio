@@ -1,4 +1,4 @@
-module Data exposing (All, Data, all, ofLanguage)
+module Data exposing (All, Data, Labels, all, ofLanguage)
 
 import Data.Introduction as Introduction
 import Element exposing (Element)
@@ -11,6 +11,15 @@ import Works
 type alias Data msg =
     { introduction : Element msg
     , works : List (Work msg)
+    , labels : Labels
+    }
+
+
+type alias Labels =
+    { title : String
+    , readMoreEnglish : String
+    , readMoreJapanese : String
+    , readMoreSpanish : String
     }
 
 
@@ -28,14 +37,32 @@ all tagMessenger =
         { english =
             { introduction = Introduction.ofLanguage tagMessenger English
             , works = Works.ofLanguage English Works.all
+            , labels =
+                { title = "Ale Grilli's portfolio"
+                , readMoreEnglish = "Read more about it."
+                , readMoreJapanese = "Read more about it (in Japanese)."
+                , readMoreSpanish = "Read more about it (in Spanish)."
+                }
             }
         , japanese =
             { introduction = Introduction.ofLanguage tagMessenger Japanese
             , works = Works.ofLanguage Japanese Works.all
+            , labels =
+                { title = "アレ・グリリのポートフォリオ"
+                , readMoreEnglish = "さらに詳しく（英語）。"
+                , readMoreJapanese = "さらに詳しく。"
+                , readMoreSpanish = "さらに詳しく（スペイン語）。"
+                }
             }
         , spanish =
             { introduction = Introduction.ofLanguage tagMessenger Spanish
             , works = Works.ofLanguage Spanish Works.all
+            , labels =
+                { title = "Portafolio de Ale Grilli"
+                , readMoreEnglish = "Lee más al respecto (en inglés)."
+                , readMoreJapanese = "Lee más al respecto (en japonés)."
+                , readMoreSpanish = "Lee más al respecto."
+                }
             }
         }
 

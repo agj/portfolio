@@ -40,7 +40,11 @@ english =
             }
         ]
     , links = []
-    , readMoreUrl = Just "http://blog.agj.cl/tag/the-tea-room/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/tag/the-tea-room/"
+            , language = English
+            }
     }
 
 
@@ -69,7 +73,11 @@ japanese =
             }
         ]
     , links = []
-    , readMoreUrl = Just "http://blog.agj.cl/tag/the-tea-room/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/tag/the-tea-room/"
+            , language = English
+            }
     }
 
 
@@ -98,5 +106,9 @@ spanish =
             }
         ]
     , links = []
-    , readMoreUrl = Just "http://blog.agj.cl/tag/the-tea-room/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/tag/the-tea-room/"
+            , language = English
+            }
     }

@@ -69,7 +69,11 @@ english =
             }
         ]
     , links = []
-    , readMoreUrl = Just "http://blog.agj.cl/tag/come-to-think-of-language/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/tag/come-to-think-of-language/"
+            , language = English
+            }
     }
 
 
@@ -127,7 +131,11 @@ japanese =
             }
         ]
     , links = []
-    , readMoreUrl = Just "http://blog.agj.cl/2017/04/kotoba-kara-kangaete-miru-to/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/2017/04/kotoba-kara-kangaete-miru-to/"
+            , language = Japanese
+            }
     }
 
 
@@ -185,5 +193,9 @@ spanish =
             }
         ]
     , links = []
-    , readMoreUrl = Just "http://blog.agj.cl/tag/come-to-think-of-language/"
+    , readMore =
+        Just
+            { url = "http://blog.agj.cl/tag/come-to-think-of-language/"
+            , language = English
+            }
     }
