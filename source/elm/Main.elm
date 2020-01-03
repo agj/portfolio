@@ -3,6 +3,7 @@ module Main exposing (Document, Model, init, main, subscriptions, update, view)
 import Browser
 import Browser.Events
 import Data exposing (Data, Labels)
+import Debug
 import Dict
 import Element exposing (..)
 import Element.Background as Background
@@ -53,7 +54,7 @@ type alias Flags =
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( { language = English
+    ( { language = getLanguageFromPreferred flags.languages
       , tag = Nothing
       , viewport = flags.viewport
       , popupVisual = Nothing
@@ -578,6 +579,15 @@ linkStyle =
     , centerX
     , pointer
     ]
+
+
+getLanguageFromPreferred : List String -> Language
+getLanguageFromPreferred codes =
+    codes
+        |> List.map (String.left 2)
+        |> List.filterMap Language.fromCode
+        |> List.head
+        |> Maybe.withDefault English
 
 
 
