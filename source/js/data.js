@@ -7,6 +7,7 @@ const glob = require('glob-promise');
 const matter = require('gray-matter');
 const ow = require('ow');
 const sharp = require('sharp');
+const axios = require('axios');
 require('dot-into').install();
 
 
@@ -88,25 +89,28 @@ const generateWorkCache = (work, workName) => {
 
 	// Visuals
 	if (work.default.visuals) {
-		work.default.visuals.into(R.forEachObjIndexed((visual) => {
+		work.default.visuals.into(R.forEachObjIndexed(async (visual) => {
 			console.log(visual)
 			if (visual.type === visualType.image) {
 				const isUrl = ow.isValid(visual.url, ow.string.url);
 				const outputDir = `${ cacheDir }${ workName }/`;
-
 				fs.ensureDirSync(outputDir);
+				const parsedFilename =
+					isUrl ? path.parse(visual.url.split('/').into(R.last))
+					: path.parse(`${ outputDir }${ visual.url }`);
+				const outputFilename = `${ outputDir }${ parsedFilename.name }-thumb${ parsedFilename.ext }`;
+				const output = fs.createWriteStream(outputFilename);
 
 				if (isUrl) {
+					(await axios.get(visual.url, { responseType: 'stream' }))
+						.data
+						.pipe(makeThumbnail())
+						.pipe(output);
 
 				} else {
-					const parsedFilename = path.parse(`${ outputDir }${ visual.url }`);
-					const outputFilename = `${ outputDir }${ parsedFilename.name }-thumb${ parsedFilename.ext }`;
-					const input = fs.createReadStream(`${ worksDir }${ workName }/${ visual.url }`);
-					const output = fs.createWriteStream(outputFilename);
-
-					input
+					fs.createReadStream(`${ worksDir }${ workName }/${ visual.url }`)
 						.pipe(makeThumbnail())
-						.pipe(output)
+						.pipe(output);
 				}
 			}
 		}))
@@ -133,6 +137,7 @@ const retrieveWorks = async () => {
 		'kotokan',
 		'runnerby',
 		'tearoom',
+		'mitos',
 	];
 
 	const works =
