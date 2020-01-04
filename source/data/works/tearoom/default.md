@@ -1,14 +1,16 @@
 ---
 name: The tea room
-category: int
-type: VR experience
-year: 2017
+tags:
+  - VisualCommunication
+  - Programming
+  - Digital
+  - VideoGame
+date: "2017"
 readMore: http://blog.agj.cl/tag/the-tea-room/
-links:
-  watch video:
-    url: https://vimeo.com/216446958
-    width: 640
-    height: 360
+visuals:
+  - type: Video
+    host: Vimeo
+    id: "216446958"
 ---
 
 

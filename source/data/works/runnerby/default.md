@@ -1,20 +1,19 @@
 ---
 name: Runnerby
-category: int
-type: video game
-year: 2010
-image: runnerby.png
+tags:
+  - VisualCommunication
+  - VideoGame
+  - Digital
+  - Web
+date: "2010"
 readMore: 'http://blog.agj.cl/tag/runnerby/'
+visuals:
+  - type: Video
+    host: Youtube
+    id: "n5uQDt5hXDQ"
 links:
-  play:
-    url: 'http://www.agj.cl/files/games/runnerby/#small'
-    width: 256
-    height: 384
-    type: flash
-  watch video:
-    url: 'http://www.youtube.com/watch?v=n5uQDt5hXDQ'
-    width: 256
-    height: 409
+  - label: Play
+    url: 'http://www.agj.cl/files/games/runnerby/'
 ---
 
 
@@ -22,4 +21,4 @@ A game controlled by a single key (spacebar), which makes a perpetually running 
 
 Designed around simplicity of controls, but difficulty of execution.
 
-(Playthrough video by [Alexey Zubkov](http://about.me/ortoslon).)
+(Playthrough video by [moshboy](https://twitter.com/moshboy).)

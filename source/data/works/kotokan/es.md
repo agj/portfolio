@@ -1,6 +1,5 @@
 ---
 name: Pensando en el lenguaje
-type: experimento lingüístico
 ---
 
 

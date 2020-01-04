@@ -1,24 +1,27 @@
 ---
 name: Come to think of language
-category: [av, vis, other]
-type: language experiment
-year: 2017
+tags:
+  - VisualCommunication
+  - Language
+  - Graphic
+  - Video
+date: "2017"
 readMore: http://blog.agj.cl/tag/come-to-think-of-language/
-links:
-  exhibition:
-    url: https://vimeo.com/201826714
-    width: 640
-    height: 360
-  book:
-    links:
-      book 1: /portfolio/data/works/kotokan/book01.jpg
-      2: /portfolio/data/works/kotokan/book02.jpg
-      3: /portfolio/data/works/kotokan/book03.jpg
-  postcards: /portfolio/data/works/kotokan/postcards01.jpg
-  video:
-    url: https://vimeo.com/199388496
-    width: 640
-    height: 360
+visuals:
+  - type: Video
+    host: Vimeo
+    id: "201826714"
+  - type: Image
+    url: book01.jpg
+  - type: Image
+    url: book02.jpg
+  - type: Image
+    url: book03.jpg
+  - type: Image
+    url: postcards01.jpg
+  - type: Video
+    host: Vimeo
+    id: "199388496"
 ---
 
 

@@ -1,6 +1,5 @@
 ---
 name: ことばから考えてみると
-type: 言語の実験作品
 readMore: http://blog.agj.cl/2017/04/kotoba-kara-kangaete-miru-to/
 ---
 
