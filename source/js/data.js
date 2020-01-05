@@ -8,6 +8,7 @@ const matter = require('gray-matter');
 const ow = require('ow');
 const sharp = require('sharp');
 const axios = require('axios');
+const stream = require('stream');
 require('dot-into').install();
 
 
@@ -93,38 +94,51 @@ const generateWorkCache = (work, workName) => {
 			console.log(visual)
 			if (visual.type === visualType.image) {
 				const isUrl = ow.isValid(visual.url, ow.string.url);
+
 				const outputDir = `${ cacheDir }${ workName }/`;
 				fs.ensureDirSync(outputDir);
 				const parsedFilename =
 					isUrl ? path.parse(visual.url.split('/').into(R.last))
 					: path.parse(`${ outputDir }${ visual.url }`);
+
 				const outputFilename = `${ outputDir }${ parsedFilename.name }-thumb${ parsedFilename.ext }`;
+				const metaOutputFilename = `${ outputDir }${ parsedFilename.base }.meta.json`;
+
+				const input =
+					isUrl ? (await axios.get(visual.url, { responseType: 'stream' })).data
+					: fs.createReadStream(`${ worksDir }${ workName }/${ visual.url }`);
 				const output = fs.createWriteStream(outputFilename);
+				const metaOutput = fs.createWriteStream(metaOutputFilename);
 
-				if (isUrl) {
-					(await axios.get(visual.url, { responseType: 'stream' }))
-						.data
-						.pipe(makeThumbnail())
-						.pipe(output);
-
-				} else {
-					fs.createReadStream(`${ worksDir }${ workName }/${ visual.url }`)
-						.pipe(makeThumbnail())
-						.pipe(output);
-				}
+				makeThumbnail(input, output, metaOutput);
 			}
 		}))
 	}
 };
 
-const makeThumbnail = () =>
-	sharp()
+const makeThumbnail = (input, output, metaOutput) => {
+	const process =
+		sharp()
+		.metadata((err, data) => {
+			const meta = {
+				width: data.width,
+				height: data.height,
+			};
+			const Readable = stream.Readable;
+			const metaInput = new Readable();
+			metaInput._read = () => {};
+			metaInput.push(JSON.stringify(meta, null, '\t'));
+			metaInput.push(null);
+			metaInput.pipe(metaOutput);
+		})
 		.resize(thumbnailSize, thumbnailSize, { fit: 'cover' })
 		.jpeg({
 			quality: 80,
 			force: false,
 			chromaSubsampling: '4:4:4',
 		});
+	input.pipe(process).pipe(output);
+};
 
 
 // Functions
