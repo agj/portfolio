@@ -34,6 +34,44 @@ const hostType = {
 const getFile = async (filename) =>
 	fs.readFile(filename, 'utf-8');
 const awaitAll = Promise.all.bind(Promise);
+const getFileName = (p) =>
+	p
+	.split(path.sep)
+	.filter(R.complement(R.isEmpty))
+	.into(R.last)
+	.split('.')
+	.into(R.init)
+	.join('');
+const getVideoMetadata = async (host, id) => {
+	if (host === hostType.youtube) {
+		const response = (await axios.get(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${ id }&format=json`, { responseType: 'json' })).data;
+		console.log(response)
+		return {
+			width: response.width,
+			height: response.height,
+			thumbnailUrl: response.thumbnail_url,
+		};
+	} else if (host === hostType.vimeo) {
+		const response = (await axios.get(`http://vimeo.com/api/v2/video/${ id }.json`, { responseType: 'json' })).data[0];
+		console.log(response)
+		return {
+			width: response.width,
+			height: response.height,
+			thumbnailUrl: response.thumbnail_large,
+		};
+	}
+};
+const jsonStream = (data) => {
+	const Readable = stream.Readable;
+	const input = new Readable();
+	input._read = () => {};
+	input.push(JSON.stringify(data, null, '\t'));
+	input.push(null);
+	return input;
+};
+
+
+// Massage data
 
 const parseMD = (text) => {
 	const parsed = matter(text);
@@ -58,10 +96,17 @@ const normalizeWork = (work, name) => {
 };
 const normalizeVisual = R.curry((workName, visual) => {
 	if (visual.type === visualType.image) {
+		const normalizedUrl = toLocalPath(workName, visual.url);
 		return R.mergeRight(visual, {
-			url: toLocalPath(workName, visual.url),
+			url: normalizedUrl,
 			thumbnailUrl: toThumbnailPath(workName, visual.url),
 			retrieveUrl: visual.url,
+			metaUrl: `${ normalizedUrl }.meta.json`,
+		});
+	} else if (visual.type === visualType.video) {
+		return R.mergeRight(visual, {
+			thumbnailUrl: `${ workName }/${ visual.host }-${ visual.id }-thumb.jpg`,
+			metaUrl: `${ workName }/${ visual.host }-${ visual.id }.meta.json`,
 		});
 	}
 	return visual;
@@ -80,14 +125,6 @@ const toThumbnailPath = (workName, url) => {
 		: path.parse(`${ url }`);
 	return `${ workName }/${ parsedPath.dir }${ parsedPath.dir ? '/' : '' }${ parsedPath.name }-thumb${ parsedPath.ext }`
 };
-const getFileName = (p) =>
-	p
-	.split(path.sep)
-	.filter(R.complement(R.isEmpty))
-	.into(R.last)
-	.split('.')
-	.into(R.init)
-	.join('');
 const validateLanguage = ow.create(
 	ow.object.exactShape({
 		description: ow.string,
@@ -122,29 +159,55 @@ const generateWorkCache = (work, workName) => {
 
 	// Visuals
 	if (work.default.visuals) {
-		work.default.visuals.into(R.forEachObjIndexed(async (visual) => {
-			console.log(visual)
+		work.default.visuals.into(R.forEach(async (visual) => {
+			console.log(workName, visual.type);
+			console.log(visual);
+
+			// Filenames.
+			const outputDir = `${ cacheDir }`;
+			const outputFilename = `${ outputDir }${ visual.thumbnailUrl }`;
+			const metaOutputFilename = `${ outputDir }${ visual.metaUrl }`;
+
+			// Create folders.
+			const outputFilenameParsed = path.parse(outputFilename);
+			const metaOutputFilenameParsed = path.parse(metaOutputFilename);
+			fs.ensureDirSync(outputFilenameParsed.dir);
+			fs.ensureDirSync(metaOutputFilenameParsed.dir);
+
+			// Streams.
+			const output = fs.createWriteStream(outputFilename);
+			const metaOutput = fs.createWriteStream(metaOutputFilename);
+
 			if (visual.type === visualType.image) {
-				// Filenames
-				const outputDir = `${ cacheDir }`;
-				const outputFilename = `${ outputDir }${ visual.thumbnailUrl }`;
-				const metaOutputFilename = `${ outputDir }${ visual.url }.meta.json`;
-
-				// Create the relevant folders.
-				const outputFilenameParsed = path.parse(outputFilename);
-				const metaOutputFilenameParsed = path.parse(metaOutputFilename);
-				fs.ensureDirSync(outputFilenameParsed.dir);
-				fs.ensureDirSync(metaOutputFilenameParsed.dir);
-
-				// Create the input and output streams
+				// Streams.
 				const isUrl = ow.isValid(visual.retrieveUrl, ow.string.url);
 				const input =
 					isUrl ? (await axios.get(visual.retrieveUrl, { responseType: 'stream' })).data
 					: fs.createReadStream(`${ worksDir }${ workName }/${ visual.retrieveUrl }`);
-				const output = fs.createWriteStream(outputFilename);
-				const metaOutput = fs.createWriteStream(metaOutputFilename);
 
 				makeThumbnail(input, output, metaOutput);
+
+			} else if (visual.type === visualType.video) {
+				const meta = await getVideoMetadata(visual.host, visual.id);
+
+				// Streams.
+				const input = (await axios.get(meta.thumbnailUrl, { responseType: 'stream' })).data;
+
+				const process =
+					sharp()
+					.resize(thumbnailSize, thumbnailSize, { fit: 'cover' })
+					.jpeg({
+						force: true,
+						quality: 80,
+						chromaSubsampling: '4:4:4',
+					});
+				input.pipe(process).pipe(output);
+
+				const metaInput = jsonStream({
+					width: meta.width,
+					height: meta.height,
+				});
+				metaInput.pipe(metaOutput);
 			}
 		}))
 	}
@@ -154,21 +217,16 @@ const makeThumbnail = (input, output, metaOutput) => {
 	const process =
 		sharp()
 		.metadata((err, data) => {
-			const meta = {
+			const metaInput = jsonStream({
 				width: data.width,
 				height: data.height,
-			};
-			const Readable = stream.Readable;
-			const metaInput = new Readable();
-			metaInput._read = () => {};
-			metaInput.push(JSON.stringify(meta, null, '\t'));
-			metaInput.push(null);
+			});
 			metaInput.pipe(metaOutput);
 		})
 		.resize(thumbnailSize, thumbnailSize, { fit: 'cover' })
 		.jpeg({
-			quality: 80,
 			force: false,
+			quality: 80,
 			chromaSubsampling: '4:4:4',
 		});
 	input.pipe(process).pipe(output);
@@ -194,9 +252,9 @@ const retrieveWorks = async () => {
 				workName,
 				(await ((await glob(`${ worksDir }${ workName }/*.md`))
 						.map(getFileName)
-						.map(async (mdName) => [
-							mdName,
-							(await getFile(`${ worksDir }${ workName }/${ mdName }.md`))
+						.map(async (language) => [
+							language,
+							(await getFile(`${ worksDir }${ workName }/${ language }.md`))
 						]))
 					.into(awaitAll))
 					.into(R.fromPairs)
