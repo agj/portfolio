@@ -16,6 +16,7 @@ require('dot-into').install();
 
 const worksDir = 'source/data/works/';
 const cacheDir = 'cache/works/';
+const worksFolderName = 'works';
 const thumbnailSize = 200;
 
 const visualType = {
@@ -41,12 +42,43 @@ const parseMD = (text) => {
 		{ description: parsed.content },
 	);
 };
-const normalizeWork = (work) => {
+const normalizeWork = (work, name) => {
 	const def = work.default;
-	return work.into(R.map(R.pipe(
-		R.mergeDeepRight(def),
-		R.tap(validateLanguage),
-	)));
+	const filled =
+		work.into(R.map(R.pipe(
+			R.mergeDeepRight(def),
+			R.tap(validateLanguage),
+		)));
+	return filled
+		.into(R.map(
+			R.over(R.lensProp('visuals'), R.map(normalizeVisual(name)))
+			// if (language.visuals)
+			// 	language.visuals.map(normalize);
+		))
+};
+const normalizeVisual = R.curry((workName, visual) => {
+	if (visual.type === visualType.image) {
+		return R.mergeRight(visual, {
+			url: toLocalPath(workName, visual.url),
+			thumbnailUrl: toThumbnailPath(workName, visual.url),
+			retrieveUrl: visual.url,
+		});
+	}
+	return visual;
+});
+const toLocalPath = (workName, url) => {
+	const isUrl = ow.isValid(url, ow.string.url);
+	const parsedPath =
+		isUrl ? path.parse(url.split('/').into(R.last))
+		: path.parse(`${ url }`);
+	return `${ workName }/${ parsedPath.dir }${ parsedPath.dir ? '/' : '' }${ parsedPath.base }`
+};
+const toThumbnailPath = (workName, url) => {
+	const isUrl = ow.isValid(url, ow.string.url);
+	const parsedPath =
+		isUrl ? path.parse(url.split('/').into(R.last))
+		: path.parse(`${ url }`);
+	return `${ workName }/${ parsedPath.dir }${ parsedPath.dir ? '/' : '' }${ parsedPath.name }-thumb${ parsedPath.ext }`
 };
 const getFileName = (p) =>
 	p
@@ -93,20 +125,22 @@ const generateWorkCache = (work, workName) => {
 		work.default.visuals.into(R.forEachObjIndexed(async (visual) => {
 			console.log(visual)
 			if (visual.type === visualType.image) {
-				const isUrl = ow.isValid(visual.url, ow.string.url);
+				// Filenames
+				const outputDir = `${ cacheDir }`;
+				const outputFilename = `${ outputDir }${ visual.thumbnailUrl }`;
+				const metaOutputFilename = `${ outputDir }${ visual.url }.meta.json`;
 
-				const outputDir = `${ cacheDir }${ workName }/`;
-				fs.ensureDirSync(outputDir);
-				const parsedFilename =
-					isUrl ? path.parse(visual.url.split('/').into(R.last))
-					: path.parse(`${ outputDir }${ visual.url }`);
+				// Create the relevant folders.
+				const outputFilenameParsed = path.parse(outputFilename);
+				const metaOutputFilenameParsed = path.parse(metaOutputFilename);
+				fs.ensureDirSync(outputFilenameParsed.dir);
+				fs.ensureDirSync(metaOutputFilenameParsed.dir);
 
-				const outputFilename = `${ outputDir }${ parsedFilename.name }-thumb${ parsedFilename.ext }`;
-				const metaOutputFilename = `${ outputDir }${ parsedFilename.base }.meta.json`;
-
+				// Create the input and output streams
+				const isUrl = ow.isValid(visual.retrieveUrl, ow.string.url);
 				const input =
-					isUrl ? (await axios.get(visual.url, { responseType: 'stream' })).data
-					: fs.createReadStream(`${ worksDir }${ workName }/${ visual.url }`);
+					isUrl ? (await axios.get(visual.retrieveUrl, { responseType: 'stream' })).data
+					: fs.createReadStream(`${ worksDir }${ workName }/${ visual.retrieveUrl }`);
 				const output = fs.createWriteStream(outputFilename);
 				const metaOutput = fs.createWriteStream(metaOutputFilename);
 
@@ -170,7 +204,7 @@ const retrieveWorks = async () => {
 			]))
 		.into(awaitAll))
 		.into(R.fromPairs)
-		.into(R.map(normalizeWork));
+		.into(R.mapObjIndexed(normalizeWork));
 
 	return works;
 };
