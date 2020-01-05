@@ -1,6 +1,7 @@
 
 const R = require('ramda');
 const fs = require('fs-extra');
+require('dot-into').install();
 
 const log = R.tap(console.log);
 const prepend = R.curry((prep, text) => prep + text);
@@ -13,11 +14,14 @@ const multiGroupBy = R.curry((getGroups, list) =>
 			r),
 		{})
 	.into(R.map(R.uniq)));
+const toJson = (data) =>
+	JSON.stringify(data, null, '\t')
+	.into(prepend('\ufeff'));
 
 
 module.exports = {
 	log,
 	prepend,
-	writeFile,
 	multiGroupBy,
+	toJson,
 };
