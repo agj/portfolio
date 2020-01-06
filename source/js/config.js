@@ -1,8 +1,11 @@
 
 module.exports = {
+    elmDir: 'source/elm/',
+    copyDir: 'source/copy/',
+    dataDir: 'source/data/',
     worksDir: 'source/data/works/',
     cacheDir: 'cache/works/',
-    worksFolderName: 'works',
+    outputDir: 'output/',
     thumbnailSize: 200,
 
     visualType: {

@@ -65,13 +65,13 @@ const getVisualMetadata = (visual) =>
 // API
 
 const generateWorksJson = async (works) => {
-	fs.ensureDirSync(cfg.cacheDir);
+	fs.ensureDirSync(cfg.outputDir);
 
 	const worksArray =
 		R.values(works)
 		.map(normalizeWork);
 
-	fs.writeFileSync(`${ cfg.cacheDir }data.json`, _.toJson(worksArray), 'utf-8');
+	fs.writeFileSync(`${ cfg.outputDir }works/data.json`, _.toJson(worksArray), 'utf-8');
 };
 
 

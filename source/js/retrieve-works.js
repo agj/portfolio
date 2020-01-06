@@ -86,6 +86,24 @@ const toThumbnailPath = (workName, url) => {
 		: path.parse(`${ url }`);
 	return `${ workName }/${ parsedPath.dir }${ parsedPath.dir ? '/' : '' }${ parsedPath.name }-thumb${ parsedPath.ext }`;
 };
+const retrieveWorkAsPair = async (workName) => [workName, await retrieveWork(workName)];
+const retrieveWork = async (workName) => {
+	const folder = `${ cfg.worksDir }${ workName }/`;
+	const languageFiles = await glob(`${ folder }*.md`);
+	const languagePairs = await
+		languageFiles
+		.map(getFileName)
+		.map(async (language) => [
+			language,
+			fs.readFileSync(`${ folder }${ language }.md`, 'utf-8'),
+		])
+		.into(awaitAll);
+	const work =
+		languagePairs
+		.into(R.fromPairs)
+		.into(R.map(parseMarkdown));
+	return normalizeWork(work, workName);
+};
 
 
 // Validation
@@ -154,25 +172,6 @@ const retrieveWorks = async () => {
 		.into(R.fromPairs);
 
 	return works;
-};
-
-const retrieveWorkAsPair = async (workName) => [workName, await retrieveWork(workName)];
-const retrieveWork = async (workName) => {
-	const folder = `${ cfg.worksDir }${ workName }/`;
-	const languageFiles = await glob(`${ folder }*.md`);
-	const languagePairs = await
-		languageFiles
-		.map(getFileName)
-		.map(async (language) => [
-			language,
-			fs.readFileSync(`${ folder }${ language }.md`, 'utf-8'),
-		])
-		.into(awaitAll);
-	const work =
-		languagePairs
-		.into(R.fromPairs)
-		.into(R.map(parseMarkdown));
-	return normalizeWork(work, workName);
 };
 
 
