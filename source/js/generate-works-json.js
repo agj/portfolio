@@ -72,7 +72,9 @@ const generateWorksJson = async (works) => {
 		R.values(works)
 		.map(normalizeWork);
 
-	fs.writeFileSync(`${ cfg.outputDir }works/data.json`, _.toJson(worksArray), 'utf-8');
+	const filename = `${ cfg.outputDir }works/data.json`;
+	fs.ensureFileSync(filename);
+	fs.writeFileSync(filename, _.toJson(worksArray), 'utf-8');
 };
 
 

@@ -125,7 +125,8 @@ workDecoder =
 
 markdownDecoder : Decoder (Element msg)
 markdownDecoder =
-    Decode.succeed (Element.text "This is just a temporary text for the markdown decoder.")
+    Decode.succeed <|
+        Element.paragraph [] [ Element.text "This is just a temporary text for the markdown decoder." ]
 
 
 dateDecoder : Decoder Date
@@ -182,16 +183,3 @@ linkDecoder =
 readMoreDecoder : Decoder ReadMore
 readMoreDecoder =
     Decode.succeed { url = "http://example.com", language = English }
-
-
-
--- let
---     imageDecoder =
---         Decode.succeed Image
---             |> required "type" (succeed "Image")
---             |> required
--- in
--- oneOf
---     [ imageDecoder
---     , videoDecoder
---     ]

@@ -35,9 +35,23 @@ const watchElm = () =>
 
 // Static files copy
 
-const copy = () =>
+const copyGeneralData = () =>
 	gulp.src(`${ cfg.copyDir }**`)
 	.pipe(gulp.dest(`${ cfg.outputDir }`));
+const copyWorkData = () =>
+	gulp.src([
+		`${ cfg.worksDir }**/*.*`,
+		`!${ cfg.worksDir }*/*.md`,
+	])
+	.pipe(gulp.dest(`${ cfg.outputDir }works/`));
+const copyCache = () =>
+	gulp.src([
+		`${ cfg.cacheDir }**/*.*`,
+		`!${ cfg.cacheDir }**/*.meta.json`,
+	])
+	.pipe(gulp.dest(`${ cfg.outputDir }works/`));
+
+const copy = gulp.parallel(copyGeneralData, copyWorkData, copyCache);
 
 const watchCopy = () =>
 	gulp.watch(`${ cfg.copyDir }**`, copy);

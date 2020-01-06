@@ -1,7 +1,0 @@
-
-defaultLanguageName: English
-languages:
-  # abbr: full description         # The abbreviation will be used to identify the language throughout this document.
-  es: español
-  ja: 日本語
-shuffle: true
