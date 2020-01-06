@@ -1,6 +1,8 @@
-module Work exposing (Date(..), Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, languages, ofLanguage)
+module Work exposing (Date(..), Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
 
 import Element exposing (Element)
+import Json.Decode as Decode exposing (Decoder, andThen, float, list, nullable, oneOf, string)
+import Json.Decode.Pipeline exposing (required)
 import Language exposing (..)
 import Tag exposing (Tag)
 
@@ -89,3 +91,107 @@ ofLanguage language workLanguages =
 
         Spanish ->
             data.spanish
+
+
+
+-- DECODERS
+
+
+allWorksDecoder : Decoder (List (WorkLanguages msg))
+allWorksDecoder =
+    list workLanguagesDecoder
+
+
+workLanguagesDecoder : Decoder (WorkLanguages msg)
+workLanguagesDecoder =
+    Decode.succeed (\en ja es -> WorkLanguages { english = en, japanese = ja, spanish = es })
+        |> required "en" workDecoder
+        |> required "ja" workDecoder
+        |> required "es" workDecoder
+
+
+workDecoder : Decoder (Work msg)
+workDecoder =
+    Decode.succeed Work
+        |> required "name" string
+        |> required "description" markdownDecoder
+        |> required "mainVisualUrl" string
+        |> required "date" dateDecoder
+        |> required "tags" (list Tag.decoder)
+        |> required "visuals" (list visualDecoder)
+        |> required "links" (list linkDecoder)
+        |> required "readMore" (nullable readMoreDecoder)
+
+
+markdownDecoder : Decoder (Element msg)
+markdownDecoder =
+    Decode.succeed (Element.text "This is just a temporary text for the markdown decoder.")
+
+
+dateDecoder : Decoder Date
+dateDecoder =
+    string |> andThen (\date -> Decode.succeed (Date date))
+
+
+visualDecoder : Decoder Visual
+visualDecoder =
+    let
+        imageDecoder =
+            Decode.succeed (\tUrl url ar -> Image { thumbnailUrl = tUrl, url = url, aspectRatio = ar })
+                |> required "thumbnailUrl" string
+                |> required "url" string
+                |> required "aspectRatio" float
+
+        videoDecoder =
+            Decode.succeed (\tUrl id ar host -> Video { thumbnailUrl = tUrl, id = id, aspectRatio = ar, host = host })
+                |> required "thumbnailUrl" string
+                |> required "id" string
+                |> required "aspectRatio" float
+                |> required "host" videoHostDecoder
+    in
+    oneOf
+        [ imageDecoder
+        , videoDecoder
+        ]
+
+
+videoHostDecoder : Decoder VideoHost
+videoHostDecoder =
+    string
+        |> andThen
+            (\hostString ->
+                case hostString of
+                    "Youtube" ->
+                        Decode.succeed Youtube
+
+                    "Vimeo" ->
+                        Decode.succeed Vimeo
+
+                    other ->
+                        Decode.fail <| "Video host unknown: " ++ other
+            )
+
+
+linkDecoder : Decoder Link
+linkDecoder =
+    Decode.succeed Link
+        |> required "label" string
+        |> required "url" string
+
+
+readMoreDecoder : Decoder ReadMore
+readMoreDecoder =
+    Decode.succeed { url = "http://example.com", language = English }
+
+
+
+-- let
+--     imageDecoder =
+--         Decode.succeed Image
+--             |> required "type" (succeed "Image")
+--             |> required
+-- in
+-- oneOf
+--     [ imageDecoder
+--     , videoDecoder
+--     ]

@@ -2,7 +2,8 @@ module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
 import Browser
 import Browser.Events
-import Data exposing (Data, Labels)
+import Data.Introduction as Introduction
+import Data.Labels as Labels exposing (Labels)
 import Debug
 import Dict
 import Element exposing (..)
@@ -11,12 +12,14 @@ import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
+import Http
 import Language exposing (Language(..))
 import Palette
 import Tag exposing (Tag)
 import Utils exposing (..)
 import VideoEmbed
 import Work exposing (..)
+import Works
 
 
 
@@ -42,8 +45,14 @@ type alias Model =
     , tag : Maybe Tag
     , viewport : Viewport
     , popupVisual : Maybe Visual
-    , data : Data.All Msg
+    , data : DataStatus
     }
+
+
+type DataStatus
+    = DataLoading
+    | DataLoadError Http.Error
+    | DataLoaded (List (WorkLanguages Msg))
 
 
 type alias Flags =
@@ -58,10 +67,18 @@ init flags =
       , tag = Nothing
       , viewport = flags.viewport
       , popupVisual = Nothing
-      , data = Data.all SelectedTag
+      , data = DataLoading
       }
-    , Cmd.none
+    , getData
     )
+
+
+getData : Cmd Msg
+getData =
+    Http.get
+        { url = "works/data.json"
+        , expect = Http.expectJson GotData Work.allWorksDecoder
+        }
 
 
 getLayoutSize : Viewport -> LayoutSize
@@ -87,6 +104,7 @@ type Msg
     | SelectedTag Tag
     | SelectedVisual (Maybe Visual)
     | GotViewport Viewport
+    | GotData (Result Http.Error (List (WorkLanguages Msg)))
 
 
 type alias Viewport =
@@ -116,6 +134,18 @@ update msg model =
             , Cmd.none
             )
 
+        GotData result ->
+            case result of
+                Ok data ->
+                    ( { model | data = DataLoaded data }
+                    , Cmd.none
+                    )
+
+                Err err ->
+                    ( { model | data = DataLoadError err }
+                    , Cmd.none
+                    )
+
 
 
 -- VIEW
@@ -130,10 +160,10 @@ type alias Document msg =
 view : Model -> Document Msg
 view model =
     let
-        data =
-            Data.ofLanguage model.language model.data
+        labels =
+            Labels.ofLanguage model.language
     in
-    { title = data.labels.title
+    { title = labels.title
     , body =
         [ layout
             (case model.popupVisual of
@@ -151,8 +181,8 @@ view model =
 viewMain : Model -> Element Msg
 viewMain model =
     let
-        data =
-            Data.ofLanguage model.language model.data
+        labels =
+            Labels.ofLanguage model.language
 
         layoutSize =
             getLayoutSize model.viewport
@@ -163,6 +193,12 @@ viewMain model =
 
             else
                 600
+
+        worksBlock =
+            el
+                [ width (px worksBlockWidth)
+                , padding Palette.spaceSmall
+                ]
     in
     column
         [ width <|
@@ -173,19 +209,43 @@ viewMain model =
                 px 600
         , centerX
         ]
-        [ viewTop model.language data.introduction
-        , viewWorks worksBlockWidth data.labels model.tag data.works
+        [ viewTop model.language
+        , case model.data of
+            DataLoaded data ->
+                let
+                    works =
+                        Works.ofLanguage model.language data
+                in
+                worksBlock <|
+                    viewWorks (worksBlockWidth - (2 * Palette.spaceSmall)) labels model.tag works
+
+            DataLoading ->
+                worksBlock <|
+                    viewLoadMessage "Loading…"
+
+            DataLoadError err ->
+                case err of
+                    Http.BadBody msg ->
+                        worksBlock <|
+                            viewLoadMessage
+                                ("Data error! "
+                                    ++ msg
+                                )
+
+                    _ ->
+                        worksBlock <|
+                            viewLoadMessage "Load error! Please try refreshing the page."
         ]
 
 
-viewTop : Language -> Element Msg -> Element Msg
-viewTop language introductionText =
+viewTop : Language -> Element Msg
+viewTop language =
     column
         [ Font.color Palette.light
         , Background.color Palette.dark
         ]
         [ viewLanguageSelector language
-        , viewIntroduction introductionText
+        , viewIntroduction (Introduction.ofLanguage SelectedTag language)
         ]
 
 
@@ -252,29 +312,29 @@ viewWorks blockWidth labels maybeTag works =
                     List.filter
                         (\w -> List.member tag w.tags)
                         works
-
-        paddingAmount =
-            Palette.spaceSmall
     in
-    el
-        [ width (px blockWidth)
-        , padding paddingAmount
-        ]
-    <|
-        if List.length filteredWorks == 0 then
-            viewWorkBlock <|
-                [ standardP
-                    []
-                    [ text "Select any highlighted keyword above to see examples of my work."
-                    ]
-                ]
+    if List.length filteredWorks == 0 then
+        viewLoadMessage "Select any highlighted keyword above to see examples of my work."
 
-        else
-            column
-                [ width fill
-                , spacing Palette.spaceSmall
-                ]
-                (List.map (viewWork (blockWidth - (paddingAmount * 2)) labels) filteredWorks)
+    else
+        column
+            [ width fill
+            , spacing Palette.spaceSmall
+            ]
+            (List.map
+                (viewWork blockWidth labels)
+                filteredWorks
+            )
+
+
+viewLoadMessage : String -> Element Msg
+viewLoadMessage message =
+    viewWorkBlock <|
+        [ standardP
+            [ padding Palette.spaceNormal ]
+            [ text message
+            ]
+        ]
 
 
 viewWorkBlock : List (Element Msg) -> Element Msg
@@ -309,7 +369,7 @@ viewWork blockWidth labels work =
         )
 
 
-viewWorkReadMore : Data.Labels -> Work.ReadMore -> Element Msg
+viewWorkReadMore : Labels -> Work.ReadMore -> Element Msg
 viewWorkReadMore labels desc =
     let
         label =

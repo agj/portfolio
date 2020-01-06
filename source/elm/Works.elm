@@ -1,18 +1,10 @@
-module Works exposing (all, ofLanguage)
+module Works exposing (ofLanguage)
 
 import Data.Kotokan
 import Data.Runnerby
 import Data.TeaRoom
 import Language exposing (..)
 import Work exposing (..)
-
-
-all : List (WorkLanguages msg)
-all =
-    [ Data.Runnerby.data
-    , Data.TeaRoom.data
-    , Data.Kotokan.data
-    ]
 
 
 ofLanguage : Language -> List (WorkLanguages msg) -> List (Work msg)

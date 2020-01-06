@@ -7,16 +7,20 @@ import Tag exposing (Tag)
 
 
 ofLanguage : (Tag -> msg) -> Language -> Element msg
-ofLanguage tagSelectionMessenger language =
+ofLanguage tagMessenger language =
     case language of
         English ->
-            english (makeTag tagSelectionMessenger)
+            english (makeTag tagMessenger)
 
         Japanese ->
-            japanese (makeTag tagSelectionMessenger)
+            japanese (makeTag tagMessenger)
 
         Spanish ->
-            spanish (makeTag tagSelectionMessenger)
+            spanish (makeTag tagMessenger)
+
+
+
+-- ACTUAL DATA
 
 
 english tag =
