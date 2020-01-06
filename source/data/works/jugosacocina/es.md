@@ -1,5 +1,5 @@
 ---
-readMore: 'http://blog.agj.cl/2010/01/cookbook-for-children/#language'
+readMore: http://blog.agj.cl/2010/01/cookbook-for-children/#language
 ---
 
 

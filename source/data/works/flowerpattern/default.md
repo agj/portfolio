@@ -1,16 +1,17 @@
 ---
 name: Flower pattern
-category: int
-type: digital toy
-year: 2012
+tags:
+  - VisualCommunication
+  - Programming
+  - Digital
+  - VideoGame
+  - Web
+  - UserInterface
+date: "2012"
 readMore: http://blog.agj.cl/tag/flower-pattern/
 links:
-  play:
+  - label: Play
     url: http://www.agj.cl/files/games/flowerpattern/
-    width: 640
-    height: 480
-    type: touch
-    popup: false
 ---
 
 

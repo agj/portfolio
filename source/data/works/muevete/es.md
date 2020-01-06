@@ -1,5 +1,5 @@
 ---
-readMore: 'http://blog.agj.cl/tag/muevete/'
+readMore: http://blog.agj.cl/tag/muevete/
 ---
 
 

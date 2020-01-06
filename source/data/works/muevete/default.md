@@ -1,14 +1,16 @@
 ---
 name: Muévete
-category: int
-type: interactive installation
-year: 2011
+tags:
+  - VisualCommunication
+  - Programming
+  - Digital
+  - Graphic
+date: "2011"
 readMore: http://blog.agj.cl/tag/muevete/
-links:
-  watch video:
-    url: http://vimeo.com/32240154
-    width: 640
-    height: 360
+visuals:
+  - type: Video
+    host: Vimeo
+    id: "32240154"
 ---
 
 

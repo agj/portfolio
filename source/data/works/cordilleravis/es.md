@@ -1,6 +1,6 @@
 ---
 name: Visualizador baldosas Cordillera
-readMore: 'http://blog.agj.cl/2013/10/tiles-visualizer/#language'
+readMore: http://blog.agj.cl/2013/10/tiles-visualizer/#language
 ---
 
 

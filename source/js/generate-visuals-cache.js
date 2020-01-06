@@ -54,7 +54,7 @@ const generateVisualsCache = async (work, workName) => {
 			const outputFilename = `${ outputDir }${ visual.thumbnailUrl }`;
 			const metaOutputFilename = `${ outputDir }${ visual.metaUrl }`;
 
-			if (fs.pathExists(outputFilename) && fs.pathExists(metaOutputFilename)) {
+			if (fs.pathExistsSync(outputFilename) && fs.pathExistsSync(metaOutputFilename)) {
 				_.log(`Skipping files already existing in cache:`);
 				_.log(`    ${ outputFilename }`);
 				_.log(`    ${ metaOutputFilename }`);

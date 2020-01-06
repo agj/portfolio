@@ -1,14 +1,14 @@
 ---
 name: Where the thread goes
-category: av
-type: video
-year: 2015
+tags:
+  - VisualCommunication
+  - Video
+date: "2015"
 readMore: http://blog.agj.cl/2017/05/where-the-thread-goes/
-links:
-  watch video:
-    url: http://vimeo.com/151801842
-    width: 640
-    height: 360
+visuals:
+  - type: Video
+    host: Vimeo
+    id: "151801842"
 ---
 
 

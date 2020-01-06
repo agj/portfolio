@@ -29,6 +29,7 @@ const normalizeLanguage = (language) => {
 		description: language.description,
 		date: language.date,
 		tags: language.tags,
+		mainVisualUrl: language.mainVisualUrl,
 		visuals:
 			language.visuals ? language.visuals.map(normalizeVisual)
 			: [],

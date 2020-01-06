@@ -1,14 +1,14 @@
 ---
 name: Wooden still
-category: av
-type: video
-year: 2011
+tags:
+  - VisualCommunication
+  - Video
+date: "2011"
 readMore: http://blog.agj.cl/2011/01/wooden-still/
-links:
-  watch:
-    url: http://vimeo.com/19267207
-    width: 640
-    height: 360
+visuals:
+  - type: Video
+    host: Vimeo
+    id: "19267207"
 ---
 
 

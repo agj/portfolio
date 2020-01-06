@@ -17,13 +17,15 @@ const getFile = async (filename) =>
 	fs.readFile(filename, 'utf-8');
 const awaitAll = Promise.all.bind(Promise);
 const getFileName = (p) =>
-	p
-	.split(path.sep)
-	.filter(R.complement(R.isEmpty))
-	.into(R.last)
+	getLastDir(p)
 	.split('.')
 	.into(R.init)
 	.join('');
+const getLastDir = (p) =>
+	p.split(path.sep)
+	.filter(R.complement(R.isEmpty))
+	.into(R.last);
+
 
 
 // Process
@@ -36,18 +38,25 @@ const parseMarkdown = (text) => {
 	);
 };
 const normalizeWork = R.curry(async (work, workName) => {
+	if (!work.default)
+		throw `No default language file for work ${ workName }!`;
 	const def =
 		work.default
-		.into(R.assoc('mainVisualUrl', `${ workName }/${ await getMainVisualFilename(workName) }`));
+		.into(R.assoc('mainVisualUrl', `${ workName }/${ await getMainVisualFilename(workName) }`))
+		.into(R.mergeRight({ visuals: [], links: [] }));
 	const filled =
 		work.into(R.map(R.pipe(
 			R.mergeDeepRight(def),
 		)));
-	validateWork(filled);
+	try {
+		validateWork(filled);
+	} catch (e) {
+		throw `Error in work '${ workName }'\n` + e.message;
+	}
 	return filled
 		.into(R.map(
 			R.over(R.lensProp('visuals'), R.map(normalizeVisual(workName)))
-		))
+		));
 });
 const getMainVisualFilename = async (workName) => {
 	const mainFiles = await glob(`${ cfg.worksDir }${ workName }/main.*`);
@@ -108,23 +117,23 @@ const retrieveWork = async (workName) => {
 
 // Validation
 
+const pathValidation = ow.any(
+	ow.string.url,
+	ow.string.not.includes(path.sep),
+);
 const linkValidation = ow.object.exactShape({
 	label: ow.string,
-	url: ow.string,
+	url: ow.string.url,
 });
 const visualValidation = ow.any(
 	ow.object.exactShape({
 		type: ow.string.equals(cfg.visualType.image),
-		url: ow.any(
-			ow.string.url,
-			ow.string.not.includes(path.sep),
-		),
+		url: pathValidation,
 	}),
 	ow.object.exactShape({
 		type: ow.string.equals(cfg.visualType.video),
 		host: ow.string.oneOf(R.values(cfg.hostType)),
-		host: ow.string,
-		id: ow.string,
+		id: ow.string.not.url,
 	})
 );
 const languageValidation = ow.object.exactShape({
@@ -153,15 +162,9 @@ const validateLanguage = ow.create(languageValidation);
 // API
 
 const retrieveWorks = async () => {
-	// const workNames =
-	// 	(await glob(`${ cfg.worksDir }*/`))
-	// 	.map(getFileName)
-	const workNames = [
-		'kotokan',
-		'runnerby',
-		'tearoom',
-		'mitos',
-	];
+	const workNames =
+		(await glob(`${ cfg.worksDir }*/`))
+		.map(getLastDir);
 
 	const workPairs = await
 		workNames

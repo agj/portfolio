@@ -1,14 +1,16 @@
 ---
 name: Asymmetric feedback
-category: [int]
-type: interactive installation
-year: 2015
+tags:
+  - VisualCommunication
+  - Programming
+  - Language
+  - Digital
+date: "2015"
 readMore: http://blog.agj.cl/2017/05/several-installations/
-links:
-  watch video:
-    url: https://vimeo.com/135842909
-    width: 640
-    height: 360
+visuals:
+  - type: Video
+    host: Vimeo
+    id: "135842909"
 ---
 
 
