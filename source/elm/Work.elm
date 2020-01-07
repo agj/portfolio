@@ -1,9 +1,12 @@
 module Work exposing (Date(..), Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
 
 import Element exposing (Element)
+import Element.Font as Font
 import Json.Decode as Decode exposing (Decoder, andThen, float, list, nullable, oneOf, string)
 import Json.Decode.Pipeline exposing (required)
 import Language exposing (..)
+import Mark
+import Mark.Error
 import Tag exposing (Tag)
 
 
@@ -114,7 +117,7 @@ workDecoder : Decoder (Work msg)
 workDecoder =
     Decode.succeed Work
         |> required "name" string
-        |> required "description" markdownDecoder
+        |> required "description" emuDecoder
         |> required "mainVisualUrl" string
         |> required "date" dateDecoder
         |> required "tags" (list Tag.decoder)
@@ -123,10 +126,39 @@ workDecoder =
         |> required "readMore" (nullable readMoreDecoder)
 
 
-markdownDecoder : Decoder (Element msg)
-markdownDecoder =
-    Decode.succeed <|
-        Element.paragraph [] [ Element.text "This is just a temporary text for the markdown decoder." ]
+emuDecoder : Decoder (Element msg)
+emuDecoder =
+    string
+        |> andThen
+            (\raw ->
+                Decode.succeed (renderEmu raw)
+            )
+
+
+renderEmu : String -> Element msg
+renderEmu raw =
+    case Mark.compile emuDocument raw of
+        Mark.Success result ->
+            result
+
+        Mark.Almost { result, errors } ->
+            Element.column []
+                (List.map (Mark.Error.toString >> Element.text) errors)
+
+        Mark.Failure errors ->
+            Element.column []
+                (List.map (Mark.Error.toString >> Element.text) errors)
+
+
+emuDocument : Mark.Document (Element msg)
+emuDocument =
+    Mark.document
+        (Element.column [])
+        (Mark.text styledTextToEl)
+
+
+styledTextToEl styles str =
+    Element.text str
 
 
 dateDecoder : Decoder Date
