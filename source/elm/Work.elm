@@ -1,5 +1,6 @@
 module Work exposing (Date(..), Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
 
+import Doc
 import Element exposing (Element)
 import Element.Font as Font
 import Json.Decode as Decode exposing (Decoder, andThen, float, list, nullable, oneOf, string)
@@ -7,6 +8,7 @@ import Json.Decode.Pipeline exposing (required)
 import Language exposing (..)
 import Mark
 import Mark.Error
+import Palette
 import Tag exposing (Tag)
 
 
@@ -126,41 +128,6 @@ workDecoder =
         |> required "readMore" (nullable readMoreDecoder)
 
 
-emuDecoder : Decoder (Element msg)
-emuDecoder =
-    string
-        |> andThen
-            (\raw ->
-                Decode.succeed (renderEmu raw)
-            )
-
-
-renderEmu : String -> Element msg
-renderEmu raw =
-    case Mark.compile emuDocument raw of
-        Mark.Success result ->
-            result
-
-        Mark.Almost { result, errors } ->
-            Element.column []
-                (List.map (Mark.Error.toString >> Element.text) errors)
-
-        Mark.Failure errors ->
-            Element.column []
-                (List.map (Mark.Error.toString >> Element.text) errors)
-
-
-emuDocument : Mark.Document (Element msg)
-emuDocument =
-    Mark.document
-        (Element.column [])
-        (Mark.text styledTextToEl)
-
-
-styledTextToEl styles str =
-    Element.text str
-
-
 dateDecoder : Decoder Date
 dateDecoder =
     string |> andThen (\date -> Decode.succeed (Date date))
@@ -215,3 +182,72 @@ linkDecoder =
 readMoreDecoder : Decoder ReadMore
 readMoreDecoder =
     Decode.succeed { url = "http://example.com", language = English }
+
+
+
+--- MARKUP DECODING
+
+
+emuDecoder : Decoder (Element msg)
+emuDecoder =
+    string
+        |> andThen (\raw -> Decode.succeed (renderEmu raw))
+
+
+renderEmu : String -> Element msg
+renderEmu raw =
+    case Mark.compile emuDocument raw of
+        Mark.Success result ->
+            Element.column [] [ result ]
+
+        Mark.Almost { result, errors } ->
+            Element.column [] <|
+                List.map (Mark.Error.toString >> Element.text) errors
+
+        Mark.Failure errors ->
+            Element.column [] <|
+                List.map (Mark.Error.toString >> Element.text) errors
+
+
+emuDocument : Mark.Document (Element msg)
+emuDocument =
+    Mark.document emuWrapper <|
+        Mark.manyOf [ Mark.map (Element.paragraph Palette.attrsParagraph) inlineParser ]
+
+
+emuWrapper : List (Element msg) -> Element msg
+emuWrapper =
+    Element.column []
+
+
+inlineParser : Mark.Block (List (Element msg))
+inlineParser =
+    Mark.text styledTextToEl
+
+
+styledTextToEl : Mark.Styles -> String -> Element msg
+styledTextToEl styles str =
+    let
+        bold =
+            if styles.bold then
+                [ Font.bold ]
+
+            else
+                []
+
+        italic =
+            if styles.italic then
+                [ Font.italic ]
+
+            else
+                []
+
+        strike =
+            if styles.strike then
+                [ Font.strike ]
+
+            else
+                []
+    in
+    Element.el (bold ++ italic ++ strike)
+        (Element.text str)

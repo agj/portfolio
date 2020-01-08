@@ -1,8 +1,5 @@
 module Works exposing (ofLanguage)
 
-import Data.Kotokan
-import Data.Runnerby
-import Data.TeaRoom
 import Language exposing (..)
 import Work exposing (..)
 

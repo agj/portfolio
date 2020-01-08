@@ -17,6 +17,7 @@ type Tag
     | Translation
     | EducationalSoftware
     | LanguageTeaching
+    | Interactive
 
 
 decoder : Decoder Tag

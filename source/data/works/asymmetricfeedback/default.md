@@ -3,7 +3,6 @@ name: Asymmetric feedback
 tags:
   - VisualCommunication
   - Programming
-  - Language
   - Digital
 date: "2015"
 readMore: http://blog.agj.cl/2017/05/several-installations/

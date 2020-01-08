@@ -1,6 +1,7 @@
 module Palette exposing (..)
 
 import Element exposing (..)
+import Element.Font as Font
 
 
 
@@ -70,3 +71,15 @@ spaceSmaller =
 
 spaceSmallest =
     2
+
+
+
+-- ATTRIBUTES
+
+
+attrsParagraph : List (Attribute msg)
+attrsParagraph =
+    [ Font.size textSizeNormal
+    , paddingXY 0 10
+    , spacing <| textLineSpacing textSizeNormal
+    ]

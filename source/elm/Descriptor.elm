@@ -12,10 +12,7 @@ import Utils exposing (..)
 
 p : List (Element msg) -> Element msg
 p children =
-    paragraph
-        [ paddingXY 0 10
-        , spacing <| Palette.textLineSpacing Palette.textSizeNormal
-        ]
+    paragraph Palette.attrsParagraph
         children
 
 
