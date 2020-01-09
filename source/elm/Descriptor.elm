@@ -10,6 +10,8 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
+import Html
+import Html.Attributes
 import Palette
 import Tag exposing (Tag)
 import Utils exposing (..)
@@ -108,7 +110,17 @@ fromText txt =
                 }
 
         ( Nothing, [] ) ->
-            t textContent
+            if Format.isCode format then
+                html
+                    (Html.span
+                        [ Html.Attributes.style "white-space" "pre"
+                        , Html.Attributes.style "font-family" "monospace"
+                        ]
+                        [ Html.text textContent ]
+                    )
+
+            else
+                t textContent
 
         ( Nothing, style ) ->
             el style (t textContent)

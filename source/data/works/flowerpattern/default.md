@@ -17,4 +17,4 @@ links:
 
 A drawing toy that forms beautiful patterns upon input, created for touch screens (although it also works with the mouse). Try it on a tablet or smartphone by visiting this web address:
 
-[`http://agj.cl/ip/fp`](http://agj.cl/ip/fp)
+`http://agj.cl/ip/fp`{link| url = http://agj.cl/ip/fp }

@@ -15,4 +15,4 @@ visuals:
 ---
 
 
-Interaction design and software programming for a floor and wall tiles in-context visualizer. Select surfaces on a photo and choose among the tiles in Cordillera's catalog to see them applied. Contract work for [company *Traak* yes.]{ link | url = http://traak.cl/ }
+Interaction design and software programming for a floor and wall tiles in-context visualizer. Select surfaces on a photo and choose among the tiles in Cordillera's catalog to see them applied. Contract work for /Traak/.

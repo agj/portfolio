@@ -200,10 +200,9 @@ renderEmu : String -> Doc
 renderEmu raw =
     let
         withErrors errors =
-            Doc.create <|
-                List.map
-                    (Mark.Error.toString >> Text.create Format.empty >> List.singleton >> Paragraph.create)
-                    errors
+            List.map errorToParagraph errors
+                -- |> unnest
+                |> Doc.create
     in
     case Mark.compile emuDocument raw of
         Mark.Success result ->
@@ -214,6 +213,22 @@ renderEmu raw =
 
         Mark.Failure errors ->
             withErrors errors
+
+
+errorToParagraph : Mark.Error.Error -> Paragraph
+errorToParagraph error =
+    let
+        doit string =
+            Text.create (Format.empty |> Format.setCode True) string
+                |> List.singleton
+                |> Paragraph.create
+    in
+    Mark.Error.toString error |> doit
+
+
+
+-- |> String.split "\n"
+-- |> List.map doit
 
 
 emuDocument : Mark.Document Doc
@@ -235,15 +250,19 @@ inlineParser =
         { view = \styles str -> [ toFormattedText styles str ]
         , replacements = []
         , inlines =
-            [ Mark.annotation "link"
-                toLinkedText
+            [ Mark.annotation "link" toLinkedText
                 |> Mark.field "url" Mark.string
             ]
         }
 
 
-
--- toFormattedText
+toUpperText : List ( Mark.Styles, String ) -> List Text
+toUpperText parts =
+    let
+        process ( styles, str ) =
+            Text.create (toFormat styles) (String.toUpper str)
+    in
+    List.map process parts
 
 
 toFormattedText : Mark.Styles -> String -> Text
@@ -257,7 +276,6 @@ toLinkedText strings url =
         process ( styles, str ) =
             Text.create
                 (toFormat styles |> Format.setLink (Just (Doc.Link.create url)))
-                -- (toFormat styles)
                 str
     in
     List.map process strings
