@@ -4,8 +4,8 @@ import Browser
 import Browser.Events
 import Data.Introduction as Introduction
 import Data.Labels as Labels exposing (Labels)
-import Debug
-import Dict
+import Descriptor
+import Doc exposing (Doc)
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -52,7 +52,7 @@ type alias Model =
 type DataStatus
     = DataLoading
     | DataLoadError Http.Error
-    | DataLoaded (List (WorkLanguages Msg))
+    | DataLoaded (List WorkLanguages)
 
 
 type alias Flags =
@@ -104,7 +104,7 @@ type Msg
     | SelectedTag Tag
     | SelectedVisual (Maybe Visual)
     | GotViewport Viewport
-    | GotData (Result Http.Error (List (WorkLanguages Msg)))
+    | GotData (Result Http.Error (List WorkLanguages))
 
 
 type alias Viewport =
@@ -300,7 +300,7 @@ viewIntroduction introductionText =
         introductionText
 
 
-viewWorks : Int -> Labels -> Maybe Tag -> List (Work Msg) -> Element Msg
+viewWorks : Int -> Labels -> Maybe Tag -> List Work -> Element Msg
 viewWorks blockWidth labels maybeTag works =
     let
         filteredWorks =
@@ -330,9 +330,8 @@ viewWorks blockWidth labels maybeTag works =
 viewLoadMessage : String -> Element Msg
 viewLoadMessage message =
     viewWorkBlock <|
-        [ standardP
-            [ padding Palette.spaceNormal ]
-            [ text message
+        [ Descriptor.p
+            [ Descriptor.t message
             ]
         ]
 
@@ -348,7 +347,7 @@ viewWorkBlock children =
         children
 
 
-viewWork : Int -> Labels -> Work Msg -> Element Msg
+viewWork : Int -> Labels -> Work -> Element Msg
 viewWork blockWidth labels work =
     let
         readMore =
@@ -384,8 +383,7 @@ viewWorkReadMore labels desc =
                     labels.readMoreSpanish
     in
     el [ paddingXY Palette.spaceNormal 0 ] <|
-        standardP
-            []
+        Descriptor.p
             [ newTabLink linkStyle
                 { url = desc.url
                 , label = text label
@@ -393,10 +391,10 @@ viewWorkReadMore labels desc =
             ]
 
 
-viewWorkDescription : Element Msg -> Element Msg
-viewWorkDescription child =
+viewWorkDescription : Doc -> Element Msg
+viewWorkDescription doc =
     el [ paddingXY Palette.spaceNormal 0 ]
-        child
+        (Descriptor.fromDoc doc)
 
 
 viewWorkLinks : List Link -> Element Msg

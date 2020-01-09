@@ -1,4 +1,4 @@
-module Doc.Format exposing (Format, create, isBold, isItalic, link, setBold, setItalic, setLink)
+module Doc.Format exposing (Format, empty, isBold, isItalic, link, setBold, setItalic, setLink)
 
 import Doc.Link exposing (Link)
 
@@ -26,8 +26,8 @@ link (Format format) =
     format.link
 
 
-create : Format
-create =
+empty : Format
+empty =
     Format
         { bold = False
         , italic = False

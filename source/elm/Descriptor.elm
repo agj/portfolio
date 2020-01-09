@@ -1,5 +1,8 @@
-module Descriptor exposing (bold, d, l, list, makeTag, p, t)
+module Descriptor exposing (bold, d, fromDoc, l, list, makeTag, p, t)
 
+import Doc exposing (Doc)
+import Doc.Paragraph as Paragraph exposing (Paragraph)
+import Doc.Text as Text exposing (Text)
 import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
@@ -10,21 +13,8 @@ import Tag exposing (Tag)
 import Utils exposing (..)
 
 
-p : List (Element msg) -> Element msg
-p children =
-    paragraph Palette.attrsParagraph
-        children
-
-
-l : String -> String -> Element msg
-l label url =
-    newTabLink
-        [ Font.underline
-        , pointer
-        ]
-        { label = text label
-        , url = url
-        }
+d =
+    column []
 
 
 makeTag : (Tag -> msg) -> Tag -> String -> Element msg
@@ -40,17 +30,34 @@ makeTag messenger theTag label =
         (text label)
 
 
-bold : Element msg -> Element msg
-bold child =
-    el [ Font.bold ] child
+p : List (Element msg) -> Element msg
+p children =
+    paragraph
+        [ Font.size Palette.textSizeNormal
+        , paddingXY 0 10
+        , spacing <| Palette.textLineSpacing Palette.textSizeNormal
+        ]
+        children
 
 
 t =
     text
 
 
-d =
-    column []
+bold : Element msg -> Element msg
+bold child =
+    el [ Font.bold ] child
+
+
+l : String -> String -> Element msg
+l label url =
+    newTabLink
+        [ Font.underline
+        , pointer
+        ]
+        { label = text label
+        , url = url
+        }
 
 
 list : List (Element msg) -> Element msg
@@ -68,7 +75,19 @@ list children =
             List.map toRow children
     in
     column
-        [ paddingXY 0 10
+        [ paddingXY 0 (fraction 0.5 Palette.textSizeNormal)
         , spacing <| Palette.textLineSpacing Palette.textSizeNormal
         ]
         rows
+
+
+fromDoc : Doc -> Element msg
+fromDoc doc =
+    let
+        fromParagraph par =
+            p <| List.map fromText (Paragraph.content par)
+
+        fromText txt =
+            t (Text.content txt)
+    in
+    textColumn [] <| List.map fromParagraph (Doc.content doc)

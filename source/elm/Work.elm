@@ -1,8 +1,9 @@
 module Work exposing (Date(..), Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
 
-import Doc
-import Element exposing (Element)
-import Element.Font as Font
+import Doc exposing (Doc)
+import Doc.Format as Format exposing (Format)
+import Doc.Paragraph as Paragraph exposing (Paragraph)
+import Doc.Text as Text exposing (Text)
 import Json.Decode as Decode exposing (Decoder, andThen, float, list, nullable, oneOf, string)
 import Json.Decode.Pipeline exposing (required)
 import Language exposing (..)
@@ -12,17 +13,17 @@ import Palette
 import Tag exposing (Tag)
 
 
-type WorkLanguages msg
+type WorkLanguages
     = WorkLanguages
-        { english : Work msg
-        , japanese : Work msg
-        , spanish : Work msg
+        { english : Work
+        , japanese : Work
+        , spanish : Work
         }
 
 
-type alias Work msg =
+type alias Work =
     { name : String
-    , description : Element msg
+    , description : Doc
     , mainVisualUrl : String
     , date : Date
     , tags : List Tag
@@ -74,12 +75,12 @@ type alias Link =
 -- ACCESSORS
 
 
-languages : { english : Work msg, japanese : Work msg, spanish : Work msg } -> WorkLanguages msg
+languages : { english : Work, japanese : Work, spanish : Work } -> WorkLanguages
 languages data =
     WorkLanguages data
 
 
-ofLanguage : Language -> WorkLanguages msg -> Work msg
+ofLanguage : Language -> WorkLanguages -> Work
 ofLanguage language workLanguages =
     let
         data =
@@ -102,12 +103,12 @@ ofLanguage language workLanguages =
 -- DECODERS
 
 
-allWorksDecoder : Decoder (List (WorkLanguages msg))
+allWorksDecoder : Decoder (List WorkLanguages)
 allWorksDecoder =
     list workLanguagesDecoder
 
 
-workLanguagesDecoder : Decoder (WorkLanguages msg)
+workLanguagesDecoder : Decoder WorkLanguages
 workLanguagesDecoder =
     Decode.succeed (\en ja es -> WorkLanguages { english = en, japanese = ja, spanish = es })
         |> required "en" workDecoder
@@ -115,7 +116,7 @@ workLanguagesDecoder =
         |> required "es" workDecoder
 
 
-workDecoder : Decoder (Work msg)
+workDecoder : Decoder Work
 workDecoder =
     Decode.succeed Work
         |> required "name" string
@@ -188,66 +189,58 @@ readMoreDecoder =
 --- MARKUP DECODING
 
 
-emuDecoder : Decoder (Element msg)
+emuDecoder : Decoder Doc
 emuDecoder =
     string
         |> andThen (\raw -> Decode.succeed (renderEmu raw))
 
 
-renderEmu : String -> Element msg
+renderEmu : String -> Doc
 renderEmu raw =
+    let
+        withErrors errors =
+            Doc.create <|
+                List.map
+                    (Mark.Error.toString >> Text.create Format.empty >> List.singleton >> Paragraph.create)
+                    errors
+    in
     case Mark.compile emuDocument raw of
         Mark.Success result ->
-            Element.column [] [ result ]
+            result
 
         Mark.Almost { result, errors } ->
-            Element.column [] <|
-                List.map (Mark.Error.toString >> Element.text) errors
+            withErrors errors
 
         Mark.Failure errors ->
-            Element.column [] <|
-                List.map (Mark.Error.toString >> Element.text) errors
+            withErrors errors
 
 
-emuDocument : Mark.Document (Element msg)
+emuDocument : Mark.Document Doc
 emuDocument =
     Mark.document emuWrapper <|
-        Mark.manyOf [ Mark.map (Element.paragraph Palette.attrsParagraph) inlineParser ]
+        Mark.manyOf [ Mark.map Paragraph.create inlineParser ]
 
 
-emuWrapper : List (Element msg) -> Element msg
+emuWrapper : List Paragraph -> Doc
 emuWrapper =
-    Element.column []
+    Doc.create
 
 
-inlineParser : Mark.Block (List (Element msg))
+
+-- Element.column []
+
+
+inlineParser : Mark.Block (List Text)
 inlineParser =
-    Mark.text styledTextToEl
+    Mark.text toFormattedText
 
 
-styledTextToEl : Mark.Styles -> String -> Element msg
-styledTextToEl styles str =
+toFormattedText : Mark.Styles -> String -> Text
+toFormattedText styles str =
     let
-        bold =
-            if styles.bold then
-                [ Font.bold ]
-
-            else
-                []
-
-        italic =
-            if styles.italic then
-                [ Font.italic ]
-
-            else
-                []
-
-        strike =
-            if styles.strike then
-                [ Font.strike ]
-
-            else
-                []
+        format =
+            Format.empty
+                |> Format.setBold styles.bold
+                |> Format.setItalic styles.italic
     in
-    Element.el (bold ++ italic ++ strike)
-        (Element.text str)
+    Text.create format str
