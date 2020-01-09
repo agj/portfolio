@@ -4,6 +4,7 @@ tags:
   - VisualCommunication
   - Programming
   - Digital
+  - Interactive
 date: "2015"
 readMore: http://blog.agj.cl/2017/05/several-installations/
 visuals:

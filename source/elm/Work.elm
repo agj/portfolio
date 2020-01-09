@@ -252,17 +252,14 @@ inlineParser =
         , inlines =
             [ Mark.annotation "link" toLinkedText
                 |> Mark.field "url" Mark.string
+            , Mark.verbatim "code" toCodeText
             ]
         }
 
 
-toUpperText : List ( Mark.Styles, String ) -> List Text
-toUpperText parts =
-    let
-        process ( styles, str ) =
-            Text.create (toFormat styles) (String.toUpper str)
-    in
-    List.map process parts
+toCodeText : String -> List Text
+toCodeText str =
+    [ Text.create (Format.empty |> Format.setCode True) str ]
 
 
 toFormattedText : Mark.Styles -> String -> Text

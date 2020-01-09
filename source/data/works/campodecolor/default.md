@@ -8,6 +8,7 @@ tags:
   - Web
   - UserInterface
   - Graphic
+  - Interactive
 date: "2008"
 readMore: http://blog.agj.cl/tag/campodecolor/
 visuals:
@@ -15,7 +16,7 @@ visuals:
     host: Vimeo
     id: "2898875"
 links:
-  - label: Play (Flash)
+  - label: Play (requires Flash)
     url: http://www.agj.cl/files/games/campodecolor1/
 ---
 

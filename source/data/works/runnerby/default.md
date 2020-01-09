@@ -5,6 +5,7 @@ tags:
   - VideoGame
   - Digital
   - Web
+  - Interactive
 date: "2010"
 readMore: 'http://blog.agj.cl/tag/runnerby/'
 visuals:
@@ -21,4 +22,4 @@ A game controlled by a single key (spacebar), which makes a perpetually running 
 
 Designed around simplicity of controls, but difficulty of execution.
 
-(Playthrough video by [moshboy](https://twitter.com/moshboy).)
+(Playthrough video by [moshboy]{link| url = https://twitter.com/moshboy }.)

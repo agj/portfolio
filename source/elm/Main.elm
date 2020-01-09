@@ -308,13 +308,23 @@ viewWorks blockWidth labels maybeTag works =
                 Nothing ->
                     []
 
+                Just Tag.Any ->
+                    works
+
                 Just tag ->
                     List.filter
                         (\w -> List.member tag w.tags)
                         works
     in
     if List.length filteredWorks == 0 then
-        viewLoadMessage "Select any highlighted keyword above to see examples of my work."
+        Descriptor.p
+            [ text "Select any highlighted keyword above to see examples of my work, or just see "
+            , Descriptor.makeTag SelectedTag Tag.Any "everything"
+            , text "."
+            ]
+            |> viewMessageBlock
+            |> List.singleton
+            |> viewWorkBlock
 
     else
         column
@@ -329,10 +339,19 @@ viewWorks blockWidth labels maybeTag works =
 
 viewLoadMessage : String -> Element Msg
 viewLoadMessage message =
-    viewWorkBlock <|
-        [ Descriptor.p
+    viewMessageBlock <|
+        Descriptor.p
             [ Descriptor.t message
             ]
+
+
+viewMessageBlock : Element Msg -> Element Msg
+viewMessageBlock child =
+    viewWorkBlock <|
+        [ el
+            [ paddingXY Palette.spaceNormal Palette.spaceNormal
+            ]
+            child
         ]
 
 

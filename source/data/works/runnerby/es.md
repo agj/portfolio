@@ -3,4 +3,4 @@ Un juego controlado por sólo una tecla (espacio), la cual hace saltar al person
 
 Diseñado buscando sencillez en control, pero dificultad de ejecución.
 
-(Video por [moshboy](https://twitter.com/moshboy).)
+(Video por [moshboy]{link| url = https://twitter.com/moshboy }.)

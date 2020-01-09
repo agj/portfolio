@@ -4,7 +4,8 @@ import Json.Decode as Decode exposing (Decoder, andThen, string)
 
 
 type Tag
-    = VisualCommunication
+    = Any
+    | VisualCommunication
     | Programming
     | Language
     | Learning
@@ -64,6 +65,9 @@ decoder =
 
                     "LanguageTeaching" ->
                         Decode.succeed LanguageTeaching
+
+                    "Interactive" ->
+                        Decode.succeed Interactive
 
                     other ->
                         Decode.fail <| "Tag unknown: " ++ other

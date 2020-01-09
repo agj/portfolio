@@ -6,6 +6,7 @@ tags:
   - Digital
   - Web
   - UserInterface
+  - Interactive
 date: "2013"
 readMore: http://blog.agj.cl/2013/10/tiles-visualizer/
 visuals:
@@ -15,4 +16,4 @@ visuals:
 ---
 
 
-Interaction design and software programming for a floor and wall tiles in-context visualizer. Select surfaces on a photo and choose among the tiles in Cordillera's catalog to see them applied. Contract work for /Traak/.
+Interaction design and software programming for a floor and wall tiles in-context visualizer. Select surfaces on a photo and choose among the tiles in Cordillera's catalog to see them applied. Contract work for Traak.

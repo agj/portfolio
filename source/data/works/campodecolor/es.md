@@ -1,5 +1,8 @@
 ---
 readMore: http://blog.agj.cl/tag/campodecolor/
+links:
+  - label: Jugar (requiere Flash)
+    url: http://www.agj.cl/files/games/campodecolor1/
 ---
 
 
