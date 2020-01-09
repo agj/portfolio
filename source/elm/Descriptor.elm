@@ -1,6 +1,8 @@
-module Descriptor exposing (bold, d, fromDoc, l, list, makeTag, p, t)
+module Descriptor exposing (bold, d, fromDoc, list, makeTag, p, t)
 
 import Doc exposing (Doc)
+import Doc.Format as Format exposing (Format)
+import Doc.Link as Link exposing (Link)
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
 import Element exposing (..)
@@ -49,17 +51,6 @@ bold child =
     el [ Font.bold ] child
 
 
-l : String -> String -> Element msg
-l label url =
-    newTabLink
-        [ Font.underline
-        , pointer
-        ]
-        { label = text label
-        , url = url
-        }
-
-
 list : List (Element msg) -> Element msg
 list children =
     let
@@ -83,11 +74,47 @@ list children =
 
 fromDoc : Doc -> Element msg
 fromDoc doc =
-    let
-        fromParagraph par =
-            p <| List.map fromText (Paragraph.content par)
-
-        fromText txt =
-            t (Text.content txt)
-    in
     textColumn [] <| List.map fromParagraph (Doc.content doc)
+
+
+
+-- INTERNAL
+
+
+fromParagraph : Paragraph -> Element msg
+fromParagraph par =
+    p <| List.map fromText (Paragraph.content par)
+
+
+fromText : Text -> Element msg
+fromText txt =
+    let
+        textContent =
+            Text.content txt
+
+        format =
+            Text.format txt
+    in
+    case ( Format.link format, getStyle format ) of
+        ( Just lnk, style ) ->
+            newTabLink
+                ([ Font.underline
+                 , pointer
+                 ]
+                    ++ style
+                )
+                { label = t textContent
+                , url = Link.url lnk
+                }
+
+        ( Nothing, [] ) ->
+            t textContent
+
+        ( Nothing, style ) ->
+            el style (t textContent)
+
+
+getStyle : Format -> List (Element.Attribute msg)
+getStyle format =
+    ifElse (Format.isBold format) [ Font.bold ] []
+        ++ ifElse (Format.isItalic format) [ Font.italic ] []

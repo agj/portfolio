@@ -71,7 +71,7 @@ english tag =
 japanese tag =
     d
         [ p
-            [ bold (t "アレ・グリリ（Ale Grilli）")
+            [ bold <| t "アレ・グリリ（Ale Grilli）"
             , t "と言います。拠点をチリのサンティアゴにしています。活動は次の四つのエリアの組み合わせです。"
             ]
         , list

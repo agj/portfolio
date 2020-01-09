@@ -11,6 +11,15 @@ type Format
         }
 
 
+empty : Format
+empty =
+    Format
+        { bold = False
+        , italic = False
+        , link = Nothing
+        }
+
+
 isBold : Format -> Bool
 isBold (Format format) =
     format.bold
@@ -26,13 +35,8 @@ link (Format format) =
     format.link
 
 
-empty : Format
-empty =
-    Format
-        { bold = False
-        , italic = False
-        , link = Nothing
-        }
+
+-- SETTERS
 
 
 setBold : Bool -> Format -> Format

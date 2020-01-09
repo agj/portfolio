@@ -2,6 +2,7 @@ module Work exposing (Date(..), Link, ReadMore, VideoDescription, VideoHost(..),
 
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
+import Doc.Link
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
 import Json.Decode as Decode exposing (Decoder, andThen, float, list, nullable, oneOf, string)
@@ -9,8 +10,8 @@ import Json.Decode.Pipeline exposing (required)
 import Language exposing (..)
 import Mark
 import Mark.Error
-import Palette
 import Tag exposing (Tag)
+import Utils exposing (..)
 
 
 type WorkLanguages
@@ -218,7 +219,9 @@ renderEmu raw =
 emuDocument : Mark.Document Doc
 emuDocument =
     Mark.document emuWrapper <|
-        Mark.manyOf [ Mark.map Paragraph.create inlineParser ]
+        Mark.manyOf
+            [ Mark.map (unnest >> Paragraph.create) inlineParser
+            ]
 
 
 emuWrapper : List Paragraph -> Doc
@@ -226,21 +229,42 @@ emuWrapper =
     Doc.create
 
 
-
--- Element.column []
-
-
-inlineParser : Mark.Block (List Text)
+inlineParser : Mark.Block (List (List Text))
 inlineParser =
-    Mark.text toFormattedText
+    Mark.textWith
+        { view = \styles str -> [ toFormattedText styles str ]
+        , replacements = []
+        , inlines =
+            [ Mark.annotation "link"
+                toLinkedText
+                |> Mark.field "url" Mark.string
+            ]
+        }
+
+
+
+-- toFormattedText
 
 
 toFormattedText : Mark.Styles -> String -> Text
 toFormattedText styles str =
+    Text.create (toFormat styles) str
+
+
+toLinkedText : List ( Mark.Styles, String ) -> String -> List Text
+toLinkedText strings url =
     let
-        format =
-            Format.empty
-                |> Format.setBold styles.bold
-                |> Format.setItalic styles.italic
+        process ( styles, str ) =
+            Text.create
+                (toFormat styles |> Format.setLink (Just (Doc.Link.create url)))
+                -- (toFormat styles)
+                str
     in
-    Text.create format str
+    List.map process strings
+
+
+toFormat : Mark.Styles -> Format
+toFormat styles =
+    Format.empty
+        |> Format.setBold styles.bold
+        |> Format.setItalic styles.italic
