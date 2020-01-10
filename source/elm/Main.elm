@@ -201,15 +201,12 @@ viewMain model =
                 ]
     in
     column
-        [ width <|
-            if layoutSize == PhoneSize then
-                fill
-
-            else
-                px 600
+        [ width <| ifElse (layoutSize == PhoneSize) fill (px 600)
         , centerX
+        , inFront <| viewLanguageSelector model.language
+        , paddingEach { top = Palette.spaceSmall, bottom = 0, left = 0, right = 0 }
         ]
-        [ viewTop model.language
+        [ viewTop model.language model.tag
         , case model.data of
             DataLoaded data ->
                 let
@@ -221,31 +218,28 @@ viewMain model =
 
             DataLoading ->
                 worksBlock <|
-                    viewLoadMessage "Loading…"
+                    viewLoadMessage labels.loading
 
             DataLoadError err ->
                 case err of
                     Http.BadBody msg ->
                         worksBlock <|
-                            viewLoadMessage
-                                ("Data error! "
-                                    ++ msg
-                                )
+                            viewLoadMessage ("Data error!\n\n" ++ msg)
 
                     _ ->
                         worksBlock <|
-                            viewLoadMessage "Load error! Please try refreshing the page."
+                            viewLoadMessage labels.loadError
         ]
 
 
-viewTop : Language -> Element Msg
-viewTop language =
+viewTop : Language -> Maybe Tag -> Element Msg
+viewTop language selectedTag =
     column
         [ Font.color Palette.light
         , Background.color Palette.dark
+        , paddingEach { top = Palette.spaceNormal, bottom = Palette.spaceSmall, left = 0, right = 0 }
         ]
-        [ viewLanguageSelector language
-        , viewIntroduction (Introduction.ofLanguage SelectedTag language)
+        [ viewIntroduction (Introduction.ofLanguage SelectedTag selectedTag language)
         ]
 
 
@@ -264,30 +258,29 @@ viewLanguageSelector language =
 
 viewLanguageButton : String -> Language -> Language -> Element Msg
 viewLanguageButton label language selectedLanguage =
-    el
-        ([ onClick (SelectedLanguage language)
-         , Font.size Palette.textSizeNormal
-         , width (px (fraction 2.9 Palette.textSizeNormal))
-         , height (px (fraction 2.3 Palette.textSizeNormal))
-         , pointer
-         ]
-            ++ (if language == selectedLanguage then
-                    [ Background.color Palette.light
-                    , Font.color Palette.dark
-                    ]
+    if language == selectedLanguage then
+        none
 
-                else
-                    [ Background.color Palette.highlightDark
-                    , Font.color Palette.light
-                    ]
-               )
-        )
-        (el
-            [ centerX
-            , centerY
+    else
+        el
+            [ onClick (SelectedLanguage language)
+            , Font.size Palette.textSizeNormal
+            , width (px (fraction 2.9 Palette.textSizeNormal))
+            , height (px (fraction 2.3 Palette.textSizeNormal))
+            , pointer
+            , Background.color Palette.highlightDark
+            , Font.color Palette.light
+            , mouseDown
+                [ Background.color Palette.highlightLight
+                , Font.color Palette.dark
+                ]
             ]
-            (text label)
-        )
+            (el
+                [ centerX
+                , centerY
+                ]
+                (text label)
+            )
 
 
 viewIntroduction : Element Msg -> Element Msg
@@ -300,43 +293,6 @@ viewIntroduction introductionText =
         introductionText
 
 
-viewWorks : Int -> Labels -> Maybe Tag -> List Work -> Element Msg
-viewWorks blockWidth labels maybeTag works =
-    let
-        filteredWorks =
-            case maybeTag of
-                Nothing ->
-                    []
-
-                Just Tag.Any ->
-                    works
-
-                Just tag ->
-                    List.filter
-                        (\w -> List.member tag w.tags)
-                        works
-    in
-    if List.length filteredWorks == 0 then
-        Descriptor.p
-            [ text "Select any highlighted keyword above to see examples of my work, or just see "
-            , Descriptor.makeTag SelectedTag Tag.Any "everything"
-            , text "."
-            ]
-            |> viewMessageBlock
-            |> List.singleton
-            |> viewWorkBlock
-
-    else
-        column
-            [ width fill
-            , spacing Palette.spaceSmall
-            ]
-            (List.map
-                (viewWork blockWidth labels)
-                filteredWorks
-            )
-
-
 viewLoadMessage : String -> Element Msg
 viewLoadMessage message =
     viewMessageBlock <|
@@ -347,187 +303,14 @@ viewLoadMessage message =
 
 viewMessageBlock : Element Msg -> Element Msg
 viewMessageBlock child =
-    viewWorkBlock <|
+    viewWorkBlock [] <|
         [ el
             [ paddingXY Palette.spaceNormal Palette.spaceNormal
+            , width fill
+            , Font.center
             ]
             child
         ]
-
-
-viewWorkBlock : List (Element Msg) -> Element Msg
-viewWorkBlock children =
-    column
-        [ width fill
-        , Font.color Palette.light
-        , Background.color Palette.dark
-        , Font.size Palette.textSizeNormal
-        ]
-        children
-
-
-viewWork : Int -> Labels -> Work -> Element Msg
-viewWork blockWidth labels work =
-    let
-        readMore =
-            case work.readMore of
-                Just desc ->
-                    [ viewWorkReadMore labels desc ]
-
-                Nothing ->
-                    []
-    in
-    viewWorkBlock
-        ([ viewWorkTitle blockWidth work.name work.mainVisualUrl
-         , viewWorkVisuals blockWidth work.visuals
-         , viewWorkLinks work.links
-         , viewWorkDescription work.description
-         ]
-            ++ readMore
-        )
-
-
-viewWorkReadMore : Labels -> Work.ReadMore -> Element Msg
-viewWorkReadMore labels desc =
-    let
-        label =
-            case desc.language of
-                English ->
-                    labels.readMoreEnglish
-
-                Japanese ->
-                    labels.readMoreJapanese
-
-                Spanish ->
-                    labels.readMoreSpanish
-    in
-    el [ paddingXY Palette.spaceNormal 0 ] <|
-        Descriptor.p
-            [ newTabLink linkStyle
-                { url = desc.url
-                , label = text label
-                }
-            ]
-
-
-viewWorkDescription : Doc -> Element Msg
-viewWorkDescription doc =
-    el [ paddingXY Palette.spaceNormal 0 ]
-        (Descriptor.fromDoc doc)
-
-
-viewWorkLinks : List Link -> Element Msg
-viewWorkLinks links =
-    let
-        makeLink link =
-            newTabLink
-                ([ centerX ] ++ linkStyle)
-                { url = link.url
-                , label = text link.label
-                }
-    in
-    wrappedRow
-        [ paddingXY Palette.spaceNormal Palette.spaceSmall
-        , width fill
-        ]
-    <|
-        List.map makeLink links
-
-
-viewWorkTitle : Int -> String -> String -> Element Msg
-viewWorkTitle blockWidth title mainVisualUrl =
-    let
-        mainBlock =
-            el
-                [ width (px blockWidth)
-                , height (px blockWidth)
-                , Background.image mainVisualUrl
-                , Font.shadow
-                    { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
-                    , blur = 0
-                    , color = rgb 0 0 0
-                    }
-                ]
-
-        gradientBlock =
-            column
-                [ height (px <| Palette.textSizeLarge * 2)
-                , width fill
-                , alignBottom
-                , paddingXY Palette.spaceNormal 0
-                , Background.gradient
-                    { angle = 0
-                    , steps =
-                        [ rgba 0 0 0 0.7
-                        , rgba 0 0 0 0.3
-                        , rgba 0 0 0 0
-                        ]
-                    }
-                ]
-
-        yearBlock =
-            el
-                [ alignBottom
-                , paddingXY 0 0
-                , Font.size Palette.textSizeSmall
-                ]
-
-        titleBlock =
-            el
-                [ alignBottom
-                , paddingXY 0 Palette.spaceSmaller
-                , Font.size Palette.textSizeLarge
-                ]
-    in
-    mainBlock
-        (gradientBlock
-            [ yearBlock (text "2010")
-            , titleBlock (text title)
-            ]
-        )
-
-
-viewWorkVisuals : Int -> List Visual -> Element Msg
-viewWorkVisuals blockWidth visuals =
-    let
-        perRow =
-            4
-
-        spaceBetween =
-            Palette.spaceSmallest
-
-        thumbnailSize =
-            toFloat (blockWidth - (spaceBetween * (perRow - 1)))
-                / perRow
-                |> floor
-    in
-    wrappedRow
-        [ spacing spaceBetween
-        , paddingEach { top = spaceBetween, bottom = 0, left = 0, right = 0 }
-        ]
-        (List.map (viewVisualThumbnail thumbnailSize) visuals)
-
-
-viewVisualThumbnail : Int -> Visual -> Element Msg
-viewVisualThumbnail size visual =
-    let
-        thumbnailUrl =
-            case visual of
-                Image desc ->
-                    desc.thumbnailUrl
-
-                Video desc ->
-                    desc.thumbnailUrl
-    in
-    image
-        [ width (px size)
-        , height (px size)
-        , onClick (SelectedVisual (Just visual))
-        , pointer
-        ]
-        { src = thumbnailUrl
-        , description = "(thumbnail)"
-        }
 
 
 viewPopupVisual : Viewport -> Visual -> Element Msg
@@ -631,40 +414,229 @@ viewPopupVisual viewport visual =
                 ]
 
 
-standardP : List (Attribute Msg) -> List (Element Msg) -> Element Msg
-standardP attrs children =
-    paragraph
-        (attrs
-            ++ [ paddingXY 0 10
-               , spacing <| Palette.textLineSpacing Palette.textSizeNormal
-               ]
+
+-- VIEW WORKS
+
+
+viewWorks : Int -> Labels -> Maybe Tag -> List Work -> Element Msg
+viewWorks blockWidth labels maybeTag works =
+    let
+        filteredWorks =
+            case maybeTag of
+                Nothing ->
+                    []
+
+                Just Tag.Any ->
+                    works
+
+                Just tag ->
+                    List.filter
+                        (\w -> List.member tag w.tags)
+                        works
+    in
+    if List.isEmpty filteredWorks then
+        viewLoadMessage labels.pleaseSelect
+
+    else
+        column
+            [ width fill
+            , spacing Palette.spaceSmall
+            ]
+            (List.map
+                (viewWork blockWidth labels)
+                filteredWorks
+            )
+
+
+viewWorkBlock : List (Attribute Msg) -> List (Element Msg) -> Element Msg
+viewWorkBlock attrs children =
+    column
+        ([ width fill
+         , Font.color Palette.light
+         , Background.color Palette.dark
+         , Font.size Palette.textSizeNormal
+         ]
+            ++ attrs
         )
         children
 
 
+viewWork : Int -> Labels -> Work -> Element Msg
+viewWork blockWidth labels work =
+    viewWorkBlock
+        [ below <| viewWorkReadMore labels work.readMore
+        , case work.readMore of
+            Just _ ->
+                paddingEach { bottom = 1 * Palette.textSizeNormal, top = 0, left = 0, right = 0 }
 
--- UTILS
+            Nothing ->
+                padding 0
+        ]
+        [ viewWorkTitle blockWidth work.name work.mainVisualUrl
+        , viewWorkVisuals blockWidth work.visuals
+        , viewWorkLinks work.links
+        , viewWorkDescription work.description
+        ]
 
 
-linkStyle : List (Element.Attribute Msg)
-linkStyle =
-    [ Background.color Palette.highlightDark
-    , Border.rounded (fraction 0.2 Palette.textSizeNormal)
-    , paddingXY
-        (fraction 0.6 Palette.textSizeNormal)
-        (fraction 0.4 Palette.textSizeNormal)
-    , centerX
-    , pointer
-    ]
+viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Element Msg
+viewWorkReadMore labels readMore =
+    case readMore of
+        Nothing ->
+            none
+
+        Just desc ->
+            let
+                label =
+                    case desc.language of
+                        English ->
+                            labels.readMoreEnglish
+
+                        Japanese ->
+                            labels.readMoreJapanese
+
+                        Spanish ->
+                            labels.readMoreSpanish
+            in
+            el
+                [ paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, bottom = Palette.spaceNormal, top = 0 }
+                , alignRight
+                , moveUp <| 1.5 * toFloat Palette.textSizeNormal
+                ]
+            <|
+                newTabLink linkStyle
+                    { url = desc.url
+                    , label = text label
+                    }
 
 
-getLanguageFromPreferred : List String -> Language
-getLanguageFromPreferred codes =
-    codes
-        |> List.map (String.left 2)
-        |> List.filterMap Language.fromCode
-        |> List.head
-        |> Maybe.withDefault English
+viewWorkDescription : Doc -> Element Msg
+viewWorkDescription doc =
+    el [ paddingXY Palette.spaceNormal Palette.spaceSmall ]
+        (Descriptor.fromDoc doc)
+
+
+viewWorkLinks : List Link -> Element Msg
+viewWorkLinks links =
+    let
+        makeLink link =
+            newTabLink
+                (centerX :: linkStyle)
+                { url = link.url
+                , label = text link.label
+                }
+    in
+    if List.isEmpty links then
+        none
+
+    else
+        wrappedRow
+            [ paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = Palette.spaceNormal, bottom = 0 }
+            , width fill
+            ]
+        <|
+            List.map makeLink links
+
+
+viewWorkTitle : Int -> String -> String -> Element Msg
+viewWorkTitle blockWidth title mainVisualUrl =
+    let
+        mainBlock =
+            el
+                [ width (px blockWidth)
+                , height (px blockWidth)
+                , Background.image mainVisualUrl
+                , Font.shadow
+                    { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
+                    , blur = 0
+                    , color = rgb 0 0 0
+                    }
+                ]
+
+        gradientBlock =
+            column
+                [ height (px <| Palette.textSizeLarge * 2)
+                , width fill
+                , alignBottom
+                , paddingXY Palette.spaceNormal 0
+                , Background.gradient
+                    { angle = 0
+                    , steps =
+                        [ rgba 0 0 0 0.7
+                        , rgba 0 0 0 0.3
+                        , rgba 0 0 0 0
+                        ]
+                    }
+                ]
+
+        yearBlock =
+            el
+                [ alignBottom
+                , paddingXY 0 0
+                , Font.size Palette.textSizeSmall
+                ]
+
+        titleBlock =
+            el
+                [ alignBottom
+                , paddingXY 0 Palette.spaceSmaller
+                , Font.size Palette.textSizeLarge
+                ]
+    in
+    mainBlock
+        (gradientBlock
+            [ yearBlock (text "2010")
+            , titleBlock (text title)
+            ]
+        )
+
+
+viewWorkVisuals : Int -> List Visual -> Element Msg
+viewWorkVisuals blockWidth visuals =
+    let
+        perRow =
+            4
+
+        spaceBetween =
+            Palette.spaceSmallest
+
+        thumbnailSize =
+            toFloat (blockWidth - (spaceBetween * (perRow - 1)))
+                / perRow
+                |> floor
+    in
+    if List.isEmpty visuals then
+        none
+
+    else
+        wrappedRow
+            [ spacing spaceBetween
+            , width fill
+            , paddingEach { top = spaceBetween, bottom = 0, left = 0, right = 0 }
+            ]
+            (List.map (viewVisualThumbnail thumbnailSize) visuals)
+
+
+viewVisualThumbnail : Int -> Visual -> Element Msg
+viewVisualThumbnail size visual =
+    let
+        thumbnailUrl =
+            case visual of
+                Image desc ->
+                    desc.thumbnailUrl
+
+                Video desc ->
+                    desc.thumbnailUrl
+    in
+    image
+        [ width (px size)
+        , height (px size)
+        , onClick (SelectedVisual (Just visual))
+        , pointer
+        ]
+        { src = thumbnailUrl
+        , description = "(thumbnail)"
+        }
 
 
 
@@ -676,3 +648,31 @@ subscriptions model =
     Browser.Events.onResize <|
         \w h ->
             GotViewport { width = w, height = h }
+
+
+
+-- OTHER
+
+
+linkStyle : List (Element.Attribute Msg)
+linkStyle =
+    [ Background.color Palette.highlightDark
+    , paddingXY
+        (fraction 0.6 Palette.textSizeNormal)
+        (fraction 0.4 Palette.textSizeNormal)
+    , centerX
+    , pointer
+    , mouseDown
+        [ Background.color Palette.highlightLight
+        , Font.color Palette.dark
+        ]
+    ]
+
+
+getLanguageFromPreferred : List String -> Language
+getLanguageFromPreferred codes =
+    codes
+        |> List.map (String.left 2)
+        |> List.filterMap Language.fromCode
+        |> List.head
+        |> Maybe.withDefault English

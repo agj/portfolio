@@ -4,7 +4,6 @@ tags:
   - VisualCommunication
   - Programming
   - Digital
-  - Graphic
   - Interactive
 date: "2011"
 readMore: http://blog.agj.cl/tag/muevete/

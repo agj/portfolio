@@ -22,15 +22,31 @@ d =
     textColumn [ width fill ]
 
 
-makeTag : (Tag -> msg) -> Tag -> String -> Element msg
-makeTag messenger theTag label =
+makeTag : (Tag -> msg) -> Maybe Tag -> Tag -> String -> Element msg
+makeTag messenger selectedTag tag label =
+    let
+        isSelectedTag =
+            case selectedTag of
+                Just st ->
+                    st == tag
+
+                Nothing ->
+                    False
+    in
     el
-        [ Background.color Palette.highlightDark
-        , Font.color Palette.light
-        , paddingXY 11 3
-        , Border.rounded 15
-        , onClick (messenger theTag)
+        [ ifElse isSelectedTag
+            (Background.color Palette.highlightLight)
+            (Background.color Palette.highlightDark)
+        , Font.color <| ifElse isSelectedTag Palette.dark Palette.light
+        , paddingXY
+            (fraction 0.3 Palette.textSizeNormal)
+            (fraction 0.15 Palette.textSizeNormal)
+        , onClick (messenger tag)
         , pointer
+        , mouseDown
+            [ Background.color Palette.highlightLight
+            , Font.color Palette.dark
+            ]
         ]
         (text label)
 
@@ -52,7 +68,11 @@ t =
 
 bold : Element msg -> Element msg
 bold child =
-    el [ Font.bold ] child
+    el
+        [ Font.bold
+        , Font.color Palette.highlightLight
+        ]
+        child
 
 
 list : List (Element msg) -> Element msg

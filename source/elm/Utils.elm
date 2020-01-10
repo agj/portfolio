@@ -1,7 +1,5 @@
 module Utils exposing (fraction, ifElse, unnest)
 
-import Element exposing (..)
-
 
 fraction : Float -> Int -> Int
 fraction frac num =

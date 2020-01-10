@@ -1,35 +1,42 @@
-module Palette exposing (..)
+module Palette exposing (dark, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
 
-import Element exposing (..)
-import Element.Font as Font
+import Color exposing (Color)
+import Color.Manipulate
+import Element
 
 
 
 -- COLOR
 
 
-dark : Color
+dark : Element.Color
 dark =
-    rgb 0.1 0.1 0.1
+    Element.rgb 0.1 0.1 0.1
 
 
-light : Color
+light : Element.Color
 light =
-    rgb 0.9 0.9 0.9
+    Element.rgb 0.9 0.9 0.9
 
 
-highlightLight : Color
+highlightLight : Element.Color
 highlightLight =
-    rgb 1 0.5 1
+    baseHighlight |> toElmUiColor
 
 
-highlightDark : Color
+highlightDark : Element.Color
 highlightDark =
-    rgb 0.5 0 0.5
+    baseSecondaryHighlight
+        |> Color.Manipulate.darken 0.1
+        |> Color.Manipulate.desaturate 0.5
+        |> toElmUiColor
 
 
-
--- TEXT
+highlightDarker : Element.Color
+highlightDarker =
+    baseSecondaryHighlight
+        |> Color.Manipulate.darken 0.3
+        |> toElmUiColor
 
 
 textSizeSmall : Int
@@ -61,13 +68,39 @@ spaceNormal =
     20
 
 
+spaceSmall : Int
 spaceSmall =
     10
 
 
+spaceSmaller : Int
 spaceSmaller =
     5
 
 
+spaceSmallest : Int
 spaceSmallest =
     2
+
+
+
+-- INTERNAL
+
+
+baseHighlight : Color
+baseHighlight =
+    Color.rgb255 207 255 0
+
+
+baseSecondaryHighlight : Color
+baseSecondaryHighlight =
+    Color.rgb255 255 0 204
+
+
+toElmUiColor : Color -> Element.Color
+toElmUiColor color =
+    let
+        { red, green, blue } =
+            Color.toRgba color
+    in
+    Element.rgb red green blue

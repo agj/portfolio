@@ -6,17 +6,17 @@ import Language exposing (..)
 import Tag exposing (Tag)
 
 
-ofLanguage : (Tag -> msg) -> Language -> Element msg
-ofLanguage tagMessenger language =
+ofLanguage : (Tag -> msg) -> Maybe Tag -> Language -> Element msg
+ofLanguage tagMessenger selectedTag language =
     case language of
         English ->
-            english (makeTag tagMessenger)
+            english (makeTag tagMessenger selectedTag)
 
         Japanese ->
-            japanese (makeTag tagMessenger)
+            japanese (makeTag tagMessenger selectedTag)
 
         Spanish ->
-            spanish (makeTag tagMessenger)
+            spanish (makeTag tagMessenger selectedTag)
 
 
 
@@ -27,14 +27,18 @@ english tag =
     d
         [ p
             [ t "My name is "
-            , bold (t "Ale Grilli")
-            , t ". I’m based in Santiago, Chile. My work is concerned with various intersections of the following four areas."
-            ]
-        , list
-            [ tag Tag.VisualCommunication "Visual communication"
+            , bold <| t "Ale Grilli"
+            , t "—thank you for perusing my "
+            , bold <| t "portfolio"
+            , t ". I’m based in Santiago, Chile. My work is concerned with various intersections of four areas—"
+            , tag Tag.VisualCommunication "Visual Communication"
+            , t ", "
             , tag Tag.Programming "Programming"
+            , t ", "
             , tag Tag.Language "Language"
+            , t ", and "
             , tag Tag.Learning "Learning"
+            , t ". I'm a master in new media from Tokyo Geidai, graphic designer from U. Diego Portales, and self-taught programmer."
             ]
         , p
             [ t "I’m a creator. I make "
@@ -54,7 +58,7 @@ english tag =
             , t " on occasion."
             ]
         , p
-            [ t "I’m a languages nerd. I am fluent in three (Spanish, English, Japanese) and am working on a fourth (Chinese Mandarin). I do "
+            [ t "I’m a languages nerd, fluent in two L2s (English, Japanese) and working on a third (Chinese Mandarin.) I do "
             , tag Tag.Translation "translation"
             , t " work, subtitling too."
             ]
@@ -65,6 +69,11 @@ english tag =
             , tag Tag.LanguageTeaching "teach languages"
             , t "."
             ]
+        , p
+            [ t "To see examples of my work, choose any of the highlighted keywords above. Or you can choose to see "
+            , tag Tag.Any "all"
+            , t " of them at once."
+            ]
         ]
 
 
@@ -72,42 +81,51 @@ japanese tag =
     d
         [ p
             [ bold <| t "アレ・グリリ（Ale Grilli）"
-            , t "と言います。拠点をチリのサンティアゴにしています。活動は次の四つのエリアの組み合わせです。"
-            ]
-        , list
-            [ tag Tag.VisualCommunication "視覚コミュニケーション"
+            , t "の"
+            , bold <| t "ポートフォリオ"
+            , t "をご覧くださりありがとうございます。拠点をチリのサンティアゴにしている者です。"
+            , tag Tag.VisualCommunication "視覚コミュニケーション"
+            , t "、"
             , tag Tag.Programming "プログラミング"
+            , t "、"
             , tag Tag.Language "言語"
+            , t "、"
             , tag Tag.Learning "習得"
+            , t "という４つのエリアの組み合わせで活動します。東京藝大大学院のメディア映像や、チリ Diego Portales 大学グラフィックデザイン学部の卒業生です。プログラミングを独学しました。"
             ]
         , p
-            [ t "クリエイターです。"
+            [ t "クリエイターであって、"
             , tag Tag.VideoGame "ゲーム"
             , t "や"
             , tag Tag.Web "ウェブ"
-            , t "の物など、"
-            , tag Tag.Digital "デジタルの物"
-            , t "を作ることが好きです。"
+            , t "など、"
+            , tag Tag.Digital "デジタル"
+            , t "の物を作ることが多いです。"
             , tag Tag.UserInterface "ユーザーインタフェース"
-            , t "や"
-            , tag Tag.Interactive "その他インタラクティブ"
-            , t "、"
+            , t "やその他"
+            , tag Tag.Interactive "インタラクティブ"
+            , t "と"
             , tag Tag.Graphic "グラフィック"
             , t "をデザインしたりします。"
             , tag Tag.Video "映像"
             , t "も撮ったり編集したりします。"
             ]
         , p
-            [ t "言語オタクだと言えます。流暢に話せるのは３つ（スペイン語・英語・日本語）で、現在４つ目（中国語）で頑張っています。"
+            [ t "自称言語オタクです。第二言語２つ（英語・日本語）が流暢で、現在３つ目（中国語）を目指しています。"
             , tag Tag.Translation "翻訳"
             , t "や字幕の仕事をしたりします。"
             ]
         , p
-            [ t "習得についてよく考えます。テクノロジーと教育という会社に"
+            [ t "「習得」についてよく考えます。教育テクノロジーの会社で"
             , tag Tag.EducationalSoftware "教育ソフト"
-            , t "を開発したことがあります。時に"
+            , t "を開発したことがあります。時折"
             , tag Tag.LanguageTeaching "言語を教える"
-            , t "こともあります。"
+            , t "ことがあります。"
+            ]
+        , p
+            [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してください。もしくは"
+            , tag Tag.Any "全て"
+            , t "を一気に見ることもできます。"
             ]
         ]
 
@@ -116,34 +134,38 @@ spanish tag =
     d
         [ p
             [ t "Me llamo "
-            , bold (t "Ale Grilli")
-            , t ". Vivo en Santiago, Chile. Mi trabajo coincide con diversas intersecciones entre las siguientes cuatro áreas."
-            ]
-        , list
-            [ tag Tag.VisualCommunication "Comunicación visual"
+            , bold <| t "Ale Grilli"
+            , t "—gracias por revisar mi "
+            , bold <| t "portafolio"
+            , t ". Vivo en Santiago, Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
+            , tag Tag.VisualCommunication "Comunicación Visual"
+            , t ", "
             , tag Tag.Programming "Programación"
+            , t ", "
             , tag Tag.Language "Idiomas"
+            , t ", y "
             , tag Tag.Learning "Aprendizaje"
+            , t ". Soy magíster en nuevos medios de Tokyo Geidai, diseñador gráfico de U. Diego Portales, y programador autoenseñado."
             ]
         , p
-            [ t "Soy un creador. Hago "
-            , tag Tag.Digital "cosas digitales"
+            [ t "Soy un creador. Hago cosas "
+            , tag Tag.Digital "digitales"
             , t ", como "
             , tag Tag.VideoGame "videojuegos"
-            , t " y "
-            , tag Tag.Web "cosas web"
+            , t " y otras para la "
+            , tag Tag.Web "web"
             , t ". Diseño "
             , tag Tag.UserInterface "interfaces de usuario"
-            , t " y otras "
-            , tag Tag.Interactive "cosas interactivas"
+            , t " y otros "
+            , tag Tag.Interactive "interactivos"
             , t ", además de "
-            , tag Tag.Graphic "gráficos"
+            , tag Tag.Graphic "gráfica"
             , t ". Creo y edito "
             , tag Tag.Video "videos"
             , t " ocasionalmente."
             ]
         , p
-            [ t "Soy un “ñoño” de los idiomas. Hablo fluído tres idiomas (español, inglés, japonés), y estoy aprendiendo un cuarto (chino mandarín). Trabajo "
+            [ t "Soy fanático de los idiomas. Hablo fluído dos L2 (inglés, japonés), y estoy aprendiendo una tercera (chino mandarín). Trabajo "
             , tag Tag.Translation "traduciendo"
             , t " y subtitulando también."
             ]
@@ -153,5 +175,10 @@ spanish tag =
             , t ". A veces "
             , tag Tag.LanguageTeaching "enseño idiomas"
             , t "."
+            ]
+        , p
+            [ t "Para ver ejemplos de mi trabajo, elige alguna de las palabras destacadas de arriba. También puedes elegir verlos "
+            , tag Tag.Any "todos"
+            , t " juntos."
             ]
         ]

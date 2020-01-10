@@ -7,7 +7,6 @@ tags:
   - VideoGame
   - Web
   - UserInterface
-  - Graphic
   - Interactive
 date: "2008"
 readMore: http://blog.agj.cl/tag/campodecolor/
