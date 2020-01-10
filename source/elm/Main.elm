@@ -441,7 +441,7 @@ viewWorkTitle blockWidth title mainVisualUrl =
             el
                 [ width (px blockWidth)
                 , height (px blockWidth)
-                , Background.image ("works/" ++ mainVisualUrl)
+                , Background.image mainVisualUrl
                 , Font.shadow
                     { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
                     , blur = 0
@@ -525,7 +525,7 @@ viewVisualThumbnail size visual =
         , onClick (SelectedVisual (Just visual))
         , pointer
         ]
-        { src = "works/" ++ thumbnailUrl
+        { src = thumbnailUrl
         , description = "(thumbnail)"
         }
 
@@ -590,7 +590,7 @@ viewPopupVisual viewport visual =
                         , centerX
                         , centerY
                         ]
-                        { src = "works/" ++ desc.url
+                        { src = desc.url
                         , description = "(image)"
                         }
 

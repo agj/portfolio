@@ -1,11 +1,14 @@
 
+const worksFolder = "works"
+
 module.exports = {
     elmDir: 'source/elm/',
     copyDir: 'source/copy/',
     dataDir: 'source/data/',
-    worksDir: 'source/data/works/',
-    cacheDir: 'cache/works/',
+    worksDir: `source/data/${ worksFolder }/`,
+    cacheDir: `cache/${ worksFolder }/`,
     outputDir: 'output/',
+    worksFolder: worksFolder,
     thumbnailSize: 200,
 
     visualType: {

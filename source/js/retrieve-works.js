@@ -73,12 +73,12 @@ const getMainVisualFilename = async (workName) => {
 };
 const normalizeVisual = R.curry((workName, visual) => {
 	if (visual.type === cfg.visualType.image) {
-		const normalizedUrl = toLocalPath(workName, visual.url);
+		const localPath = toLocalPath(workName, visual.url);
 		return R.mergeRight(visual, {
-			url: normalizedUrl,
+			url: _.isUrl(visual.url) ? visual.url : localPath,
 			thumbnailUrl: toThumbnailPath(workName, visual.url),
 			retrieveUrl: visual.url,
-			metaUrl: `${ normalizedUrl }.meta.json`,
+			metaUrl: `${ localPath }.meta.json`,
 		});
 	} else if (visual.type === cfg.visualType.video) {
 		return R.mergeRight(visual, {
@@ -94,16 +94,14 @@ const normalizeReadMore = R.curry((langId, defUrl, url) =>{
 	: undefined
 });
 const toLocalPath = (workName, url) => {
-	const isUrl = ow.isValid(url, ow.string.url);
 	const parsedPath =
-		isUrl ? path.parse(url.split('/').into(R.last))
+		_.isUrl(url) ? path.parse(url.split('/').into(R.last))
 		: path.parse(`${ url }`);
 	return `${ workName }/${ parsedPath.dir }${ parsedPath.dir ? '/' : '' }${ parsedPath.base }`;
 };
 const toThumbnailPath = (workName, url) => {
-	const isUrl = ow.isValid(url, ow.string.url);
 	const parsedPath =
-		isUrl ? path.parse(url.split('/').into(R.last))
+		_.isUrl(url) ? path.parse(url.split('/').into(R.last))
 		: path.parse(`${ url }`);
 	return `${ workName }/${ parsedPath.dir }${ parsedPath.dir ? '/' : '' }${ parsedPath.name }-thumb${ parsedPath.ext }`;
 };

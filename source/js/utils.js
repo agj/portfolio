@@ -1,6 +1,7 @@
 
 const R = require('ramda');
 const fs = require('fs-extra');
+const ow = require('ow');
 require('dot-into').install();
 
 const log = R.tap(console.log);
@@ -17,6 +18,8 @@ const multiGroupBy = R.curry((getGroups, list) =>
 const toJson = (data) =>
 	JSON.stringify(data, null, '\t')
 	.into(prepend('\ufeff'));
+const isUrl = (url) =>
+	ow.isValid(url, ow.string.url);
 
 
 module.exports = {
@@ -24,4 +27,5 @@ module.exports = {
 	prepend,
 	multiGroupBy,
 	toJson,
+	isUrl,
 };

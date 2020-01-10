@@ -29,7 +29,7 @@ const normalizeLanguage = (language) => {
 		description: language.description,
 		date: language.date,
 		tags: language.tags,
-		mainVisualUrl: language.mainVisualUrl,
+		mainVisualUrl: `${ cfg.worksFolder }/${ language.mainVisualUrl }`,
 		visuals:
 			language.visuals ? language.visuals.map(normalizeVisual)
 			: [],
@@ -44,8 +44,9 @@ const normalizeVisual = (visual) => {
 	if (visual.type === cfg.visualType.image) {
 		return {
 			type: visual.type,
-			url: visual.url,
-			thumbnailUrl: visual.thumbnailUrl,
+			url: _.isUrl(visual.url) ? visual.url
+				: `${ cfg.worksFolder }/${ visual.url }`,
+			thumbnailUrl: `${ cfg.worksFolder }/${ visual.thumbnailUrl }`,
 			aspectRatio: meta.width / meta.height,
 		};
 	} else if (visual.type === cfg.visualType.video) {
@@ -53,7 +54,7 @@ const normalizeVisual = (visual) => {
 			type: visual.type,
 			host: visual.host,
 			id: visual.id,
-			thumbnailUrl: visual.thumbnailUrl,
+			thumbnailUrl: `${ cfg.worksFolder }/${ visual.thumbnailUrl }`,
 			aspectRatio: meta.width / meta.height,
 		};
 	}
@@ -72,7 +73,7 @@ const generateWorksJson = async (works) => {
 		R.values(works)
 		.map(normalizeWork);
 
-	const filename = `${ cfg.outputDir }works/data.json`;
+	const filename = `${ cfg.outputDir }${ cfg.worksFolder }/data.json`;
 	fs.ensureFileSync(filename);
 	fs.writeFileSync(filename, _.toJson(worksArray), 'utf-8');
 };
