@@ -12,6 +12,7 @@ import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
+import Html.Attributes
 import Http
 import Language exposing (Language(..))
 import Palette
@@ -317,7 +318,7 @@ viewPopupVisual : Viewport -> Visual -> Element Msg
 viewPopupVisual viewport visual =
     let
         reservedSpace =
-            50
+            fraction 3 Palette.spaceNormal
 
         viewportVertical =
             toFloat viewport.width / toFloat viewport.height < 1
@@ -346,9 +347,6 @@ viewPopupVisual viewport visual =
 
                 Video desc ->
                     desc.aspectRatio
-
-        visualVertical =
-            visualAR > 1
 
         visualWidth =
             if visualAR > usableAR then
@@ -386,13 +384,17 @@ viewPopupVisual viewport visual =
                 , height (px reservedSpace)
                 , Font.color (rgb 1 1 1)
                 , onClick (SelectedVisual Nothing)
+                , Background.color Palette.highlightLight
+                , alignRight
+                , alignTop
+                , pointer
                 ]
-                (text "CLOSE")
+                (text "×")
     in
     el
         [ width fill
         , height fill
-        , Background.color (rgba 0 0 0 0.3)
+        , Background.color (Palette.darkTransparent 0.2)
         ]
     <|
         if viewportVertical then
@@ -464,7 +466,7 @@ viewWorkBlock attrs children =
 viewWork : Int -> Labels -> Work -> Element Msg
 viewWork blockWidth labels work =
     viewWorkBlock
-        [ below <| viewWorkReadMore labels work.readMore
+        [ inFront <| viewWorkReadMore labels work.readMore
         , case work.readMore of
             Just _ ->
                 paddingEach { bottom = 1 * Palette.textSizeNormal, top = 0, left = 0, right = 0 }
@@ -499,9 +501,10 @@ viewWorkReadMore labels readMore =
                             labels.readMoreSpanish
             in
             el
-                [ paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, bottom = Palette.spaceNormal, top = 0 }
-                , alignRight
-                , moveUp <| 1.5 * toFloat Palette.textSizeNormal
+                [ alignRight
+                , alignBottom
+                , moveDown <| 0.3 * toFloat Palette.textSizeNormal
+                , moveLeft <| toFloat Palette.spaceNormal
                 ]
             <|
                 newTabLink linkStyle

@@ -1,4 +1,4 @@
-module VideoEmbed exposing (..)
+module VideoEmbed exposing (get)
 
 import Element exposing (Element)
 import Html exposing (..)

@@ -1,4 +1,4 @@
-module Palette exposing (dark, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
+module Palette exposing (dark, darkTransparent, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
 
 import Color exposing (Color)
 import Color.Manipulate
@@ -11,7 +11,8 @@ import Element
 
 dark : Element.Color
 dark =
-    Element.rgb 0.1 0.1 0.1
+    baseDark
+        |> toElmUiColor
 
 
 light : Element.Color
@@ -37,6 +38,17 @@ highlightDarker =
     baseSecondaryHighlight
         |> Color.Manipulate.darken 0.3
         |> toElmUiColor
+
+
+darkTransparent : Float -> Element.Color
+darkTransparent opacity =
+    baseDark
+        |> Color.Manipulate.fadeOut opacity
+        |> toElmUiColor
+
+
+
+-- TEXT
 
 
 textSizeSmall : Int
@@ -97,10 +109,15 @@ baseSecondaryHighlight =
     Color.rgb255 255 0 204
 
 
+baseDark : Color
+baseDark =
+    Color.rgb 0.1 0.1 0.1
+
+
 toElmUiColor : Color -> Element.Color
 toElmUiColor color =
     let
-        { red, green, blue } =
+        { red, green, blue, alpha } =
             Color.toRgba color
     in
-    Element.rgb red green blue
+    Element.rgba red green blue alpha
