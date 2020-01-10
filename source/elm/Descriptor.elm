@@ -17,8 +17,9 @@ import Tag exposing (Tag)
 import Utils exposing (..)
 
 
+d : List (Element msg) -> Element msg
 d =
-    column []
+    textColumn [ width fill ]
 
 
 makeTag : (Tag -> msg) -> Tag -> String -> Element msg
@@ -44,6 +45,7 @@ p children =
         children
 
 
+t : String -> Element msg
 t =
     text
 
@@ -76,7 +78,7 @@ list children =
 
 fromDoc : Doc -> Element msg
 fromDoc doc =
-    textColumn [] <| List.map fromParagraph (Doc.content doc)
+    textColumn [ width fill ] <| List.map fromParagraph (Doc.content doc)
 
 
 

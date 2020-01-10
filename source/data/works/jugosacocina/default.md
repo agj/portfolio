@@ -4,7 +4,7 @@ tags:
   - VisualCommunication
   - Learning
   - Graphic
-date: "2009"
+date: 2009
 readMore: http://blog.agj.cl/2010/01/cookbook-for-children/
 visuals:
   - type: Image
