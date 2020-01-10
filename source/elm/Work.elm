@@ -5,8 +5,8 @@ import Doc.Format as Format exposing (Format)
 import Doc.Link
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
-import Json.Decode as Decode exposing (Decoder, andThen, float, list, nullable, oneOf, string)
-import Json.Decode.Pipeline exposing (required)
+import Json.Decode as Decode exposing (Decoder, andThen, float, list, maybe, oneOf, string)
+import Json.Decode.Pipeline exposing (optional, required)
 import Language exposing (..)
 import Mark
 import Mark.Error
@@ -127,7 +127,7 @@ workDecoder =
         |> required "tags" (list Tag.decoder)
         |> required "visuals" (list visualDecoder)
         |> required "links" (list linkDecoder)
-        |> required "readMore" (nullable readMoreDecoder)
+        |> optional "readMore" (maybe readMoreDecoder) Nothing
 
 
 dateDecoder : Decoder Date
@@ -183,11 +183,9 @@ linkDecoder =
 
 readMoreDecoder : Decoder ReadMore
 readMoreDecoder =
-    Decode.succeed { url = "http://example.com", language = English }
-
-
-
---- MARKUP DECODING
+    Decode.succeed (\url language -> { url = url, language = language })
+        |> required "url" string
+        |> required "language" Language.decoder
 
 
 emuDecoder : Decoder Doc

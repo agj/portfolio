@@ -26,6 +26,8 @@ const getLastDir = (p) =>
 	.filter(R.complement(R.isEmpty))
 	.into(R.last);
 
+const languageIdToFileStandard = (id) => id === cfg.languages[0] ? 'default' : id;
+const fileStandardToLanguageId = (id) => id === 'default' ? cfg.languages[0] : id;
 
 
 // Process
@@ -38,25 +40,30 @@ const parseMarkdown = (text) => {
 	);
 };
 const normalizeWork = R.curry(async (work, workName) => {
-	if (!work.default)
-		throw `No default language file for work ${ workName }!`;
+	try {
+		validateWork(work);
+	} catch (e) {
+		throw `Error in work '${ workName }'\n` + e.message;
+	}
+
 	const def =
 		work.default
 		.into(R.assoc('mainVisualUrl', `${ workName }/${ await getMainVisualFilename(workName) }`))
 		.into(R.mergeRight({ visuals: [], links: [] }));
-	const filled =
-		work.into(R.map(R.pipe(
-			R.mergeDeepRight(def),
-		)));
-	try {
-		validateWork(filled);
-	} catch (e) {
-		throw `Error in work '${ workName }'\n` + e.message;
-	}
-	return filled
-		.into(R.map(
-			R.over(R.lensProp('visuals'), R.map(normalizeVisual(workName)))
+
+	const processedReadMore =
+		work.into(R.mapObjIndexed((language, id) =>
+			language.into(R.assoc('readMore', normalizeReadMore(id, def.readMore, language.readMore)))
 		));
+	const filled =
+		processedReadMore.into(R.map(
+			R.mergeDeepRight(def),
+		))
+		.into(R.map(R.evolve({
+			visuals: R.map(normalizeVisual(workName)),
+			date: R.toString,
+		})));
+	return filled;
 });
 const getMainVisualFilename = async (workName) => {
 	const mainFiles = await glob(`${ cfg.worksDir }${ workName }/main.*`);
@@ -79,7 +86,12 @@ const normalizeVisual = R.curry((workName, visual) => {
 			metaUrl: `${ workName }/${ visual.host }-${ visual.id }.meta.json`,
 		});
 	}
-	return visual;
+	throw `Visual for work '${ workName }' has wrong type: ${ visual.type }`;
+});
+const normalizeReadMore = R.curry((langId, defUrl, url) =>{
+	return url ?      { url: url,    language: fileStandardToLanguageId(langId) }
+	: defUrl ? { url: defUrl, language: cfg.languages[0] }
+	: undefined
 });
 const toLocalPath = (workName, url) => {
 	const isUrl = ow.isValid(url, ow.string.url);
@@ -138,25 +150,30 @@ const visualValidation = ow.any(
 );
 const languageValidation = ow.object.exactShape({
 	description: ow.string,
+	name: ow.optional.string,
+	readMore: ow.optional.string,
+	links: ow.optional.array.ofType(linkValidation),
+});
+const defaultLanguageValidation = ow.object.exactShape({
+	description: ow.string,
 	name: ow.string,
 	tags: ow.array.ofType(ow.string).minLength(1),
-	date: ow.string,
-	mainVisualUrl: ow.string,
+	date: ow.any(ow.string, ow.number.integer),
 	readMore: ow.optional.string,
 	visuals: ow.optional.array.ofType(visualValidation),
 	links: ow.optional.array.ofType(linkValidation),
 });
 const workValidation = (() => {
-	const languages = cfg.languages.into(R.update(0, 'default'));
+	const languages = cfg.languages.map(languageIdToFileStandard);
 	const validations =
 		languages
 		.into(R.indexBy(R.identity))
-		.into(R.map(R.always(languageValidation)));
+		.into(R.map(R.always(languageValidation)))
+		.into(R.assoc('default', defaultLanguageValidation));
 	return ow.object.exactShape(validations);
 })();
 
 const validateWork = ow.create(workValidation);
-const validateLanguage = ow.create(languageValidation);
 
 
 // API
