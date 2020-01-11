@@ -83,7 +83,7 @@ japanese tag =
             [ bold <| t "アレ・グリリ（Ale Grilli）"
             , t "の"
             , bold <| t "ポートフォリオ"
-            , t "をご覧くださりありがとうございます。拠点をチリのサンティアゴにしている者です。"
+            , t "をご覧いただきありがとうございます。拠点をチリのサンティアゴにしている者です。"
             , tag Tag.VisualCommunication "視覚コミュニケーション"
             , t "、"
             , tag Tag.Programming "プログラミング"

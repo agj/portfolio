@@ -4,8 +4,10 @@ const fs = require('fs-extra');
 const path = require('path');
 const ow = require('ow');
 const sharp = require('sharp');
+const vibrant = require('node-vibrant');
 const axios = require('axios');
 const stream = require('stream');
+const streamToPromise = require('stream-to-promise');
 require('dot-into').install();
 
 const cfg = require('./config');
@@ -46,18 +48,39 @@ const jsonStream = (data) => {
 
 // Process
 
+const logSkipped = (name) => {
+	_.log(`Skipped existing: ${ name }`);
+}
 const generateVisualsCache = async (work, workName) => {
+	// Main visual.
+
+	const mvMetaOutputFilename = `${ cfg.cacheDir }${ work.default.mainVisualMetaUrl }`;
+
+	if (fs.pathExistsSync(mvMetaOutputFilename)) {
+		logSkipped(mvMetaOutputFilename);
+
+	} else {
+		// Create folders.
+		const mvMetaOutputFilenameParsed = path.parse(mvMetaOutputFilename);
+		fs.ensureDirSync(mvMetaOutputFilenameParsed.dir);
+
+		const input = fs.createReadStream(`${ cfg.worksDir }${ work.default.mainVisualUrl }`);
+		const image = await streamToPromise(input);
+
+		await writeImageMetadata(image, mvMetaOutputFilename);
+	}
+
+	// Visuals.
+
 	if (work.default.visuals) {
 		const promises = work.default.visuals.into(R.map(async (visual) => {
 			// Filenames.
-			const outputDir = `${ cfg.cacheDir }`;
-			const outputFilename = `${ outputDir }${ visual.thumbnailUrl }`;
-			const metaOutputFilename = `${ outputDir }${ visual.metaUrl }`;
+			const outputFilename = `${ cfg.cacheDir }${ visual.thumbnailUrl }`;
+			const metaOutputFilename = `${ cfg.cacheDir }${ visual.metaUrl }`;
 
 			if (fs.pathExistsSync(outputFilename) && fs.pathExistsSync(metaOutputFilename)) {
-				_.log(`Skipping files already existing in cache:`);
-				_.log(`    ${ outputFilename }`);
-				_.log(`    ${ metaOutputFilename }`);
+				logSkipped(outputFilename);
+				logSkipped(metaOutputFilename);
 
 			} else {
 				// Create folders.
@@ -66,45 +89,36 @@ const generateVisualsCache = async (work, workName) => {
 				fs.ensureDirSync(outputFilenameParsed.dir);
 				fs.ensureDirSync(metaOutputFilenameParsed.dir);
 
-				// Streams.
-				const output = fs.createWriteStream(outputFilename);
-				const metaOutput = fs.createWriteStream(metaOutputFilename);
-
 				// Images.
 				if (visual.type === cfg.visualType.image) {
-					// Streams.
-					const isUrl = ow.isValid(visual.retrieveUrl, ow.string.url);
 					const input =
-						isUrl ? (await axios.get(visual.retrieveUrl, { responseType: 'stream' })).data
+						_.isUrl(visual.retrieveUrl) ? (await axios.get(visual.retrieveUrl, { responseType: 'stream' })).data
 						: fs.createReadStream(`${ cfg.worksDir }${ workName }/${ visual.retrieveUrl }`);
+					const image = await streamToPromise(input);
 
-					await makeThumbnail(input, output, metaOutput);
+					await makeThumbnail(image, outputFilename);
+					await writeImageMetadata(image, metaOutputFilename);
 
 				// Videos.
 				} else if (visual.type === cfg.visualType.video) {
-					const meta = await getVideoMetadata(visual.host, visual.id);
+					const metaVideo = await getVideoMetadata(visual.host, visual.id);
 
-					// Streams.
-					const input = (await axios.get(meta.thumbnailUrl, { responseType: 'stream' })).data;
+					const input = (await axios.get(metaVideo.thumbnailUrl, { responseType: 'stream' })).data;
+					const image = await streamToPromise(input);
 
-					const process =
-						sharp()
-						.resize(cfg.thumbnailSize, cfg.thumbnailSize, { fit: 'cover' })
-						.jpeg({
-							force: true,
-							quality: 80,
-							chromaSubsampling: '4:4:4',
-						});
+					await makeThumbnail(image, outputFilename);
 
-					await input.pipe(process).pipe(output)
-						.into(onFinished);
+					const metaImage = await getImageMetadata(image, metaOutputFilename);
 
-					const metaInput = jsonStream({
-						width: meta.width,
-						height: meta.height,
-					});
-					await metaInput.pipe(metaOutput)
-						.into(onFinished);
+					fs.writeFileSync(
+						metaOutputFilename,
+						_.toJson({
+							width: metaVideo.width,
+							height: metaVideo.height,
+							color: metaImage.color,
+						}),
+						'utf-8',
+					);
 				}
 			}
 		}));
@@ -121,24 +135,35 @@ const onFinished = (str) => new Promise((resolve) => {
 	str.on('end', done);
 });
 
-const makeThumbnail = async (input, output, metaOutput) => {
-	const process =
-		sharp()
-		.metadata((err, data) => {
-			const metaInput = jsonStream({
-				width: data.width,
-				height: data.height,
-			});
-			metaInput.pipe(metaOutput);
-		})
+const getImageMetadata = async (image) => {
+	const metadata = await sharp(image)
+		.metadata();
+	const colors = await vibrant.from(image)
+		.getPalette();
+	const color = colors.DarkVibrant.rgb;
+	return {
+		width: metadata.width,
+		height: metadata.height,
+		color: {
+			red: color[0] / 0xff,
+			green: color[1] / 0xff,
+			blue: color[2] / 0xff,
+		},
+	};
+};
+const writeImageMetadata = async (image, outputPath) => {
+	fs.writeFileSync(outputPath, _.toJson(await getImageMetadata(image)), 'utf-8');
+};
+const makeThumbnail = async (image, outputPath) => {
+	const thumbnail = await sharp(image)
 		.resize(cfg.thumbnailSize, cfg.thumbnailSize, { fit: 'cover' })
 		.jpeg({
 			force: false,
 			quality: 80,
 			chromaSubsampling: '4:4:4',
-		});
-	await input.pipe(process).pipe(output)
-		.into(onFinished);
+		})
+		.toBuffer();
+	return fs.writeFile(outputPath, thumbnail);
 };
 
 

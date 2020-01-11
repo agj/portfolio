@@ -3,12 +3,16 @@ module VideoEmbed exposing (get)
 import Element exposing (Element)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Utils exposing (..)
 import Work exposing (VideoDescription, VideoHost(..))
 
 
 get : VideoDescription -> Int -> Int -> Element msg
 get desc width height =
     let
+        color =
+            toCssColor desc.color
+
         standard fixedSrc =
             Element.html <|
                 iframe
@@ -17,6 +21,7 @@ get desc width height =
                     , attribute "allowfullscreen" "allowfullscreen"
                     , style "width" (String.fromInt width ++ "px")
                     , style "height" (String.fromInt height ++ "px")
+                    , style "background-color" color
                     ]
                     []
     in

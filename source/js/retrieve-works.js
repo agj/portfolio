@@ -49,6 +49,7 @@ const normalizeWork = R.curry(async (work, workName) => {
 	const def =
 		work.default
 		.into(R.assoc('mainVisualUrl', `${ workName }/${ await getMainVisualFilename(workName) }`))
+		.into(R.assoc('mainVisualMetaUrl', `${ workName }/${ await getMainVisualFilename(workName) }.meta.json`))
 		.into(R.mergeRight({ visuals: [], links: [] }));
 
 	const processedReadMore =
@@ -180,6 +181,9 @@ const retrieveWorks = async () => {
 	const workNames =
 		(await glob(`${ cfg.worksDir }*/`))
 		.map(getLastDir);
+	// const workNames = [
+	// 	'kotokan',
+	// ];
 
 	const workPairs = await
 		workNames

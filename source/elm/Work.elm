@@ -5,6 +5,7 @@ import Doc.Format as Format exposing (Format)
 import Doc.Link
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
+import Element
 import Json.Decode as Decode exposing (Decoder, andThen, float, list, maybe, oneOf, string)
 import Json.Decode.Pipeline exposing (optional, required)
 import Language exposing (..)
@@ -26,6 +27,7 @@ type alias Work =
     { name : String
     , description : Doc
     , mainVisualUrl : String
+    , mainVisualColor : Element.Color
     , date : Date
     , tags : List Tag
     , visuals : List Visual
@@ -49,6 +51,7 @@ type Visual
         { thumbnailUrl : String
         , url : String
         , aspectRatio : Float
+        , color : Element.Color
         }
     | Video VideoDescription
 
@@ -58,6 +61,7 @@ type alias VideoDescription =
     , id : String
     , aspectRatio : Float
     , host : VideoHost
+    , color : Element.Color
     }
 
 
@@ -123,6 +127,7 @@ workDecoder =
         |> required "name" string
         |> required "description" emuDecoder
         |> required "mainVisualUrl" string
+        |> required "mainVisualColor" colorDecoder
         |> required "date" dateDecoder
         |> required "tags" (list Tag.decoder)
         |> required "visuals" (list visualDecoder)
@@ -139,17 +144,19 @@ visualDecoder : Decoder Visual
 visualDecoder =
     let
         imageDecoder =
-            Decode.succeed (\tUrl url ar -> Image { thumbnailUrl = tUrl, url = url, aspectRatio = ar })
+            Decode.succeed (\tUrl url ar color -> Image { thumbnailUrl = tUrl, url = url, aspectRatio = ar, color = color })
                 |> required "thumbnailUrl" string
                 |> required "url" string
                 |> required "aspectRatio" float
+                |> required "color" colorDecoder
 
         videoDecoder =
-            Decode.succeed (\tUrl id ar host -> Video { thumbnailUrl = tUrl, id = id, aspectRatio = ar, host = host })
+            Decode.succeed (\tUrl id ar host color -> Video { thumbnailUrl = tUrl, id = id, aspectRatio = ar, host = host, color = color })
                 |> required "thumbnailUrl" string
                 |> required "id" string
                 |> required "aspectRatio" float
                 |> required "host" videoHostDecoder
+                |> required "color" colorDecoder
     in
     oneOf
         [ imageDecoder
@@ -172,6 +179,14 @@ videoHostDecoder =
                     other ->
                         Decode.fail <| "Video host unknown: " ++ other
             )
+
+
+colorDecoder : Decoder Element.Color
+colorDecoder =
+    Decode.succeed Element.rgb
+        |> required "red" float
+        |> required "green" float
+        |> required "blue" float
 
 
 linkDecoder : Decoder Link

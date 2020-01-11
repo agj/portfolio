@@ -16,8 +16,7 @@ const multiGroupBy = R.curry((getGroups, list) =>
 		{})
 	.into(R.map(R.uniq)));
 const toJson = (data) =>
-	JSON.stringify(data, null, '\t')
-	.into(prepend('\ufeff'));
+	JSON.stringify(data, null, '\t');
 const isUrl = (url) =>
 	ow.isValid(url, ow.string.url);
 

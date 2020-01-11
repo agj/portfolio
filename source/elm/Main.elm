@@ -370,9 +370,10 @@ viewPopupVisual viewport visual =
                         , height (px visualHeight)
                         , centerX
                         , centerY
+                        , Background.color desc.color
                         ]
                         { src = desc.url
-                        , description = "(image)"
+                        , description = ""
                         }
 
                 Video desc ->
@@ -466,7 +467,7 @@ viewWorkBlock attrs children =
 viewWork : Int -> Labels -> Work -> Element Msg
 viewWork blockWidth labels work =
     viewWorkBlock
-        [ inFront <| viewWorkReadMore labels work.readMore
+        [ inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
         , case work.readMore of
             Just _ ->
                 paddingEach { bottom = 1 * Palette.textSizeNormal, top = 0, left = 0, right = 0 }
@@ -474,15 +475,15 @@ viewWork blockWidth labels work =
             Nothing ->
                 padding 0
         ]
-        [ viewWorkTitle blockWidth work.name work.mainVisualUrl
+        [ viewWorkTitle blockWidth work.name work.mainVisualUrl work.mainVisualColor
         , viewWorkVisuals blockWidth work.visuals
-        , viewWorkLinks work.links
+        , viewWorkLinks work.links work.mainVisualColor
         , viewWorkDescription work.description
         ]
 
 
-viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Element Msg
-viewWorkReadMore labels readMore =
+viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Element.Color -> Element Msg
+viewWorkReadMore labels readMore color =
     case readMore of
         Nothing ->
             none
@@ -507,7 +508,7 @@ viewWorkReadMore labels readMore =
                 , moveLeft <| toFloat Palette.spaceNormal
                 ]
             <|
-                newTabLink linkStyle
+                newTabLink (linkStyle color)
                     { url = desc.url
                     , label = text label
                     }
@@ -519,12 +520,12 @@ viewWorkDescription doc =
         (Descriptor.fromDoc doc)
 
 
-viewWorkLinks : List Link -> Element Msg
-viewWorkLinks links =
+viewWorkLinks : List Link -> Element.Color -> Element Msg
+viewWorkLinks links color =
     let
         makeLink link =
             newTabLink
-                (centerX :: linkStyle)
+                (centerX :: linkStyle color)
                 { url = link.url
                 , label = text link.label
                 }
@@ -541,33 +542,35 @@ viewWorkLinks links =
             List.map makeLink links
 
 
-viewWorkTitle : Int -> String -> String -> Element Msg
-viewWorkTitle blockWidth title mainVisualUrl =
+viewWorkTitle : Int -> String -> String -> Element.Color -> Element Msg
+viewWorkTitle blockWidth title mainVisualUrl mainVisualColor =
     let
         mainBlock =
             el
                 [ width (px blockWidth)
                 , height (px blockWidth)
                 , Background.image mainVisualUrl
-                , Font.shadow
-                    { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
-                    , blur = 0
-                    , color = rgb 0 0 0
-                    }
+                , htmlAttribute <| Html.Attributes.style "background-color" (toCssColor mainVisualColor)
+
+                -- , Font.shadow
+                --     { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
+                --     , blur = 0
+                --     , color = rgb 0 0 0
+                --     }
                 ]
 
         gradientBlock =
             column
-                [ height (px <| Palette.textSizeLarge * 2)
+                [ height (px <| Palette.textSizeLarge * 3)
                 , width fill
                 , alignBottom
                 , paddingXY Palette.spaceNormal 0
                 , Background.gradient
                     { angle = 0
                     , steps =
-                        [ rgba 0 0 0 0.7
-                        , rgba 0 0 0 0.3
-                        , rgba 0 0 0 0
+                        [ transparentColor 0.9 mainVisualColor
+                        , transparentColor 0.4 mainVisualColor
+                        , transparentColor 0 mainVisualColor
                         ]
                     }
                 ]
@@ -623,22 +626,23 @@ viewWorkVisuals blockWidth visuals =
 viewVisualThumbnail : Int -> Visual -> Element Msg
 viewVisualThumbnail size visual =
     let
-        thumbnailUrl =
+        ( thumbnailUrl, color ) =
             case visual of
                 Image desc ->
-                    desc.thumbnailUrl
+                    ( desc.thumbnailUrl, desc.color )
 
                 Video desc ->
-                    desc.thumbnailUrl
+                    ( desc.thumbnailUrl, desc.color )
     in
     image
         [ width (px size)
         , height (px size)
         , onClick (SelectedVisual (Just visual))
         , pointer
+        , Background.color color
         ]
         { src = thumbnailUrl
-        , description = "(thumbnail)"
+        , description = " "
         }
 
 
@@ -657,9 +661,9 @@ subscriptions model =
 -- OTHER
 
 
-linkStyle : List (Element.Attribute Msg)
-linkStyle =
-    [ Background.color Palette.highlightDark
+linkStyle : Element.Color -> List (Element.Attribute Msg)
+linkStyle backgroundColor =
+    [ Background.color backgroundColor -- Palette.highlightDark
     , paddingXY
         (fraction 0.6 Palette.textSizeNormal)
         (fraction 0.4 Palette.textSizeNormal)

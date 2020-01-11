@@ -24,12 +24,17 @@ const normalizeWork = (work) =>
 	])
 	.into(R.fromPairs);
 const normalizeLanguage = (language) => {
+	const mvMeta =
+		fs.readFileSync(`${ cfg.cacheDir }${ language.mainVisualMetaUrl }`, 'utf-8')
+		.into(JSON.parse);
+
 	return {
 		name: language.name,
 		description: language.description,
 		date: language.date,
 		tags: language.tags,
 		mainVisualUrl: `${ cfg.worksFolder }/${ language.mainVisualUrl }`,
+		mainVisualColor: mvMeta.color,
 		visuals:
 			language.visuals ? language.visuals.map(normalizeVisual)
 			: [],
@@ -48,6 +53,7 @@ const normalizeVisual = (visual) => {
 				: `${ cfg.worksFolder }/${ visual.url }`,
 			thumbnailUrl: `${ cfg.worksFolder }/${ visual.thumbnailUrl }`,
 			aspectRatio: meta.width / meta.height,
+			color: meta.color,
 		};
 	} else if (visual.type === cfg.visualType.video) {
 		return {
@@ -56,6 +62,7 @@ const normalizeVisual = (visual) => {
 			id: visual.id,
 			thumbnailUrl: `${ cfg.worksFolder }/${ visual.thumbnailUrl }`,
 			aspectRatio: meta.width / meta.height,
+			color: meta.color,
 		};
 	}
 };
