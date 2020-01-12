@@ -1,7 +1,9 @@
-module Language exposing (Language(..), decoder, fromCode)
+module Language exposing (Language(..), decoder, encoder, fromCode)
 
 import Dict
+import Dict.Extra
 import Json.Decode as Decode exposing (Decoder, andThen, string)
+import Json.Encode as Encode exposing (Value)
 
 
 type Language
@@ -35,3 +37,13 @@ decoder =
                     Nothing ->
                         Decode.fail <| "Language code unknown: " ++ code
             )
+
+
+encoder : Language -> Value
+encoder language =
+    case Dict.Extra.find (\_ lang -> language == lang) languageCodes of
+        Just ( code, _ ) ->
+            Encode.string code
+
+        Nothing ->
+            Encode.null

@@ -8,14 +8,15 @@ import Descriptor
 import Doc exposing (Doc)
 import Element exposing (..)
 import Element.Background as Background
-import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
 import Html.Attributes
 import Http
 import Language exposing (Language(..))
+import Maybe.Extra
 import Palette
+import SaveState exposing (SaveState)
 import Tag exposing (Tag)
 import Utils exposing (..)
 import VideoEmbed
@@ -59,13 +60,25 @@ type DataStatus
 type alias Flags =
     { languages : List String
     , viewport : { width : Int, height : Int }
+    , storedState : Maybe String
     }
 
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( { language = getLanguageFromPreferred flags.languages
-      , tag = Nothing
+    let
+        saveState =
+            Maybe.withDefault "" flags.storedState
+                |> SaveState.load
+    in
+    ( { language =
+            case saveState of
+                Just { language } ->
+                    language
+
+                Nothing ->
+                    getLanguageFromPreferred flags.languages
+      , tag = Maybe.map .tag saveState |> Maybe.Extra.join
       , viewport = flags.viewport
       , popupVisual = Nothing
       , data = DataLoading
@@ -118,11 +131,13 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SelectedLanguage language ->
-            ( { model | language = language }, Cmd.none )
+            ( { model | language = language }
+            , SaveState.save { language = language, tag = model.tag }
+            )
 
         SelectedTag tag ->
             ( { model | tag = Just tag }
-            , Cmd.none
+            , SaveState.save { language = model.language, tag = Just tag }
             )
 
         SelectedVisual selection ->

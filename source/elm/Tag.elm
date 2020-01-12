@@ -1,6 +1,9 @@
 module Tag exposing (..)
 
+import Dict
+import Dict.Extra
 import Json.Decode as Decode exposing (Decoder, andThen, string)
+import Json.Encode as Encode exposing (Value)
 
 
 type Tag
@@ -21,54 +24,49 @@ type Tag
     | Interactive
 
 
+tagCodes =
+    Dict.fromList
+        [ ( "VisualCommunication", VisualCommunication )
+        , ( "Programming", Programming )
+        , ( "Language", Language )
+        , ( "Learning", Learning )
+        , ( "Digital", Digital )
+        , ( "VideoGame", VideoGame )
+        , ( "Web", Web )
+        , ( "UserInterface", UserInterface )
+        , ( "Graphic", Graphic )
+        , ( "Video", Video )
+        , ( "Translation", Translation )
+        , ( "EducationalSoftware", EducationalSoftware )
+        , ( "LanguageTeaching", LanguageTeaching )
+        , ( "Interactive", Interactive )
+        ]
+
+
 decoder : Decoder Tag
 decoder =
     string
         |> andThen
-            (\tagString ->
-                case tagString of
-                    "VisualCommunication" ->
-                        Decode.succeed VisualCommunication
+            (\code ->
+                case Dict.get code tagCodes of
+                    Just tag ->
+                        Decode.succeed tag
 
-                    "Programming" ->
-                        Decode.succeed Programming
-
-                    "Language" ->
-                        Decode.succeed Language
-
-                    "Learning" ->
-                        Decode.succeed Learning
-
-                    "Digital" ->
-                        Decode.succeed Digital
-
-                    "VideoGame" ->
-                        Decode.succeed VideoGame
-
-                    "Web" ->
-                        Decode.succeed Web
-
-                    "UserInterface" ->
-                        Decode.succeed UserInterface
-
-                    "Graphic" ->
-                        Decode.succeed Graphic
-
-                    "Video" ->
-                        Decode.succeed Video
-
-                    "Translation" ->
-                        Decode.succeed Translation
-
-                    "EducationalSoftware" ->
-                        Decode.succeed EducationalSoftware
-
-                    "LanguageTeaching" ->
-                        Decode.succeed LanguageTeaching
-
-                    "Interactive" ->
-                        Decode.succeed Interactive
-
-                    other ->
-                        Decode.fail <| "Tag unknown: " ++ other
+                    Nothing ->
+                        Decode.fail <| "Tag unknown: " ++ code
             )
+
+
+encoder : Maybe Tag -> Value
+encoder maybeTag =
+    case maybeTag of
+        Just tag ->
+            case Dict.Extra.find (\_ t -> tag == t) tagCodes of
+                Just ( code, _ ) ->
+                    Encode.string code
+
+                Nothing ->
+                    Encode.null
+
+        Nothing ->
+            Encode.null
