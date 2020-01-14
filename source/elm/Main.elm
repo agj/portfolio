@@ -579,10 +579,9 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor } =
 
         gradientBlock =
             column
-                [ height (px <| Palette.textSizeLarge * 3)
-                , width fill
+                [ width fill
                 , alignBottom
-                , paddingXY Palette.spaceNormal 0
+                , paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = fraction 1 Palette.textSizeLarge, bottom = 0 }
                 , Background.gradient
                     { angle = 0
                     , steps =
@@ -613,7 +612,8 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor } =
     mainBlock
         (gradientBlock
             [ yearBlock (text <| Date.toString date)
-            , titleBlock (text title)
+            , titleBlock <|
+                paragraph [] [ text title ]
             ]
         )
 
