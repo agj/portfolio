@@ -42,4 +42,4 @@ saveStateDecoder : Decoder SaveState
 saveStateDecoder =
     Decode.succeed SaveState
         |> required "language" Language.decoder
-        |> optional "tag" (maybe Tag.decoder) Nothing
+        |> optional "tag" (maybe <| Tag.decoder Tag.AllowsAny) Nothing

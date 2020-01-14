@@ -58,7 +58,7 @@ english tag =
             , t " on occasion."
             ]
         , p
-            [ t "I’m a languages nerd, fluent in two L2s (English, Japanese) and working on a third (Chinese Mandarin.) I do "
+            [ t "I’m a languages nerd, fluent in two second languages (English, Japanese) and working on a third (Chinese Mandarin.) I do "
             , tag Tag.Translation "translation"
             , t " work, subtitling too."
             ]
@@ -165,7 +165,7 @@ spanish tag =
             , t " ocasionalmente."
             ]
         , p
-            [ t "Soy fanático de los idiomas. Hablo fluído dos L2 (inglés, japonés), y estoy aprendiendo una tercera (chino mandarín). Trabajo "
+            [ t "Soy fanático de los idiomas. Hablo fluído dos segundas lenguas (inglés, japonés), y estoy aprendiendo una tercera (chino mandarín). Trabajo "
             , tag Tag.Translation "traduciendo"
             , t " y subtitulando también."
             ]

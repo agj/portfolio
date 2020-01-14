@@ -1,4 +1,4 @@
-module Work exposing (Date(..), Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
+module Work exposing (Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
 
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
@@ -13,6 +13,7 @@ import Mark
 import Mark.Error
 import Tag exposing (Tag)
 import Utils exposing (..)
+import Work.Date as Date exposing (Date)
 
 
 type WorkLanguages
@@ -40,10 +41,6 @@ type alias ReadMore =
     { url : String
     , language : Language
     }
-
-
-type Date
-    = Date String
 
 
 type Visual
@@ -128,16 +125,11 @@ workDecoder =
         |> required "description" emuDecoder
         |> required "mainVisualUrl" string
         |> required "mainVisualColor" colorDecoder
-        |> required "date" dateDecoder
-        |> required "tags" (list Tag.decoder)
+        |> required "date" Date.decoder
+        |> required "tags" (list <| Tag.decoder Tag.DisallowsAny)
         |> required "visuals" (list visualDecoder)
         |> required "links" (list linkDecoder)
         |> optional "readMore" (maybe readMoreDecoder) Nothing
-
-
-dateDecoder : Decoder Date
-dateDecoder =
-    string |> andThen (\date -> Decode.succeed (Date date))
 
 
 visualDecoder : Decoder Visual

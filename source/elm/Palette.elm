@@ -1,8 +1,9 @@
-module Palette exposing (dark, darkTransparent, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
+module Palette exposing (dark, darkTransparent, font, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
 
 import Color exposing (Color)
 import Color.Manipulate
 import Element
+import Element.Font as Font exposing (Font)
 
 
 
@@ -51,6 +52,13 @@ darkTransparent opacity =
 -- TEXT
 
 
+font : List Font
+font =
+    [ Font.typeface "mplus-1p"
+    , Font.sansSerif
+    ]
+
+
 textSizeSmall : Int
 textSizeSmall =
     11
@@ -68,7 +76,7 @@ textSizeLarge =
 
 textLineSpacing : Int -> Int
 textLineSpacing fontSize =
-    round (toFloat fontSize * 0.4)
+    round (toFloat fontSize * 0.6)
 
 
 

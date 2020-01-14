@@ -62,7 +62,7 @@ const normalizeWork = R.curry(async (work, workName) => {
 		))
 		.into(R.map(R.evolve({
 			visuals: R.map(normalizeVisual(workName)),
-			date: R.toString,
+			date: (date) => typeof date == 'string' ? date : R.toString(date),
 		})));
 	return filled;
 });

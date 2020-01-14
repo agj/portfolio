@@ -21,6 +21,7 @@ import Tag exposing (Tag)
 import Utils exposing (..)
 import VideoEmbed
 import Work exposing (..)
+import Work.Date as Date exposing (Date)
 import Works
 
 
@@ -182,12 +183,15 @@ view model =
     { title = labels.title
     , body =
         [ layout
-            (case model.popupVisual of
-                Just visual ->
-                    [ inFront (viewPopupVisual model.viewport visual) ]
+            ([ Font.family Palette.font
+             ]
+                ++ (case model.popupVisual of
+                        Just visual ->
+                            [ inFront (viewPopupVisual model.viewport visual) ]
 
-                Nothing ->
-                    []
+                        Nothing ->
+                            []
+                   )
             )
             (viewMain model)
         ]
@@ -490,7 +494,12 @@ viewWork blockWidth labels work =
             Nothing ->
                 padding 0
         ]
-        [ viewWorkTitle blockWidth work.name work.mainVisualUrl work.mainVisualColor
+        [ viewWorkTitle blockWidth
+            { title = work.name
+            , date = work.date
+            , mainVisualUrl = work.mainVisualUrl
+            , mainVisualColor = work.mainVisualColor
+            }
         , viewWorkVisuals blockWidth work.visuals
         , viewWorkLinks work.links work.mainVisualColor
         , viewWorkDescription work.description
@@ -557,8 +566,8 @@ viewWorkLinks links color =
             List.map makeLink links
 
 
-viewWorkTitle : Int -> String -> String -> Element.Color -> Element Msg
-viewWorkTitle blockWidth title mainVisualUrl mainVisualColor =
+viewWorkTitle : Int -> { title : String, date : Date, mainVisualUrl : String, mainVisualColor : Element.Color } -> Element Msg
+viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor } =
     let
         mainBlock =
             el
@@ -566,12 +575,6 @@ viewWorkTitle blockWidth title mainVisualUrl mainVisualColor =
                 , height (px blockWidth)
                 , Background.image mainVisualUrl
                 , htmlAttribute <| Html.Attributes.style "background-color" (toCssColor mainVisualColor)
-
-                -- , Font.shadow
-                --     { offset = ( 0.0, 0.1 * toFloat Palette.textSizeLarge )
-                --     , blur = 0
-                --     , color = rgb 0 0 0
-                --     }
                 ]
 
         gradientBlock =
@@ -595,6 +598,8 @@ viewWorkTitle blockWidth title mainVisualUrl mainVisualColor =
                 [ alignBottom
                 , paddingXY 0 0
                 , Font.size Palette.textSizeSmall
+                , Font.glow mainVisualColor 0.5
+                , Font.bold
                 ]
 
         titleBlock =
@@ -602,11 +607,12 @@ viewWorkTitle blockWidth title mainVisualUrl mainVisualColor =
                 [ alignBottom
                 , paddingXY 0 Palette.spaceSmaller
                 , Font.size Palette.textSizeLarge
+                , Font.glow mainVisualColor 0.5
                 ]
     in
     mainBlock
         (gradientBlock
-            [ yearBlock (text "2010")
+            [ yearBlock (text <| Date.toString date)
             , titleBlock (text title)
             ]
         )
