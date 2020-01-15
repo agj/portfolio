@@ -1,6 +1,6 @@
-module CustomAttrs exposing (backgroundColor, svgFilter)
+module CustomEl exposing (backgroundColor, imageInline, inlineCenter, svgFilter)
 
-import Element
+import Element exposing (..)
 import Html.Attributes as Attributes
 import Utils exposing (..)
 
@@ -13,6 +13,21 @@ backgroundColor color =
 svgFilter : String -> Element.Attribute msg
 svgFilter id =
     style "filter" ("url(#" ++ id ++ ")")
+
+
+imageInline : List (Element.Attribute msg) -> { src : String, description : String } -> Element msg
+imageInline attrs desc =
+    image
+        ([ style "display" "inline-flex"
+         ]
+            ++ attrs
+        )
+        desc
+
+
+inlineCenter : Element.Attribute msg
+inlineCenter =
+    style "vertical-align" "middle"
 
 
 

@@ -2,7 +2,7 @@ module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
 import Browser
 import Browser.Events
-import CustomAttrs
+import CustomEl
 import Data.Introduction as Introduction
 import Data.Labels as Labels exposing (Labels)
 import Descriptor
@@ -251,7 +251,6 @@ viewMain model =
                     _ ->
                         worksBlock <|
                             viewLoadMessage labels.loadError
-        , svgFilter
         ]
 
 
@@ -312,7 +311,6 @@ viewIntroduction introductionText =
         [ width fill
         , paddingXY Palette.spaceNormal Palette.spaceSmaller
         , Font.size Palette.textSizeNormal
-        , Background.color <| rgb 1 1 1
         ]
         introductionText
 
@@ -578,7 +576,7 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor } =
                 [ width (px blockWidth)
                 , height (px blockWidth)
                 , Background.image mainVisualUrl
-                , CustomAttrs.backgroundColor mainVisualColor
+                , CustomEl.backgroundColor mainVisualColor
                 ]
 
         gradientBlock =
@@ -708,36 +706,3 @@ getLanguageFromPreferred codes =
         |> List.filterMap Language.fromCode
         |> List.head
         |> Maybe.withDefault English
-
-
-svgFilter : Element msg
-svgFilter =
-    Element.html <|
-        Svg.svg []
-            [ Svg.filter
-                [ Svg.Attributes.id "color-filter" ]
-                -- [ Svg.feTurbulence
-                --     [ Svg.Attributes.type_ "turbulence"
-                --     , Svg.Attributes.baseFrequency "0.004"
-                --     , Svg.Attributes.numOctaves "2"
-                --     , Svg.Attributes.result "turbulence"
-                --     ]
-                --     []
-                [ Svg.feFlood
-                    [ Svg.Attributes.result "floodFill"
-                    , Svg.Attributes.x "0"
-                    , Svg.Attributes.y "0"
-                    , Svg.Attributes.width "100%"
-                    , Svg.Attributes.height "100%"
-                    , Svg.Attributes.floodColor "yellow"
-                    , Svg.Attributes.floodOpacity "0.5"
-                    ]
-                    []
-                , Svg.feBlend
-                    [ Svg.Attributes.in2 "SourceGraphic"
-                    , Svg.Attributes.in_ "floodFill"
-                    , Svg.Attributes.mode "screen"
-                    ]
-                    []
-                ]
-            ]

@@ -1,12 +1,13 @@
 module Data.Introduction exposing (ofLanguage)
 
-import CustomAttrs
+import CustomEl
 import Descriptor exposing (..)
 import Element exposing (Element)
 import Element.Background as Background
 import Language exposing (..)
 import Palette
 import Tag exposing (Tag)
+import Utils exposing (..)
 
 
 ofLanguage : (Tag -> msg) -> Maybe Tag -> Language -> Element msg
@@ -34,21 +35,17 @@ english tag =
             , t "—thank you for perusing my "
             , bold <| t "portfolio"
             , t ". I’m based in Santiago, Chile. My work is concerned with various intersections of four areas—"
-            , Element.image
-                [ Element.width (Element.px <| 5 * Palette.textSizeNormal)
-                , Element.height (Element.px <| 5 * Palette.textSizeNormal)
-                , CustomAttrs.svgFilter "color-filter"
-                ]
-                { src = "image/icon-programming.svg"
-                , description = " "
-                }
             , tag Tag.VisualCommunication "Visual Communication"
+            , icon "visual-communication"
             , t ", "
             , tag Tag.Programming "Programming"
+            , icon "programming"
             , t ", "
             , tag Tag.Language "Language"
+            , icon "language"
             , t ", and "
             , tag Tag.Learning "Learning"
+            , icon "learning"
             , t ". I'm a master in new media from Tokyo Geidai, graphic designer from U. Diego Portales, and self-taught programmer."
             ]
         , p
@@ -193,3 +190,19 @@ spanish tag =
             , t " juntos."
             ]
         ]
+
+
+
+-- INTERNAL
+
+
+icon : String -> Element msg
+icon name =
+    CustomEl.imageInline
+        [ Element.width (Element.px <| fraction 1.5 Palette.textSizeNormal)
+        , Element.height (Element.px <| fraction 1.5 Palette.textSizeNormal)
+        , CustomEl.inlineCenter
+        ]
+        { src = "image/icon-" ++ name ++ "-light.svg"
+        , description = " "
+        }

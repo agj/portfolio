@@ -1,6 +1,6 @@
 module Descriptor exposing (bold, d, fromDoc, list, makeTag, p, t)
 
-import CustomAttrs
+import CustomEl
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
 import Doc.Link as Link exposing (Link)
