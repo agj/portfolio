@@ -2,6 +2,7 @@ module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
 import Browser
 import Browser.Events
+import CustomAttrs
 import Data.Introduction as Introduction
 import Data.Labels as Labels exposing (Labels)
 import Descriptor
@@ -11,12 +12,13 @@ import Element.Background as Background
 import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
-import Html.Attributes
 import Http
 import Language exposing (Language(..))
 import Maybe.Extra
 import Palette
 import SaveState exposing (SaveState)
+import Svg
+import Svg.Attributes
 import Tag exposing (Tag)
 import Utils exposing (..)
 import VideoEmbed
@@ -249,6 +251,7 @@ viewMain model =
                     _ ->
                         worksBlock <|
                             viewLoadMessage labels.loadError
+        , svgFilter
         ]
 
 
@@ -309,6 +312,7 @@ viewIntroduction introductionText =
         [ width fill
         , paddingXY Palette.spaceNormal Palette.spaceSmaller
         , Font.size Palette.textSizeNormal
+        , Background.color <| rgb 1 1 1
         ]
         introductionText
 
@@ -501,8 +505,8 @@ viewWork blockWidth labels work =
             , mainVisualColor = work.mainVisualColor
             }
         , viewWorkVisuals blockWidth work.visuals
-        , viewWorkLinks work.links work.mainVisualColor
-        , viewWorkDescription work.description
+        , viewWorkLinks work.mainVisualColor work.links
+        , viewWorkDescription work.mainVisualColor work.description
         ]
 
 
@@ -538,14 +542,14 @@ viewWorkReadMore labels readMore color =
                     }
 
 
-viewWorkDescription : Doc -> Element Msg
-viewWorkDescription doc =
+viewWorkDescription : Element.Color -> Doc -> Element Msg
+viewWorkDescription color doc =
     el [ paddingXY Palette.spaceNormal Palette.spaceSmall ]
-        (Descriptor.fromDoc doc)
+        (Descriptor.fromDoc color doc)
 
 
-viewWorkLinks : List Link -> Element.Color -> Element Msg
-viewWorkLinks links color =
+viewWorkLinks : Element.Color -> List Link -> Element Msg
+viewWorkLinks color links =
     let
         makeLink link =
             newTabLink
@@ -574,7 +578,7 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor } =
                 [ width (px blockWidth)
                 , height (px blockWidth)
                 , Background.image mainVisualUrl
-                , htmlAttribute <| Html.Attributes.style "background-color" (toCssColor mainVisualColor)
+                , CustomAttrs.backgroundColor mainVisualColor
                 ]
 
         gradientBlock =
@@ -704,3 +708,36 @@ getLanguageFromPreferred codes =
         |> List.filterMap Language.fromCode
         |> List.head
         |> Maybe.withDefault English
+
+
+svgFilter : Element msg
+svgFilter =
+    Element.html <|
+        Svg.svg []
+            [ Svg.filter
+                [ Svg.Attributes.id "color-filter" ]
+                -- [ Svg.feTurbulence
+                --     [ Svg.Attributes.type_ "turbulence"
+                --     , Svg.Attributes.baseFrequency "0.004"
+                --     , Svg.Attributes.numOctaves "2"
+                --     , Svg.Attributes.result "turbulence"
+                --     ]
+                --     []
+                [ Svg.feFlood
+                    [ Svg.Attributes.result "floodFill"
+                    , Svg.Attributes.x "0"
+                    , Svg.Attributes.y "0"
+                    , Svg.Attributes.width "100%"
+                    , Svg.Attributes.height "100%"
+                    , Svg.Attributes.floodColor "yellow"
+                    , Svg.Attributes.floodOpacity "0.5"
+                    ]
+                    []
+                , Svg.feBlend
+                    [ Svg.Attributes.in2 "SourceGraphic"
+                    , Svg.Attributes.in_ "floodFill"
+                    , Svg.Attributes.mode "screen"
+                    ]
+                    []
+                ]
+            ]

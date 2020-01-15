@@ -1,8 +1,11 @@
 module Data.Introduction exposing (ofLanguage)
 
+import CustomAttrs
 import Descriptor exposing (..)
 import Element exposing (Element)
+import Element.Background as Background
 import Language exposing (..)
+import Palette
 import Tag exposing (Tag)
 
 
@@ -31,6 +34,14 @@ english tag =
             , t "—thank you for perusing my "
             , bold <| t "portfolio"
             , t ". I’m based in Santiago, Chile. My work is concerned with various intersections of four areas—"
+            , Element.image
+                [ Element.width (Element.px <| 5 * Palette.textSizeNormal)
+                , Element.height (Element.px <| 5 * Palette.textSizeNormal)
+                , CustomAttrs.svgFilter "color-filter"
+                ]
+                { src = "image/icon-programming.svg"
+                , description = " "
+                }
             , tag Tag.VisualCommunication "Visual Communication"
             , t ", "
             , tag Tag.Programming "Programming"

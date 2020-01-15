@@ -1,5 +1,6 @@
 module Descriptor exposing (bold, d, fromDoc, list, makeTag, p, t)
 
+import CustomAttrs
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
 import Doc.Link as Link exposing (Link)
@@ -96,22 +97,22 @@ list children =
         rows
 
 
-fromDoc : Doc -> Element msg
-fromDoc doc =
-    textColumn [ width fill ] <| List.map fromParagraph (Doc.content doc)
+fromDoc : Element.Color -> Doc -> Element msg
+fromDoc color doc =
+    textColumn [ width fill ] <| List.map (fromParagraph color) (Doc.content doc)
 
 
 
 -- INTERNAL
 
 
-fromParagraph : Paragraph -> Element msg
-fromParagraph par =
-    p <| List.map fromText (Paragraph.content par)
+fromParagraph : Element.Color -> Paragraph -> Element msg
+fromParagraph color par =
+    p <| List.map (fromText color) (Paragraph.content par)
 
 
-fromText : Text -> Element msg
-fromText txt =
+fromText : Element.Color -> Text -> Element msg
+fromText color txt =
     let
         textContent =
             Text.content txt
@@ -124,6 +125,7 @@ fromText txt =
             newTabLink
                 ([ Font.underline
                  , pointer
+                 , mouseDown [ Font.color Palette.highlightLight ]
                  ]
                     ++ style
                 )
