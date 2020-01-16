@@ -43,13 +43,10 @@ radialGradient colors =
         processedColors =
             List.map process colors
     in
-    -- style "background" "radial-gradient(closest-side, rgba(0, 0, 0, 100%) 0%, rgba(255, 255, 255, 0) 100%)"
-    Debug.log "style"
-        (style "background" <|
-            "radial-gradient(closest-side, "
-                ++ String.join ", " processedColors
-                ++ ")"
-        )
+    style "background" <|
+        "radial-gradient(closest-side, "
+            ++ String.join ", " processedColors
+            ++ ")"
 
 
 

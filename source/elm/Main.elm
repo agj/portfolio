@@ -404,19 +404,23 @@ viewPopupVisual viewport visual =
             el
                 [ width (px reservedSpace)
                 , height (px reservedSpace)
-                , Font.color (rgb 1 1 1)
-                , onClick (SelectedVisual Nothing)
-                , Background.color Palette.highlightLight
+                , padding <| fraction 0.3 reservedSpace
                 , alignRight
                 , alignTop
                 , pointer
                 ]
-                (text "×")
+                (image [ width fill, height fill ]
+                    { src = "image/icon-close-light.svg"
+                    , description = " "
+                    }
+                )
     in
     el
         [ width fill
         , height fill
         , Background.color (Palette.darkTransparent 0.2)
+        , onClick (SelectedVisual Nothing)
+        , pointer
         ]
     <|
         if viewportVertical then
@@ -585,34 +589,10 @@ viewIcon color name isVisible =
     in
     case isVisible of
         True ->
-            el
-                [ Element.width <| px size
-                , Element.height <| px size
-                , Element.padding <| fraction 0.1 size
-                , CustomEl.radialGradient
-                    [ ( 0.5, transparentColor 0.5 color )
-                    , ( 1, rgba 0 0 0 0 )
-                    ]
-                ]
-                (CustomEl.imageInline
-                    [ Element.width fill
-                    , Element.height fill
-                    ]
-                    { src = "image/icon-" ++ name ++ "-light.svg"
-                    , description = " "
-                    }
-                )
+            icon size color ("icon-" ++ name ++ "-light")
 
         False ->
             none
-
-
-
--- el
---     [ Element.width <| px size
---     , Element.height <| px size
---     ]
---     none
 
 
 viewWorkVisuals : Int -> List Visual -> Element Msg
@@ -644,24 +624,39 @@ viewWorkVisuals blockWidth visuals =
 viewVisualThumbnail : Int -> Visual -> Element Msg
 viewVisualThumbnail size visual =
     let
-        ( thumbnailUrl, color ) =
+        ( thumbnailUrl, color, isVideo ) =
             case visual of
                 Image desc ->
-                    ( desc.thumbnailUrl, desc.color )
+                    ( desc.thumbnailUrl, desc.color, False )
 
                 Video desc ->
-                    ( desc.thumbnailUrl, desc.color )
+                    ( desc.thumbnailUrl, desc.color, True )
     in
-    image
-        [ width (px size)
-        , height (px size)
-        , onClick (SelectedVisual (Just visual))
-        , pointer
-        , Background.color color
-        ]
-        { src = thumbnailUrl
-        , description = " "
-        }
+    el
+        ([ width (px size)
+         , height (px size)
+         , onClick (SelectedVisual (Just visual))
+         , pointer
+         , Background.color color
+         ]
+            ++ ifElse isVideo
+                [ inFront <|
+                    el
+                        [ alignRight
+                        , alignBottom
+                        ]
+                        (icon (fraction 0.3 size) color "icon-play-light")
+                ]
+                []
+        )
+        (image
+            [ width (px size)
+            , height (px size)
+            ]
+            { src = thumbnailUrl
+            , description = " "
+            }
+        )
 
 
 viewWorkLinks : Element.Color -> List Link -> Element Msg
@@ -761,3 +756,24 @@ getLanguageFromPreferred codes =
         |> List.filterMap Language.fromCode
         |> List.head
         |> Maybe.withDefault English
+
+
+icon : Int -> Element.Color -> String -> Element msg
+icon size color name =
+    el
+        [ Element.width <| px size
+        , Element.height <| px size
+        , Element.padding <| fraction 0.1 size
+        , CustomEl.radialGradient
+            [ ( 0.5, transparentColor 0.5 color )
+            , ( 1, rgba 0 0 0 0 )
+            ]
+        ]
+        (CustomEl.imageInline
+            [ Element.width fill
+            , Element.height fill
+            ]
+            { src = "image/" ++ name ++ ".svg"
+            , description = " "
+            }
+        )
