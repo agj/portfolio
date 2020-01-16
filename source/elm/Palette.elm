@@ -1,4 +1,4 @@
-module Palette exposing (dark, darkTransparent, font, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
+module Palette exposing (dark, font, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
 
 import Color exposing (Color)
 import Color.Manipulate
@@ -38,13 +38,6 @@ highlightDarker : Element.Color
 highlightDarker =
     baseSecondaryHighlight
         |> Color.Manipulate.darken 0.3
-        |> toElmUiColor
-
-
-darkTransparent : Float -> Element.Color
-darkTransparent opacity =
-    baseDark
-        |> Color.Manipulate.fadeOut opacity
         |> toElmUiColor
 
 

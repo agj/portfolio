@@ -383,6 +383,14 @@ viewPopupVisual viewport visual =
             else
                 floor (toFloat usableWidth * (1 / visualAR))
 
+        color =
+            case visual of
+                Image desc ->
+                    desc.color
+
+                Video desc ->
+                    desc.color
+
         visualEl =
             case visual of
                 Image desc ->
@@ -391,7 +399,7 @@ viewPopupVisual viewport visual =
                         , height (px visualHeight)
                         , centerX
                         , centerY
-                        , Background.color desc.color
+                        , Background.color color
                         ]
                         { src = desc.url
                         , description = ""
@@ -418,7 +426,7 @@ viewPopupVisual viewport visual =
     el
         [ width fill
         , height fill
-        , Background.color (Palette.darkTransparent 0.2)
+        , Background.color (transparentColor 0.8 color)
         , onClick (SelectedVisual Nothing)
         , pointer
         ]
