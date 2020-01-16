@@ -25,15 +25,18 @@ unnest list =
 toCssColor : Element.Color -> String
 toCssColor color =
     let
-        { red, green, blue } =
+        { red, green, blue, alpha } =
             Element.toRgb color
     in
-    "rgb("
+    "rgba("
         ++ String.fromInt (round <| red * 255)
         ++ ", "
         ++ String.fromInt (round <| green * 255)
         ++ ", "
         ++ String.fromInt (round <| blue * 255)
+        ++ ", "
+        ++ String.fromFloat (alpha * 100)
+        ++ "%"
         ++ ")"
 
 

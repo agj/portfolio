@@ -1,5 +1,6 @@
-module CustomEl exposing (backgroundColor, imageInline, inlineCenter, svgFilter)
+module CustomEl exposing (backgroundColor, imageInline, inlineCenter, radialGradient, svgFilter)
 
+import Debug
 import Element exposing (..)
 import Html.Attributes as Attributes
 import Utils exposing (..)
@@ -28,6 +29,27 @@ imageInline attrs desc =
 inlineCenter : Element.Attribute msg
 inlineCenter =
     style "vertical-align" "middle"
+
+
+radialGradient : List ( Float, Element.Color ) -> Element.Attribute msg
+radialGradient colors =
+    let
+        process ( position, color ) =
+            toCssColor color
+                ++ " "
+                ++ String.fromFloat (position * 100.0)
+                ++ "%"
+
+        processedColors =
+            List.map process colors
+    in
+    -- style "background" "radial-gradient(closest-side, rgba(0, 0, 0, 100%) 0%, rgba(255, 255, 255, 0) 100%)"
+    Debug.log "style"
+        (style "background" <|
+            "radial-gradient(closest-side, "
+                ++ String.join ", " processedColors
+                ++ ")"
+        )
 
 
 

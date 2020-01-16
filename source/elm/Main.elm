@@ -501,6 +501,12 @@ viewWork blockWidth labels work =
             , date = work.date
             , mainVisualUrl = work.mainVisualUrl
             , mainVisualColor = work.mainVisualColor
+            , icons =
+                { visualCommunication = List.member Tag.VisualCommunication work.tags
+                , programming = List.member Tag.Programming work.tags
+                , language = List.member Tag.Language work.tags
+                , learning = List.member Tag.Learning work.tags
+                }
             }
         , viewWorkVisuals blockWidth work.visuals
         , viewWorkLinks work.mainVisualColor work.links
@@ -508,75 +514,25 @@ viewWork blockWidth labels work =
         ]
 
 
-viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Element.Color -> Element Msg
-viewWorkReadMore labels readMore color =
-    case readMore of
-        Nothing ->
-            none
-
-        Just desc ->
-            let
-                label =
-                    case desc.language of
-                        English ->
-                            labels.readMoreEnglish
-
-                        Japanese ->
-                            labels.readMoreJapanese
-
-                        Spanish ->
-                            labels.readMoreSpanish
-            in
-            el
-                [ alignRight
-                , alignBottom
-                , moveDown <| 0.3 * toFloat Palette.textSizeNormal
-                , moveLeft <| toFloat Palette.spaceNormal
-                ]
-            <|
-                newTabLink (linkStyle color)
-                    { url = desc.url
-                    , label = text label
-                    }
-
-
-viewWorkDescription : Element.Color -> Doc -> Element Msg
-viewWorkDescription color doc =
-    el [ paddingXY Palette.spaceNormal Palette.spaceSmall ]
-        (Descriptor.fromDoc color doc)
-
-
-viewWorkLinks : Element.Color -> List Link -> Element Msg
-viewWorkLinks color links =
-    let
-        makeLink link =
-            newTabLink
-                (centerX :: linkStyle color)
-                { url = link.url
-                , label = text link.label
-                }
-    in
-    if List.isEmpty links then
-        none
-
-    else
-        wrappedRow
-            [ paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = Palette.spaceNormal, bottom = 0 }
-            , width fill
-            ]
-        <|
-            List.map makeLink links
-
-
-viewWorkTitle : Int -> { title : String, date : Date, mainVisualUrl : String, mainVisualColor : Element.Color } -> Element Msg
-viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor } =
+viewWorkTitle : Int -> { title : String, date : Date, mainVisualUrl : String, mainVisualColor : Element.Color, icons : { visualCommunication : Bool, programming : Bool, language : Bool, learning : Bool } } -> Element Msg
+viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons } =
     let
         mainBlock =
-            el
+            column
                 [ width (px blockWidth)
                 , height (px blockWidth)
                 , Background.image mainVisualUrl
                 , CustomEl.backgroundColor mainVisualColor
+                ]
+
+        iconsBlock =
+            row
+                [ paddingXY Palette.spaceNormal Palette.spaceSmall
+                ]
+                [ viewIcon mainVisualColor "visual-communication" icons.visualCommunication
+                , viewIcon mainVisualColor "programming" icons.programming
+                , viewIcon mainVisualColor "language" icons.language
+                , viewIcon mainVisualColor "learning" icons.learning
                 ]
 
         gradientBlock =
@@ -612,12 +568,51 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor } =
                 ]
     in
     mainBlock
-        (gradientBlock
+        [ iconsBlock
+        , gradientBlock
             [ yearBlock (text <| Date.toString date)
             , titleBlock <|
                 paragraph [] [ text title ]
             ]
-        )
+        ]
+
+
+viewIcon : Element.Color -> String -> Bool -> Element msg
+viewIcon color name isVisible =
+    let
+        size =
+            fraction 1.5 Palette.spaceNormal
+    in
+    case isVisible of
+        True ->
+            el
+                [ Element.width <| px size
+                , Element.height <| px size
+                , Element.padding <| fraction 0.1 size
+                , CustomEl.radialGradient
+                    [ ( 0.5, transparentColor 0.5 color )
+                    , ( 1, rgba 0 0 0 0 )
+                    ]
+                ]
+                (CustomEl.imageInline
+                    [ Element.width fill
+                    , Element.height fill
+                    ]
+                    { src = "image/icon-" ++ name ++ "-light.svg"
+                    , description = " "
+                    }
+                )
+
+        False ->
+            none
+
+
+
+-- el
+--     [ Element.width <| px size
+--     , Element.height <| px size
+--     ]
+--     none
 
 
 viewWorkVisuals : Int -> List Visual -> Element Msg
@@ -667,6 +662,66 @@ viewVisualThumbnail size visual =
         { src = thumbnailUrl
         , description = " "
         }
+
+
+viewWorkLinks : Element.Color -> List Link -> Element Msg
+viewWorkLinks color links =
+    let
+        makeLink link =
+            newTabLink
+                (centerX :: linkStyle color)
+                { url = link.url
+                , label = text link.label
+                }
+    in
+    if List.isEmpty links then
+        none
+
+    else
+        wrappedRow
+            [ paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = Palette.spaceNormal, bottom = 0 }
+            , width fill
+            ]
+        <|
+            List.map makeLink links
+
+
+viewWorkDescription : Element.Color -> Doc -> Element Msg
+viewWorkDescription color doc =
+    el [ paddingXY Palette.spaceNormal Palette.spaceSmall ]
+        (Descriptor.fromDoc color doc)
+
+
+viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Element.Color -> Element Msg
+viewWorkReadMore labels readMore color =
+    case readMore of
+        Nothing ->
+            none
+
+        Just desc ->
+            let
+                label =
+                    case desc.language of
+                        English ->
+                            labels.readMoreEnglish
+
+                        Japanese ->
+                            labels.readMoreJapanese
+
+                        Spanish ->
+                            labels.readMoreSpanish
+            in
+            el
+                [ alignRight
+                , alignBottom
+                , moveDown <| 0.3 * toFloat Palette.textSizeNormal
+                , moveLeft <| toFloat Palette.spaceNormal
+                ]
+            <|
+                newTabLink (linkStyle color)
+                    { url = desc.url
+                    , label = text label
+                    }
 
 
 
