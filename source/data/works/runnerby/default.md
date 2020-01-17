@@ -6,20 +6,21 @@ tags:
   - Digital
   - Web
   - Interactive
-date: "2010"
-readMore: 'http://blog.agj.cl/tag/runnerby/'
+date: 2010
+readMore: http://blog.agj.cl/tag/runnerby/
 visuals:
   - type: Video
     host: Youtube
-    id: "n5uQDt5hXDQ"
+    id: "_jD5AzvEZmk"
+  - type: Image
+    url: 01.png
+  - type: Image
+    url: 02.png
 links:
-  - label: Play
-    url: 'http://www.agj.cl/files/games/runnerby/'
+  - label: Play (Flash)
+    url: http://www.agj.cl/files/games/runnerby/
 ---
 
 
-A game controlled by a single key (spacebar), which makes a perpetually running character jump. Uses Flash.
-
+A game controlled by a single key (spacebar), which makes a perpetually running character jump.
 Designed around simplicity of controls, but difficulty of execution.
-
-(Playthrough video by [moshboy]{link| url = https://twitter.com/moshboy }.)

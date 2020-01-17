@@ -34,7 +34,8 @@ english tag =
             , bold <| t "Ale Grilli"
             , t "—thank you for perusing my "
             , bold <| t "portfolio"
-            , t ". I’m based in Santiago, Chile. My work is concerned with various intersections of four areas—"
+            , t ". I’m based in Santiago, Chile."
+            , t "My work is concerned with various intersections of four areas—"
             , tag Tag.VisualCommunication "Visual Communication"
             , icon "visual-communication"
             , t ", "
@@ -46,7 +47,8 @@ english tag =
             , t ", and "
             , tag Tag.Learning "Learning"
             , icon "learning"
-            , t ". I'm a master in new media from Tokyo Geidai, graphic designer from U. Diego Portales, and self-taught programmer."
+            , t ". "
+            , t "I'm a master in new media from Tokyo Geidai, graphic designer from U. Diego Portales, and self-taught programmer."
             ]
         , p
             [ t "I’m a creator. I make "
@@ -66,19 +68,22 @@ english tag =
             , t " on occasion."
             ]
         , p
-            [ t "I’m a languages nerd, fluent in two second languages (English, Japanese) and working on a third (Chinese Mandarin.) I do "
+            [ t "I’m a languages nerd, fluent in English and Japanese, apart from my native Spanish, and also working on Chinese Mandarin. "
+            , t "I do "
             , tag Tag.Translation "translation"
             , t " work, subtitling too."
             ]
         , p
-            [ t "I think a lot about learning. I’ve worked for ed-tech companies programming "
+            [ t "I think a lot about learning. "
+            , t "I’ve worked for ed-tech companies programming "
             , tag Tag.EducationalSoftware "educational software"
             , t ". I occasionally "
             , tag Tag.LanguageTeaching "teach languages"
             , t "."
             ]
         , p
-            [ t "To see examples of my work, choose any of the highlighted keywords above. Or you can choose to see "
+            [ t "To see examples of my work, choose any of the highlighted keywords above. "
+            , t "Or you can choose to see "
             , tag Tag.Any "all"
             , t " of them at once."
             ]
@@ -93,45 +98,52 @@ japanese tag =
             , bold <| t "ポートフォリオ"
             , t "をご覧いただきありがとうございます。拠点をチリのサンティアゴにしている者です。"
             , tag Tag.VisualCommunication "視覚コミュニケーション"
+            , icon "visual-communication"
             , t "、"
             , tag Tag.Programming "プログラミング"
+            , icon "programming"
             , t "、"
             , tag Tag.Language "言語"
+            , icon "language"
             , t "、"
             , tag Tag.Learning "習得"
-            , t "という４つのエリアの組み合わせで活動します。東京藝大大学院のメディア映像や、チリ Diego Portales 大学グラフィックデザイン学部の卒業生です。プログラミングを独学しました。"
+            , icon "learning"
+            , t "という４つのエリアの組み合わせで活動します。"
+            , t "東京藝大大学院のメディア映像や、チリ Diego Portales 大学グラフィックデザイン学部の卒業生です。"
+            , t "プログラミングを独学しました。"
             ]
         , p
-            [ t "クリエイターであって、"
+            [ t "クリエイターです。"
             , tag Tag.VideoGame "ゲーム"
             , t "や"
             , tag Tag.Web "ウェブ"
             , t "など、"
             , tag Tag.Digital "デジタル"
-            , t "の物を作ることが多いです。"
+            , t "の何かしらを作ることが多いです。"
             , tag Tag.UserInterface "ユーザーインタフェース"
-            , t "やその他"
+            , t "などいった"
             , tag Tag.Interactive "インタラクティブ"
-            , t "と"
+            , t "や"
             , tag Tag.Graphic "グラフィック"
             , t "をデザインしたりします。"
             , tag Tag.Video "映像"
-            , t "も撮ったり編集したりします。"
+            , t "作成にも手を組んだりします。"
             ]
         , p
-            [ t "自称言語オタクです。第二言語２つ（英語・日本語）が流暢で、現在３つ目（中国語）を目指しています。"
+            [ t "言語オタクだと言っていいくらい言語が好きです。ネイティブのスペイン語に加えて英語と日本語が流暢で、現在中国語も目指しています。"
             , tag Tag.Translation "翻訳"
             , t "や字幕の仕事をしたりします。"
             ]
         , p
-            [ t "「習得」についてよく考えます。教育テクノロジーの会社で"
+            [ t "「習得」についてよく考えます。"
+            , t "教育テクノロジーの会社で"
             , tag Tag.EducationalSoftware "教育ソフト"
             , t "を開発したことがあります。時折"
             , tag Tag.LanguageTeaching "言語を教える"
             , t "ことがあります。"
             ]
         , p
-            [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してください。もしくは"
+            [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してください。"
             , tag Tag.Any "全て"
             , t "を一気に見ることもできます。"
             ]
@@ -147,12 +159,16 @@ spanish tag =
             , bold <| t "portafolio"
             , t ". Vivo en Santiago, Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
             , tag Tag.VisualCommunication "Comunicación Visual"
+            , icon "visual-communication"
             , t ", "
             , tag Tag.Programming "Programación"
+            , icon "programming"
             , t ", "
             , tag Tag.Language "Idiomas"
+            , icon "language"
             , t ", y "
             , tag Tag.Learning "Aprendizaje"
+            , icon "learning"
             , t ". Soy magíster en nuevos medios de Tokyo Geidai, diseñador gráfico de U. Diego Portales, y programador autoenseñado."
             ]
         , p
