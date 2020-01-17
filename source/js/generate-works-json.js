@@ -63,6 +63,7 @@ const normalizeVisual = (visual) => {
 			thumbnailUrl: `${ cfg.worksFolder }/${ visual.thumbnailUrl }`,
 			aspectRatio: meta.width / meta.height,
 			color: meta.color,
+			parameters: visual.parameters ? visual.parameters : {},
 		};
 	}
 };

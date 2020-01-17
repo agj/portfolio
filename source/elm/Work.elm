@@ -1,4 +1,4 @@
-module Work exposing (Link, ReadMore, VideoDescription, VideoHost(..), Visual(..), Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
+module Work exposing (Link, ReadMore, Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
 
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
@@ -14,6 +14,7 @@ import Mark.Error
 import Tag exposing (Tag)
 import Utils exposing (..)
 import Work.Date as Date exposing (Date)
+import Work.Visual as Visual exposing (Visual)
 
 
 type WorkLanguages
@@ -41,30 +42,6 @@ type alias ReadMore =
     { url : String
     , language : Language
     }
-
-
-type Visual
-    = Image
-        { thumbnailUrl : String
-        , url : String
-        , aspectRatio : Float
-        , color : Element.Color
-        }
-    | Video VideoDescription
-
-
-type alias VideoDescription =
-    { thumbnailUrl : String
-    , id : String
-    , aspectRatio : Float
-    , host : VideoHost
-    , color : Element.Color
-    }
-
-
-type VideoHost
-    = Youtube
-    | Vimeo
 
 
 type alias Link =
@@ -124,61 +101,12 @@ workDecoder =
         |> required "name" string
         |> required "description" emuDecoder
         |> required "mainVisualUrl" string
-        |> required "mainVisualColor" colorDecoder
+        |> required "mainVisualColor" Visual.colorDecoder
         |> required "date" Date.decoder
         |> required "tags" (list <| Tag.decoder Tag.DisallowsAny)
-        |> required "visuals" (list visualDecoder)
+        |> required "visuals" (list Visual.decoder)
         |> required "links" (list linkDecoder)
         |> optional "readMore" (maybe readMoreDecoder) Nothing
-
-
-visualDecoder : Decoder Visual
-visualDecoder =
-    let
-        imageDecoder =
-            Decode.succeed (\tUrl url ar color -> Image { thumbnailUrl = tUrl, url = url, aspectRatio = ar, color = color })
-                |> required "thumbnailUrl" string
-                |> required "url" string
-                |> required "aspectRatio" float
-                |> required "color" colorDecoder
-
-        videoDecoder =
-            Decode.succeed (\tUrl id ar host color -> Video { thumbnailUrl = tUrl, id = id, aspectRatio = ar, host = host, color = color })
-                |> required "thumbnailUrl" string
-                |> required "id" string
-                |> required "aspectRatio" float
-                |> required "host" videoHostDecoder
-                |> required "color" colorDecoder
-    in
-    oneOf
-        [ imageDecoder
-        , videoDecoder
-        ]
-
-
-videoHostDecoder : Decoder VideoHost
-videoHostDecoder =
-    string
-        |> andThen
-            (\hostString ->
-                case hostString of
-                    "Youtube" ->
-                        Decode.succeed Youtube
-
-                    "Vimeo" ->
-                        Decode.succeed Vimeo
-
-                    other ->
-                        Decode.fail <| "Video host unknown: " ++ other
-            )
-
-
-colorDecoder : Decoder Element.Color
-colorDecoder =
-    Decode.succeed Element.rgb
-        |> required "red" float
-        |> required "green" float
-        |> required "blue" float
 
 
 linkDecoder : Decoder Link
@@ -229,11 +157,6 @@ errorToParagraph error =
                 |> Paragraph.create
     in
     Mark.Error.toString error |> doit
-
-
-
--- |> String.split "\n"
--- |> List.map doit
 
 
 emuDocument : Mark.Document Doc

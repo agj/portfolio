@@ -145,6 +145,7 @@ const visualValidation = ow.any(
 		type: ow.string.equals(cfg.visualType.video),
 		host: ow.string.oneOf(R.values(cfg.hostType)),
 		id: ow.string.not.url,
+		parameters: ow.optional.object.valuesOfType(ow.string),
 	})
 );
 const languageValidation = ow.object.exactShape({

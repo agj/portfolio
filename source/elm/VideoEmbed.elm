@@ -4,7 +4,7 @@ import Element exposing (Element)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Utils exposing (..)
-import Work exposing (VideoDescription, VideoHost(..))
+import Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter)
 
 
 get : VideoDescription -> Int -> Int -> Element msg
@@ -31,8 +31,51 @@ get desc width height =
         ]
         (case desc.host of
             Vimeo ->
-                standard ("https://player.vimeo.com/video/" ++ desc.id ++ "?color=ffffff&title=0&byline=0&portrait=0")
+                let
+                    params =
+                        [ { key = "color", value = "ffffff" }
+                        , { key = "title", value = "0" }
+                        , { key = "byline", value = "0" }
+                        , { key = "portrait", value = "0" }
+                        , { key = "autoplay", value = "1" }
+                        ]
+                in
+                standard
+                    ("https://player.vimeo.com/video/"
+                        ++ desc.id
+                        ++ "?"
+                        ++ parseParameters (params ++ desc.parameters)
+                    )
 
             Youtube ->
-                standard ("https://www.youtube-nocookie.com/embed/" ++ desc.id ++ "?rel=0&showinfo=0")
+                let
+                    params =
+                        [ { key = "rel", value = "0" }
+                        , { key = "autoplay", value = "1" }
+                        , { key = "color", value = "white" }
+                        ]
+                in
+                standard
+                    ("https://www.youtube-nocookie.com/embed/"
+                        ++ desc.id
+                        ++ "?"
+                        ++ parseParameters (params ++ desc.parameters)
+                    )
         )
+
+
+
+-- INTERNAL
+
+
+parseParameters : List VideoParameter -> String
+parseParameters params =
+    let
+        toString param =
+            param.key
+                ++ "="
+                ++ param.value
+    in
+    params
+        |> List.map toString
+        |> String.join "&"

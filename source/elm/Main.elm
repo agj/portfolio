@@ -24,6 +24,7 @@ import Utils exposing (..)
 import VideoEmbed
 import Work exposing (..)
 import Work.Date as Date exposing (Date)
+import Work.Visual as Visual exposing (VideoHost(..), Visual(..))
 import Works
 
 
