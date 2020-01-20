@@ -11,6 +11,12 @@ visuals:
   - type: Video
     host: Vimeo
     id: "32240154"
+  - type: Image
+    url: photo01.jpg
+  - type: Image
+    url: screen01.png
+  - type: Image
+    url: screen02.png
 ---
 
 

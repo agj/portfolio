@@ -9,6 +9,12 @@ visuals:
   - type: Video
     host: Vimeo
     id: "19267207"
+  - type: Image
+    url: 01.jpg
+  - type: Image
+    url: 02.jpg
+  - type: Image
+    url: 03.jpg
 ---
 
 

@@ -73,55 +73,60 @@ const generateVisualsCache = async (work, workName) => {
 	// Visuals.
 
 	if (work.default.visuals) {
-		const promises = work.default.visuals.into(R.map(async (visual) => {
-			// Filenames.
-			const outputFilename = `${ cfg.cacheDir }${ visual.thumbnailUrl }`;
-			const metaOutputFilename = `${ cfg.cacheDir }${ visual.metaUrl }`;
+		const allVisuals =
+			work.into(R.map(R.prop('visuals')))
+			.into(R.values)
+			.into(R.unnest);
+		const promises =
+			allVisuals.into(R.map(async (visual) => {
+				// Filenames.
+				const outputFilename = `${ cfg.cacheDir }${ visual.thumbnailUrl }`;
+				const metaOutputFilename = `${ cfg.cacheDir }${ visual.metaUrl }`;
 
-			if (fs.pathExistsSync(outputFilename) && fs.pathExistsSync(metaOutputFilename)) {
-				logSkipped(outputFilename);
-				logSkipped(metaOutputFilename);
+				if (fs.pathExistsSync(outputFilename) && fs.pathExistsSync(metaOutputFilename)) {
+					logSkipped(outputFilename);
+					logSkipped(metaOutputFilename);
 
-			} else {
-				// Create folders.
-				const outputFilenameParsed = path.parse(outputFilename);
-				const metaOutputFilenameParsed = path.parse(metaOutputFilename);
-				fs.ensureDirSync(outputFilenameParsed.dir);
-				fs.ensureDirSync(metaOutputFilenameParsed.dir);
+				} else {
+					// Create folders.
+					const outputFilenameParsed = path.parse(outputFilename);
+					const metaOutputFilenameParsed = path.parse(metaOutputFilename);
+					fs.ensureDirSync(outputFilenameParsed.dir);
+					fs.ensureDirSync(metaOutputFilenameParsed.dir);
 
-				// Images.
-				if (visual.type === cfg.visualType.image) {
-					const input =
-						_.isUrl(visual.retrieveUrl) ? (await axios.get(visual.retrieveUrl, { responseType: 'stream' })).data
-						: fs.createReadStream(`${ cfg.worksDir }${ workName }/${ visual.retrieveUrl }`);
-					const image = await streamToPromise(input);
+					// Images.
+					if (visual.type === cfg.visualType.image) {
+						const input =
+							_.isUrl(visual.retrieveUrl) ? (await axios.get(visual.retrieveUrl, { responseType: 'stream' })).data
+							: fs.createReadStream(`${ cfg.worksDir }${ workName }/${ visual.retrieveUrl }`);
+						const image = await streamToPromise(input);
 
-					await makeThumbnail(image, outputFilename);
-					await writeImageMetadata(image, metaOutputFilename);
+						await makeThumbnail(image, outputFilename);
+						await writeImageMetadata(image, metaOutputFilename);
 
-				// Videos.
-				} else if (visual.type === cfg.visualType.video) {
-					const metaVideo = await getVideoMetadata(visual.host, visual.id);
+					// Videos.
+					} else if (visual.type === cfg.visualType.video) {
+						const metaVideo = await getVideoMetadata(visual.host, visual.id);
 
-					const input = (await axios.get(metaVideo.thumbnailUrl, { responseType: 'stream' })).data;
-					const image = await streamToPromise(input);
+						const input = (await axios.get(metaVideo.thumbnailUrl, { responseType: 'stream' })).data;
+						const image = await streamToPromise(input);
 
-					await makeThumbnail(image, outputFilename);
+						await makeThumbnail(image, outputFilename);
 
-					const metaImage = await getImageMetadata(image, metaOutputFilename);
+						const metaImage = await getImageMetadata(image, metaOutputFilename);
 
-					fs.writeFileSync(
-						metaOutputFilename,
-						_.toJson({
-							width: metaVideo.width,
-							height: metaVideo.height,
-							color: metaImage.color,
-						}),
-						'utf-8',
-					);
+						fs.writeFileSync(
+							metaOutputFilename,
+							_.toJson({
+								width: metaVideo.width,
+								height: metaVideo.height,
+								color: metaImage.color,
+							}),
+							'utf-8',
+						);
+					}
 				}
-			}
-		}));
+			}));
 
 		await awaitAll(promises);
 	}

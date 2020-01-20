@@ -1,5 +1,15 @@
 ---
 name: 糸のゆくさき
+visuals:
+  - type: Video
+    host: Vimeo
+    id: "151801842"
+  - type: Image
+    url: 01.jpg
+  - type: Image
+    url: 02.jpg
+  - type: Image
+    url: 03.jpg
 ---
 
 

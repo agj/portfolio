@@ -152,6 +152,7 @@ const languageValidation = ow.object.exactShape({
 	description: ow.string,
 	name: ow.optional.string,
 	readMore: ow.optional.string,
+	visuals: ow.optional.array.ofType(visualValidation),
 	links: ow.optional.array.ofType(linkValidation),
 });
 const defaultLanguageValidation = ow.object.exactShape({

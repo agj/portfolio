@@ -1,6 +1,25 @@
 ---
 name: ことばから考えてみると
 readMore: http://blog.agj.cl/2017/04/kotoba-kara-kangaete-miru-to/
+visuals:
+  - type: Video
+    host: Vimeo
+    id: "201826714"
+  - type: Image
+    url: tenji01.jpg
+  - type: Image
+    url: book01.jpg
+  - type: Image
+    url: book02.jpg
+  - type: Image
+    url: postcards01.jpg
+  - type: Image
+    url: postcards02-ja.png
+  - type: Image
+    url: video01.jpg
+  - type: Video
+    host: Vimeo
+    id: "199388496"
 ---
 
 
