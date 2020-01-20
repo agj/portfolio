@@ -12,13 +12,17 @@ visuals:
     host: Vimeo
     id: "201826714"
   - type: Image
+    url: tenji01.jpg
+  - type: Image
     url: book01.jpg
   - type: Image
     url: book02.jpg
   - type: Image
-    url: book03.jpg
-  - type: Image
     url: postcards01.jpg
+  - type: Image
+    url: postcards02-en.png
+  - type: Image
+    url: video01.jpg
   - type: Video
     host: Vimeo
     id: "199388496"

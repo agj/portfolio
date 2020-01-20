@@ -13,6 +13,18 @@ readMore: http://blog.agj.cl/tag/flower-pattern/
 links:
   - label: Play
     url: http://www.agj.cl/files/games/flowerpattern/
+visuals:
+  - type: Video
+    host: Youtube
+    id: "PpfZt4hwKi4"
+  - type: Image
+    url: 01.png
+  - type: Image
+    url: 02.png
+  - type: Image
+    url: 03.png
+  - type: Image
+    url: 04.png
 ---
 
 
