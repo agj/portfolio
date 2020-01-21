@@ -17,8 +17,6 @@ import Language exposing (Language(..))
 import Maybe.Extra
 import Palette
 import SaveState exposing (SaveState)
-import Svg
-import Svg.Attributes
 import Tag exposing (Tag)
 import Utils exposing (..)
 import VideoEmbed
@@ -568,8 +566,12 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons } 
                 [ alignBottom
                 , paddingXY 0 0
                 , Font.size Palette.textSizeSmall
-                , Font.glow mainVisualColor 0.5
                 , Font.bold
+                , CustomEl.glow
+                    { color = mainVisualColor
+                    , strength = 5.0
+                    , size = 3.0
+                    }
                 ]
 
         titleBlock =
@@ -577,7 +579,11 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons } 
                 [ alignBottom
                 , paddingXY 0 Palette.spaceSmaller
                 , Font.size Palette.textSizeLarge
-                , Font.glow mainVisualColor 0.5
+                , CustomEl.glow
+                    { color = mainVisualColor
+                    , strength = 5.0
+                    , size = 3.0
+                    }
                 ]
     in
     mainBlock
@@ -596,12 +602,11 @@ viewIcon color name isVisible =
         size =
             fraction 1.5 Palette.spaceNormal
     in
-    case isVisible of
-        True ->
-            icon size color ("icon-" ++ name ++ "-light")
+    if isVisible then
+        icon size color ("icon-" ++ name ++ "-light")
 
-        False ->
-            none
+    else
+        none
 
 
 viewWorkVisuals : Int -> List Visual -> Element Msg
@@ -774,7 +779,7 @@ icon size color name =
         , Element.height <| px size
         , Element.padding <| fraction 0.1 size
         , CustomEl.radialGradient
-            [ ( 0.5, transparentColor 0.5 color )
+            [ ( 0.5, transparentColor 0.9 color )
             , ( 1, rgba 0 0 0 0 )
             ]
         ]
