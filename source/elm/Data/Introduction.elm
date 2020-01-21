@@ -189,7 +189,7 @@ spanish tag =
             , t " ocasionalmente."
             ]
         , p
-            [ t "Soy fanático de los idiomas. Hablo fluído dos segundas lenguas (inglés, japonés), y estoy aprendiendo una tercera (chino mandarín). Trabajo "
+            [ t "Soy fanático de los idiomas. Además de mi español nativo, hablo fluído inglés y japonés, y estoy aprendiendo chino mandarín. Trabajo "
             , tag Tag.Translation "traduciendo"
             , t " y subtitulando también."
             ]
