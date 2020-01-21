@@ -9,7 +9,13 @@ module.exports = {
     cacheDir: `cache/${ worksFolder }/`,
     outputDir: 'output/',
     worksFolder: worksFolder,
+
     thumbnailSize: 300,
+    mainVisualSize: {
+        width: 1200,
+        height: 1200,
+    },
+    visualMaxSize: 2000,
 
     visualType: {
         image: 'Image',

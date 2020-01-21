@@ -44,6 +44,12 @@ const jsonStream = (data) => {
 	input.push(null);
 	return input;
 };
+const fileExists = fs.pathExistsSync;
+const filesExist = R.all(fileExists);
+const ensureFolder = (filename) => {
+	const parsed = path.parse(filename);
+	fs.ensureDirSync(parsed.dir);
+};
 
 
 // Process
@@ -54,10 +60,11 @@ const logSkipped = (name) => {
 const generateVisualsCache = async (work, workName) => {
 	// Main visual.
 
+	const mvOutputFilename = `${ cfg.cacheDir }${ work.default.mainVisualUrl }`;
 	const mvMetaOutputFilename = `${ cfg.cacheDir }${ work.default.mainVisualMetaUrl }`;
 
-	if (fs.pathExistsSync(mvMetaOutputFilename)) {
-		logSkipped(mvMetaOutputFilename);
+	if (fs.pathExistsSync(mvOutputFilename) && fs.pathExistsSync(mvMetaOutputFilename)) {
+		console.log(`Skipped: ${ workName } -> main visual`);
 
 	} else {
 		// Create folders.
@@ -67,7 +74,9 @@ const generateVisualsCache = async (work, workName) => {
 		const input = fs.createReadStream(`${ cfg.worksDir }${ work.default.mainVisualUrl }`);
 		const image = await streamToPromise(input);
 
-		await writeImageMetadata(image, mvMetaOutputFilename);
+		const resized = await resizeMainVisual(image);
+		await fs.writeFile(mvOutputFilename, resized);
+		await writeImageMetadata(resized, mvMetaOutputFilename);
 	}
 
 	// Visuals.
@@ -80,29 +89,38 @@ const generateVisualsCache = async (work, workName) => {
 		const promises =
 			allVisuals.into(R.map(async (visual) => {
 				// Filenames.
-				const outputFilename = `${ cfg.cacheDir }${ visual.thumbnailUrl }`;
-				const metaOutputFilename = `${ cfg.cacheDir }${ visual.metaUrl }`;
+				const thumbOutputFilename = `${ cfg.cacheDir }${ visual.thumbnailUrl }`;
+				const metaOutputFilename =  `${ cfg.cacheDir }${ visual.metaUrl }`;
 
-				if (fs.pathExistsSync(outputFilename) && fs.pathExistsSync(metaOutputFilename)) {
-					logSkipped(outputFilename);
-					logSkipped(metaOutputFilename);
+				if (filesExist([thumbOutputFilename, metaOutputFilename])) {
+					console.log(`Skipped: ${ workName } -> ${ visual.retrieveUrl ? visual.retrieveUrl : visual.id }`);
 
 				} else {
-					// Create folders.
-					const outputFilenameParsed = path.parse(outputFilename);
-					const metaOutputFilenameParsed = path.parse(metaOutputFilename);
-					fs.ensureDirSync(outputFilenameParsed.dir);
-					fs.ensureDirSync(metaOutputFilenameParsed.dir);
+					[thumbOutputFilename, metaOutputFilename]
+						.forEach(ensureFolder);
 
 					// Images.
 					if (visual.type === cfg.visualType.image) {
+						const isLocal = !_.isUrl(visual.retrieveUrl);
 						const input =
-							_.isUrl(visual.retrieveUrl) ? (await axios.get(visual.retrieveUrl, { responseType: 'stream' })).data
-							: fs.createReadStream(`${ cfg.worksDir }${ workName }/${ visual.retrieveUrl }`);
+							isLocal ? fs.createReadStream(`${ cfg.worksDir }${ workName }/${ visual.retrieveUrl }`)
+							: (await axios.get(visual.retrieveUrl, { responseType: 'stream' })).data;
 						const image = await streamToPromise(input);
 
-						await makeThumbnail(image, outputFilename);
-						await writeImageMetadata(image, metaOutputFilename);
+						const thumbnail = await toThumbnail(image);
+						await fs.writeFile(thumbOutputFilename, thumbnail);
+
+						if (isLocal) {
+							const outputFilename = `${ cfg.cacheDir }${ visual.url }`;
+							ensureFolder(outputFilename);
+
+							const resized = await resizeImage(image);
+							await fs.writeFile(outputFilename, resized);
+							await writeImageMetadata(resized, metaOutputFilename);
+
+						} else {
+							await writeImageMetadata(image, metaOutputFilename);
+						}
 
 					// Videos.
 					} else if (visual.type === cfg.visualType.video) {
@@ -111,16 +129,17 @@ const generateVisualsCache = async (work, workName) => {
 						const input = (await axios.get(metaVideo.thumbnailUrl, { responseType: 'stream' })).data;
 						const image = await streamToPromise(input);
 
-						await makeThumbnail(image, outputFilename);
+						const thumbnail = await toThumbnail(image);
+						await fs.writeFile(thumbOutputFilename, thumbnail);
 
-						const metaImage = await getImageMetadata(image, metaOutputFilename);
+						const color = await getImageColor(thumbnail);
 
 						fs.writeFileSync(
 							metaOutputFilename,
 							_.toJson({
 								width: metaVideo.width,
 								height: metaVideo.height,
-								color: metaImage.color,
+								color: color,
 							}),
 							'utf-8',
 						);
@@ -140,26 +159,38 @@ const onFinished = (str) => new Promise((resolve) => {
 	str.on('end', done);
 });
 
-const getImageMetadata = async (image) => {
+const getImageDimensions = async (image) => {
 	const metadata = await sharp(image)
 		.metadata();
+	return {
+		width: metadata.width,
+		height: metadata.height,
+	};
+};
+const getImageColor = async (image) => {
 	const colors = await vibrant.from(image)
 		.getPalette();
 	const color = colors.DarkVibrant.rgb;
 	return {
-		width: metadata.width,
-		height: metadata.height,
-		color: {
-			red: color[0] / 0xff,
-			green: color[1] / 0xff,
-			blue: color[2] / 0xff,
-		},
+		red:   color[0] / 0xff,
+		green: color[1] / 0xff,
+		blue:  color[2] / 0xff,
+	};
+};
+const getImageMetadata = async (image) => {
+	const dimensions = await getImageDimensions(image);
+	const color = await getImageColor(image);
+	return {
+		width: dimensions.width,
+		height: dimensions.height,
+		color,
 	};
 };
 const writeImageMetadata = async (image, outputPath) => {
 	fs.writeFileSync(outputPath, _.toJson(await getImageMetadata(image)), 'utf-8');
 };
-const makeThumbnail = async (image, outputPath) => {
+
+const toThumbnail = async (image) => {
 	const thumbnail = await sharp(image)
 		.resize(cfg.thumbnailSize, cfg.thumbnailSize, { fit: 'cover' })
 		.jpeg({
@@ -168,8 +199,85 @@ const makeThumbnail = async (image, outputPath) => {
 			chromaSubsampling: '4:4:4',
 		})
 		.toBuffer();
-	return fs.writeFile(outputPath, thumbnail);
+	return thumbnail;
+	// return fs.writeFile(outputPath, thumbnail);
 };
+const resizeMainVisual = async (image) => {
+	const actual = await getImageMetadata(image);
+	const target = cfg.mainVisualSize;
+	const actualAR = actual.width / actual.height;
+	const targetAR = target.width / target.height;
+
+	const targetSize =
+		actualAR > targetAR
+
+			// Image is more landscapey
+			? actual.width > target.width
+				? actual.height > target.height
+					? { // Image is larger overall
+						width: target.width,
+						height: target.height,
+					}
+					: { // Image is wider but not taller
+						width: actual.height * targetAR,
+						height: actual.height,
+					}
+				: { // Image is smaller overall
+					width: actual.height * targetAR,
+					height: actual.height,
+				}
+
+			// Image is more portraity
+			: actual.height > target.height
+				? actual.width > target.width
+					? { // Image is larger overall
+						width: target.width,
+						height: target.height,
+					}
+					: { // Image is taller but not wider
+						width: actual.width,
+						height: actual.width / targetAR,
+					}
+				: { // Image is smaller overall
+					width: actual.width,
+					height: actual.width / targetAR,
+				};
+
+	return resizeTo(targetSize, image);
+};
+
+const resizeImage = async (image) => {
+	const actual = await getImageMetadata(image);
+	const actualAR = actual.width / actual.height;
+
+	if (actual.width > cfg.visualMaxSize || actual.height > cfg.visualMaxSize) {
+		const targetSize =
+			actual.width > actual.height
+				? { // Wider
+					width: cfg.visualMaxSize,
+					height: cfg.visualMaxSize / actualAR,
+				}
+				: { // Taller
+					width: cfg.visualMaxSize * actualAR,
+					height: cfg.visualMaxSize,
+				};
+
+		return resizeTo(targetSize, image);
+
+	} else {
+		return image;
+	}
+};
+
+const resizeTo = (dimensions, image) =>
+	sharp(image)
+	.resize(Math.round(dimensions.width), Math.round(dimensions.height), { fit: 'cover' })
+	.jpeg({
+		force: false,
+		quality: 80,
+		chromaSubsampling: '4:4:4',
+	})
+	.toBuffer();
 
 
 // API
