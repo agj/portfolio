@@ -228,45 +228,48 @@ viewMain model =
                     Palette.spaceNormal
                 , CustomEl.id "works"
                 ]
+
+        content =
+            case model.data of
+                DataLoaded data ->
+                    let
+                        works =
+                            Works.ofLanguage model.language data
+                    in
+                    worksBlock <|
+                        viewWorks
+                            { blockWidth =
+                                ifElse (layoutFormat == PhoneLayout)
+                                    (worksBlockWidth - (2 * Palette.spaceSmall))
+                                    worksBlockWidth
+                            , labels = labels
+                            , maybeTag = model.tag
+                            , works = works
+                            , settings = settings
+                            }
+
+                DataLoading ->
+                    worksBlock <|
+                        viewLoadMessage labels.loading
+
+                DataLoadError err ->
+                    case err of
+                        Http.BadBody msg ->
+                            worksBlock <|
+                                viewLoadMessage ("Data error!\n\n" ++ msg)
+
+                        _ ->
+                            worksBlock <|
+                                viewLoadMessage labels.loadError
     in
     column
         [ width <| Maybe.withDefault fill (settings.worksBlockWidth |> Maybe.map px)
         , centerX
         , inFront <| viewLanguageSelector model.language
-        , paddingEach { top = Palette.spaceSmall, bottom = 0, left = 0, right = 0 }
+        , paddingEach { top = Palette.spaceSmall, bottom = Palette.spaceNormal, left = 0, right = 0 }
         ]
         [ viewTop model.language model.tag
-        , case model.data of
-            DataLoaded data ->
-                let
-                    works =
-                        Works.ofLanguage model.language data
-                in
-                worksBlock <|
-                    viewWorks
-                        { blockWidth =
-                            ifElse (layoutFormat == PhoneLayout)
-                                (worksBlockWidth - (2 * Palette.spaceSmall))
-                                worksBlockWidth
-                        , labels = labels
-                        , maybeTag = model.tag
-                        , works = works
-                        , settings = settings
-                        }
-
-            DataLoading ->
-                worksBlock <|
-                    viewLoadMessage labels.loading
-
-            DataLoadError err ->
-                case err of
-                    Http.BadBody msg ->
-                        worksBlock <|
-                            viewLoadMessage ("Data error!\n\n" ++ msg)
-
-                    _ ->
-                        worksBlock <|
-                            viewLoadMessage labels.loadError
+        , content
         ]
 
 
