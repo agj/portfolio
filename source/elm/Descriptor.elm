@@ -41,7 +41,7 @@ makeTag messenger selectedTag tag label =
         , Font.color <| ifElse isSelectedTag Palette.dark Palette.light
         , paddingXY
             (fraction 0.3 Palette.textSizeNormal)
-            (fraction 0.15 Palette.textSizeNormal)
+            (fraction 0.1 Palette.textSizeNormal)
         , onClick (messenger tag)
         , pointer
         , mouseDown

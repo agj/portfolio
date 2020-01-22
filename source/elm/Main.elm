@@ -123,7 +123,6 @@ type Msg
     | SelectedVisual (Maybe Visual)
     | GotViewport Viewport
     | GotData (Result Http.Error (List WorkLanguages))
-    | GotScrollTarget String
     | NoOp
 
 
@@ -170,11 +169,6 @@ update msg model =
                     ( { model | data = DataLoadError err }
                     , Cmd.none
                     )
-
-        GotScrollTarget id ->
-            ( model
-            , Task.attempt (always NoOp) (SmoothScroll.scrollTo id)
-            )
 
         NoOp ->
             ( model, Cmd.none )
