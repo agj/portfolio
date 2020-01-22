@@ -44,11 +44,11 @@ english =
 
 japanese =
     { title = "アレ・グリリのポートフォリオ"
-    , readMoreEnglish = "さらに詳しく（英語）"
-    , readMoreJapanese = "さらに詳しく"
-    , readMoreSpanish = "さらに詳しく（スペイン語）"
+    , readMoreEnglish = "もっと詳しく（英語）"
+    , readMoreJapanese = "もっと詳しく"
+    , readMoreSpanish = "もっと詳しく（スペイン語）"
     , loading = "読み込み中…"
-    , loadError = "データの読み込みできませんでした。リロードを試してください。"
+    , loadError = "データの読み込みはできませんでした。リロードを試してください。"
     , pleaseSelect = "上からキーワードを選択してください"
     }
 

@@ -207,7 +207,7 @@ viewMain model =
             LayoutFormat.fromDimensions model.viewport
 
         settings =
-            Settings.fromFormat layoutFormat
+            Settings.forFormat layoutFormat
 
         worksBlockWidth =
             case settings.worksBlockWidth of

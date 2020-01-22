@@ -1,4 +1,4 @@
-module Data.Settings exposing (Settings, fromFormat)
+module Data.Settings exposing (Settings, forFormat)
 
 import LayoutFormat exposing (LayoutFormat(..))
 
@@ -10,8 +10,8 @@ type alias Settings =
     }
 
 
-fromFormat : LayoutFormat -> Settings
-fromFormat format =
+forFormat : LayoutFormat -> Settings
+forFormat format =
     case format of
         PhoneLayout ->
             phone
