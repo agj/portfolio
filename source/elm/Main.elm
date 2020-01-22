@@ -5,6 +5,7 @@ import Browser.Events
 import CustomEl
 import Data.Introduction as Introduction
 import Data.Labels as Labels exposing (Labels)
+import Data.Settings as Settings exposing (Settings)
 import Descriptor
 import Doc exposing (Doc)
 import Element exposing (..)
@@ -14,6 +15,7 @@ import Element.Font as Font
 import Html exposing (Html)
 import Http
 import Language exposing (Language(..))
+import LayoutFormat exposing (LayoutFormat(..))
 import Maybe.Extra
 import Palette
 import SaveState exposing (SaveState)
@@ -97,20 +99,6 @@ getData =
         { url = "works/data.json"
         , expect = Http.expectJson GotData Work.allWorksDecoder
         }
-
-
-getLayoutSize : Viewport -> LayoutSize
-getLayoutSize viewport =
-    if viewport.width < 600 then
-        PhoneSize
-
-    else
-        DesktopSize
-
-
-type LayoutSize
-    = PhoneSize
-    | DesktopSize
 
 
 
@@ -215,25 +203,34 @@ viewMain model =
         labels =
             Labels.ofLanguage model.language
 
-        layoutSize =
-            getLayoutSize model.viewport
+        layoutFormat =
+            LayoutFormat.fromDimensions model.viewport
+
+        settings =
+            Settings.fromFormat layoutFormat
 
         worksBlockWidth =
-            if layoutSize == PhoneSize then
-                model.viewport.width
+            case settings.worksBlockWidth of
+                Just num ->
+                    num
 
-            else
-                600
+                Nothing ->
+                    model.viewport.width
 
         worksBlock =
             el
                 [ width (px worksBlockWidth)
-                , padding Palette.spaceSmall
+                , paddingXY
+                    (ifElse (layoutFormat == PhoneLayout)
+                        Palette.spaceSmall
+                        0
+                    )
+                    Palette.spaceNormal
                 , CustomEl.id "works"
                 ]
     in
     column
-        [ width <| ifElse (layoutSize == PhoneSize) fill (px 600)
+        [ width <| Maybe.withDefault fill (settings.worksBlockWidth |> Maybe.map px)
         , centerX
         , inFront <| viewLanguageSelector model.language
         , paddingEach { top = Palette.spaceSmall, bottom = 0, left = 0, right = 0 }
@@ -246,7 +243,16 @@ viewMain model =
                         Works.ofLanguage model.language data
                 in
                 worksBlock <|
-                    viewWorks (worksBlockWidth - (2 * Palette.spaceSmall)) labels model.tag works
+                    viewWorks
+                        { blockWidth =
+                            ifElse (layoutFormat == PhoneLayout)
+                                (worksBlockWidth - (2 * Palette.spaceSmall))
+                                worksBlockWidth
+                        , labels = labels
+                        , maybeTag = model.tag
+                        , works = works
+                        , settings = settings
+                        }
 
             DataLoading ->
                 worksBlock <|
@@ -464,8 +470,8 @@ viewPopupVisual viewport visual =
 -- VIEW WORKS
 
 
-viewWorks : Int -> Labels -> Maybe Tag -> List Work -> Element Msg
-viewWorks blockWidth labels maybeTag works =
+viewWorks : { blockWidth : Int, labels : Labels, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Element Msg
+viewWorks { blockWidth, labels, maybeTag, works, settings } =
     let
         filteredWorks =
             case maybeTag of
@@ -489,7 +495,7 @@ viewWorks blockWidth labels maybeTag works =
             , spacing Palette.spaceSmall
             ]
             (List.map
-                (viewWork blockWidth labels)
+                (viewWork blockWidth labels settings)
                 filteredWorks
             )
 
@@ -507,8 +513,8 @@ viewWorkBlock attrs children =
         children
 
 
-viewWork : Int -> Labels -> Work -> Element Msg
-viewWork blockWidth labels work =
+viewWork : Int -> Labels -> Settings -> Work -> Element Msg
+viewWork blockWidth labels settings work =
     viewWorkBlock
         [ inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
         , case work.readMore of
@@ -529,20 +535,21 @@ viewWork blockWidth labels work =
                 , language = List.member Tag.Language work.tags
                 , learning = List.member Tag.Learning work.tags
                 }
+            , settings = settings
             }
-        , viewWorkVisuals blockWidth work.visuals
+        , viewWorkVisuals blockWidth settings work.visuals
         , viewWorkLinks work.mainVisualColor work.links
         , viewWorkDescription work.mainVisualColor work.description
         ]
 
 
-viewWorkTitle : Int -> { title : String, date : Date, mainVisualUrl : String, mainVisualColor : Element.Color, icons : { visualCommunication : Bool, programming : Bool, language : Bool, learning : Bool } } -> Element Msg
-viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons } =
+viewWorkTitle : Int -> { title : String, date : Date, mainVisualUrl : String, mainVisualColor : Element.Color, settings : Settings, icons : { visualCommunication : Bool, programming : Bool, language : Bool, learning : Bool } } -> Element Msg
+viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, settings } =
     let
         mainBlock =
             column
                 [ width (px blockWidth)
-                , height (px blockWidth)
+                , height (px (round (toFloat blockWidth / settings.mainVisualAspectRatio)))
                 , Background.image mainVisualUrl
                 , CustomEl.backgroundColor mainVisualColor
                 ]
@@ -621,18 +628,18 @@ viewIcon color name isVisible =
         none
 
 
-viewWorkVisuals : Int -> List Visual -> Element Msg
-viewWorkVisuals blockWidth visuals =
+viewWorkVisuals : Int -> Settings -> List Visual -> Element Msg
+viewWorkVisuals blockWidth settings visuals =
     let
         perRow =
-            4
+            settings.thumbnailsPerRow
 
         spaceBetween =
             Palette.spaceSmallest
 
         thumbnailSize =
             toFloat (blockWidth - (spaceBetween * (perRow - 1)))
-                / perRow
+                / toFloat perRow
                 |> floor
     in
     if List.isEmpty visuals then
