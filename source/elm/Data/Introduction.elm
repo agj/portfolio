@@ -34,7 +34,7 @@ english tag =
             , bold <| t "Ale Grilli"
             , t "—thank you for perusing my "
             , bold <| t "portfolio"
-            , t ". I’m based in Santiago, Chile."
+            , t ". I’m based in Santiago, Chile. "
             , t "My work is concerned with various intersections of four areas—"
             , tag Tag.VisualCommunication "Visual Communication"
             , icon "visual-communication"

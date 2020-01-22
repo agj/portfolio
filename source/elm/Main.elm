@@ -539,6 +539,7 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons } 
         iconsBlock =
             row
                 [ paddingXY Palette.spaceNormal Palette.spaceSmall
+                , CustomEl.style "flex-basis" "auto"
                 ]
                 [ viewIcon mainVisualColor "visual-communication" icons.visualCommunication
                 , viewIcon mainVisualColor "programming" icons.programming

@@ -1,6 +1,5 @@
-module CustomEl exposing (backgroundColor, glow, imageInline, inlineCenter, radialGradient, svgFilter)
+module CustomEl exposing (backgroundColor, glow, imageInline, inlineCenter, radialGradient, style, svgFilter)
 
-import Debug
 import Element exposing (..)
 import Html.Attributes as Attributes
 import Utils exposing (..)
@@ -72,10 +71,6 @@ glow { color, strength, size } =
     style "text-shadow" <|
         String.join ", "
             (List.repeat (max 1 (round strength)) value)
-
-
-
--- INTERNAL
 
 
 style : String -> String -> Element.Attribute msg
