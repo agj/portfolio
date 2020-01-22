@@ -1,6 +1,7 @@
 module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
 import Browser
+import Browser.Dom as Dom
 import Browser.Events
 import CustomEl
 import Data.Introduction as Introduction
@@ -16,8 +17,10 @@ import Http
 import Language exposing (Language(..))
 import Maybe.Extra
 import Palette
+import Ports
 import SaveState exposing (SaveState)
 import Tag exposing (Tag)
+import Task
 import Utils exposing (..)
 import VideoEmbed
 import Work exposing (..)
@@ -50,6 +53,7 @@ type alias Model =
     , viewport : Viewport
     , popupVisual : Maybe Visual
     , data : DataStatus
+    , scrollTo : ScrollTarget
     }
 
 
@@ -57,6 +61,11 @@ type DataStatus
     = DataLoading
     | DataLoadError Http.Error
     | DataLoaded (List WorkLanguages)
+
+
+type ScrollTarget
+    = DontScroll
+    | ScrollTo Int
 
 
 type alias Flags =
@@ -72,6 +81,13 @@ init flags =
         saveState =
             Maybe.withDefault "" flags.storedState
                 |> SaveState.load
+
+        viewport =
+            { width = flags.viewport.width
+            , height = flags.viewport.height
+            , x = 0
+            , y = 0
+            }
     in
     ( { language =
             case saveState of
@@ -81,9 +97,10 @@ init flags =
                 Nothing ->
                     getLanguageFromPreferred flags.languages
       , tag = Maybe.map .tag saveState |> Maybe.Extra.join
-      , viewport = flags.viewport
+      , viewport = viewport
       , popupVisual = Nothing
       , data = DataLoading
+      , scrollTo = DontScroll
       }
     , getData
     )
@@ -119,39 +136,25 @@ type Msg
     = SelectedLanguage Language
     | SelectedTag Tag
     | SelectedVisual (Maybe Visual)
-    | GotViewport Viewport
+    | GotViewport Dom.Viewport
     | GotData (Result Http.Error (List WorkLanguages))
+    | Resized
+    | Scrolled Bool
+    | GotAnimationFrame Float
+    | NoOp
 
 
 type alias Viewport =
     { width : Int
     , height : Int
+    , x : Int
+    , y : Int
     }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        SelectedLanguage language ->
-            ( { model | language = language }
-            , SaveState.save { language = language, tag = model.tag }
-            )
-
-        SelectedTag tag ->
-            ( { model | tag = Just tag }
-            , SaveState.save { language = model.language, tag = Just tag }
-            )
-
-        SelectedVisual selection ->
-            ( { model | popupVisual = selection }
-            , Cmd.none
-            )
-
-        GotViewport viewport ->
-            ( { model | viewport = viewport }
-            , Cmd.none
-            )
-
         GotData result ->
             case result of
                 Ok data ->
@@ -163,6 +166,80 @@ update msg model =
                     ( { model | data = DataLoadError err }
                     , Cmd.none
                     )
+
+        SelectedLanguage language ->
+            ( { model | language = language }
+            , SaveState.save { language = language, tag = model.tag }
+            )
+
+        SelectedTag tag ->
+            ( { model
+                | tag = Just tag
+                , scrollTo = ScrollTo 1000
+              }
+            , SaveState.save { language = model.language, tag = Just tag }
+            )
+
+        SelectedVisual selection ->
+            ( { model | popupVisual = selection }
+            , Cmd.none
+            )
+
+        GotViewport vp ->
+            let
+                viewport =
+                    { width = round vp.viewport.width
+                    , height = round vp.viewport.height
+                    , x = round vp.viewport.x
+                    , y = round vp.viewport.y
+                    }
+
+                scrollTo =
+                    case model.scrollTo of
+                        ScrollTo pos ->
+                            if abs (round vp.viewport.y - pos) <= 2 then
+                                DontScroll
+
+                            else
+                                ScrollTo pos
+
+                        DontScroll ->
+                            DontScroll
+            in
+            ( { model
+                | viewport = viewport
+                , scrollTo = scrollTo
+              }
+            , Cmd.none
+            )
+
+        Resized ->
+            ( model
+            , Task.perform GotViewport Dom.getViewport
+            )
+
+        Scrolled _ ->
+            ( model
+            , Task.perform GotViewport Dom.getViewport
+            )
+
+        GotAnimationFrame delta ->
+            case model.scrollTo of
+                ScrollTo pos ->
+                    let
+                        target =
+                            toFloat model.viewport.y
+                                + (toFloat (pos - model.viewport.y) / 2)
+                    in
+                    ( model
+                    , Task.perform (\_ -> NoOp) (Dom.setViewport 0 target)
+                    )
+
+                DontScroll ->
+                    ( model, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 
@@ -185,6 +262,7 @@ view model =
     , body =
         [ layout
             ([ Font.family Palette.font
+             , Background.color Palette.darkish
              ]
                 ++ (case model.popupVisual of
                         Just visual ->
@@ -740,9 +818,18 @@ viewWorkReadMore labels readMore color =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Browser.Events.onResize <|
-        \w h ->
-            GotViewport { width = w, height = h }
+    Sub.batch
+        [ Browser.Events.onResize
+            (\w h -> Resized)
+        , Ports.onScroll Scrolled
+
+        -- , ifElse (model.scrollTo /= DontScroll)
+        --     (Ports.onScroll Scrolled)
+        --     Sub.none
+        , ifElse (model.scrollTo /= DontScroll)
+            (Browser.Events.onAnimationFrameDelta GotAnimationFrame)
+            Sub.none
+        ]
 
 
 
