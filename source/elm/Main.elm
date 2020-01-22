@@ -408,21 +408,28 @@ viewPopupVisual viewport visual =
                     desc.color
 
         visualEl =
-            case visual of
-                Image desc ->
-                    image
-                        [ width (px visualWidth)
-                        , height (px visualHeight)
-                        , centerX
-                        , centerY
-                        , Background.color color
-                        ]
-                        { src = desc.url
-                        , description = ""
-                        }
+            el
+                [ width (px usableWidth)
+                , height (px usableHeight)
+                , alignLeft
+                , alignBottom
+                ]
+                (case visual of
+                    Image desc ->
+                        image
+                            [ width (px visualWidth)
+                            , height (px visualHeight)
+                            , centerX
+                            , centerY
+                            , Background.color color
+                            ]
+                            { src = desc.url
+                            , description = ""
+                            }
 
-                Video desc ->
-                    VideoEmbed.get desc visualWidth visualHeight
+                    Video desc ->
+                        VideoEmbed.get desc visualWidth visualHeight
+                )
 
         closeButton =
             el
@@ -445,25 +452,9 @@ viewPopupVisual viewport visual =
         , Background.color (transparentColor 0.8 color)
         , onClick (SelectedVisual Nothing)
         , pointer
+        , inFront closeButton
         ]
-    <|
-        if viewportVertical then
-            column
-                [ width fill
-                , height fill
-                ]
-                [ closeButton
-                , visualEl
-                ]
-
-        else
-            row
-                [ width fill
-                , height fill
-                ]
-                [ visualEl
-                , closeButton
-                ]
+        visualEl
 
 
 

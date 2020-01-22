@@ -1,6 +1,7 @@
 module VideoEmbed exposing (get)
 
 import Element exposing (Element)
+import Element.Background as Background
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Utils exposing (..)
@@ -10,24 +11,23 @@ import Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter)
 get : VideoDescription -> Int -> Int -> Element msg
 get desc width height =
     let
-        color =
-            toCssColor desc.color
-
-        standard fixedSrc =
-            Element.html <|
-                iframe
-                    [ src fixedSrc
-                    , attribute "frameborder" "0"
-                    , attribute "allowfullscreen" "allowfullscreen"
-                    , style "width" (String.fromInt width ++ "px")
-                    , style "height" (String.fromInt height ++ "px")
-                    , style "background-color" color
-                    ]
-                    []
+        makeElement theSrc =
+            iframe
+                [ src theSrc
+                , attribute "frameborder" "0"
+                , attribute "allowfullscreen" "allowfullscreen"
+                , style "width" "100%"
+                , style "height" "100%"
+                ]
+                []
+                |> Element.html
     in
     Element.el
         [ Element.centerX
         , Element.centerY
+        , Element.width (Element.px width)
+        , Element.height (Element.px height)
+        , Background.color desc.color
         ]
         (case desc.host of
             Vimeo ->
@@ -40,7 +40,7 @@ get desc width height =
                         , { key = "autoplay", value = "1" }
                         ]
                 in
-                standard
+                makeElement
                     ("https://player.vimeo.com/video/"
                         ++ desc.id
                         ++ "?"
@@ -55,7 +55,7 @@ get desc width height =
                         , { key = "color", value = "white" }
                         ]
                 in
-                standard
+                makeElement
                     ("https://www.youtube-nocookie.com/embed/"
                         ++ desc.id
                         ++ "?"
