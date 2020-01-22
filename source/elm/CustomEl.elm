@@ -1,4 +1,4 @@
-module CustomEl exposing (backgroundColor, glow, imageInline, inlineCenter, radialGradient, style, svgFilter)
+module CustomEl exposing (backgroundColor, glow, id, imageInline, inlineCenter, radialGradient, style, svgFilter)
 
 import Element exposing (..)
 import Html.Attributes as Attributes
@@ -29,8 +29,8 @@ backgroundColor color =
 
 
 svgFilter : String -> Element.Attribute msg
-svgFilter id =
-    style "filter" ("url(#" ++ id ++ ")")
+svgFilter filterId =
+    style "filter" ("url(#" ++ filterId ++ ")")
 
 
 inlineCenter : Element.Attribute msg
@@ -76,3 +76,8 @@ glow { color, strength, size } =
 style : String -> String -> Element.Attribute msg
 style attribute value =
     Element.htmlAttribute <| Attributes.style attribute value
+
+
+id : String -> Element.Attribute msg
+id name =
+    Element.htmlAttribute <| Attributes.id name

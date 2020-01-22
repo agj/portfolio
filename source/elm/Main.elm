@@ -17,7 +17,9 @@ import Language exposing (Language(..))
 import Maybe.Extra
 import Palette
 import SaveState exposing (SaveState)
+import SmoothScroll
 import Tag exposing (Tag)
+import Task
 import Utils exposing (..)
 import VideoEmbed
 import Work exposing (..)
@@ -121,6 +123,8 @@ type Msg
     | SelectedVisual (Maybe Visual)
     | GotViewport Viewport
     | GotData (Result Http.Error (List WorkLanguages))
+    | GotScrollTarget String
+    | NoOp
 
 
 type alias Viewport =
@@ -139,7 +143,10 @@ update msg model =
 
         SelectedTag tag ->
             ( { model | tag = Just tag }
-            , SaveState.save { language = model.language, tag = Just tag }
+            , Cmd.batch
+                [ SaveState.save { language = model.language, tag = Just tag }
+                , Task.attempt (always NoOp) (SmoothScroll.scrollTo "works")
+                ]
             )
 
         SelectedVisual selection ->
@@ -164,6 +171,14 @@ update msg model =
                     , Cmd.none
                     )
 
+        GotScrollTarget id ->
+            ( model
+            , Task.attempt (always NoOp) (SmoothScroll.scrollTo id)
+            )
+
+        NoOp ->
+            ( model, Cmd.none )
+
 
 
 -- VIEW
@@ -185,6 +200,7 @@ view model =
     , body =
         [ layout
             ([ Font.family Palette.font
+             , Background.color Palette.darkish
              ]
                 ++ (case model.popupVisual of
                         Just visual ->
@@ -219,6 +235,7 @@ viewMain model =
             el
                 [ width (px worksBlockWidth)
                 , padding Palette.spaceSmall
+                , CustomEl.id "works"
                 ]
     in
     column
