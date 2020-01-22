@@ -10,12 +10,10 @@ module.exports = {
     outputDir: 'output/',
     worksFolder: worksFolder,
 
-    thumbnailSize: 300,
-    mainVisualSize: {
-        width: 1200,
-        height: 1200,
-    },
+    mainVisualSize: 1200,
+    mainVisualAR: 1.77,
     visualMaxSize: 2000,
+    thumbnailSize: 300,
 
     visualType: {
         image: 'Image',

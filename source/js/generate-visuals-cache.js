@@ -200,50 +200,40 @@ const toThumbnail = async (image) => {
 		})
 		.toBuffer();
 	return thumbnail;
-	// return fs.writeFile(outputPath, thumbnail);
 };
 const resizeMainVisual = async (image) => {
 	const actual = await getImageMetadata(image);
-	const target = cfg.mainVisualSize;
+	const targetSize = cfg.mainVisualSize;
 	const actualAR = actual.width / actual.height;
-	const targetAR = target.width / target.height;
+	const targetAR = cfg.mainVisualAR;
 
-	const targetSize =
-		actualAR > targetAR
+	const ar =
+		actualAR >= targetAR // Is image more landscapey?
+			? targetAR
+			: actualAR > 1 // Is image landscape at all?
+				? actualAR
+				: 1;
 
-			// Image is more landscapey
-			? actual.width > target.width
-				? actual.height > target.height
-					? { // Image is larger overall
-						width: target.width,
-						height: target.height,
-					}
-					: { // Image is wider but not taller
-						width: actual.height * targetAR,
-						height: actual.height,
-					}
-				: { // Image is smaller overall
-					width: actual.height * targetAR,
-					height: actual.height,
-				}
+	const croppedSize =
+		actualAR >= ar
+			? { // If image is more landscapey
+				width: actual.height * ar,
+				height: actual.height,
+			}
+			: { // If image is more portraity
+				width: actual.width,
+				height: actual.width / ar,
+			};
+	
+	const scaledSize =
+		croppedSize.height > targetSize
+			? {
+				width: croppedSize.width * (targetSize / croppedSize.height),
+				height: targetSize,
+			}
+			: croppedSize;
 
-			// Image is more portraity
-			: actual.height > target.height
-				? actual.width > target.width
-					? { // Image is larger overall
-						width: target.width,
-						height: target.height,
-					}
-					: { // Image is taller but not wider
-						width: actual.width,
-						height: actual.width / targetAR,
-					}
-				: { // Image is smaller overall
-					width: actual.width,
-					height: actual.width / targetAR,
-				};
-
-	return resizeTo(targetSize, image);
+	return resizeTo(scaledSize, image);
 };
 
 const resizeImage = async (image) => {
