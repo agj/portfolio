@@ -35,8 +35,6 @@
 			app.ports.saveState.subscribe((state) => {
 				localStorage.setItem('portfolio-state', state);
 			});
-
-			document.addEventListener('scroll', () => app.ports.onScroll.send(true));
 		</script>
 	</body>
 </html>

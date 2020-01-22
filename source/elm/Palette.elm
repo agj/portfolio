@@ -1,4 +1,4 @@
-module Palette exposing (dark, darkish, font, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
+module Palette exposing (dark, font, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
 
 import Color exposing (Color)
 import Color.Manipulate
@@ -13,12 +13,6 @@ import Element.Font as Font exposing (Font)
 dark : Element.Color
 dark =
     baseDark
-        |> toElmUiColor
-
-
-darkish : Element.Color
-darkish =
-    baseDarkish
         |> toElmUiColor
 
 
@@ -118,12 +112,7 @@ baseSecondaryHighlight =
 
 baseDark : Color
 baseDark =
-    Color.rgb 0 0 0
-
-
-baseDarkish : Color
-baseDarkish =
-    Color.rgb 0.3 0.3 0.3
+    Color.rgb 0.1 0.1 0.1
 
 
 toElmUiColor : Color -> Element.Color
