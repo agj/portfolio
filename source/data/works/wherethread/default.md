@@ -1,8 +1,8 @@
 ---
 name: Where the thread goes
 tags:
-  - VisualCommunication
   - Video
+  - VisualCommunication
 date: "2015"
 readMore: http://blog.agj.cl/2017/05/where-the-thread-goes/
 visuals:

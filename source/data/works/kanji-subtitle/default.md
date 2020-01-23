@@ -1,12 +1,12 @@
 ---
 name: Subtitling of Japanese TV show
 tags:
-  - Language
-  - Learning
-  - Digital
-  - Video
   - Translation
+  - Language
+  - Video
+  - Learning
   - LanguageTeaching
+  - Digital
 date: 2018
 visuals:
   - type: Video

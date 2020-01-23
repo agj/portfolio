@@ -1,12 +1,12 @@
 ---
 name: Tiles visualizer
 tags:
-  - VisualCommunication
-  - Programming
-  - Digital
-  - Web
   - UserInterface
+  - VisualCommunication
+  - Web
+  - Programming
   - Interactive
+  - Digital
 date: "2013"
 readMore: http://blog.agj.cl/2013/10/tiles-visualizer/
 visuals:

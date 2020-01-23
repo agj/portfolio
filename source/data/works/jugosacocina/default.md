@@ -2,8 +2,8 @@
 name: Jugosa cocina para niños
 tags:
   - VisualCommunication
-  - Learning
   - Graphic
+  - Learning
 date: 2009
 readMore: http://blog.agj.cl/2010/01/cookbook-for-children/
 visuals:

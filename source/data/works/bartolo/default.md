@@ -1,14 +1,14 @@
 ---
 name: Bartolo series
 tags:
-  - VisualCommunication
+  - EducationalSoftware
   - Programming
+  - Interactive
   - Learning
   - Digital
   - VideoGame
+  - VisualCommunication
   - Web
-  - Interactive
-  - EducationalSoftware
 date: 2010-2014
 visuals:
   - type: Video

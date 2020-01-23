@@ -1,10 +1,10 @@
 ---
 name: Asymmetric feedback
 tags:
-  - VisualCommunication
+  - Interactive
   - Programming
   - Digital
-  - Interactive
+  - VisualCommunication
 date: 2015
 readMore: http://blog.agj.cl/2017/05/several-installations/
 visuals:

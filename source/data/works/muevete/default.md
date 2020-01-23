@@ -1,10 +1,10 @@
 ---
 name: Muévete
 tags:
-  - VisualCommunication
+  - Interactive
   - Programming
   - Digital
-  - Interactive
+  - VisualCommunication
 date: "2011"
 readMore: http://blog.agj.cl/tag/muevete/
 visuals:

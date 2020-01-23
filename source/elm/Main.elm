@@ -16,6 +16,7 @@ import Html exposing (Html)
 import Http
 import Language exposing (Language(..))
 import LayoutFormat exposing (LayoutFormat(..))
+import List.Extra
 import Maybe.Extra
 import Palette
 import SaveState exposing (SaveState)
@@ -479,6 +480,7 @@ viewWorks { blockWidth, labels, maybeTag, works, settings } =
                     List.filter
                         (\w -> List.member tag w.tags)
                         works
+                        |> sortWorks tag
     in
     if List.isEmpty filteredWorks then
         viewLoadMessage labels.pleaseSelect
@@ -804,3 +806,13 @@ icon size color name =
             , description = " "
             }
         )
+
+
+sortWorks : Tag -> List Work -> List Work
+sortWorks tag works =
+    let
+        tagIndex work =
+            List.Extra.elemIndex tag work.tags
+                |> Maybe.withDefault 999
+    in
+    List.sortBy tagIndex works

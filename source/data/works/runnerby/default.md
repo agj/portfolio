@@ -1,11 +1,11 @@
 ---
 name: Runnerby
 tags:
-  - VisualCommunication
   - VideoGame
-  - Digital
-  - Web
   - Interactive
+  - Digital
+  - VisualCommunication
+  - Web
 date: 2010
 readMore: http://blog.agj.cl/tag/runnerby/
 visuals:

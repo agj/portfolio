@@ -2,9 +2,9 @@
 name: Come to think of language
 tags:
   - VisualCommunication
-  - Language
   - Graphic
   - Video
+  - Language
 date: "2017"
 readMore: http://blog.agj.cl/tag/come-to-think-of-language/
 visuals:

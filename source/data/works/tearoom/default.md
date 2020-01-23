@@ -1,11 +1,11 @@
 ---
 name: The tea room
 tags:
-  - VisualCommunication
+  - Interactive
   - Programming
   - Digital
   - VideoGame
-  - Interactive
+  - VisualCommunication
 date: "2017"
 readMore: http://blog.agj.cl/tag/the-tea-room/
 visuals:

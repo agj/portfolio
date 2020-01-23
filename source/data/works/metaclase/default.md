@@ -1,9 +1,9 @@
 ---
 name: Kanji metaclass
 tags:
-  - Language
-  - Learning
   - LanguageTeaching
+  - Learning
+  - Language
 date: 2014-
 readMore: http://blog.agj.cl/tag/metaclase-de-kanji/
 visuals:

@@ -1,13 +1,13 @@
 ---
 name: Campodecolor
 tags:
+  - UserInterface
+  - VideoGame
   - VisualCommunication
   - Programming
-  - Digital
-  - VideoGame
-  - Web
-  - UserInterface
   - Interactive
+  - Digital
+  - Web
 date: "2008"
 readMore: http://blog.agj.cl/tag/campodecolor/
 visuals:

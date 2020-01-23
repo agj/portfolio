@@ -1,13 +1,13 @@
 ---
 name: Flower pattern
 tags:
-  - VisualCommunication
-  - Programming
-  - Digital
   - VideoGame
-  - Web
   - UserInterface
+  - Web
+  - Programming
   - Interactive
+  - VisualCommunication
+  - Digital
 date: "2012"
 readMore: http://blog.agj.cl/tag/flower-pattern/
 links:
