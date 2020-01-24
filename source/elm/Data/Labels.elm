@@ -5,6 +5,7 @@ import Language exposing (..)
 
 type alias Labels =
     { title : String
+    , backToHome : String
     , readMoreEnglish : String
     , readMoreJapanese : String
     , readMoreSpanish : String
@@ -33,6 +34,7 @@ ofLanguage language =
 
 english =
     { title = "Ale Grilli's portfolio"
+    , backToHome = "Back to agj.cl"
     , readMoreEnglish = "Read more about it"
     , readMoreJapanese = "Read more about it (in Japanese)"
     , readMoreSpanish = "Read more about it (in Spanish)"
@@ -44,6 +46,7 @@ english =
 
 japanese =
     { title = "アレ・グリリのポートフォリオ"
+    , backToHome = "agj.cl に戻る"
     , readMoreEnglish = "もっと詳しく（英語）"
     , readMoreJapanese = "もっと詳しく"
     , readMoreSpanish = "もっと詳しく（スペイン語）"
@@ -55,6 +58,7 @@ japanese =
 
 spanish =
     { title = "Portafolio de Ale Grilli"
+    , backToHome = "Volver a agj.cl"
     , readMoreEnglish = "Lee más al respecto (en inglés)"
     , readMoreJapanese = "Lee más al respecto (en japonés)"
     , readMoreSpanish = "Lee más al respecto"

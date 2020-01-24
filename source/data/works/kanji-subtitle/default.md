@@ -23,4 +23,4 @@ visuals:
     url: 02.jpg
 ---
 
-In order to use in a Japanese language workshop, I extracted part of an episode of a fun educational Japanese TV show about the history of the Japanese writing system, and subtitled it into Spanish.
+In order to use it in a Japanese language workshop, I extracted part of an episode of a fun educational Japanese TV show about the history of the Japanese writing system, and subtitled it into Spanish.

@@ -32,9 +32,10 @@ english tag =
         [ p
             [ t "My name is "
             , bold <| t "Ale Grilli"
-            , t "—thank you for perusing my "
+            , t "—thank you for taking a look at my "
             , bold <| t "portfolio"
-            , t ". I’m based in Santiago, Chile. "
+            , t ". "
+            , t "I’m based in Santiago, Chile. "
             , t "My work is concerned with various intersections of four areas—"
             , tag Tag.VisualCommunication "Visual Communication"
             , icon "visual-communication"
@@ -65,10 +66,10 @@ english tag =
             , tag Tag.Graphic "graphics"
             , t ". I shoot and edit "
             , tag Tag.Video "videos"
-            , t " on occasion."
+            , t "."
             ]
         , p
-            [ t "I’m a languages nerd, fluent in English and Japanese, apart from my native Spanish, and also working on Chinese Mandarin. "
+            [ t "I’m a languages nerd, fluent in English and Japanese, apart from my native Spanish, and also working on Chinese Mandarin right now. "
             , t "I do "
             , tag Tag.Translation "translation"
             , t " work, subtitling too."
@@ -79,13 +80,18 @@ english tag =
             , tag Tag.EducationalSoftware "educational software"
             , t ". I occasionally "
             , tag Tag.LanguageTeaching "teach languages"
-            , t "."
+            , t " too."
             ]
         , p
             [ t "To see examples of my work, choose any of the highlighted keywords above. "
             , t "Or you can choose to see "
             , tag Tag.Any "all"
-            , t " of them at once."
+            , t " of them at once. "
+            , t "Get in touch via email at "
+            , bold <| t "ale¶agj.cl"
+            , t " (¶\u{00A0}=\u{00A0}@) or "
+            , l "Twitter" (Url "https://twitter.com/alegrilli")
+            , t "!"
             ]
         ]
 
@@ -96,7 +102,8 @@ japanese tag =
             [ bold <| t "アレ・グリリ（Ale Grilli）"
             , t "の"
             , bold <| t "ポートフォリオ"
-            , t "をご覧いただきありがとうございます。拠点をチリのサンティアゴにしている者です。"
+            , t "をご覧いただきありがとうございます。"
+            , t "拠点をチリのサンティアゴにしている者です。"
             , tag Tag.VisualCommunication "視覚コミュニケーション"
             , icon "visual-communication"
             , t "、"
@@ -146,6 +153,12 @@ japanese tag =
             [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してください。"
             , tag Tag.Any "全て"
             , t "を一気に見ることもできます。"
+            , t "連絡はメールで"
+            , bold <| t "ale¶agj.cl"
+            , t "（¶\u{00A0}=\u{00A0}@）あるいは"
+            , l "Twitter" (Url "https://twitter.com/alegrilli")
+            , t "より。"
+            , t "待っております！"
             ]
         ]
 
@@ -157,7 +170,7 @@ spanish tag =
             , bold <| t "Ale Grilli"
             , t "—gracias por revisar mi "
             , bold <| t "portafolio"
-            , t ". Vivo en Santiago, Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
+            , t ". Vivo en Santiago de Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
             , tag Tag.VisualCommunication "Comunicación Visual"
             , icon "visual-communication"
             , t ", "
@@ -186,7 +199,7 @@ spanish tag =
             , tag Tag.Graphic "gráfica"
             , t ". Creo y edito "
             , tag Tag.Video "videos"
-            , t " ocasionalmente."
+            , t "."
             ]
         , p
             [ t "Soy fanático de los idiomas. Además de mi español nativo, hablo fluído inglés y japonés, y estoy aprendiendo chino mandarín. Trabajo "
@@ -203,7 +216,12 @@ spanish tag =
         , p
             [ t "Para ver ejemplos de mi trabajo, elige alguna de las palabras destacadas de arriba. También puedes elegir verlos "
             , tag Tag.Any "todos"
-            , t " juntos."
+            , t " juntos. "
+            , t "Contáctame por correo a "
+            , bold <| t "ale¶agj.cl"
+            , t " (¶\u{00A0}=\u{00A0}@), o por "
+            , l "Twitter" (Url "https://twitter.com/alegrilli")
+            , t "."
             ]
         ]
 

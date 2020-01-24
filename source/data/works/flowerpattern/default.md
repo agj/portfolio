@@ -28,6 +28,6 @@ visuals:
 ---
 
 
-A drawing toy that forms beautiful patterns upon input, created for touch screens (although it also works with the mouse). [Try it on a tablet or smartphone]{link| url = http://agj.cl/ip/fp } by visiting this web address:
+A drawing toy that forms beautiful patterns upon input, created for touch screens (although it also works with the mouse). Try it by visiting this web address:
 
 `http://agj.cl/ip/fp`{code}

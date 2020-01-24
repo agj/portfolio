@@ -24,6 +24,8 @@ links:
 ---
 
 
-Prototype for my undergraduate thesis project. An experimental videogame that offers the barest elements for making visual compositions, and attempts to evaluate their compositive parameters.
+Prototype for my undergraduate thesis project.
+An experimental videogame that offers the barest elements for making visual compositions, and attempts to evaluate their compositive parameters.
 
-Click on the animated picture to start. In the center, a canvas that can be filled with the circles to the right, by drag-and-dropping them. Below, a rough (and inaccurate, in this prototype) analysis of some compositive values: color temperature, symmetry, visual rhythm, and visual accent.
+In the center lies the canvas, which can be “painted” on by dragging onto it the shapes that float across the right side.
+Below, four compositive values are analysed: color temperature, symmetry, visual rhythm, and visual accent. In this incomplete prototype the analysis is not quite accurate, sadly.

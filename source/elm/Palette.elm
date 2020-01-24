@@ -1,4 +1,4 @@
-module Palette exposing (dark, darkish, font, highlightDark, highlightDarker, highlightLight, light, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
+module Palette exposing (dark, darkish, font, highlightDark, highlightDarker, highlightLight, light, spaceLarge, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
 
 import Color exposing (Color)
 import Color.Manipulate
@@ -80,6 +80,11 @@ textLineSpacing fontSize =
 
 
 -- SPACING
+
+
+spaceLarge : Int
+spaceLarge =
+    26
 
 
 spaceNormal : Int

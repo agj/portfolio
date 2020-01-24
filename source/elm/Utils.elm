@@ -1,4 +1,4 @@
-module Utils exposing (fraction, ifElse, toCssColor, transparentColor, unnest)
+module Utils exposing (fraction, ifElse, sides, toCssColor, transparentColor, unnest)
 
 import Element
 
@@ -47,3 +47,11 @@ transparentColor opacity color =
             Element.toRgb color
     in
     Element.rgba red green blue opacity
+
+
+sides =
+    { left = 0
+    , right = 0
+    , top = 0
+    , bottom = 0
+    }

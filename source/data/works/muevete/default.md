@@ -20,7 +20,11 @@ visuals:
 ---
 
 
-Interactive artwork commissioned by [Centro Cultural La Moneda]{link| url = http://www.ccplm.cl/}, project for which I was in charge of software programming, and which was featured in the 2013 [Design Biennial]{link| url = http://www.bienaldediseno.cl/ } in Santiago. The Adobe AIR application interprets motion captured by a camera and displays reactive visuals and audio on a large projection. Design by [Sebastián Skoknic]{link| url = http://skoknic.weebly.com/ }, support by Francisco Fuentes.
+Interactive artwork commissioned by [Centro Cultural La Moneda]{link| url = http://www.ccplm.cl/}, project for which I was in charge of software programming, and which was featured in the 2013 [Design Biennial]{link| url = http://www.bienaldediseno.cl/ } in Santiago.
+I was in charge of programming the design by [Sebastián Skoknic]{link| url = http://skoknic.weebly.com/ }.
 
-A web version was also developed, which is available at [their website]{link| url = http://www.ccplm.cl/color/#muestra } by clicking on the number '05' and then on 'Juega!'. Requires a webcam and Flash.
+The installation is set up so that visitors can interact with the projection by moving their bodies.
+
+A web version was also developed, which is available at [their website]{link| url = http://www.ccplm.cl/color/#muestra } by clicking on the number ‘05’ and then on ‘Juega!’.
+Requires a webcam and Flash.
 

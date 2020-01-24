@@ -1,4 +1,4 @@
-module Descriptor exposing (bold, d, fromDoc, list, makeTag, p, t)
+module Descriptor exposing (Url(..), bold, d, fromDoc, l, list, makeTag, p, t)
 
 import CustomEl
 import Doc exposing (Doc)
@@ -16,6 +16,10 @@ import Html.Attributes
 import Palette
 import Tag exposing (Tag)
 import Utils exposing (..)
+
+
+type Url
+    = Url String
 
 
 d : List (Element msg) -> Element msg
@@ -65,6 +69,14 @@ p children =
 t : String -> Element msg
 t =
     text
+
+
+l : String -> Url -> Element msg
+l textContent (Url url) =
+    newTabLink linkStyle
+        { label = t textContent
+        , url = url
+        }
 
 
 bold : Element msg -> Element msg
@@ -123,12 +135,7 @@ fromText color txt =
     case ( Format.link format, getStyle format ) of
         ( Just lnk, style ) ->
             newTabLink
-                ([ Font.underline
-                 , pointer
-                 , mouseDown [ Font.color Palette.highlightLight ]
-                 ]
-                    ++ style
-                )
+                (linkStyle ++ style)
                 { label = t textContent
                 , url = Link.url lnk
                 }
@@ -154,3 +161,11 @@ getStyle : Format -> List (Element.Attribute msg)
 getStyle format =
     ifElse (Format.isBold format) [ Font.bold ] []
         ++ ifElse (Format.isItalic format) [ Font.italic ] []
+
+
+linkStyle : List (Element.Attribute msg)
+linkStyle =
+    [ Font.underline
+    , pointer
+    , mouseDown [ Font.color Palette.highlightLight ]
+    ]

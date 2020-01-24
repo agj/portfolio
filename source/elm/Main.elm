@@ -2,6 +2,7 @@ module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
 import Browser
 import Browser.Events
+import Browser.Navigation as Navigation
 import CustomEl
 import Data.Introduction as Introduction
 import Data.Labels as Labels exposing (Labels)
@@ -10,6 +11,7 @@ import Descriptor
 import Doc exposing (Doc)
 import Element exposing (..)
 import Element.Background as Background
+import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
@@ -110,6 +112,7 @@ type Msg
     = SelectedLanguage Language
     | SelectedTag Tag
     | SelectedVisual (Maybe Visual)
+    | SelectedGoHome
     | GotViewport Viewport
     | GotData (Result Http.Error (List WorkLanguages))
     | NoOp
@@ -140,6 +143,11 @@ update msg model =
         SelectedVisual selection ->
             ( { model | popupVisual = selection }
             , Cmd.none
+            )
+
+        SelectedGoHome ->
+            ( model
+            , Navigation.load "/"
             )
 
         GotViewport viewport ->
@@ -267,7 +275,8 @@ viewMain model =
         [ width <| Maybe.withDefault fill (settings.worksBlockWidth |> Maybe.map px)
         , centerX
         , inFront <| viewLanguageSelector model.language
-        , paddingEach { top = Palette.spaceSmall, bottom = Palette.spaceNormal, left = 0, right = 0 }
+        , inFront <| viewBackButton labels.backToHome
+        , paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceNormal }
         ]
         [ viewTop model.language model.tag
         , content
@@ -279,7 +288,7 @@ viewTop language selectedTag =
     column
         [ Font.color Palette.light
         , Background.color Palette.dark
-        , paddingEach { top = Palette.spaceNormal, bottom = Palette.spaceSmall, left = 0, right = 0 }
+        , paddingEach { sides | top = Palette.spaceNormal, bottom = Palette.spaceSmall }
         ]
         [ viewIntroduction (Introduction.ofLanguage SelectedTag selectedTag language)
         ]
@@ -290,12 +299,34 @@ viewLanguageSelector language =
     row
         [ spacing Palette.spaceSmallest
         , alignRight
-        , paddingEach { right = Palette.spaceSmall, left = 0, top = 0, bottom = 0 }
+        , paddingEach { sides | right = Palette.spaceSmall }
         ]
         [ viewLanguageButton "EN" English language
         , viewLanguageButton "ES" Spanish language
         , viewLanguageButton "日" Japanese language
         ]
+
+
+viewBackButton : String -> Element Msg
+viewBackButton label =
+    el [ centerX, centerY ] (text label)
+        |> el
+            [ alignLeft
+            , paddingXY Palette.spaceSmall 0
+            , Font.size Palette.textSizeNormal
+            , height (px (fraction 2.3 Palette.textSizeNormal))
+            , pointer
+            , Background.color Palette.dark
+            , Border.color Palette.highlightDark
+            , Border.widthEach { left = 1, right = 1, bottom = 1, top = 0 }
+            , Font.color Palette.light
+            , mouseDown
+                [ Background.color Palette.highlightLight
+                , Font.color Palette.dark
+                ]
+            , onClick SelectedGoHome
+            ]
+        |> el [ paddingEach { sides | left = Palette.spaceSmall } ]
 
 
 viewLanguageButton : String -> Language -> Language -> Element Msg
@@ -329,7 +360,7 @@ viewIntroduction : Element Msg -> Element Msg
 viewIntroduction introductionText =
     el
         [ width fill
-        , paddingXY Palette.spaceNormal Palette.spaceSmaller
+        , paddingXY Palette.spaceNormal Palette.spaceNormal
         , Font.size Palette.textSizeNormal
         ]
         introductionText
@@ -488,7 +519,7 @@ viewWorks { blockWidth, labels, maybeTag, works, settings } =
     else
         column
             [ width fill
-            , spacing Palette.spaceSmall
+            , spacing Palette.spaceNormal
             ]
             (List.map
                 (viewWork blockWidth labels settings)
@@ -513,12 +544,7 @@ viewWork : Int -> Labels -> Settings -> Work -> Element Msg
 viewWork blockWidth labels settings work =
     viewWorkBlock
         [ inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
-        , case work.readMore of
-            Just _ ->
-                paddingEach { bottom = 1 * Palette.textSizeNormal, top = 0, left = 0, right = 0 }
-
-            Nothing ->
-                padding 0
+        , paddingEach { sides | bottom = Palette.spaceNormal }
         ]
         [ viewWorkTitle blockWidth
             { title = work.name
@@ -645,7 +671,7 @@ viewWorkVisuals blockWidth settings visuals =
         wrappedRow
             [ spacing spaceBetween
             , width fill
-            , paddingEach { top = spaceBetween, bottom = 0, left = 0, right = 0 }
+            , paddingEach { sides | top = spaceBetween }
             ]
             (List.map (viewVisualThumbnail thumbnailSize) visuals)
 
