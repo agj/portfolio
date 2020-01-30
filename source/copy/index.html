@@ -35,6 +35,13 @@
 			app.ports.saveState.subscribe((state) => {
 				localStorage.setItem('portfolio-state', state);
 			});
+
+			app.ports.getViewport.subscribe(() => {
+				app.ports.gotViewport.send({
+					width: document.body.clientWidth,
+					height: document.body.clientHeight,
+				});
+			});
 		</script>
 	</body>
 </html>

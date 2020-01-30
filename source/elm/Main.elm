@@ -27,9 +27,10 @@ import Tag exposing (Tag)
 import Task
 import Utils exposing (..)
 import VideoEmbed
+import Viewport exposing (Viewport)
 import Work exposing (..)
 import Work.Date as Date exposing (Date)
-import Work.Visual as Visual exposing (VideoHost(..), Visual(..))
+import Work.Visual as Visual exposing (Visual(..))
 import Works
 
 
@@ -113,15 +114,10 @@ type Msg
     | SelectedTag Tag
     | SelectedVisual (Maybe Visual)
     | SelectedGoHome
+    | Resized
     | GotViewport Viewport
     | GotData (Result Http.Error (List WorkLanguages))
     | NoOp
-
-
-type alias Viewport =
-    { width : Int
-    , height : Int
-    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -148,6 +144,11 @@ update msg model =
         SelectedGoHome ->
             ( model
             , Navigation.load "/"
+            )
+
+        Resized ->
+            ( model
+            , Viewport.get
             )
 
         GotViewport viewport ->
@@ -780,9 +781,11 @@ viewWorkReadMore labels readMore color =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Browser.Events.onResize <|
-        \w h ->
-            GotViewport { width = w, height = h }
+    Sub.batch
+        [ Browser.Events.onResize <|
+            \w h -> Resized
+        , Viewport.got GotViewport NoOp
+        ]
 
 
 
