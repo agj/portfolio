@@ -62,6 +62,7 @@ p children =
         [ Font.size Palette.textSizeNormal
         , paddingXY 0 10
         , spacing <| Palette.textLineSpacing Palette.textSizeNormal
+        , CustomEl.iOsTextScalingFix
         ]
         children
 

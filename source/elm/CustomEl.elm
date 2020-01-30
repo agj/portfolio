@@ -1,4 +1,4 @@
-module CustomEl exposing (backgroundColor, glow, id, imageInline, inlineCenter, radialGradient, style, svgFilter)
+module CustomEl exposing (backgroundColor, glow, iOsTextScalingFix, id, imageInline, inlineCenter, radialGradient, style, svgFilter)
 
 import Element exposing (..)
 import Html.Attributes as Attributes
@@ -71,6 +71,11 @@ glow { color, strength, size } =
     style "text-shadow" <|
         String.join ", "
             (List.repeat (max 1 (round strength)) value)
+
+
+iOsTextScalingFix : Element.Attribute msg
+iOsTextScalingFix =
+    style "-webkit-text-size-adjust" "100%"
 
 
 style : String -> String -> Element.Attribute msg
