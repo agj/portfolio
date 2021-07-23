@@ -27,7 +27,6 @@ visuals:
     url: 04.png
 ---
 
-
 A drawing toy that forms beautiful patterns upon input, created for touch screens (although it also works with the mouse). Try it by visiting this web address:
 
 `http://agj.cl/ip/fp`{code}

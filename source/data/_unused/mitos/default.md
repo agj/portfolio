@@ -18,5 +18,4 @@ visuals:
     url: http://piclog.agj.cl/image/normal/20081222195658_huala.jpg
 ---
 
-
 Ten illustrations of different mythical beings of Chilean folklore, created in school for a book called “Dictionary of mythological beings in Chile”.

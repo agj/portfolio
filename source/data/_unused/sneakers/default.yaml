@@ -4,12 +4,12 @@ category: av
 type: video
 year: 2007
 image: zapatillas.jpg
-readMore: 'http://blog.agj.cl/2009/01/the-story-of-my-sneakers/'
+readMore: "http://blog.agj.cl/2009/01/the-story-of-my-sneakers/"
 description: >-
   A short film depicting a young girl's little ritual to cast away her troubles,
   wherein the camcorder itself serves as her witness.
 links:
   watch:
-    url: 'http://www.vimeo.com/2729724'
+    url: "http://www.vimeo.com/2729724"
     width: 504
     height: 380

@@ -23,7 +23,6 @@ links:
     url: http://www.agj.cl/files/games/campodecolor1/
 ---
 
-
 Prototype for my undergraduate thesis project.
 An experimental videogame that offers the barest elements for making visual compositions, and attempts to evaluate their compositive parameters.
 

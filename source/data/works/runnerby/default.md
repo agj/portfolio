@@ -21,6 +21,5 @@ links:
     url: http://www.agj.cl/files/games/runnerby/
 ---
 
-
 A game controlled by a single key (spacebar), which makes a perpetually running character jump.
 Designed around simplicity of controls, but difficulty of execution.

@@ -22,6 +22,5 @@ visuals:
     url: ltdp03.png
 ---
 
-
 A series of educational video games for children, involving the titular dog character, developed by [Imactiva]{link| url = http://www.imactiva.cl/ }.
 I participated in the development of the language and history titles, for which I worked as programmer and software architect.
