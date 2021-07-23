@@ -17,5 +17,4 @@ visuals:
     url: http://piclog.agj.cl/image/normal/20100105162500_jugosa3.jpg
 ---
 
-
 A cookbook for children, project for which I worked as art director and layout designer.

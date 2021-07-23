@@ -15,5 +15,4 @@ visuals:
     url: 02.jpg
 ---
 
-
 A video performance. This was our answer to the school assignment of making a video using our bodies, and taking “rope” as theme, although it's lost very early in the video. We attempted becoming human swings all around the city of Yokohama.

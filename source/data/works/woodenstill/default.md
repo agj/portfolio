@@ -17,6 +17,5 @@ visuals:
     url: 03.jpg
 ---
 
-
 A mood piece animated out of sequences of photographs.
 The subject is my grandmother's house in southern Chile and its surroundings.

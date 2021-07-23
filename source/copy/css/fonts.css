@@ -1,18 +1,25 @@
-
 @font-face {
-  font-family: 'mplus-1p';
+  font-family: "mplus-1p";
   font-style: normal;
   font-weight: normal;
-  src: local('M PLUS 1p'), local('MPLUS1p-Regular'),
-       url('/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-300.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-300.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+  src: local("M PLUS 1p"), local("MPLUS1p-Regular"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-300.woff2")
+      format("woff2"),
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url("/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-300.woff")
+      format("woff");
 }
 
 @font-face {
-  font-family: 'mplus-1p';
+  font-family: "mplus-1p";
   font-style: normal;
   font-weight: bold;
-  src: local('M PLUS 1p ExtraBold'), local('MPLUS1p-ExtraBold'),
-       url('/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-       url('/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+  src: local("M PLUS 1p ExtraBold"), local("MPLUS1p-ExtraBold"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-700.woff2")
+      format("woff2"),
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url("/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-700.woff")
+      format("woff");
 }

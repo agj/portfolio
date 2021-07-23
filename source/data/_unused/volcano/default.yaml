@@ -4,13 +4,13 @@ category: av
 type: video
 year: 2009
 image: volcano2.jpg
-readMore: 'http://blog.agj.cl/2009/01/volcano/'
+readMore: "http://blog.agj.cl/2009/01/volcano/"
 description: >
   A simple music video for a friend's (<a
   href="http://www.fireandrobot.com/">Matt Peter</a>) song. Footage was captured
   around my neighborhood with a camcorder.
 links:
   watch:
-    url: 'http://www.vimeo.com/3024136'
+    url: "http://www.vimeo.com/3024136"
     width: 504
     height: 380
