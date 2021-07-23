@@ -132,7 +132,12 @@ update msg model =
             ( { model | tag = Just tag }
             , Cmd.batch
                 [ SaveState.save { language = model.language, tag = Just tag }
-                , Task.attempt (always NoOp) (SmoothScroll.scrollTo "works")
+                , Task.attempt
+                    (always NoOp)
+                    (SmoothScroll.scrollToWithOptions
+                        { defaultScroll | speed = 10 }
+                        "works"
+                    )
                 ]
             )
 
@@ -845,3 +850,7 @@ sortWorks tag works =
                 |> Maybe.withDefault 999
     in
     List.sortBy tagIndex works
+
+
+defaultScroll =
+    SmoothScroll.defaultConfig
