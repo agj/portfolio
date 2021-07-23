@@ -1,30 +1,30 @@
-import R from "ramda";
+import { append, tap, curry, uniq, map, set, lensProp, has } from "ramda";
 import ow from "ow";
 import { spawn } from "child_process";
 import dotInto from "dot-into";
 
 dotInto.install();
 
-export const log = R.tap(console.log);
+export const log = tap(console.log);
 
-export const prepend = R.curry((prep, text) => prep + text);
+export const prepend = curry((prep, text) => prep + text);
 
-export const multiGroupBy = R.curry((getGroups, list) =>
+export const multiGroupBy = curry((getGroups, list) =>
   list
     .reduce(
       (r, item) =>
         getGroups(item).reduce(
           (r, group) =>
-            R.set(
-              R.lensProp(group),
-              R.append(item, R.has(group, r) ? r[group] : []),
+            set(
+              lensProp(group),
+              append(item, has(group, r) ? r[group] : []),
               r
             ),
           r
         ),
       {}
     )
-    .into(R.map(R.uniq))
+    .into(map(uniq))
 );
 
 export const toJson = (data) => JSON.stringify(data, null, "\t");
@@ -45,3 +45,16 @@ export const run = (program, options, furtherOptions) => {
 
   return proc;
 };
+
+// Internal
+
+const optionsToArray = (options) =>
+  Object.keys(options).map((opt) => {
+    const value = options[opt];
+    if (value === false) return "";
+    const start = opt.length === 1 ? `-${opt}` : `--${opt}`;
+    if (value === true) {
+      return start;
+    }
+    return `${start}="${value}"`;
+  });
