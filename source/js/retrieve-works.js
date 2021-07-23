@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const glob = require('glob-promise');
 const matter = require('gray-matter');
-const ow = require('ow');
+const ow = require('ow').default;
 require('dot-into').install();
 
 const cfg = require('./config');

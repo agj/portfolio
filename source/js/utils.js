@@ -1,7 +1,7 @@
 
 const R = require('ramda');
 const fs = require('fs-extra');
-const ow = require('ow');
+const ow = require('ow').default;
 require('dot-into').install();
 
 const log = R.tap(console.log);
