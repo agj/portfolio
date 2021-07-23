@@ -25,10 +25,7 @@ const buildElm = () => doElm({ optimize: true, debug: false });
 
 const debugElm = () => doElm({ optimize: false, debug: true });
 
-const formatElm = () => exec(`npx elm-format ${cfg.elmDir} --yes`);
-
-const watchElm = () =>
-  gulp.watch(`${cfg.elmDir}**/*.elm`, gulp.series(formatElm, debugElm));
+const watchElm = () => gulp.watch(`${cfg.elmDir}**/*.elm`, debugElm);
 
 // Static files copy
 
@@ -66,7 +63,5 @@ export const debug = gulp.parallel(copy, generateJson, debugElm);
 export const watch = gulp.parallel(watchCopy, watchJson, watchElm);
 
 export default build;
-
-export { formatElm as format };
 
 export { generateCache as cache };
