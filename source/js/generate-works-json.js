@@ -2,7 +2,7 @@ import R from "ramda";
 import fs from "fs-extra";
 import dotInto from "dot-into";
 
-import _ from "./utils.js";
+import { isUrl, toJson } from "./utils.js";
 import cfg from "./config.js";
 
 dotInto.install();
@@ -40,9 +40,7 @@ const normalizeVisual = (visual) => {
   if (visual.type === cfg.visualType.image) {
     return {
       type: visual.type,
-      url: _.isUrl(visual.url)
-        ? visual.url
-        : `${cfg.worksFolder}/${visual.url}`,
+      url: isUrl(visual.url) ? visual.url : `${cfg.worksFolder}/${visual.url}`,
       thumbnailUrl: `${cfg.worksFolder}/${visual.thumbnailUrl}`,
       aspectRatio: meta.width / meta.height,
       color: meta.color,
@@ -71,7 +69,7 @@ const generateWorksJson = async (works) => {
 
   const filename = `${cfg.outputDir}${cfg.worksFolder}/data.json`;
   fs.ensureFileSync(filename);
-  fs.writeFileSync(filename, _.toJson(worksArray), "utf-8");
+  fs.writeFileSync(filename, toJson(worksArray), "utf-8");
 };
 
 export default generateWorksJson;

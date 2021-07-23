@@ -9,8 +9,7 @@ import generateWorksJson from "./source/js/generate-works-json.js";
 import generateVisualsCache from "./source/js/generate-visuals-cache.js";
 
 import cfg from "./source/js/config.js";
-
-const exec = promisify(exec_);
+import { run } from "./source/js/utils.js";
 
 // Elm compilation
 

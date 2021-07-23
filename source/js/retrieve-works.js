@@ -7,7 +7,7 @@ import ow from "ow";
 import dotInto from "dot-into";
 
 import cfg from "./config.js";
-import _ from "./utils.js";
+import { isUrl } from "./utils.js";
 
 dotInto.install();
 
@@ -82,7 +82,7 @@ const normalizeVisual = R.curry((workName, visual) => {
   if (visual.type === cfg.visualType.image) {
     const localPath = toLocalPath(workName, visual.url);
     return R.mergeRight(visual, {
-      url: _.isUrl(visual.url) ? visual.url : localPath,
+      url: isUrl(visual.url) ? visual.url : localPath,
       thumbnailUrl: toThumbnailPath(workName, visual.url),
       retrieveUrl: visual.url,
       metaUrl: `${localPath}.meta.json`,
@@ -103,7 +103,7 @@ const normalizeReadMore = R.curry((langId, defUrl, url) => {
     : undefined;
 });
 const toLocalPath = (workName, url) => {
-  const parsedPath = _.isUrl(url)
+  const parsedPath = isUrl(url)
     ? path.parse(url.split("/").into(R.last))
     : path.parse(`${url}`);
   return `${workName}/${parsedPath.dir}${parsedPath.dir ? "/" : ""}${
@@ -111,7 +111,7 @@ const toLocalPath = (workName, url) => {
   }`;
 };
 const toThumbnailPath = (workName, url) => {
-  const parsedPath = _.isUrl(url)
+  const parsedPath = isUrl(url)
     ? path.parse(url.split("/").into(R.last))
     : path.parse(`${url}`);
   return `${workName}/${parsedPath.dir}${parsedPath.dir ? "/" : ""}${

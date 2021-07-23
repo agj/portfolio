@@ -1,12 +1,15 @@
 import R from "ramda";
 import ow from "ow";
+import { spawn } from "child_process";
 import dotInto from "dot-into";
 
 dotInto.install();
 
-const log = R.tap(console.log);
-const prepend = R.curry((prep, text) => prep + text);
-const multiGroupBy = R.curry((getGroups, list) =>
+export const log = R.tap(console.log);
+
+export const prepend = R.curry((prep, text) => prep + text);
+
+export const multiGroupBy = R.curry((getGroups, list) =>
   list
     .reduce(
       (r, item) =>
@@ -23,13 +26,22 @@ const multiGroupBy = R.curry((getGroups, list) =>
     )
     .into(R.map(R.uniq))
 );
-const toJson = (data) => JSON.stringify(data, null, "\t");
-const isUrl = (url) => ow.isValid(url, ow.string.url);
 
-export default {
-  log,
-  prepend,
-  multiGroupBy,
-  toJson,
-  isUrl,
+export const toJson = (data) => JSON.stringify(data, null, "\t");
+
+export const isUrl = (url) => ow.isValid(url, ow.string.url);
+
+export const run = (program, options, furtherOptions) => {
+  const [cmd, ...cmds] = program.split(" ");
+  const opts = cmds.concat(optionsToArray(options));
+  const allOpts = furtherOptions
+    ? append("--", opts).concat(optionsToArray(furtherOptions))
+    : opts;
+
+  const proc = spawn(cmd || "echo", allOpts, {
+    shell: true,
+    stdio: "inherit",
+  });
+
+  return proc;
 };
