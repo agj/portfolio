@@ -254,9 +254,6 @@ changeQuery { url, key } query =
 
         queryParams =
             case query.tag of
-                Just Tag.Any ->
-                    Dict.empty
-
                 Just tag ->
                     Dict.fromList
                         [ ( "tag", [ Tag.toString tag ] ) ]
