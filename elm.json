@@ -19,6 +19,7 @@
             "elm-community/list-extra": "8.2.2",
             "elm-community/maybe-extra": "5.1.0",
             "linuss/smooth-scroll": "1.1.0",
+            "lydell/elm-app-url": "1.0.2",
             "mdgriffith/elm-markup": "3.0.1",
             "mdgriffith/elm-ui": "1.1.5",
             "noahzgordon/elm-color-extra": "1.0.2"
