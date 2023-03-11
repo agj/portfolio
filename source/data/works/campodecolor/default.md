@@ -18,9 +18,6 @@ visuals:
     url: screen01.png
   - type: Image
     url: screen02.png
-links:
-  - label: Play (requires Flash)
-    url: http://www.agj.cl/files/games/campodecolor1/
 ---
 
 Prototype for my undergraduate thesis project.

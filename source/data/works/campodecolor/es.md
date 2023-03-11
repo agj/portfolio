@@ -1,8 +1,5 @@
 ---
 readMore: http://blog.agj.cl/tag/campodecolor/
-links:
-  - label: Jugar (requiere Flash)
-    url: http://www.agj.cl/files/games/campodecolor1/
 ---
 
 Prototipo para mi proyecto de titulación. Un videojuego experimental que entrega los más mínimos elementos para realizar una composición visual, e intenta hacer una evaluación de sus parámetros compositivos.

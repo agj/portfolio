@@ -1,7 +1,4 @@
 ---
-links:
-  - label: 遊んでみる（Flash 必要）
-    url: http://www.agj.cl/files/games/campodecolor1/
 ---
 
 学部の卒業制作として作った実験的なゲームです。

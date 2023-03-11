@@ -16,9 +16,6 @@ visuals:
     url: 01.png
   - type: Image
     url: 02.png
-links:
-  - label: Play (Flash)
-    url: http://www.agj.cl/files/games/runnerby/
 ---
 
 A game controlled by a single key (spacebar), which makes a perpetually running character jump.
