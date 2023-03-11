@@ -1,4 +1,10 @@
-module Tag exposing (Codification(..), Tag(..), decoder, encoder)
+module Tag exposing
+    ( Codification(..)
+    , Tag(..)
+    , decoder
+    , encoder
+    , toString
+    )
 
 import Dict
 import Dict.Extra
@@ -81,3 +87,52 @@ encoder maybeTag =
 
         Nothing ->
             Encode.null
+
+
+toString : Tag -> String
+toString tag =
+    case tag of
+        Any ->
+            "Any"
+
+        VisualCommunication ->
+            "VisualCommunication"
+
+        Programming ->
+            "Programming"
+
+        Language ->
+            "Language"
+
+        Learning ->
+            "Learning"
+
+        Digital ->
+            "Digital"
+
+        VideoGame ->
+            "VideoGame"
+
+        Web ->
+            "Web"
+
+        UserInterface ->
+            "UserInterface"
+
+        Graphic ->
+            "Graphic"
+
+        Video ->
+            "Video"
+
+        Translation ->
+            "Translation"
+
+        EducationalSoftware ->
+            "EducationalSoftware"
+
+        LanguageTeaching ->
+            "LanguageTeaching"
+
+        Interactive ->
+            "Interactive"
