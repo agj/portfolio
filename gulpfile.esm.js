@@ -72,7 +72,7 @@ export const build = gulp.parallel(copy, generateJson, buildElm);
 
 export const debug = gulp.parallel(copy, generateJson, debugElm);
 
-export const develop = gulp.parallel(watchCopy, developElm);
+export const develop = gulp.parallel(watchCopy, watchJson, developElm);
 
 export { generateCache as cache };
 
