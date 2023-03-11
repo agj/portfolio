@@ -99,8 +99,7 @@ queryParser queryParameters =
             queryParameters
                 |> Dict.get "tag"
                 |> Maybe.andThen List.head
-                |> Maybe.map (Decode.decodeString (Tag.decoder Tag.AllowsAny))
-                |> Maybe.andThen Result.toMaybe
+                |> Maybe.andThen Tag.fromString
     in
     { tag = tag }
 

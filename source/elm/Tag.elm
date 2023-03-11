@@ -3,6 +3,7 @@ module Tag exposing
     , Tag(..)
     , decoder
     , encoder
+    , fromString
     , toString
     )
 
@@ -136,3 +137,8 @@ toString tag =
 
         Interactive ->
             "Interactive"
+
+
+fromString : String -> Maybe Tag
+fromString string =
+    Dict.get string tagCodes
