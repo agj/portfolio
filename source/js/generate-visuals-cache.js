@@ -9,7 +9,7 @@ import streamToPromise from "stream-to-promise";
 import dotInto from "dot-into";
 
 import cfg from "./config.js";
-import _ from "./utils.js";
+import * as _ from "./utils.js";
 
 dotInto.install();
 

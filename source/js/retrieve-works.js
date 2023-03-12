@@ -186,9 +186,6 @@ const validateWork = ow.create(workValidation);
 
 const retrieveWorks = async () => {
   const workNames = (await glob(`${cfg.worksDir}*/`)).map(getLastDir);
-  // const workNames = [
-  // 	'kotokan',
-  // ];
 
   const workPairs = await workNames.map(retrieveWorkAsPair).into(awaitAll);
   const works = workPairs.into(R.fromPairs);
