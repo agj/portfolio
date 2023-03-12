@@ -150,19 +150,11 @@ getData =
 
 onUrlChange : Url -> Msg
 onUrlChange url =
-    let
-        log =
-            Debug.log "url" url
-    in
     NoOp
 
 
 onUrlRequest : Browser.UrlRequest -> Msg
 onUrlRequest urlRequest =
-    let
-        log =
-            Debug.log "url" urlRequest
-    in
     NoOp
 
 
