@@ -256,6 +256,8 @@ changeQuery { url, key } query =
         resultUrl =
             { appUrl | queryParameters = queryParams }
                 |> AppUrl.toString
+                -- Fix relative URLs don't work:
+                |> String.replace "?" "/?"
     in
     Navigation.pushUrl key resultUrl
 
