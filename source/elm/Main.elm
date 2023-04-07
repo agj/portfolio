@@ -1,5 +1,6 @@
 module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
+import AppUrl exposing (QueryParameters)
 import Browser
 import Browser.Events
 import Browser.Navigation as Navigation
@@ -8,6 +9,7 @@ import Data.Introduction as Introduction
 import Data.Labels as Labels exposing (Labels)
 import Data.Settings as Settings exposing (Settings)
 import Descriptor
+import Dict
 import Doc exposing (Doc)
 import Element exposing (..)
 import Element.Background as Background
@@ -16,6 +18,7 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
 import Http
+import Json.Decode as Decode
 import Language exposing (Language(..))
 import LayoutFormat exposing (LayoutFormat(..))
 import List.Extra
@@ -25,6 +28,7 @@ import SaveState exposing (SaveState)
 import SmoothScroll
 import Tag exposing (Tag)
 import Task
+import Url exposing (Url)
 import Utils exposing (..)
 import VideoEmbed
 import Viewport exposing (Viewport)
@@ -40,11 +44,13 @@ import Works
 
 main : Program Flags Model Msg
 main =
-    Browser.document
+    Browser.application
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
+        , onUrlChange = onUrlChange
+        , onUrlRequest = onUrlRequest
         }
 
 
@@ -54,10 +60,11 @@ main =
 
 type alias Model =
     { language : Language
-    , tag : Maybe Tag
     , viewport : Viewport
     , popupVisual : Maybe Visual
+    , query : Query
     , data : DataStatus
+    , navigationData : NavigationData
     }
 
 
@@ -74,24 +81,56 @@ type alias Flags =
     }
 
 
-init : Flags -> ( Model, Cmd Msg )
-init flags =
+type alias Query =
+    { tag : Maybe Tag
+    }
+
+
+type alias NavigationData =
+    { url : Url
+    , key : Navigation.Key
+    }
+
+
+queryParser : QueryParameters -> Query
+queryParser queryParameters =
+    let
+        tag =
+            queryParameters
+                |> Dict.get "tag"
+                |> Maybe.andThen List.head
+                |> Maybe.andThen Tag.fromString
+    in
+    { tag = tag }
+
+
+init : Flags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
+init flags url navKey =
     let
         saveState =
             Maybe.withDefault "" flags.storedState
                 |> SaveState.load
-    in
-    ( { language =
+
+        initLanguage =
             case saveState of
                 Just { language } ->
                     language
 
                 Nothing ->
                     getLanguageFromPreferred flags.languages
-      , tag = Maybe.map .tag saveState |> Maybe.Extra.join
+
+        query =
+            url
+                |> AppUrl.fromUrl
+                |> .queryParameters
+                |> queryParser
+    in
+    ( { language = initLanguage
+      , query = query
       , viewport = flags.viewport
       , popupVisual = Nothing
       , data = DataLoading
+      , navigationData = { url = url, key = navKey }
       }
     , getData
     )
@@ -103,6 +142,20 @@ getData =
         { url = "works/data.json"
         , expect = Http.expectJson GotData Work.allWorksDecoder
         }
+
+
+
+-- ROUTING
+
+
+onUrlChange : Url -> Msg
+onUrlChange url =
+    NoOp
+
+
+onUrlRequest : Browser.UrlRequest -> Msg
+onUrlRequest urlRequest =
+    NoOp
 
 
 
@@ -125,19 +178,26 @@ update msg model =
     case msg of
         SelectedLanguage language ->
             ( { model | language = language }
-            , SaveState.save { language = language, tag = model.tag }
+            , SaveState.save { language = language }
             )
 
         SelectedTag tag ->
-            ( { model | tag = Just tag }
+            let
+                query =
+                    model.query
+
+                newQuery =
+                    { query | tag = Just tag }
+            in
+            ( { model | query = newQuery }
             , Cmd.batch
-                [ SaveState.save { language = model.language, tag = Just tag }
-                , Task.attempt
+                [ Task.attempt
                     (always NoOp)
                     (SmoothScroll.scrollToWithOptions
                         { defaultScroll | speed = 10 }
                         "works"
                     )
+                , changeQuery model.navigationData newQuery
                 ]
             )
 
@@ -175,6 +235,31 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+changeQuery : NavigationData -> Query -> Cmd Msg
+changeQuery { url, key } query =
+    let
+        appUrl =
+            url
+                |> AppUrl.fromUrl
+
+        queryParams =
+            case query.tag of
+                Just tag ->
+                    Dict.fromList
+                        [ ( "tag", [ Tag.toString tag ] ) ]
+
+                Nothing ->
+                    Dict.empty
+
+        resultUrl =
+            { appUrl | queryParameters = queryParams }
+                |> AppUrl.toString
+                -- Fix relative URLs don't work:
+                |> String.replace "?" "/?"
+    in
+    Navigation.pushUrl key resultUrl
 
 
 
@@ -258,7 +343,7 @@ viewMain model =
                                     (worksBlockWidth - (2 * Palette.spaceSmall))
                                     worksBlockWidth
                             , labels = labels
-                            , maybeTag = model.tag
+                            , maybeTag = model.query.tag
                             , works = works
                             , settings = settings
                             }
@@ -284,7 +369,7 @@ viewMain model =
         , inFront <| viewBackButton labels.backToHome
         , paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceNormal }
         ]
-        [ viewTop model.language model.tag
+        [ viewTop model.language model.query.tag
         , content
         ]
 

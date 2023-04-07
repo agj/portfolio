@@ -49,7 +49,7 @@ english tag =
             , tag Tag.Learning "Learning"
             , icon "learning"
             , t ". "
-            , t "I'm a master in new media from Tokyo Geidai, graphic designer from U. Diego Portales, and self-taught programmer."
+            , t "I'm a master in new media from Tokyo Geidai (Japan), graphic designer from U. Diego Portales (Chile), and a self-taught programmer."
             ]
         , p
             [ t "I’m a creator. I make "
@@ -69,10 +69,10 @@ english tag =
             , t "."
             ]
         , p
-            [ t "I’m a languages nerd, fluent in English and Japanese, apart from my native Spanish, and also working on Chinese Mandarin right now. "
+            [ t "I’m a languages nerd, fluent in English and Japanese, apart from my native Spanish, and also working on my Mandarin Chinese currently. "
             , t "I do "
             , tag Tag.Translation "translation"
-            , t " work, subtitling too."
+            , t " work; subtitling too."
             ]
         , p
             [ t "I think a lot about learning. "
@@ -80,7 +80,7 @@ english tag =
             , tag Tag.EducationalSoftware "educational software"
             , t ". I occasionally "
             , tag Tag.LanguageTeaching "teach languages"
-            , t " too."
+            , t " as well."
             ]
         , p
             [ t "To see examples of my work, choose any of the highlighted keywords above. "
@@ -89,8 +89,8 @@ english tag =
             , t " of them at once. "
             , t "Get in touch via email at "
             , bold <| t "ale¶agj.cl"
-            , t " (¶\u{00A0}=\u{00A0}@) or "
-            , l "Twitter" (Url "https://twitter.com/alegrilli")
+            , t " (¶\u{00A0}=\u{00A0}@), or "
+            , l "Mastodon" (Url "https://mstdn.social/@agj")
             , t "!"
             ]
         ]
@@ -115,8 +115,8 @@ japanese tag =
             , t "、"
             , tag Tag.Learning "習得"
             , icon "learning"
-            , t "という４つのエリアの組み合わせで活動します。"
-            , t "東京藝大大学院のメディア映像や、チリ Diego Portales 大学グラフィックデザイン学部の卒業生です。"
+            , t "という４つのエリアの組み合わせで活動してきました。"
+            , t "東京芸術大学大学院のメディア映像専攻や、チリ Diego Portales 大学グラフィックデザイン学部の卒業生です。"
             , t "プログラミングを独学しました。"
             ]
         , p
@@ -137,7 +137,8 @@ japanese tag =
             , t "作成にも手を組んだりします。"
             ]
         , p
-            [ t "言語オタクだと言っていいくらい言語が好きです。ネイティブのスペイン語に加えて英語と日本語が流暢で、現在中国語も目指しています。"
+            [ t "言語オタクだと言っていいくらい言語が好きです。"
+            , t "ネイティブのスペイン語に加えて英語と日本語が流暢で、現在中国語能力を上げることに集中しています。"
             , tag Tag.Translation "翻訳"
             , t "や字幕の仕事をしたりします。"
             ]
@@ -150,15 +151,15 @@ japanese tag =
             , t "ことがあります。"
             ]
         , p
-            [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してください。"
+            [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してから以下から閲覧できることになります。"
             , tag Tag.Any "全て"
             , t "を一気に見ることもできます。"
-            , t "連絡はメールで"
+            , t "連絡はメール（"
             , bold <| t "ale¶agj.cl"
-            , t "（¶\u{00A0}=\u{00A0}@）あるいは"
-            , l "Twitter" (Url "https://twitter.com/alegrilli")
-            , t "より。"
-            , t "待っております！"
+            , t "；¶\u{00A0}=\u{00A0}@）、あるいは"
+            , l "マストドン" (Url "https://mstdn.social/@agj")
+            , t "よりお願いします。"
+            , t "ご連絡を待っております！"
             ]
         ]
 
@@ -182,7 +183,7 @@ spanish tag =
             , t ", y "
             , tag Tag.Learning "Aprendizaje"
             , icon "learning"
-            , t ". Soy magíster en nuevos medios de Tokyo Geidai, diseñador gráfico de U. Diego Portales, y programador autoenseñado."
+            , t ". Soy magíster en nuevos medios de Tokyo Geidai (Japón), diseñador gráfico de U. Diego Portales (Chile), y programador autoenseñado."
             ]
         , p
             [ t "Soy un creador. Hago cosas "
@@ -220,7 +221,7 @@ spanish tag =
             , t "Contáctame por correo a "
             , bold <| t "ale¶agj.cl"
             , t " (¶\u{00A0}=\u{00A0}@), o por "
-            , l "Twitter" (Url "https://twitter.com/alegrilli")
+            , l "Mastodon" (Url "https://mstdn.social/@agj")
             , t "."
             ]
         ]

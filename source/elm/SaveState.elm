@@ -10,7 +10,6 @@ import Tag exposing (Tag)
 
 type alias SaveState =
     { language : Language
-    , tag : Maybe Tag
     }
 
 
@@ -18,7 +17,6 @@ save : SaveState -> Cmd msg
 save state =
     Encode.object
         [ ( "language", Language.encoder state.language )
-        , ( "tag", Tag.encoder state.tag )
         ]
         |> Encode.encode 0
         |> Ports.saveState
@@ -42,4 +40,3 @@ saveStateDecoder : Decoder SaveState
 saveStateDecoder =
     Decode.succeed SaveState
         |> required "language" Language.decoder
-        |> optional "tag" (maybe <| Tag.decoder Tag.AllowsAny) Nothing
