@@ -16,6 +16,7 @@ import Html
 import Html.Attributes
 import Palette
 import Tag exposing (Tag)
+import Util.Color as Color
 import Utils exposing (..)
 
 
@@ -41,17 +42,17 @@ makeTag messenger selectedTag tag label =
     in
     el
         [ ifElse isSelectedTag
-            (Background.color (Palette.colorAt10 Palette.baseColor))
-            (Background.color (Palette.colorAt70 Palette.baseColor))
-        , Font.color <| ifElse isSelectedTag (Palette.colorAt90 Palette.baseColor) (Palette.colorAt10 Palette.baseColor)
+            (Background.color (Palette.baseColorAt10 |> Color.toElmUi))
+            (Background.color (Palette.baseColorAt70 |> Color.toElmUi))
+        , Font.color <| ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi)
         , paddingXY
             (fraction 0.3 Palette.textSizeNormal)
             (fraction 0.1 Palette.textSizeNormal)
         , onClick (messenger tag)
         , pointer
         , mouseDown
-            [ Background.color (Palette.colorAt10 Palette.baseColor)
-            , Font.color (Palette.colorAt90 Palette.baseColor)
+            [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
+            , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
             ]
         ]
         (text label)
@@ -85,7 +86,7 @@ bold : Element msg -> Element msg
 bold child =
     el
         [ Font.bold
-        , Font.color (Palette.colorAt10 Palette.baseColor)
+        , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
         ]
         child
 
@@ -169,5 +170,5 @@ linkStyle : List (Element.Attribute msg)
 linkStyle =
     [ Font.underline
     , pointer
-    , mouseDown [ Font.color (Palette.colorAt10 Palette.baseColor) ]
+    , mouseDown [ Font.color (Palette.baseColorAt10 |> Color.toElmUi) ]
     ]

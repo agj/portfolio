@@ -285,7 +285,7 @@ view model =
     , body =
         [ layout
             ([ Font.family Palette.font
-             , Background.color (Palette.colorAt70 Palette.baseColor)
+             , Background.color (Palette.baseColorAt70 |> Color.toElmUi)
              ]
                 ++ (case model.popupVisual of
                         Just visual ->
@@ -380,8 +380,8 @@ viewMain model =
 viewTop : Language -> Maybe Tag -> Element Msg
 viewTop language selectedTag =
     column
-        [ Font.color (Palette.colorAt10 Palette.baseColor)
-        , Background.color (Palette.colorAt90 Palette.baseColor)
+        [ Font.color (Palette.baseColorAt10 |> Color.toElmUi)
+        , Background.color (Palette.baseColorAt90 |> Color.toElmUi)
         , paddingEach { sides | top = Palette.spaceNormal, bottom = Palette.spaceSmall }
         ]
         [ viewIntroduction (Introduction.ofLanguage SelectedTag selectedTag language)
@@ -410,13 +410,13 @@ viewBackButton label =
             , Font.size Palette.textSizeNormal
             , height (px (fraction 2.3 Palette.textSizeNormal))
             , pointer
-            , Background.color (Palette.colorAt90 Palette.baseColor)
-            , Border.color (Palette.colorAt50 Palette.baseColor)
+            , Background.color (Palette.baseColorAt90 |> Color.toElmUi)
+            , Border.color (Palette.baseColorAt50 |> Color.toElmUi)
             , Border.widthEach { left = 1, right = 1, bottom = 1, top = 0 }
-            , Font.color (Palette.colorAt10 Palette.baseColor)
+            , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
             , mouseDown
-                [ Background.color (Palette.colorAt10 Palette.baseColor)
-                , Font.color (Palette.colorAt90 Palette.baseColor)
+                [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
+                , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
                 ]
             , onClick SelectedGoHome
             ]
@@ -435,11 +435,11 @@ viewLanguageButton label language selectedLanguage =
             , width (px (fraction 2.9 Palette.textSizeNormal))
             , height (px (fraction 2.3 Palette.textSizeNormal))
             , pointer
-            , Background.color (Palette.colorAt50 Palette.baseColor)
-            , Font.color (Palette.colorAt10 Palette.baseColor)
+            , Background.color (Palette.baseColorAt50 |> Color.toElmUi)
+            , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
             , mouseDown
-                [ Background.color (Palette.colorAt10 Palette.baseColor)
-                , Font.color (Palette.colorAt90 Palette.baseColor)
+                [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
+                , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
                 ]
             ]
             (el
@@ -550,7 +550,7 @@ viewPopupVisual viewport visual =
                             , height (px visualHeight)
                             , centerX
                             , centerY
-                            , Background.color (Palette.colorAt50 color)
+                            , Background.color (Palette.baseColorAt50 |> Color.toElmUi)
                             ]
                             { src = desc.url
                             , description = ""
@@ -568,7 +568,7 @@ viewPopupVisual viewport visual =
                 , alignRight
                 , alignTop
                 , pointer
-                , Font.color (Palette.colorAt10 Palette.baseColor)
+                , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
                 ]
                 (View.Icon.icon View.Icon.Close (fraction 0.4 reservedSpace)
                     |> View.Icon.view
@@ -624,8 +624,8 @@ viewWorkBlock : List (Attribute Msg) -> List (Element Msg) -> Element Msg
 viewWorkBlock attrs children =
     column
         ([ width fill
-         , Font.color (Palette.colorAt10 Palette.baseColor)
-         , Background.color (Palette.colorAt90 Palette.baseColor)
+         , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
+         , Background.color (Palette.baseColorAt90 |> Color.toElmUi)
          , Font.size Palette.textSizeNormal
          ]
             ++ attrs
@@ -904,8 +904,8 @@ linkStyle backgroundColor =
     , centerX
     , pointer
     , mouseDown
-        [ Background.color (Palette.colorAt10 Palette.baseColor)
-        , Font.color (Palette.colorAt90 Palette.baseColor)
+        [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
+        , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
         ]
     ]
 

@@ -1,5 +1,9 @@
 module Palette exposing
     ( baseColor
+    , baseColorAt10
+    , baseColorAt50
+    , baseColorAt70
+    , baseColorAt90
     , colorAt10
     , colorAt50
     , colorAt70
@@ -18,7 +22,6 @@ module Palette exposing
 
 import Color exposing (Color)
 import Color.Manipulate
-import Element
 import Element.Font as Font exposing (Font)
 import Util.Color as Color
 
@@ -27,36 +30,52 @@ import Util.Color as Color
 -- COLOR
 
 
+colorAt10 : Color -> Color
+colorAt10 col =
+    col
+        |> lighten 0.9
+
+
+colorAt50 : Color -> Color
+colorAt50 col =
+    col
+
+
+colorAt70 : Color -> Color
+colorAt70 col =
+    col
+        |> darken 0.5
+
+
+colorAt90 : Color -> Color
+colorAt90 col =
+    col
+        |> darken 0.8
+
+
 baseColor : Color
 baseColor =
     Color.hsl 0.88 1 0.4
 
 
-colorAt10 : Color -> Element.Color
-colorAt10 col =
-    col
-        |> lighten 0.9
-        |> Color.toElmUi
+baseColorAt10 : Color
+baseColorAt10 =
+    colorAt10 baseColor
 
 
-colorAt50 : Color -> Element.Color
-colorAt50 col =
-    col
-        |> Color.toElmUi
+baseColorAt50 : Color
+baseColorAt50 =
+    colorAt50 baseColor
 
 
-colorAt70 : Color -> Element.Color
-colorAt70 col =
-    col
-        |> darken 0.5
-        |> Color.toElmUi
+baseColorAt70 : Color
+baseColorAt70 =
+    colorAt70 baseColor
 
 
-colorAt90 : Color -> Element.Color
-colorAt90 col =
-    col
-        |> darken 0.8
-        |> Color.toElmUi
+baseColorAt90 : Color
+baseColorAt90 =
+    colorAt90 baseColor
 
 
 
