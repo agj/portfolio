@@ -550,7 +550,7 @@ viewPopupVisual viewport visual =
                             , height (px visualHeight)
                             , centerX
                             , centerY
-                            , Background.color (Palette.baseColorAt50 |> Color.toElmUi)
+                            , Background.color (color |> Color.toElmUi)
                             ]
                             { src = desc.url
                             , description = ""
@@ -577,7 +577,7 @@ viewPopupVisual viewport visual =
     el
         [ width fill
         , height fill
-        , Background.color (Color.setOpacity 0.8 color |> Color.toElmUi)
+        , Background.color (color |> Palette.colorAt70 |> Color.setOpacity 0.8 |> Color.toElmUi)
         , onClick (SelectedVisual Nothing)
         , pointer
         , inFront closeButton
@@ -638,6 +638,8 @@ viewWork blockWidth labels settings work =
     viewWorkBlock
         [ inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
         , paddingEach { sides | bottom = Palette.spaceNormal }
+        , Font.color (work.mainVisualColor |> Palette.colorAt10 |> Color.toElmUi)
+        , Background.color (work.mainVisualColor |> Palette.colorAt90 |> Color.toElmUi)
         ]
         [ viewWorkTitle blockWidth
             { title = work.name
@@ -652,7 +654,7 @@ viewWork blockWidth labels settings work =
                 }
             , settings = settings
             }
-        , viewWorkVisuals blockWidth settings work.visuals
+        , viewWorkVisuals blockWidth settings work.mainVisualColor work.visuals
         , viewWorkLinks work.mainVisualColor work.links
         , viewWorkDescription work.mainVisualColor work.description
         ]
@@ -672,12 +674,15 @@ viewWorkTitle :
     -> Element Msg
 viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, settings } =
     let
+        colorAt70 =
+            Palette.colorAt70 mainVisualColor
+
         mainBlock =
             column
                 [ width (px blockWidth)
                 , height (px (round (toFloat blockWidth / settings.mainVisualAspectRatio)))
                 , Background.image mainVisualUrl
-                , CustomEl.backgroundColor mainVisualColor
+                , CustomEl.backgroundColor colorAt70
                 ]
 
         iconsBlock =
@@ -699,9 +704,9 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 , Background.gradient
                     { angle = 0
                     , steps =
-                        [ Color.setOpacity 0.9 mainVisualColor |> Color.toElmUi
-                        , Color.setOpacity 0.4 mainVisualColor |> Color.toElmUi
-                        , Color.setOpacity 0 mainVisualColor |> Color.toElmUi
+                        [ colorAt70 |> Color.setOpacity 0.9 |> Color.toElmUi
+                        , colorAt70 |> Color.setOpacity 0.4 |> Color.toElmUi
+                        , colorAt70 |> Color.setOpacity 0 |> Color.toElmUi
                         ]
                     }
                 ]
@@ -713,7 +718,7 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 , Font.size Palette.textSizeSmall
                 , Font.bold
                 , CustomEl.glow
-                    { color = mainVisualColor
+                    { color = mainVisualColor |> Palette.colorAt70
                     , strength = 5.0
                     , size = 3.0
                     }
@@ -725,7 +730,7 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 , paddingXY 0 Palette.spaceSmaller
                 , Font.size Palette.textSizeLarge
                 , CustomEl.glow
-                    { color = mainVisualColor
+                    { color = mainVisualColor |> Palette.colorAt70
                     , strength = 5.0
                     , size = 3.0
                     }
@@ -754,8 +759,8 @@ viewIcon color iconName isVisible =
         none
 
 
-viewWorkVisuals : Int -> Settings -> List Visual -> Element Msg
-viewWorkVisuals blockWidth settings visuals =
+viewWorkVisuals : Int -> Settings -> Color -> List Visual -> Element Msg
+viewWorkVisuals blockWidth settings mainVisualColor visuals =
     let
         perRow =
             settings.thumbnailsPerRow
@@ -777,11 +782,11 @@ viewWorkVisuals blockWidth settings visuals =
             , width fill
             , paddingEach { sides | top = spaceBetween }
             ]
-            (List.map (viewVisualThumbnail thumbnailSize) visuals)
+            (List.map (viewVisualThumbnail mainVisualColor thumbnailSize) visuals)
 
 
-viewVisualThumbnail : Int -> Visual -> Element Msg
-viewVisualThumbnail size visual =
+viewVisualThumbnail : Color -> Int -> Visual -> Element Msg
+viewVisualThumbnail mainVisualColor size visual =
     let
         ( thumbnailUrl, color, isVideo ) =
             case visual of
@@ -804,7 +809,7 @@ viewVisualThumbnail size visual =
                         [ alignRight
                         , alignBottom
                         ]
-                        (icon (fraction 0.3 size) color View.Icon.Play)
+                        (icon (fraction 0.3 size) mainVisualColor View.Icon.Play)
                 ]
                 []
         )
@@ -924,8 +929,8 @@ icon size color iconName =
     el
         [ Element.padding <| fraction 0.1 size
         , CustomEl.radialGradient
-            [ ( 0.5, Color.setOpacity 0.9 color )
-            , ( 1, Color.rgba 0 0 0 0 )
+            [ ( 0.5, color |> Palette.colorAt70 |> Color.setOpacity 0.9 )
+            , ( 1, color |> Palette.colorAt70 |> Color.setOpacity 0 )
             ]
         ]
         (View.Icon.icon iconName (fraction 0.8 size)
