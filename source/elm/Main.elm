@@ -574,7 +574,7 @@ viewPopupVisual viewport visual =
                 , alignRight
                 , alignTop
                 , pointer
-                , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
+                , Font.color (color |> Palette.colorAt10 |> Color.toElmUi)
                 ]
                 (View.Icon.icon View.Icon.Close (fraction 0.4 reservedSpace)
                     |> View.Icon.view
@@ -630,8 +630,6 @@ viewWorkBlock : List (Attribute Msg) -> List (Element Msg) -> Element Msg
 viewWorkBlock attrs children =
     column
         ([ width fill
-         , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
-         , Background.color (Palette.baseColorAt90 |> Color.toElmUi)
          , Font.size Palette.textSizeNormal
          ]
             ++ attrs
@@ -907,16 +905,16 @@ subscriptions model =
 
 
 linkStyle : Color -> List (Element.Attribute Msg)
-linkStyle backgroundColor =
-    [ Background.color (backgroundColor |> Color.toElmUi) -- (Palette.colorAt50 Palette.baseColor)
+linkStyle color =
+    [ Background.color (color |> Color.toElmUi)
     , paddingXY
         (fraction 0.6 Palette.textSizeNormal)
         (fraction 0.4 Palette.textSizeNormal)
     , centerX
     , pointer
     , mouseDown
-        [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
-        , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
+        [ Background.color (color |> Palette.colorAt10 |> Color.toElmUi)
+        , Font.color (color |> Palette.colorAt90 |> Color.toElmUi)
         ]
     ]
 
