@@ -28,13 +28,13 @@ import Element.Font as Font exposing (Font)
 
 baseColor : Color
 baseColor =
-    Color.hsl 0 0 0.5
+    Color.hsl 0.88 1 0.4
 
 
 colorAt10 : Color -> Element.Color
 colorAt10 col =
     col
-        |> Color.Manipulate.lighten 0.8
+        |> lighten 0.9
         |> toElmUiColor
 
 
@@ -47,14 +47,14 @@ colorAt50 col =
 colorAt70 : Color -> Element.Color
 colorAt70 col =
     col
-        |> Color.Manipulate.darken 0.3
+        |> darken 0.5
         |> toElmUiColor
 
 
 colorAt90 : Color -> Element.Color
 colorAt90 col =
     col
-        |> Color.Manipulate.darken 0.5
+        |> darken 0.8
         |> toElmUiColor
 
 
@@ -120,6 +120,21 @@ spaceSmallest =
 
 
 -- INTERNAL
+
+
+lighten : Float -> Color -> Color
+lighten amount color =
+    color
+        |> Color.Manipulate.scaleHsl
+            { saturationScale = 0
+            , lightnessScale = amount
+            , alphaScale = 0
+            }
+
+
+darken : Float -> Color -> Color
+darken amount color =
+    lighten -amount color
 
 
 toElmUiColor : Color -> Element.Color
