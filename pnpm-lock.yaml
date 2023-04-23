@@ -1,15 +1,15 @@
 lockfileVersion: 5.4
 
 specifiers:
-  axios: ^0.21.1
+  axios: ^0.27.2
   dot-into: ^1.0.2
   elm: ^0.19.1-5
   elm-format: ^0.8.7
   elm-go: ^5.0.19
   esm: ^3.2.25
-  fs-extra: ^10.0.0
-  glob: ^7.1.7
-  glob-promise: ^4.2.0
+  fs-extra: ^10.1.0
+  glob: ^7.2.3
+  glob-promise: ^4.2.2
   gray-matter: ^4.0.3
   gulp: ^4.0.2
   gulp-elm: ^0.8.2
@@ -17,7 +17,7 @@ specifiers:
   mkdirp: ^1.0.4
   node-vibrant: ^3.1.6
   node-watch: ^0.7.3
-  ow: ^0.27.0
+  ow: ^0.28.2
   prettier: ~2.8.7
   ramda: ^0.29.0
   sharp: ^0.32.0
@@ -25,7 +25,7 @@ specifiers:
   xregexp: ^5.1.1
 
 devDependencies:
-  axios: 0.21.4
+  axios: 0.27.2
   dot-into: 1.0.2
   elm: 0.19.1-5
   elm-format: 0.8.7
@@ -41,7 +41,7 @@ devDependencies:
   mkdirp: 1.0.4
   node-vibrant: 3.1.6
   node-watch: 0.7.3
-  ow: 0.27.0
+  ow: 0.28.2
   prettier: 2.8.7
   ramda: 0.29.0
   sharp: 0.32.0
@@ -473,10 +473,11 @@ packages:
     resolution: {integrity: sha512-NmWvPnx0F1SfrQbYwOi7OeaNGokp9XhzNioJ/CSBs8Qa4vxug81mhJEAVZwxXuBmYB5KDRfMq/F3RR0BIU7sWg==}
     dev: true
 
-  /axios/0.21.4:
-    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
+  /axios/0.27.2:
+    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
     dependencies:
       follow-redirects: 1.15.2
+      form-data: 4.0.0
     transitivePeerDependencies:
       - debug
     dev: true
@@ -1457,6 +1458,15 @@ packages:
   /form-data/2.3.3:
     resolution: {integrity: sha512-1lLKB2Mu3aGP1Q/2eCOx0fNbRMe7XdwktwOruhfqqd0rIJWwN4Dh+E3hrPSlDCXnSR7UtZ1N38rVXm+6+MEhJQ==}
     engines: {node: '>= 0.12'}
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      mime-types: 2.1.35
+    dev: true
+
+  /form-data/4.0.0:
+    resolution: {integrity: sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==}
+    engines: {node: '>= 6'}
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
@@ -2688,15 +2698,14 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /ow/0.27.0:
-    resolution: {integrity: sha512-SGnrGUbhn4VaUGdU0EJLMwZWSupPmF46hnTRII7aCLCrqixTAC5eKo8kI4/XXf1eaaI8YEVT+3FeGNJI9himAQ==}
+  /ow/0.28.2:
+    resolution: {integrity: sha512-dD4UpyBh/9m4X2NVjA+73/ZPBRF+uF4zIMFvvQsabMiEK8x41L3rQ8EENOi35kyyoaJwNxEeJcP6Fj1H4U409Q==}
     engines: {node: '>=12'}
     dependencies:
       '@sindresorhus/is': 4.6.0
       callsites: 3.1.0
       dot-prop: 6.0.1
       lodash.isequal: 4.5.0
-      type-fest: 1.4.0
       vali-date: 1.0.0
     dev: true
 
@@ -3775,11 +3784,6 @@ packages:
 
   /tweetnacl/0.14.5:
     resolution: {integrity: sha512-KXXFFdAbFXY4geFIwoyNK+f5Z1b7swfXABfL7HXCmoIWMKU3dmS26672A4EeQtDzLKy7SXmfBu51JolvEKwtGA==}
-    dev: true
-
-  /type-fest/1.4.0:
-    resolution: {integrity: sha512-yGSza74xk0UG8k+pLh5oeoYirvIiWo5t0/o3zHHAO2tRDiZcxWP7fywNlXhqb6/r6sWvwi+RsyQMWhVLe4BVuA==}
-    engines: {node: '>=10'}
     dev: true
 
   /type/1.2.0:
