@@ -55,7 +55,7 @@ colorAt90 col =
 
 baseColor : Color
 baseColor =
-    Color.hsl 0.88 1 0.4
+    Color.hsl 0.65 0.1 0.7
 
 
 baseColorAt10 : Color
