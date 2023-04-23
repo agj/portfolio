@@ -24,6 +24,7 @@ import LayoutFormat exposing (LayoutFormat(..))
 import List.Extra
 import Maybe.Extra
 import Palette
+import Phosphor
 import SaveState exposing (SaveState)
 import SmoothScroll
 import Tag exposing (Tag)
@@ -656,7 +657,18 @@ viewWork blockWidth labels settings work =
         ]
 
 
-viewWorkTitle : Int -> { title : String, date : Date, mainVisualUrl : String, mainVisualColor : Element.Color, settings : Settings, icons : { visualCommunication : Bool, programming : Bool, language : Bool, learning : Bool } } -> Element Msg
+viewWorkTitle :
+    Int
+    ->
+        { title : String
+        , date : Date
+        , mainVisualUrl : String
+        , mainVisualColor : Element.Color
+        , settings : Settings
+        , icons :
+            { visualCommunication : Bool, programming : Bool, language : Bool, learning : Bool }
+        }
+    -> Element Msg
 viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, settings } =
     let
         mainBlock =
@@ -672,10 +684,10 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 [ paddingXY Palette.spaceNormal Palette.spaceSmall
                 , CustomEl.style "flex-basis" "auto"
                 ]
-                [ viewIcon mainVisualColor "visual-communication" icons.visualCommunication
-                , viewIcon mainVisualColor "programming" icons.programming
-                , viewIcon mainVisualColor "language" icons.language
-                , viewIcon mainVisualColor "learning" icons.learning
+                [ viewIcon mainVisualColor Phosphor.eye icons.visualCommunication
+                , viewIcon mainVisualColor Phosphor.bracketsCurly icons.programming
+                , viewIcon mainVisualColor Phosphor.chatCircle icons.language
+                , viewIcon mainVisualColor Phosphor.brain icons.learning
                 ]
 
         gradientBlock =
@@ -728,14 +740,14 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
         ]
 
 
-viewIcon : Element.Color -> String -> Bool -> Element msg
-viewIcon color name isVisible =
+viewIcon : Element.Color -> Phosphor.Icon -> Bool -> Element msg
+viewIcon color theIcon isVisible =
     let
         size =
             fraction 1.5 Palette.spaceNormal
     in
     if isVisible then
-        icon size color ("icon-" ++ name ++ "-light")
+        icon size color theIcon
 
     else
         none
@@ -791,7 +803,7 @@ viewVisualThumbnail size visual =
                         [ alignRight
                         , alignBottom
                         ]
-                        (icon (fraction 0.3 size) color "icon-play-light")
+                        (icon (fraction 0.3 size) color Phosphor.playCircle)
                 ]
                 []
         )
@@ -906,8 +918,8 @@ getLanguageFromPreferred codes =
         |> Maybe.withDefault English
 
 
-icon : Int -> Element.Color -> String -> Element msg
-icon size color name =
+icon : Int -> Element.Color -> Phosphor.Icon -> Element msg
+icon size color theIcon =
     el
         [ Element.width <| px size
         , Element.height <| px size
@@ -917,13 +929,9 @@ icon size color name =
             , ( 1, rgba 0 0 0 0 )
             ]
         ]
-        (CustomEl.imageInline
-            [ Element.width fill
-            , Element.height fill
-            ]
-            { src = "image/" ++ name ++ ".svg"
-            , description = " "
-            }
+        (theIcon Phosphor.Fill
+            |> Phosphor.toHtml []
+            |> Element.html
         )
 
 
