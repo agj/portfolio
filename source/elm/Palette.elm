@@ -20,6 +20,7 @@ import Color exposing (Color)
 import Color.Manipulate
 import Element
 import Element.Font as Font exposing (Font)
+import Util.Color as Color
 
 
 
@@ -35,27 +36,27 @@ colorAt10 : Color -> Element.Color
 colorAt10 col =
     col
         |> lighten 0.9
-        |> toElmUiColor
+        |> Color.toElmUi
 
 
 colorAt50 : Color -> Element.Color
 colorAt50 col =
     col
-        |> toElmUiColor
+        |> Color.toElmUi
 
 
 colorAt70 : Color -> Element.Color
 colorAt70 col =
     col
         |> darken 0.5
-        |> toElmUiColor
+        |> Color.toElmUi
 
 
 colorAt90 : Color -> Element.Color
 colorAt90 col =
     col
         |> darken 0.8
-        |> toElmUiColor
+        |> Color.toElmUi
 
 
 
@@ -135,12 +136,3 @@ lighten amount color =
 darken : Float -> Color -> Color
 darken amount color =
     lighten -amount color
-
-
-toElmUiColor : Color -> Element.Color
-toElmUiColor color =
-    let
-        { red, green, blue, alpha } =
-            Color.toRgba color
-    in
-    Element.rgba red green blue alpha

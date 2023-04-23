@@ -1,5 +1,6 @@
 module Work exposing (Link, ReadMore, Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
 
+import Color exposing (Color)
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
 import Doc.Link
@@ -29,7 +30,7 @@ type alias Work =
     { name : String
     , description : Doc
     , mainVisualUrl : String
-    , mainVisualColor : Element.Color
+    , mainVisualColor : Color
     , date : Date
     , tags : List Tag
     , visuals : List Visual

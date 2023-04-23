@@ -4,6 +4,7 @@ import Element exposing (Element)
 import Element.Background as Background
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Util.Color as Color
 import Utils exposing (..)
 import Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter)
 
@@ -27,7 +28,7 @@ get desc width height =
         , Element.centerY
         , Element.width (Element.px width)
         , Element.height (Element.px height)
-        , Background.color desc.color
+        , Background.color (desc.color |> Color.toElmUi)
         ]
         (case desc.host of
             Vimeo ->

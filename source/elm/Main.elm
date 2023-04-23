@@ -4,6 +4,7 @@ import AppUrl exposing (QueryParameters)
 import Browser
 import Browser.Events
 import Browser.Navigation as Navigation
+import Color exposing (Color)
 import CustomEl
 import Data.Introduction as Introduction
 import Data.Labels as Labels exposing (Labels)
@@ -11,7 +12,7 @@ import Data.Settings as Settings exposing (Settings)
 import Descriptor
 import Dict
 import Doc exposing (Doc)
-import Element exposing (..)
+import Element exposing (Attribute, Element, alignBottom, alignLeft, alignRight, alignTop, centerX, centerY, column, el, fill, height, image, inFront, layout, mouseDown, moveDown, moveLeft, newTabLink, none, padding, paddingEach, paddingXY, paragraph, pointer, px, row, spacing, text, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (..)
@@ -29,6 +30,7 @@ import SmoothScroll
 import Tag exposing (Tag)
 import Task
 import Url exposing (Url)
+import Util.Color as Color
 import Utils exposing (..)
 import VideoEmbed
 import View.Icon exposing (IconName)
@@ -548,7 +550,7 @@ viewPopupVisual viewport visual =
                             , height (px visualHeight)
                             , centerX
                             , centerY
-                            , Background.color color
+                            , Background.color (Palette.colorAt50 color)
                             ]
                             { src = desc.url
                             , description = ""
@@ -575,7 +577,7 @@ viewPopupVisual viewport visual =
     el
         [ width fill
         , height fill
-        , Background.color (transparentColor 0.8 color)
+        , Background.color (Color.setOpacity 0.8 color |> Color.toElmUi)
         , onClick (SelectedVisual Nothing)
         , pointer
         , inFront closeButton
@@ -662,7 +664,7 @@ viewWorkTitle :
         { title : String
         , date : Date
         , mainVisualUrl : String
-        , mainVisualColor : Element.Color
+        , mainVisualColor : Color
         , settings : Settings
         , icons :
             { visualCommunication : Bool, programming : Bool, language : Bool, learning : Bool }
@@ -697,9 +699,9 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 , Background.gradient
                     { angle = 0
                     , steps =
-                        [ transparentColor 0.9 mainVisualColor
-                        , transparentColor 0.4 mainVisualColor
-                        , transparentColor 0 mainVisualColor
+                        [ Color.setOpacity 0.9 mainVisualColor |> Color.toElmUi
+                        , Color.setOpacity 0.4 mainVisualColor |> Color.toElmUi
+                        , Color.setOpacity 0 mainVisualColor |> Color.toElmUi
                         ]
                     }
                 ]
@@ -739,7 +741,7 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
         ]
 
 
-viewIcon : Element.Color -> IconName -> Bool -> Element msg
+viewIcon : Color -> IconName -> Bool -> Element msg
 viewIcon color iconName isVisible =
     let
         size =
@@ -794,7 +796,7 @@ viewVisualThumbnail size visual =
          , height (px size)
          , onClick (SelectedVisual (Just visual))
          , pointer
-         , Background.color color
+         , Background.color (color |> Color.toElmUi)
          ]
             ++ ifElse isVideo
                 [ inFront <|
@@ -816,7 +818,7 @@ viewVisualThumbnail size visual =
         )
 
 
-viewWorkLinks : Element.Color -> List Link -> Element Msg
+viewWorkLinks : Color -> List Link -> Element Msg
 viewWorkLinks color links =
     let
         makeLink link =
@@ -838,13 +840,13 @@ viewWorkLinks color links =
             List.map makeLink links
 
 
-viewWorkDescription : Element.Color -> Doc -> Element Msg
+viewWorkDescription : Color -> Doc -> Element Msg
 viewWorkDescription color doc =
     el [ paddingXY Palette.spaceNormal Palette.spaceSmall ]
         (Descriptor.fromDoc color doc)
 
 
-viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Element.Color -> Element Msg
+viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Color -> Element Msg
 viewWorkReadMore labels readMore color =
     case readMore of
         Nothing ->
@@ -893,9 +895,9 @@ subscriptions model =
 -- OTHER
 
 
-linkStyle : Element.Color -> List (Element.Attribute Msg)
+linkStyle : Color -> List (Element.Attribute Msg)
 linkStyle backgroundColor =
-    [ Background.color backgroundColor -- (Palette.colorAt50 Palette.baseColor)
+    [ Background.color (backgroundColor |> Color.toElmUi) -- (Palette.colorAt50 Palette.baseColor)
     , paddingXY
         (fraction 0.6 Palette.textSizeNormal)
         (fraction 0.4 Palette.textSizeNormal)
@@ -917,13 +919,13 @@ getLanguageFromPreferred codes =
         |> Maybe.withDefault English
 
 
-icon : Int -> Element.Color -> IconName -> Element msg
+icon : Int -> Color -> IconName -> Element msg
 icon size color iconName =
     el
         [ Element.padding <| fraction 0.1 size
         , CustomEl.radialGradient
-            [ ( 0.5, transparentColor 0.9 color )
-            , ( 1, rgba 0 0 0 0 )
+            [ ( 0.5, Color.setOpacity 0.9 color )
+            , ( 1, Color.rgba 0 0 0 0 )
             ]
         ]
         (View.Icon.icon iconName (fraction 0.8 size)

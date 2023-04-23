@@ -1,12 +1,13 @@
 module Descriptor exposing (Url(..), bold, d, fromDoc, l, list, makeTag, p, t)
 
+import Color exposing (Color)
 import CustomEl
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
 import Doc.Link as Link exposing (Link)
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
-import Element exposing (..)
+import Element exposing (Element, column, el, fill, html, mouseDown, newTabLink, paddingXY, paragraph, pointer, row, spacing, text, textColumn, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (..)
@@ -110,7 +111,7 @@ list children =
         rows
 
 
-fromDoc : Element.Color -> Doc -> Element msg
+fromDoc : Color -> Doc -> Element msg
 fromDoc color doc =
     textColumn [ width fill ] <| List.map (fromParagraph color) (Doc.content doc)
 
@@ -119,12 +120,12 @@ fromDoc color doc =
 -- INTERNAL
 
 
-fromParagraph : Element.Color -> Paragraph -> Element msg
+fromParagraph : Color -> Paragraph -> Element msg
 fromParagraph color par =
     p <| List.map (fromText color) (Paragraph.content par)
 
 
-fromText : Element.Color -> Text -> Element msg
+fromText : Color -> Text -> Element msg
 fromText color txt =
     let
         textContent =
