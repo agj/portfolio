@@ -31,6 +31,7 @@ import SmoothScroll
 import Tag exposing (Tag)
 import Task
 import Url exposing (Url)
+import Util.AppUrl as AppUrl
 import Util.Color as Color
 import Utils exposing (..)
 import VideoEmbed
@@ -257,27 +258,9 @@ changeQuery { url, key } query =
                 Nothing ->
                     Dict.empty
 
-        noTrailingSlashRegex =
-            "([^/])\\?"
-                |> Regex.fromString
-                |> Maybe.withDefault Regex.never
-
-        fixRelativeUrlsDontWork =
-            Regex.replaceAtMost 1
-                noTrailingSlashRegex
-                (\{ match, submatches } ->
-                    case submatches of
-                        (Just char) :: _ ->
-                            char ++ "/?"
-
-                        _ ->
-                            match
-                )
-
         resultUrl =
             { appUrl | queryParameters = queryParams }
-                |> AppUrl.toString
-                |> fixRelativeUrlsDontWork
+                |> AppUrl.toStringWithTrailingSlash
     in
     Navigation.pushUrl key resultUrl
 
