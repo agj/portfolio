@@ -9,6 +9,7 @@ import Palette
 import Phosphor
 import Tag exposing (Tag)
 import Utils exposing (..)
+import View.Icon exposing (IconName)
 
 
 ofLanguage : (Tag -> msg) -> Maybe Tag -> Language -> Element msg
@@ -39,16 +40,16 @@ english tag =
             , t "I’m based in Santiago, Chile. "
             , t "My work is concerned with various intersections of four areas—"
             , tag Tag.VisualCommunication "Visual Communication"
-            , icon Phosphor.eye
+            , icon View.Icon.VisualCommunication
             , t ", "
             , tag Tag.Programming "Programming"
-            , icon Phosphor.bracketsCurly
+            , icon View.Icon.Programming
             , t ", "
             , tag Tag.Language "Language"
-            , icon Phosphor.chatCircle
+            , icon View.Icon.Language
             , t ", and "
             , tag Tag.Learning "Learning"
-            , icon Phosphor.brain
+            , icon View.Icon.Learning
             , t ". "
             , t "I'm a master in new media from Tokyo Geidai (Japan), graphic designer from U. Diego Portales (Chile), and a self-taught programmer."
             ]
@@ -106,16 +107,16 @@ japanese tag =
             , t "をご覧いただきありがとうございます。"
             , t "拠点をチリのサンティアゴにしている者です。"
             , tag Tag.VisualCommunication "視覚コミュニケーション"
-            , icon Phosphor.eye
+            , icon View.Icon.VisualCommunication
             , t "、"
             , tag Tag.Programming "プログラミング"
-            , icon Phosphor.bracketsCurly
+            , icon View.Icon.Programming
             , t "、"
             , tag Tag.Language "言語"
-            , icon Phosphor.chatCircle
+            , icon View.Icon.Language
             , t "、"
             , tag Tag.Learning "習得"
-            , icon Phosphor.brain
+            , icon View.Icon.Learning
             , t "という４つのエリアの組み合わせで活動してきました。"
             , t "東京芸術大学大学院のメディア映像専攻や、チリ Diego Portales 大学グラフィックデザイン学部の卒業生です。"
             , t "プログラミングを独学しました。"
@@ -174,16 +175,16 @@ spanish tag =
             , bold <| t "portafolio"
             , t ". Vivo en Santiago de Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
             , tag Tag.VisualCommunication "Comunicación Visual"
-            , icon Phosphor.eye
+            , icon View.Icon.VisualCommunication
             , t ", "
             , tag Tag.Programming "Programación"
-            , icon Phosphor.bracketsCurly
+            , icon View.Icon.Programming
             , t ", "
             , tag Tag.Language "Idiomas"
-            , icon Phosphor.chatCircle
+            , icon View.Icon.Language
             , t ", y "
             , tag Tag.Learning "Aprendizaje"
-            , icon Phosphor.brain
+            , icon View.Icon.Learning
             , t ". Soy magíster en nuevos medios de Tokyo Geidai (Japón), diseñador gráfico de U. Diego Portales (Chile), y programador autoenseñado."
             ]
         , p
@@ -232,8 +233,7 @@ spanish tag =
 -- INTERNAL
 
 
-icon : Phosphor.Icon -> Element msg
-icon theIcon =
-    theIcon Phosphor.Fill
-        |> Phosphor.toHtml []
-        |> Element.html
+icon : IconName -> Element msg
+icon iconName =
+    View.Icon.icon iconName (fraction 1.5 Palette.textSizeNormal)
+        |> View.Icon.view
