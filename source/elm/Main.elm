@@ -921,15 +921,13 @@ getLanguageFromPreferred codes =
 icon : Int -> Element.Color -> IconName -> Element msg
 icon size color iconName =
     el
-        [ Element.width <| px size
-        , Element.height <| px size
-        , Element.padding <| fraction 0.1 size
+        [ Element.padding <| fraction 0.1 size
         , CustomEl.radialGradient
             [ ( 0.5, transparentColor 0.9 color )
             , ( 1, rgba 0 0 0 0 )
             ]
         ]
-        (View.Icon.icon iconName size
+        (View.Icon.icon iconName (fraction 0.8 size)
             |> View.Icon.view
         )
 
