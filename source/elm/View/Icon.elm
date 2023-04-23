@@ -16,6 +16,7 @@ type IconName
     | VisualCommunication
     | Programming
     | Learning
+    | Play
 
 
 type Icon
@@ -46,6 +47,9 @@ view (Icon { name, size }) =
 
                 Learning ->
                     Phosphor.brain
+
+                Play ->
+                    Phosphor.playCircle
     in
     phosphorIcon Phosphor.Fill
         |> Phosphor.toHtml

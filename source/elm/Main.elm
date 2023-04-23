@@ -24,7 +24,6 @@ import LayoutFormat exposing (LayoutFormat(..))
 import List.Extra
 import Maybe.Extra
 import Palette
-import Phosphor
 import SaveState exposing (SaveState)
 import SmoothScroll
 import Tag exposing (Tag)
@@ -32,6 +31,7 @@ import Task
 import Url exposing (Url)
 import Utils exposing (..)
 import VideoEmbed
+import View.Icon exposing (IconName)
 import Viewport exposing (Viewport)
 import Work exposing (..)
 import Work.Date as Date exposing (Date)
@@ -684,10 +684,10 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 [ paddingXY Palette.spaceNormal Palette.spaceSmall
                 , CustomEl.style "flex-basis" "auto"
                 ]
-                [ viewIcon mainVisualColor Phosphor.eye icons.visualCommunication
-                , viewIcon mainVisualColor Phosphor.bracketsCurly icons.programming
-                , viewIcon mainVisualColor Phosphor.chatCircle icons.language
-                , viewIcon mainVisualColor Phosphor.brain icons.learning
+                [ viewIcon mainVisualColor View.Icon.VisualCommunication icons.visualCommunication
+                , viewIcon mainVisualColor View.Icon.Programming icons.programming
+                , viewIcon mainVisualColor View.Icon.Language icons.language
+                , viewIcon mainVisualColor View.Icon.Learning icons.learning
                 ]
 
         gradientBlock =
@@ -740,14 +740,14 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
         ]
 
 
-viewIcon : Element.Color -> Phosphor.Icon -> Bool -> Element msg
-viewIcon color theIcon isVisible =
+viewIcon : Element.Color -> IconName -> Bool -> Element msg
+viewIcon color iconName isVisible =
     let
         size =
             fraction 1.5 Palette.spaceNormal
     in
     if isVisible then
-        icon size color theIcon
+        icon size color iconName
 
     else
         none
@@ -803,7 +803,7 @@ viewVisualThumbnail size visual =
                         [ alignRight
                         , alignBottom
                         ]
-                        (icon (fraction 0.3 size) color Phosphor.playCircle)
+                        (icon (fraction 0.3 size) color View.Icon.Play)
                 ]
                 []
         )
@@ -918,8 +918,8 @@ getLanguageFromPreferred codes =
         |> Maybe.withDefault English
 
 
-icon : Int -> Element.Color -> Phosphor.Icon -> Element msg
-icon size color theIcon =
+icon : Int -> Element.Color -> IconName -> Element msg
+icon size color iconName =
     el
         [ Element.width <| px size
         , Element.height <| px size
@@ -929,9 +929,8 @@ icon size color theIcon =
             , ( 1, rgba 0 0 0 0 )
             ]
         ]
-        (theIcon Phosphor.Fill
-            |> Phosphor.toHtml []
-            |> Element.html
+        (View.Icon.icon iconName size
+            |> View.Icon.view
         )
 
 
