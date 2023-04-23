@@ -566,11 +566,10 @@ viewPopupVisual viewport visual =
                 , alignRight
                 , alignTop
                 , pointer
+                , Font.color Palette.light
                 ]
-                (image [ width fill, height fill ]
-                    { src = "image/icon-close-light.svg"
-                    , description = " "
-                    }
+                (View.Icon.icon View.Icon.Close (fraction 0.4 reservedSpace)
+                    |> View.Icon.view
                 )
     in
     el

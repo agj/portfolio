@@ -17,6 +17,7 @@ type IconName
     | Programming
     | Learning
     | Play
+    | Close
 
 
 type Icon
@@ -50,6 +51,9 @@ view (Icon { name, size }) =
 
                 Play ->
                     Phosphor.playCircle
+
+                Close ->
+                    Phosphor.xCircle
     in
     phosphorIcon Phosphor.Fill
         |> Phosphor.toHtml
