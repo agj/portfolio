@@ -235,5 +235,6 @@ spanish tag =
 
 icon : IconName -> Element msg
 icon iconName =
-    View.Icon.icon iconName (fraction 1.5 Palette.textSizeNormal)
+    View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
         |> View.Icon.view
+        |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
