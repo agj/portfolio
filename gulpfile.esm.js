@@ -12,6 +12,10 @@ import generateVisualsCache from "./source/js/generate-visuals-cache.js";
 import cfg from "./source/js/config.js";
 import { run } from "./source/js/utils.js";
 
+// Install
+
+export const install = () => run("pnpm install");
+
 // Elm compilation
 
 const elmMainFile = path.join(cfg.elmDir, "Main.elm");
@@ -30,7 +34,7 @@ const debugElm = () => doElm({ optimize: false, debug: true });
 
 const developElm = () =>
   run(
-    `npx elm-go ${elmMainFile} `,
+    `pnpm exec elm-go ${elmMainFile} `,
     {
       "path-to-elm": "./node_modules/.bin/elm",
       dir: "output/",
@@ -75,15 +79,22 @@ const watchJson = () => gulp.watch(path.join(cfg.copyDir, "**"), generateJson);
 
 // Combined tasks
 
-export const build = gulp.parallel(copy, generateJson, buildElm);
+export const build = gulp.series(
+  install,
+  gulp.parallel(copy, generateJson, buildElm)
+);
 
-export const debug = gulp.parallel(copy, generateJson, debugElm);
+export const debug = gulp.series(
+  install,
+  gulp.parallel(copy, generateJson, debugElm)
+);
 
 export const develop = gulp.series(
+  install,
   gulp.parallel(copy, generateJson),
   gulp.parallel(watchCopy, watchJson, developElm)
 );
 
-export { generateCache as cache };
+export const cache = gulp.series(install, generateCache);
 
 export default build;
