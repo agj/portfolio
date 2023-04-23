@@ -280,20 +280,22 @@ view model =
     let
         labels =
             Labels.ofLanguage model.language
+
+        globalStyles =
+            [ Font.family Palette.font ]
+
+        popupVisual =
+            case model.popupVisual of
+                Just visual ->
+                    [ inFront (viewPopupVisual model.viewport visual) ]
+
+                Nothing ->
+                    []
     in
     { title = labels.title
     , body =
-        [ layout
-            (Font.family Palette.font
-                :: (case model.popupVisual of
-                        Just visual ->
-                            [ inFront (viewPopupVisual model.viewport visual) ]
-
-                        Nothing ->
-                            []
-                   )
-            )
-            (viewMain model)
+        [ viewMain model
+            |> layout (globalStyles ++ popupVisual)
         , Html.node "style"
             []
             [ "body { background-color: {color}; }"
