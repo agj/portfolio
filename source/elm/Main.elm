@@ -284,10 +284,8 @@ view model =
     { title = labels.title
     , body =
         [ layout
-            ([ Font.family Palette.font
-             , Background.color (Palette.baseColorAt70 |> Color.toElmUi)
-             ]
-                ++ (case model.popupVisual of
+            (Font.family Palette.font
+                :: (case model.popupVisual of
                         Just visual ->
                             [ inFront (viewPopupVisual model.viewport visual) ]
 
@@ -296,6 +294,12 @@ view model =
                    )
             )
             (viewMain model)
+        , Html.node "style"
+            []
+            [ "body { background-color: {color}; }"
+                |> String.replace "{color}" (Color.toCssString Palette.baseColorAt70)
+                |> Html.text
+            ]
         ]
     }
 
