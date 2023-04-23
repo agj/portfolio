@@ -95,7 +95,9 @@ const generateVisualsCache = async (work, workName) => {
     const allVisuals = work
       .into(R.map(R.prop("visuals")))
       .into(R.values)
-      .into(R.unnest);
+      .into(R.unnest)
+      .into(R.uniq);
+
     const promises = allVisuals.into(
       R.map(async (visual) => {
         // Filenames.
