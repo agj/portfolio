@@ -193,7 +193,7 @@ const getImageDimensions = async (image) => {
 };
 const getImageColor = async (image) => {
   const colors = await vibrant.from(image).getPalette();
-  const color = colors.DarkVibrant.rgb;
+  const color = colors.Vibrant.rgb;
   return {
     red: color[0] / 0xff,
     green: color[1] / 0xff,
