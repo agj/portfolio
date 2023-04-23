@@ -40,17 +40,17 @@ makeTag messenger selectedTag tag label =
     in
     el
         [ ifElse isSelectedTag
-            (Background.color Palette.highlightLight)
-            (Background.color Palette.highlightDark)
-        , Font.color <| ifElse isSelectedTag Palette.dark Palette.light
+            (Background.color (Palette.colorAt10 Palette.baseColor))
+            (Background.color (Palette.colorAt70 Palette.baseColor))
+        , Font.color <| ifElse isSelectedTag (Palette.colorAt90 Palette.baseColor) (Palette.colorAt10 Palette.baseColor)
         , paddingXY
             (fraction 0.3 Palette.textSizeNormal)
             (fraction 0.1 Palette.textSizeNormal)
         , onClick (messenger tag)
         , pointer
         , mouseDown
-            [ Background.color Palette.highlightLight
-            , Font.color Palette.dark
+            [ Background.color (Palette.colorAt10 Palette.baseColor)
+            , Font.color (Palette.colorAt90 Palette.baseColor)
             ]
         ]
         (text label)
@@ -84,7 +84,7 @@ bold : Element msg -> Element msg
 bold child =
     el
         [ Font.bold
-        , Font.color Palette.highlightLight
+        , Font.color (Palette.colorAt10 Palette.baseColor)
         ]
         child
 
@@ -168,5 +168,5 @@ linkStyle : List (Element.Attribute msg)
 linkStyle =
     [ Font.underline
     , pointer
-    , mouseDown [ Font.color Palette.highlightLight ]
+    , mouseDown [ Font.color (Palette.colorAt10 Palette.baseColor) ]
     ]

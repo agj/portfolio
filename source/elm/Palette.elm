@@ -1,4 +1,20 @@
-module Palette exposing (dark, darkish, font, highlightDark, highlightDarker, highlightLight, light, spaceLarge, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
+module Palette exposing
+    ( baseColor
+    , colorAt10
+    , colorAt50
+    , colorAt70
+    , colorAt90
+    , font
+    , spaceLarge
+    , spaceNormal
+    , spaceSmall
+    , spaceSmaller
+    , spaceSmallest
+    , textLineSpacing
+    , textSizeLarge
+    , textSizeNormal
+    , textSizeSmall
+    )
 
 import Color exposing (Color)
 import Color.Manipulate
@@ -10,40 +26,35 @@ import Element.Font as Font exposing (Font)
 -- COLOR
 
 
-dark : Element.Color
-dark =
-    baseDark
+baseColor : Color
+baseColor =
+    Color.hsl 0 0 0.5
+
+
+colorAt10 : Color -> Element.Color
+colorAt10 col =
+    col
+        |> Color.Manipulate.lighten 0.8
         |> toElmUiColor
 
 
-darkish : Element.Color
-darkish =
-    baseDarkish
+colorAt50 : Color -> Element.Color
+colorAt50 col =
+    col
         |> toElmUiColor
 
 
-light : Element.Color
-light =
-    Element.rgb 0.9 0.9 0.9
-
-
-highlightLight : Element.Color
-highlightLight =
-    baseHighlight |> toElmUiColor
-
-
-highlightDark : Element.Color
-highlightDark =
-    baseSecondaryHighlight
-        |> Color.Manipulate.darken 0.1
-        |> Color.Manipulate.desaturate 0.5
-        |> toElmUiColor
-
-
-highlightDarker : Element.Color
-highlightDarker =
-    baseSecondaryHighlight
+colorAt70 : Color -> Element.Color
+colorAt70 col =
+    col
         |> Color.Manipulate.darken 0.3
+        |> toElmUiColor
+
+
+colorAt90 : Color -> Element.Color
+colorAt90 col =
+    col
+        |> Color.Manipulate.darken 0.5
         |> toElmUiColor
 
 
@@ -109,26 +120,6 @@ spaceSmallest =
 
 
 -- INTERNAL
-
-
-baseHighlight : Color
-baseHighlight =
-    Color.rgb255 207 255 0
-
-
-baseSecondaryHighlight : Color
-baseSecondaryHighlight =
-    Color.rgb255 255 0 204
-
-
-baseDark : Color
-baseDark =
-    Color.rgb 0 0 0
-
-
-baseDarkish : Color
-baseDarkish =
-    Color.rgb 0.3 0.3 0.3
 
 
 toElmUiColor : Color -> Element.Color

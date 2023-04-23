@@ -283,7 +283,7 @@ view model =
     , body =
         [ layout
             ([ Font.family Palette.font
-             , Background.color Palette.darkish
+             , Background.color (Palette.colorAt70 Palette.baseColor)
              ]
                 ++ (case model.popupVisual of
                         Just visual ->
@@ -378,8 +378,8 @@ viewMain model =
 viewTop : Language -> Maybe Tag -> Element Msg
 viewTop language selectedTag =
     column
-        [ Font.color Palette.light
-        , Background.color Palette.dark
+        [ Font.color (Palette.colorAt10 Palette.baseColor)
+        , Background.color (Palette.colorAt90 Palette.baseColor)
         , paddingEach { sides | top = Palette.spaceNormal, bottom = Palette.spaceSmall }
         ]
         [ viewIntroduction (Introduction.ofLanguage SelectedTag selectedTag language)
@@ -408,13 +408,13 @@ viewBackButton label =
             , Font.size Palette.textSizeNormal
             , height (px (fraction 2.3 Palette.textSizeNormal))
             , pointer
-            , Background.color Palette.dark
-            , Border.color Palette.highlightDark
+            , Background.color (Palette.colorAt90 Palette.baseColor)
+            , Border.color (Palette.colorAt50 Palette.baseColor)
             , Border.widthEach { left = 1, right = 1, bottom = 1, top = 0 }
-            , Font.color Palette.light
+            , Font.color (Palette.colorAt10 Palette.baseColor)
             , mouseDown
-                [ Background.color Palette.highlightLight
-                , Font.color Palette.dark
+                [ Background.color (Palette.colorAt10 Palette.baseColor)
+                , Font.color (Palette.colorAt90 Palette.baseColor)
                 ]
             , onClick SelectedGoHome
             ]
@@ -433,11 +433,11 @@ viewLanguageButton label language selectedLanguage =
             , width (px (fraction 2.9 Palette.textSizeNormal))
             , height (px (fraction 2.3 Palette.textSizeNormal))
             , pointer
-            , Background.color Palette.highlightDark
-            , Font.color Palette.light
+            , Background.color (Palette.colorAt50 Palette.baseColor)
+            , Font.color (Palette.colorAt10 Palette.baseColor)
             , mouseDown
-                [ Background.color Palette.highlightLight
-                , Font.color Palette.dark
+                [ Background.color (Palette.colorAt10 Palette.baseColor)
+                , Font.color (Palette.colorAt90 Palette.baseColor)
                 ]
             ]
             (el
@@ -566,7 +566,7 @@ viewPopupVisual viewport visual =
                 , alignRight
                 , alignTop
                 , pointer
-                , Font.color Palette.light
+                , Font.color (Palette.colorAt10 Palette.baseColor)
                 ]
                 (View.Icon.icon View.Icon.Close (fraction 0.4 reservedSpace)
                     |> View.Icon.view
@@ -622,8 +622,8 @@ viewWorkBlock : List (Attribute Msg) -> List (Element Msg) -> Element Msg
 viewWorkBlock attrs children =
     column
         ([ width fill
-         , Font.color Palette.light
-         , Background.color Palette.dark
+         , Font.color (Palette.colorAt10 Palette.baseColor)
+         , Background.color (Palette.colorAt90 Palette.baseColor)
          , Font.size Palette.textSizeNormal
          ]
             ++ attrs
@@ -895,15 +895,15 @@ subscriptions model =
 
 linkStyle : Element.Color -> List (Element.Attribute Msg)
 linkStyle backgroundColor =
-    [ Background.color backgroundColor -- Palette.highlightDark
+    [ Background.color backgroundColor -- (Palette.colorAt50 Palette.baseColor)
     , paddingXY
         (fraction 0.6 Palette.textSizeNormal)
         (fraction 0.4 Palette.textSizeNormal)
     , centerX
     , pointer
     , mouseDown
-        [ Background.color Palette.highlightLight
-        , Font.color Palette.dark
+        [ Background.color (Palette.colorAt10 Palette.baseColor)
+        , Font.color (Palette.colorAt90 Palette.baseColor)
         ]
     ]
 
