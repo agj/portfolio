@@ -1,50 +1,81 @@
-module Palette exposing (dark, darkish, font, highlightDark, highlightDarker, highlightLight, light, spaceLarge, spaceNormal, spaceSmall, spaceSmaller, spaceSmallest, textLineSpacing, textSizeLarge, textSizeNormal, textSizeSmall)
+module Palette exposing
+    ( baseColor
+    , baseColorAt10
+    , baseColorAt50
+    , baseColorAt70
+    , baseColorAt90
+    , colorAt10
+    , colorAt50
+    , colorAt70
+    , colorAt90
+    , font
+    , spaceLarge
+    , spaceNormal
+    , spaceSmall
+    , spaceSmaller
+    , spaceSmallest
+    , textLineSpacing
+    , textSizeLarge
+    , textSizeNormal
+    , textSizeSmall
+    )
 
 import Color exposing (Color)
 import Color.Manipulate
-import Element
 import Element.Font as Font exposing (Font)
+import Util.Color as Color
 
 
 
 -- COLOR
 
 
-dark : Element.Color
-dark =
-    baseDark
-        |> toElmUiColor
+colorAt10 : Color -> Color
+colorAt10 col =
+    col
+        |> lighten 0.9
 
 
-darkish : Element.Color
-darkish =
-    baseDarkish
-        |> toElmUiColor
+colorAt50 : Color -> Color
+colorAt50 col =
+    col
 
 
-light : Element.Color
-light =
-    Element.rgb 0.9 0.9 0.9
+colorAt70 : Color -> Color
+colorAt70 col =
+    col
+        |> darken 0.5
 
 
-highlightLight : Element.Color
-highlightLight =
-    baseHighlight |> toElmUiColor
+colorAt90 : Color -> Color
+colorAt90 col =
+    col
+        |> darken 0.8
 
 
-highlightDark : Element.Color
-highlightDark =
-    baseSecondaryHighlight
-        |> Color.Manipulate.darken 0.1
-        |> Color.Manipulate.desaturate 0.5
-        |> toElmUiColor
+baseColor : Color
+baseColor =
+    Color.hsl 0.65 0.1 0.7
 
 
-highlightDarker : Element.Color
-highlightDarker =
-    baseSecondaryHighlight
-        |> Color.Manipulate.darken 0.3
-        |> toElmUiColor
+baseColorAt10 : Color
+baseColorAt10 =
+    colorAt10 baseColor
+
+
+baseColorAt50 : Color
+baseColorAt50 =
+    colorAt50 baseColor
+
+
+baseColorAt70 : Color
+baseColorAt70 =
+    colorAt70 baseColor
+
+
+baseColorAt90 : Color
+baseColorAt90 =
+    colorAt90 baseColor
 
 
 
@@ -111,30 +142,16 @@ spaceSmallest =
 -- INTERNAL
 
 
-baseHighlight : Color
-baseHighlight =
-    Color.rgb255 207 255 0
+lighten : Float -> Color -> Color
+lighten amount color =
+    color
+        |> Color.Manipulate.scaleHsl
+            { saturationScale = 0
+            , lightnessScale = amount
+            , alphaScale = 0
+            }
 
 
-baseSecondaryHighlight : Color
-baseSecondaryHighlight =
-    Color.rgb255 255 0 204
-
-
-baseDark : Color
-baseDark =
-    Color.rgb 0 0 0
-
-
-baseDarkish : Color
-baseDarkish =
-    Color.rgb 0.3 0.3 0.3
-
-
-toElmUiColor : Color -> Element.Color
-toElmUiColor color =
-    let
-        { red, green, blue, alpha } =
-            Color.toRgba color
-    in
-    Element.rgba red green blue alpha
+darken : Float -> Color -> Color
+darken amount color =
+    lighten -amount color

@@ -6,8 +6,10 @@ import Element exposing (Element)
 import Element.Background as Background
 import Language exposing (..)
 import Palette
+import Phosphor
 import Tag exposing (Tag)
 import Utils exposing (..)
+import View.Icon exposing (IconName)
 
 
 ofLanguage : (Tag -> msg) -> Maybe Tag -> Language -> Element msg
@@ -38,16 +40,16 @@ english tag =
             , t "I’m based in Santiago, Chile. "
             , t "My work is concerned with various intersections of four areas—"
             , tag Tag.VisualCommunication "Visual Communication"
-            , icon "visual-communication"
+            , icon View.Icon.VisualCommunication
             , t ", "
             , tag Tag.Programming "Programming"
-            , icon "programming"
+            , icon View.Icon.Programming
             , t ", "
             , tag Tag.Language "Language"
-            , icon "language"
+            , icon View.Icon.Language
             , t ", and "
             , tag Tag.Learning "Learning"
-            , icon "learning"
+            , icon View.Icon.Learning
             , t ". "
             , t "I'm a master in new media from Tokyo Geidai (Japan), graphic designer from U. Diego Portales (Chile), and a self-taught programmer."
             ]
@@ -105,16 +107,16 @@ japanese tag =
             , t "をご覧いただきありがとうございます。"
             , t "拠点をチリのサンティアゴにしている者です。"
             , tag Tag.VisualCommunication "視覚コミュニケーション"
-            , icon "visual-communication"
+            , icon View.Icon.VisualCommunication
             , t "、"
             , tag Tag.Programming "プログラミング"
-            , icon "programming"
+            , icon View.Icon.Programming
             , t "、"
             , tag Tag.Language "言語"
-            , icon "language"
+            , icon View.Icon.Language
             , t "、"
             , tag Tag.Learning "習得"
-            , icon "learning"
+            , icon View.Icon.Learning
             , t "という４つのエリアの組み合わせで活動してきました。"
             , t "東京芸術大学大学院のメディア映像専攻や、チリ Diego Portales 大学グラフィックデザイン学部の卒業生です。"
             , t "プログラミングを独学しました。"
@@ -173,16 +175,16 @@ spanish tag =
             , bold <| t "portafolio"
             , t ". Vivo en Santiago de Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
             , tag Tag.VisualCommunication "Comunicación Visual"
-            , icon "visual-communication"
+            , icon View.Icon.VisualCommunication
             , t ", "
             , tag Tag.Programming "Programación"
-            , icon "programming"
+            , icon View.Icon.Programming
             , t ", "
             , tag Tag.Language "Idiomas"
-            , icon "language"
+            , icon View.Icon.Language
             , t ", y "
             , tag Tag.Learning "Aprendizaje"
-            , icon "learning"
+            , icon View.Icon.Learning
             , t ". Soy magíster en nuevos medios de Tokyo Geidai (Japón), diseñador gráfico de U. Diego Portales (Chile), y programador autoenseñado."
             ]
         , p
@@ -231,13 +233,8 @@ spanish tag =
 -- INTERNAL
 
 
-icon : String -> Element msg
-icon name =
-    CustomEl.imageInline
-        [ Element.width (Element.px <| fraction 1.5 Palette.textSizeNormal)
-        , Element.height (Element.px <| fraction 1.5 Palette.textSizeNormal)
-        , CustomEl.inlineCenter
-        ]
-        { src = "image/icon-" ++ name ++ "-light.svg"
-        , description = " "
-        }
+icon : IconName -> Element msg
+icon iconName =
+    View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
+        |> View.Icon.view
+        |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]

@@ -1,6 +1,17 @@
-module CustomEl exposing (backgroundColor, glow, iOsTextScalingFix, id, imageInline, inlineCenter, radialGradient, style, svgFilter)
+module CustomEl exposing
+    ( backgroundColor
+    , glow
+    , iOsTextScalingFix
+    , id
+    , imageInline
+    , inlineCenter
+    , radialGradient
+    , style
+    , svgFilter
+    )
 
-import Element exposing (..)
+import Color exposing (Color)
+import Element exposing (Element, image)
 import Html.Attributes as Attributes
 import Utils exposing (..)
 
@@ -23,9 +34,9 @@ imageInline attrs desc =
 -- ATTRIBUTES
 
 
-backgroundColor : Element.Color -> Element.Attribute msg
+backgroundColor : Color -> Element.Attribute msg
 backgroundColor color =
-    style "background-color" (toCssColor color)
+    style "background-color" (Color.toCssString color)
 
 
 svgFilter : String -> Element.Attribute msg
@@ -38,11 +49,11 @@ inlineCenter =
     style "vertical-align" "middle"
 
 
-radialGradient : List ( Float, Element.Color ) -> Element.Attribute msg
+radialGradient : List ( Float, Color ) -> Element.Attribute msg
 radialGradient colors =
     let
         process ( position, color ) =
-            toCssColor color
+            Color.toCssString color
                 ++ " "
                 ++ String.fromFloat (position * 100.0)
                 ++ "%"
@@ -56,11 +67,11 @@ radialGradient colors =
             ++ ")"
 
 
-glow : { color : Element.Color, strength : Float, size : Float } -> Element.Attribute msg
+glow : { color : Color, strength : Float, size : Float } -> Element.Attribute msg
 glow { color, strength, size } =
     let
         colorCss =
-            toCssColor color
+            Color.toCssString color
 
         value =
             "0 0 "

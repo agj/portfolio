@@ -48,7 +48,7 @@ export const run = (program, options, furtherOptions) => {
 
 // Internal
 
-const optionsToArray = (options) =>
+const optionsToArray = (options = {}) =>
   Object.keys(options).map((opt) => {
     const value = options[opt];
     if (value === false) return "";

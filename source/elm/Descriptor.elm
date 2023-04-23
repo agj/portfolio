@@ -1,12 +1,13 @@
 module Descriptor exposing (Url(..), bold, d, fromDoc, l, list, makeTag, p, t)
 
+import Color exposing (Color)
 import CustomEl
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
 import Doc.Link as Link exposing (Link)
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
-import Element exposing (..)
+import Element exposing (Element, column, el, fill, html, mouseDown, newTabLink, paddingXY, paragraph, pointer, row, spacing, text, textColumn, width)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (..)
@@ -15,6 +16,7 @@ import Html
 import Html.Attributes
 import Palette
 import Tag exposing (Tag)
+import Util.Color as Color
 import Utils exposing (..)
 
 
@@ -40,17 +42,17 @@ makeTag messenger selectedTag tag label =
     in
     el
         [ ifElse isSelectedTag
-            (Background.color Palette.highlightLight)
-            (Background.color Palette.highlightDark)
-        , Font.color <| ifElse isSelectedTag Palette.dark Palette.light
+            (Background.color (Palette.baseColorAt10 |> Color.toElmUi))
+            (Background.color (Palette.baseColorAt70 |> Color.toElmUi))
+        , Font.color <| ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi)
         , paddingXY
             (fraction 0.3 Palette.textSizeNormal)
             (fraction 0.1 Palette.textSizeNormal)
         , onClick (messenger tag)
         , pointer
         , mouseDown
-            [ Background.color Palette.highlightLight
-            , Font.color Palette.dark
+            [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
+            , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
             ]
         ]
         (text label)
@@ -84,7 +86,7 @@ bold : Element msg -> Element msg
 bold child =
     el
         [ Font.bold
-        , Font.color Palette.highlightLight
+        , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
         ]
         child
 
@@ -110,7 +112,7 @@ list children =
         rows
 
 
-fromDoc : Element.Color -> Doc -> Element msg
+fromDoc : Color -> Doc -> Element msg
 fromDoc color doc =
     textColumn [ width fill ] <| List.map (fromParagraph color) (Doc.content doc)
 
@@ -119,12 +121,12 @@ fromDoc color doc =
 -- INTERNAL
 
 
-fromParagraph : Element.Color -> Paragraph -> Element msg
+fromParagraph : Color -> Paragraph -> Element msg
 fromParagraph color par =
     p <| List.map (fromText color) (Paragraph.content par)
 
 
-fromText : Element.Color -> Text -> Element msg
+fromText : Color -> Text -> Element msg
 fromText color txt =
     let
         textContent =
@@ -168,5 +170,5 @@ linkStyle : List (Element.Attribute msg)
 linkStyle =
     [ Font.underline
     , pointer
-    , mouseDown [ Font.color Palette.highlightLight ]
+    , mouseDown [ Font.color (Palette.baseColorAt10 |> Color.toElmUi) ]
     ]

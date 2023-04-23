@@ -3,6 +3,7 @@ import elm from "gulp-elm";
 import rename from "gulp-rename";
 import { promisify } from "util";
 import { exec as exec_ } from "child_process";
+import path from "path";
 
 import retrieveWorks from "./source/js/retrieve-works.js";
 import generateWorksJson from "./source/js/generate-works-json.js";
@@ -13,12 +14,15 @@ import { run } from "./source/js/utils.js";
 
 // Elm compilation
 
+const elmMainFile = path.join(cfg.elmDir, "Main.elm");
+const elmOutputFileName = "script.js";
+
 const doElm = (options) =>
   gulp
-    .src(`${cfg.elmDir}Main.elm`)
+    .src(elmMainFile)
     .pipe(elm(options))
-    .pipe(rename("script.js"))
-    .pipe(gulp.dest(`${cfg.outputDir}js/`));
+    .pipe(rename(elmOutputFileName))
+    .pipe(gulp.dest(path.join(cfg.outputDir, "js")));
 
 const buildElm = () => doElm({ optimize: true, debug: false });
 
@@ -26,7 +30,7 @@ const debugElm = () => doElm({ optimize: false, debug: true });
 
 const developElm = () =>
   run(
-    `npx elm-go ${cfg.elmDir}Main.elm `,
+    `pnpm exec elm-go ${elmMainFile} `,
     {
       "path-to-elm": "./node_modules/.bin/elm",
       dir: "output/",
@@ -34,7 +38,7 @@ const developElm = () =>
       hot: true,
     },
     {
-      output: `${cfg.outputDir}js/script.js`,
+      output: path.join(cfg.outputDir, "js", elmOutputFileName),
       debug: true,
     }
   );
@@ -42,15 +46,18 @@ const developElm = () =>
 // Static files copy
 
 const copyGeneralData = () =>
-  gulp.src(`${cfg.copyDir}**`).pipe(gulp.dest(`${cfg.outputDir}`));
+  gulp.src(path.join(cfg.copyDir, "**")).pipe(gulp.dest(cfg.outputDir));
 const copyCache = () =>
   gulp
-    .src([`${cfg.cacheDir}**/*.*`, `!${cfg.cacheDir}**/*.meta.json`])
-    .pipe(gulp.dest(`${cfg.outputDir}works/`));
+    .src([
+      path.join(cfg.cacheDir, "**/*.*"),
+      path.join(`!${cfg.cacheDir}`, "**/*.meta.json"),
+    ])
+    .pipe(gulp.dest(path.join(cfg.outputDir, "works/")));
 
 const copy = gulp.parallel(copyGeneralData, copyCache);
 
-const watchCopy = () => gulp.watch(`${cfg.copyDir}**`, copy);
+const watchCopy = () => gulp.watch(path.join(cfg.copyDir, "**"), copy);
 
 // Data generation
 
@@ -64,7 +71,7 @@ const generateJson = async () => {
   return await generateWorksJson(data);
 };
 
-const watchJson = () => gulp.watch(`${cfg.dataDir}**`, generateJson);
+const watchJson = () => gulp.watch(path.join(cfg.copyDir, "**"), generateJson);
 
 // Combined tasks
 
@@ -74,7 +81,7 @@ export const debug = gulp.parallel(copy, generateJson, debugElm);
 
 export const develop = gulp.series(
   gulp.parallel(copy, generateJson),
-  gulp.parallel(watchCopy, watchJson, developElm),
+  gulp.parallel(watchCopy, watchJson, developElm)
 );
 
 export { generateCache as cache };

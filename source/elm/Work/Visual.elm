@@ -1,6 +1,6 @@
 module Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter, Visual(..), colorDecoder, decoder, videoHostDecoder)
 
-import Element
+import Color exposing (Color)
 import Json.Decode as Decode exposing (Decoder, andThen, float, list, maybe, oneOf, string)
 import Json.Decode.Pipeline exposing (optional, required)
 
@@ -10,7 +10,7 @@ type Visual
         { thumbnailUrl : String
         , url : String
         , aspectRatio : Float
-        , color : Element.Color
+        , color : Color
         }
     | Video VideoDescription
 
@@ -20,7 +20,7 @@ type alias VideoDescription =
     , id : String
     , aspectRatio : Float
     , host : VideoHost
-    , color : Element.Color
+    , color : Color
     , parameters : List VideoParameter
     }
 
@@ -82,9 +82,9 @@ videoHostDecoder =
             )
 
 
-colorDecoder : Decoder Element.Color
+colorDecoder : Decoder Color
 colorDecoder =
-    Decode.succeed Element.rgb
+    Decode.succeed Color.rgb
         |> required "red" float
         |> required "green" float
         |> required "blue" float

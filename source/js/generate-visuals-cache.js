@@ -66,15 +66,15 @@ const logSkipped = (name) => {
 const generateVisualsCache = async (work, workName) => {
   // Main visual.
 
+  const mvLogReference = `${workName} -> main visual`;
   const mvOutputFilename = `${cfg.cacheDir}${work.default.mainVisualUrl}`;
   const mvMetaOutputFilename = `${cfg.cacheDir}${work.default.mainVisualMetaUrl}`;
 
-  if (
-    fs.pathExistsSync(mvOutputFilename) &&
-    fs.pathExistsSync(mvMetaOutputFilename)
-  ) {
-    console.log(`Skipped: ${workName} -> main visual`);
+  if (filesExist([mvOutputFilename, mvMetaOutputFilename])) {
+    console.log(`Skipped: ${mvLogReference}`);
   } else {
+    console.log(`Processing: ${mvLogReference}`);
+
     // Create folders.
     const mvMetaOutputFilenameParsed = path.parse(mvMetaOutputFilename);
     fs.ensureDirSync(mvMetaOutputFilenameParsed.dir);
@@ -86,6 +86,7 @@ const generateVisualsCache = async (work, workName) => {
 
     const resized = await resizeMainVisual(image);
     await fs.writeFile(mvOutputFilename, resized);
+    console.log(`Output: ${mvOutputFilename}`);
     await writeImageMetadata(resized, mvMetaOutputFilename);
   }
 
@@ -95,20 +96,24 @@ const generateVisualsCache = async (work, workName) => {
     const allVisuals = work
       .into(R.map(R.prop("visuals")))
       .into(R.values)
-      .into(R.unnest);
+      .into(R.unnest)
+      .into(R.uniq);
+
     const promises = allVisuals.into(
       R.map(async (visual) => {
+        const visualLogReference = `${workName} -> ${
+          visual.retrieveUrl ? visual.retrieveUrl : visual.id
+        }`;
+
         // Filenames.
         const thumbOutputFilename = `${cfg.cacheDir}${visual.thumbnailUrl}`;
         const metaOutputFilename = `${cfg.cacheDir}${visual.metaUrl}`;
 
         if (filesExist([thumbOutputFilename, metaOutputFilename])) {
-          console.log(
-            `Skipped: ${workName} -> ${
-              visual.retrieveUrl ? visual.retrieveUrl : visual.id
-            }`
-          );
+          console.log(`Skipped: ${visualLogReference}`);
         } else {
+          console.log(`Processing: ${visualLogReference}`);
+
           [thumbOutputFilename, metaOutputFilename].forEach(ensureFolder);
 
           // Images.
@@ -127,6 +132,7 @@ const generateVisualsCache = async (work, workName) => {
 
             const thumbnail = await toThumbnail(image);
             await fs.writeFile(thumbOutputFilename, thumbnail);
+            console.log(`Output: ${thumbOutputFilename}`);
 
             if (isLocal) {
               const outputFilename = `${cfg.cacheDir}${visual.url}`;
@@ -134,10 +140,12 @@ const generateVisualsCache = async (work, workName) => {
 
               const resized = await resizeImage(image);
               await fs.writeFile(outputFilename, resized);
+              console.log(`Output: ${outputFilename}`);
               await writeImageMetadata(resized, metaOutputFilename);
             } else {
               await writeImageMetadata(image, metaOutputFilename);
             }
+            console.log(`Output: ${metaOutputFilename}`);
 
             // Videos.
           } else if (visual.type === cfg.visualType.video) {
@@ -152,6 +160,7 @@ const generateVisualsCache = async (work, workName) => {
 
             const thumbnail = await toThumbnail(image);
             await fs.writeFile(thumbOutputFilename, thumbnail);
+            console.log(`Output: ${thumbOutputFilename}`);
 
             const color = await getImageColor(thumbnail);
 
@@ -164,6 +173,7 @@ const generateVisualsCache = async (work, workName) => {
               }),
               "utf-8"
             );
+            console.log(`Output: ${metaOutputFilename}`);
           }
         }
       })
@@ -191,7 +201,7 @@ const getImageDimensions = async (image) => {
 };
 const getImageColor = async (image) => {
   const colors = await vibrant.from(image).getPalette();
-  const color = colors.DarkVibrant.rgb;
+  const color = colors.Vibrant.rgb;
   return {
     red: color[0] / 0xff,
     green: color[1] / 0xff,
