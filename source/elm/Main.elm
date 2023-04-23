@@ -25,6 +25,7 @@ import LayoutFormat exposing (LayoutFormat(..))
 import List.Extra
 import Maybe.Extra
 import Palette
+import Regex
 import SaveState exposing (SaveState)
 import SmoothScroll
 import Tag exposing (Tag)
@@ -256,11 +257,27 @@ changeQuery { url, key } query =
                 Nothing ->
                     Dict.empty
 
+        noTrailingSlashRegex =
+            "([^/])\\?"
+                |> Regex.fromString
+                |> Maybe.withDefault Regex.never
+
+        fixRelativeUrlsDontWork =
+            Regex.replaceAtMost 1
+                noTrailingSlashRegex
+                (\{ match, submatches } ->
+                    case submatches of
+                        (Just char) :: _ ->
+                            char ++ "/?"
+
+                        _ ->
+                            match
+                )
+
         resultUrl =
             { appUrl | queryParameters = queryParams }
                 |> AppUrl.toString
-                -- Fix relative URLs don't work:
-                |> String.replace "?" "/?"
+                |> fixRelativeUrlsDontWork
     in
     Navigation.pushUrl key resultUrl
 
