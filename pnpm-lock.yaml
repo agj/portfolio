@@ -4,8 +4,8 @@ specifiers:
   axios: ^0.21.1
   dot-into: ^1.0.2
   elm: ^0.19.1-5
-  elm-format: ^0.8.5
-  elm-go: ^5.0.13
+  elm-format: ^0.8.7
+  elm-go: ^5.0.19
   esm: ^3.2.25
   fs-extra: ^10.0.0
   glob: ^7.1.7
@@ -18,7 +18,7 @@ specifiers:
   node-vibrant: ^3.1.6
   node-watch: ^0.7.1
   ow: ^0.27.0
-  prettier: ~2.3.2
+  prettier: ~2.8.7
   ramda: ^0.27.1
   sharp: ^0.28.3
   stream-to-promise: ^3.0.0
@@ -42,7 +42,7 @@ devDependencies:
   node-vibrant: 3.1.6
   node-watch: 0.7.3
   ow: 0.27.0
-  prettier: 2.3.2
+  prettier: 2.8.7
   ramda: 0.27.2
   sharp: 0.28.3
   stream-to-promise: 3.0.0
@@ -2980,8 +2980,8 @@ packages:
       tunnel-agent: 0.6.0
     dev: true
 
-  /prettier/2.3.2:
-    resolution: {integrity: sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==}
+  /prettier/2.8.7:
+    resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
