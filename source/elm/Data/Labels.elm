@@ -47,7 +47,11 @@ english =
             [ icon View.Icon.Hourglass
             , t "Loading…"
             ]
-    , loadError = p [ t "Load error! Please try refreshing the page." ]
+    , loadError =
+        p
+            [ icon View.Icon.LoadError
+            , t "Failed loading the data. Please try refreshing the page."
+            ]
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
@@ -74,7 +78,11 @@ japanese =
             [ icon View.Icon.Hourglass
             , t "読み込み中…"
             ]
-    , loadError = p [ t "データの読み込みはできませんでした。リロードを試してください。" ]
+    , loadError =
+        p
+            [ icon View.Icon.LoadError
+            , t "データの読み込みが失敗しました。リロードを試してください。"
+            ]
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
@@ -101,7 +109,11 @@ spanish =
             [ icon View.Icon.Hourglass
             , t "Cargando…"
             ]
-    , loadError = p [ t "Error de carga. Por favor intenta cargar la página otra vez." ]
+    , loadError =
+        p
+            [ icon View.Icon.LoadError
+            , t "Error cargando datos. Por favor intenta cargar la página otra vez."
+            ]
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
