@@ -468,10 +468,13 @@ viewIntroduction introductionText =
 
 viewLoadMessage : String -> Element Msg
 viewLoadMessage message =
-    viewMessageBlock <|
-        Descriptor.p
-            [ Descriptor.t message
+    Descriptor.p
+        [ Descriptor.t message ]
+        |> el
+            [ Font.color (Palette.baseColorAt10 |> Color.toElmUi)
+            , width fill
             ]
+        |> viewMessageBlock
 
 
 viewMessageBlock : Element Msg -> Element Msg
