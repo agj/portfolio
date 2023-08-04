@@ -340,9 +340,9 @@ viewMain model =
                 Nothing ->
                     model.viewport.width
 
-        worksBlock : List (Element Msg) -> Element Msg
+        worksBlock : Element Msg -> Element Msg
         worksBlock =
-            column
+            el
                 [ width (px worksBlockWidth)
                 , paddingXY
                     (ifElse (layoutFormat == PhoneLayout)
@@ -354,36 +354,31 @@ viewMain model =
                 , CustomEl.id "works"
                 ]
 
-        content : List (Element Msg)
+        content : Element Msg
         content =
             case model.data of
                 DataLoaded data ->
-                    let
-                        works =
-                            Works.ofLanguage model.language data
-                    in
-                    [ viewWorks
+                    viewWorks
                         { blockWidth =
                             ifElse (layoutFormat == PhoneLayout)
                                 (worksBlockWidth - (2 * Palette.spaceSmall))
                                 worksBlockWidth
                         , labels = labels
                         , maybeTag = model.query.tag
-                        , works = works
+                        , works = Works.ofLanguage model.language data
                         , settings = settings
                         }
-                    ]
 
                 DataLoading ->
-                    [ viewLoadMessage labels.loading ]
+                    viewLoadMessage labels.loading
 
                 DataLoadError err ->
                     case err of
                         Http.BadBody msg ->
-                            [ viewLoadMessage (Descriptor.p [ Descriptor.t ("Data error!\n\n" ++ msg) ]) ]
+                            viewLoadMessage (Descriptor.p [ Descriptor.t ("Data error!\n\n" ++ msg) ])
 
                         _ ->
-                            [ viewLoadMessage labels.loadError ]
+                            viewLoadMessage labels.loadError
     in
     column
         [ width <| Maybe.withDefault fill (settings.worksBlockWidth |> Maybe.map px)
