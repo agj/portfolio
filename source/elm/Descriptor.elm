@@ -1,4 +1,15 @@
-module Descriptor exposing (Url(..), bold, d, fromDoc, l, list, makeTag, p, t)
+module Descriptor exposing
+    ( Url(..)
+    , bold
+    , d
+    , fromDoc
+    , icon
+    , l
+    , list
+    , makeTag
+    , p
+    , t
+    )
 
 import Color exposing (Color)
 import CustomEl
@@ -18,6 +29,7 @@ import Palette
 import Tag exposing (Tag)
 import Util.Color as Color
 import Utils exposing (..)
+import View.Icon
 
 
 type Url
@@ -110,6 +122,13 @@ list children =
         , spacing <| Palette.textLineSpacing Palette.textSizeNormal
         ]
         rows
+
+
+icon : View.Icon.IconName -> Element msg
+icon iconName =
+    View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
+        |> View.Icon.view
+        |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
 
 
 fromDoc : Color -> Doc -> Element msg
