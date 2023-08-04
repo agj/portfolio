@@ -323,18 +323,21 @@ viewMain model =
                 Nothing ->
                     model.viewport.width
 
+        worksBlock : List (Element Msg) -> Element Msg
         worksBlock =
-            el
+            column
                 [ width (px worksBlockWidth)
                 , paddingXY
                     (ifElse (layoutFormat == PhoneLayout)
                         Palette.spaceSmall
                         0
                     )
-                    Palette.spaceNormal
+                    0
+                , spacing Palette.spaceNormal
                 , CustomEl.id "works"
                 ]
 
+        content : List (Element Msg)
         content =
             case model.data of
                 DataLoaded data ->
@@ -342,31 +345,28 @@ viewMain model =
                         works =
                             Works.ofLanguage model.language data
                     in
-                    worksBlock <|
-                        viewWorks
-                            { blockWidth =
-                                ifElse (layoutFormat == PhoneLayout)
-                                    (worksBlockWidth - (2 * Palette.spaceSmall))
-                                    worksBlockWidth
-                            , labels = labels
-                            , maybeTag = model.query.tag
-                            , works = works
-                            , settings = settings
-                            }
+                    [ viewWorks
+                        { blockWidth =
+                            ifElse (layoutFormat == PhoneLayout)
+                                (worksBlockWidth - (2 * Palette.spaceSmall))
+                                worksBlockWidth
+                        , labels = labels
+                        , maybeTag = model.query.tag
+                        , works = works
+                        , settings = settings
+                        }
+                    ]
 
                 DataLoading ->
-                    worksBlock <|
-                        viewLoadMessage labels.loading
+                    [ viewLoadMessage labels.loading ]
 
                 DataLoadError err ->
                     case err of
                         Http.BadBody msg ->
-                            worksBlock <|
-                                viewLoadMessage (Descriptor.p [ Descriptor.t ("Data error!\n\n" ++ msg) ])
+                            [ viewLoadMessage (Descriptor.p [ Descriptor.t ("Data error!\n\n" ++ msg) ]) ]
 
                         _ ->
-                            worksBlock <|
-                                viewLoadMessage labels.loadError
+                            [ viewLoadMessage labels.loadError ]
     in
     column
         [ width <| Maybe.withDefault fill (settings.worksBlockWidth |> Maybe.map px)
@@ -374,9 +374,10 @@ viewMain model =
         , inFront <| viewLanguageSelector model.language
         , inFront <| viewBackButton labels.backToHome
         , paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceNormal }
+        , spacing Palette.spaceNormal
         ]
         [ viewTop model.language model.query.tag
-        , content
+        , worksBlock content
         ]
 
 
