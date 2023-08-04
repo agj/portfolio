@@ -1,12 +1,9 @@
 module Data.Introduction exposing (ofLanguage)
 
-import CustomEl
 import Descriptor exposing (..)
 import Element exposing (Element)
-import Element.Background as Background
 import Language exposing (..)
 import Palette
-import Phosphor
 import Tag exposing (Tag)
 import Utils exposing (..)
 import View.Icon exposing (IconName)
@@ -74,7 +71,7 @@ english tag =
             [ t "I’m a languages nerd, fluent in English and Japanese, apart from my native Spanish, and also working on my Mandarin Chinese currently. "
             , t "I do "
             , tag Tag.Translation "translation"
-            , t " work; subtitling too."
+            , t " work occasionally; subtitling too."
             ]
         , p
             [ t "I think a lot about learning. "
@@ -139,29 +136,29 @@ japanese tag =
             , t "作成にも手を組んだりします。"
             ]
         , p
-            [ t "言語オタクだと言っていいくらい言語が好きです。"
-            , t "ネイティブのスペイン語に加えて英語と日本語が流暢で、現在中国語能力を上げることに集中しています。"
+            [ t "言語オタクだと言っても過言ではないほど言語が好きです。"
+            , t "ネイティブのスペイン語に加えて英語と日本語が（未熟な点が多々ありながら）流暢で、現在中国語能力を上げることに集中しています。"
             , tag Tag.Translation "翻訳"
-            , t "や字幕の仕事をしたりします。"
+            , t "や字幕の仕事をすることもあります。"
             ]
         , p
-            [ t "「習得」についてよく考えます。"
+            [ t "「習得」について頻繁に考えます。"
             , t "教育テクノロジーの会社で"
             , tag Tag.EducationalSoftware "教育ソフト"
-            , t "を開発したことがあります。時折"
+            , t "を開発する経験があります。時折"
             , tag Tag.LanguageTeaching "言語を教える"
-            , t "ことがあります。"
+            , t "こともあります。"
             ]
         , p
-            [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してから以下から閲覧できることになります。"
+            [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してから閲覧できます。"
             , tag Tag.Any "全て"
-            , t "を一気に見ることもできます。"
-            , t "連絡はメール（"
+            , t "を一気に見ることも可能です。"
+            , t "連絡はＥメール（"
             , bold <| t "ale¶agj.cl"
             , t "；¶\u{00A0}=\u{00A0}@）、あるいは"
             , l "マストドン" (Url "https://mstdn.social/@agj")
             , t "よりお願いします。"
-            , t "ご連絡を待っております！"
+            , t "ご連絡をお待ちしております！"
             ]
         ]
 
@@ -205,7 +202,7 @@ spanish tag =
             , t "."
             ]
         , p
-            [ t "Soy fanático de los idiomas. Además de mi español nativo, hablo fluído inglés y japonés, y estoy aprendiendo chino mandarín. Trabajo "
+            [ t "Soy fanático de los idiomas. Además de mi español nativo, hablo fluído inglés y japonés, y estoy aprendiendo chino mandarín. En ocasiones trabajo "
             , tag Tag.Translation "traduciendo"
             , t " y subtitulando también."
             ]

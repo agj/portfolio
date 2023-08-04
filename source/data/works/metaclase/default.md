@@ -1,10 +1,10 @@
 ---
-name: Kanji metaclass
+name: Kanji “metaclass”
 tags:
   - LanguageTeaching
   - Learning
   - Language
-date: 2014-
+date: 2014-2019
 readMore: http://blog.agj.cl/tag/metaclase-de-kanji/
 visuals:
   - type: Image
@@ -15,7 +15,7 @@ visuals:
     url: photo02.jpg
 ---
 
-A short workshop I teach at a Japanese school in Chile, centered on how best to learn the Japanese writing system called “kanji”,
+A short workshop I used to teach at a Japanese school in Chile, centered on how best to learn the Japanese writing system called “kanji”,
 the characters of Chinese origin of which thousands are used daily.
 Given their sheer amount, this part of the study of Japanese becomes an insurmountable barrier to some.
 In order to instill confidence in the learner, I explain the system's history and structure so as to first deepen the student's general knowledge.
