@@ -19,13 +19,10 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
 import Http
-import Json.Decode as Decode
 import Language exposing (Language(..))
 import LayoutFormat exposing (LayoutFormat(..))
 import List.Extra
-import Maybe.Extra
 import Palette
-import Regex
 import SaveState exposing (SaveState)
 import SmoothScroll
 import Tag exposing (Tag)
@@ -365,7 +362,7 @@ viewMain model =
                     case err of
                         Http.BadBody msg ->
                             worksBlock <|
-                                viewLoadMessage ("Data error!\n\n" ++ msg)
+                                viewLoadMessage (Descriptor.p [ Descriptor.t ("Data error!\n\n" ++ msg) ])
 
                         _ ->
                             worksBlock <|
@@ -466,18 +463,9 @@ viewIntroduction introductionText =
         introductionText
 
 
-viewLoadMessage : String -> Element Msg
+viewLoadMessage : Element Msg -> Element Msg
 viewLoadMessage message =
-    let
-        icon_ =
-            View.Icon.icon View.Icon.HandUp (fraction 1.4 Palette.textSizeNormal)
-                |> View.Icon.view
-                |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
-    in
-    Descriptor.p
-        [ icon_
-        , Descriptor.t message
-        ]
+    message
         |> el
             [ Font.color (Palette.baseColorAt10 |> Color.toElmUi)
             , width fill
@@ -606,7 +594,7 @@ viewPopupVisual viewport visual =
 -- VIEW WORKS
 
 
-viewWorks : { blockWidth : Int, labels : Labels, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Element Msg
+viewWorks : { blockWidth : Int, labels : Labels Msg, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Element Msg
 viewWorks { blockWidth, labels, maybeTag, works, settings } =
     let
         filteredWorks =
@@ -648,7 +636,7 @@ viewWorkBlock attrs children =
         children
 
 
-viewWork : Int -> Labels -> Settings -> Work -> Element Msg
+viewWork : Int -> Labels Msg -> Settings -> Work -> Element Msg
 viewWork blockWidth labels settings work =
     viewWorkBlock
         [ inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
@@ -866,7 +854,7 @@ viewWorkDescription color doc =
         (Descriptor.fromDoc color doc)
 
 
-viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Color -> Element Msg
+viewWorkReadMore : Labels Msg -> Maybe Work.ReadMore -> Color -> Element Msg
 viewWorkReadMore labels readMore color =
     case readMore of
         Nothing ->
