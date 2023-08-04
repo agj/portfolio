@@ -468,8 +468,16 @@ viewIntroduction introductionText =
 
 viewLoadMessage : String -> Element Msg
 viewLoadMessage message =
+    let
+        icon_ =
+            View.Icon.icon View.Icon.HandUp (fraction 1.4 Palette.textSizeNormal)
+                |> View.Icon.view
+                |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
+    in
     Descriptor.p
-        [ Descriptor.t message ]
+        [ icon_
+        , Descriptor.t message
+        ]
         |> el
             [ Font.color (Palette.baseColorAt10 |> Color.toElmUi)
             , width fill

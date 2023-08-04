@@ -18,6 +18,7 @@ type IconName
     | Learning
     | Play
     | Close
+    | HandUp
 
 
 type Icon
@@ -54,6 +55,9 @@ view (Icon { name, size }) =
 
                 Close ->
                     Phosphor.xCircle
+
+                HandUp ->
+                    Phosphor.handPointing
     in
     phosphorIcon Phosphor.Fill
         |> Phosphor.toHtml
