@@ -31,10 +31,12 @@ english tag =
         [ p
             [ t "My name is "
             , bold <| t "Ale Grilli"
-            , t "—thank you for taking a look at my "
+            , t ". Thank you for taking a look at my "
             , bold <| t "portfolio"
-            , t ". "
-            , t "I’m based in Santiago, Chile. "
+            , t "!"
+            ]
+        , p
+            [ t "I’m based in Santiago, Chile. "
             , t "My work is concerned with various intersections of four areas—"
             , tag Tag.VisualCommunication "Visual Communication"
             , icon View.Icon.VisualCommunication
@@ -101,8 +103,10 @@ japanese tag =
             [ bold <| t "アレ・グリリ（Ale Grilli）"
             , t "の"
             , bold <| t "ポートフォリオ"
-            , t "をご覧いただきありがとうございます。"
-            , t "拠点をチリのサンティアゴにしている者です。"
+            , t "をご覧いただきありがとうございます！"
+            ]
+        , p
+            [ t "拠点をチリのサンティアゴにしている者です。"
             , tag Tag.VisualCommunication "視覚コミュニケーション"
             , icon View.Icon.VisualCommunication
             , t "、"
@@ -168,9 +172,12 @@ spanish tag =
         [ p
             [ t "Me llamo "
             , bold <| t "Ale Grilli"
-            , t "—gracias por revisar mi "
+            , t ". ¡Gracias por revisar mi "
             , bold <| t "portafolio"
-            , t ". Vivo en Santiago de Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
+            , t "!"
+            ]
+        , p
+            [ t "Vivo en Santiago de Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
             , tag Tag.VisualCommunication "Comunicación Visual"
             , icon View.Icon.VisualCommunication
             , t ", "
