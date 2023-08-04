@@ -42,7 +42,11 @@ english =
     , readMoreEnglish = "Read more about it"
     , readMoreJapanese = "Read more about it (in Japanese)"
     , readMoreSpanish = "Read more about it (in Spanish)"
-    , loading = p [ t "Loading…" ]
+    , loading =
+        p
+            [ icon View.Icon.Hourglass
+            , t "Loading…"
+            ]
     , loadError = p [ t "Load error! Please try refreshing the page." ]
     , pleaseSelect =
         p
@@ -65,7 +69,11 @@ japanese =
     , readMoreEnglish = "もっと詳しく（英語）"
     , readMoreJapanese = "もっと詳しく"
     , readMoreSpanish = "もっと詳しく（スペイン語）"
-    , loading = p [ t "読み込み中…" ]
+    , loading =
+        p
+            [ icon View.Icon.Hourglass
+            , t "読み込み中…"
+            ]
     , loadError = p [ t "データの読み込みはできませんでした。リロードを試してください。" ]
     , pleaseSelect =
         p
@@ -88,7 +96,11 @@ spanish =
     , readMoreEnglish = "Lee más al respecto (en inglés)"
     , readMoreJapanese = "Lee más al respecto (en japonés)"
     , readMoreSpanish = "Lee más al respecto"
-    , loading = p [ t "Cargando…" ]
+    , loading =
+        p
+            [ icon View.Icon.Hourglass
+            , t "Cargando…"
+            ]
     , loadError = p [ t "Error de carga. Por favor intenta cargar la página otra vez." ]
     , pleaseSelect =
         p

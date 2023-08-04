@@ -19,6 +19,7 @@ type IconName
     | Play
     | Close
     | HandUp
+    | Hourglass
 
 
 type Icon
@@ -58,6 +59,9 @@ view (Icon { name, size }) =
 
                 HandUp ->
                     Phosphor.handPointing
+
+                Hourglass ->
+                    Phosphor.hourglassMedium
     in
     phosphorIcon Phosphor.Fill
         |> Phosphor.toHtml
