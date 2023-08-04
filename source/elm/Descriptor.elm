@@ -7,6 +7,7 @@ module Descriptor exposing
     , l
     , list
     , makeTag
+    , onClick
     , p
     , t
     )
@@ -60,7 +61,7 @@ makeTag messenger selectedTag tag label =
         , paddingXY
             (fraction 0.3 Palette.textSizeNormal)
             (fraction 0.1 Palette.textSizeNormal)
-        , onClick (messenger tag)
+        , Element.Events.onClick (messenger tag)
         , pointer
         , mouseDown
             [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
@@ -92,6 +93,15 @@ l textContent (Url url) =
         { label = t textContent
         , url = url
         }
+
+
+onClick : msg -> Element msg -> Element msg
+onClick msg label =
+    el
+        (linkStyle
+            ++ [ Element.Events.onClick msg ]
+        )
+        label
 
 
 bold : Element msg -> Element msg

@@ -52,7 +52,9 @@ english =
     , thatsAll =
         \{ onClearTag } ->
             p
-                [ t "That's all for that keyword. You may go back up and choose another!"
+                [ t "That's all for that keyword. "
+                , t "You may go back up and choose another!"
+                    |> Descriptor.onClick onClearTag
                 ]
     }
 
@@ -73,7 +75,9 @@ japanese =
     , thatsAll =
         \{ onClearTag } ->
             p
-                [ t "以上このキーワードに関連する項目でした。また別のを選択してみますか？"
+                [ t "以上このキーワードに関連する項目でした。"
+                , t "また別のを選択してみますか？"
+                    |> Descriptor.onClick onClearTag
                 ]
     }
 
@@ -94,6 +98,8 @@ spanish =
     , thatsAll =
         \{ onClearTag } ->
             p
-                [ t "Eso es todo para esta palabra clave. ¿Quieres elegir otra?"
+                [ t "Eso es todo para esta palabra clave. "
+                , t "¿Quieres elegir otra?"
+                    |> Descriptor.onClick onClearTag
                 ]
     }
