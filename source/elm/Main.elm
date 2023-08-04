@@ -167,6 +167,7 @@ onUrlRequest urlRequest =
 type Msg
     = SelectedLanguage Language
     | SelectedTag Tag
+    | ClearedTag
     | SelectedVisual (Maybe Visual)
     | SelectedGoHome
     | Resized
@@ -184,24 +185,10 @@ update msg model =
             )
 
         SelectedTag tag ->
-            let
-                query =
-                    model.query
+            updateTag (Just tag) model
 
-                newQuery =
-                    { query | tag = Just tag }
-            in
-            ( { model | query = newQuery }
-            , Cmd.batch
-                [ Task.attempt
-                    (always NoOp)
-                    (SmoothScroll.scrollToWithOptions
-                        { defaultScroll | speed = 10 }
-                        "works"
-                    )
-                , changeQuery model.navigationData newQuery
-                ]
-            )
+        ClearedTag ->
+            updateTag Nothing model
 
         SelectedVisual selection ->
             ( { model | popupVisual = selection }
@@ -237,6 +224,36 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+updateTag : Maybe Tag -> Model -> ( Model, Cmd Msg )
+updateTag tag model =
+    let
+        query =
+            model.query
+
+        newQuery =
+            { query | tag = tag }
+
+        scrollTargetId =
+            case tag of
+                Just _ ->
+                    "works"
+
+                Nothing ->
+                    ""
+    in
+    ( { model | query = newQuery }
+    , Cmd.batch
+        [ Task.attempt
+            (always NoOp)
+            (SmoothScroll.scrollToWithOptions
+                { defaultScroll | speed = 10 }
+                scrollTargetId
+            )
+        , changeQuery model.navigationData newQuery
+        ]
+    )
 
 
 changeQuery : NavigationData -> Query -> Cmd Msg
@@ -616,14 +633,14 @@ viewWorks { blockWidth, labels, maybeTag, works, settings } =
         viewLoadMessage labels.pleaseSelect
 
     else
-        column
-            [ width fill
-            , spacing Palette.spaceNormal
-            ]
-            (List.map
-                (viewWork blockWidth labels settings)
-                filteredWorks
-            )
+        List.map
+            (viewWork blockWidth labels settings)
+            filteredWorks
+            ++ [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
+            |> column
+                [ width fill
+                , spacing Palette.spaceNormal
+                ]
 
 
 viewWorkBlock : List (Attribute Msg) -> List (Element Msg) -> Element Msg
