@@ -385,7 +385,7 @@ viewMain model =
         , centerX
         , inFront <| viewLanguageSelector model.language
         , inFront <| viewBackButton labels.backToHome
-        , paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceNormal }
+        , paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceLarge }
         , spacing Palette.spaceNormal
         ]
         [ viewTop model.language model.query.tag

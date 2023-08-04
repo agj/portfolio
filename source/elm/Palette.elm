@@ -115,7 +115,7 @@ textLineSpacing fontSize =
 
 spaceLarge : Int
 spaceLarge =
-    26
+    50
 
 
 spaceNormal : Int
