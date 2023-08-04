@@ -4,7 +4,7 @@ tags:
   - LanguageTeaching
   - Learning
   - Language
-date: 2014-2019
+date: 2014–2019
 readMore: http://blog.agj.cl/tag/metaclase-de-kanji/
 visuals:
   - type: Image
