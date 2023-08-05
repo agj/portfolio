@@ -26,7 +26,6 @@ import Palette
 import Ports
 import SaveState exposing (SaveState)
 import Tag exposing (Tag)
-import Task
 import Url exposing (Url)
 import Util.AppUrl as AppUrl
 import Util.Color as Color
