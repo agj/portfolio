@@ -43,6 +43,14 @@
           height: document.body.clientHeight,
         });
       });
+
+      app.ports.scrollTo.subscribe((targetId) => {
+        setTimeout(() => {
+          const el = document.getElementById(targetId);
+          const elTop = el ? el.offsetTop : 0;
+          window.scrollTo({ top: elTop, behavior: "smooth" });
+        }, 0);
+      });
     </script>
   </body>
 </html>

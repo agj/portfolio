@@ -23,8 +23,8 @@ import Language exposing (Language(..))
 import LayoutFormat exposing (LayoutFormat(..))
 import List.Extra
 import Palette
+import Ports
 import SaveState exposing (SaveState)
-import SmoothScroll
 import Tag exposing (Tag)
 import Task
 import Url exposing (Url)
@@ -245,12 +245,7 @@ updateTag tag model =
     in
     ( { model | query = newQuery }
     , Cmd.batch
-        [ Task.attempt
-            (always NoOp)
-            (SmoothScroll.scrollToWithOptions
-                { defaultScroll | speed = 10 }
-                scrollTargetId
-            )
+        [ Ports.scrollTo scrollTargetId
         , changeQuery model.navigationData newQuery
         ]
     )
@@ -962,7 +957,3 @@ sortWorks tag works =
                 |> Maybe.withDefault 999
     in
     List.sortBy tagIndex works
-
-
-defaultScroll =
-    SmoothScroll.defaultConfig
