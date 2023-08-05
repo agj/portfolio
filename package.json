@@ -5,8 +5,6 @@
   "devDependencies": {
     "axios": "^0.27.2",
     "dot-into": "^1.0.2",
-    "elm": "npm:@lydell/elm@~0.19.1-12",
-    "elm-format": "^0.8.7",
     "elm-go": "^5.0.19",
     "esm": "^3.2.25",
     "fs-extra": "^10.1.0",
@@ -20,7 +18,6 @@
     "node-vibrant": "^3.1.6",
     "node-watch": "^0.7.3",
     "ow": "^0.28.2",
-    "prettier": "~2.8.7",
     "ramda": "^0.29.0",
     "sharp": "^0.32.0",
     "stream-to-promise": "^3.0.0",

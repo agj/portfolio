@@ -19,13 +19,10 @@ import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
 import Http
-import Json.Decode as Decode
 import Language exposing (Language(..))
 import LayoutFormat exposing (LayoutFormat(..))
 import List.Extra
-import Maybe.Extra
 import Palette
-import Regex
 import SaveState exposing (SaveState)
 import SmoothScroll
 import Tag exposing (Tag)
@@ -170,6 +167,7 @@ onUrlRequest urlRequest =
 type Msg
     = SelectedLanguage Language
     | SelectedTag Tag
+    | ClearedTag
     | SelectedVisual (Maybe Visual)
     | SelectedGoHome
     | Resized
@@ -187,24 +185,10 @@ update msg model =
             )
 
         SelectedTag tag ->
-            let
-                query =
-                    model.query
+            updateTag (Just tag) model
 
-                newQuery =
-                    { query | tag = Just tag }
-            in
-            ( { model | query = newQuery }
-            , Cmd.batch
-                [ Task.attempt
-                    (always NoOp)
-                    (SmoothScroll.scrollToWithOptions
-                        { defaultScroll | speed = 10 }
-                        "works"
-                    )
-                , changeQuery model.navigationData newQuery
-                ]
-            )
+        ClearedTag ->
+            updateTag Nothing model
 
         SelectedVisual selection ->
             ( { model | popupVisual = selection }
@@ -240,6 +224,36 @@ update msg model =
 
         NoOp ->
             ( model, Cmd.none )
+
+
+updateTag : Maybe Tag -> Model -> ( Model, Cmd Msg )
+updateTag tag model =
+    let
+        query =
+            model.query
+
+        newQuery =
+            { query | tag = tag }
+
+        scrollTargetId =
+            case tag of
+                Just _ ->
+                    "works"
+
+                Nothing ->
+                    ""
+    in
+    ( { model | query = newQuery }
+    , Cmd.batch
+        [ Task.attempt
+            (always NoOp)
+            (SmoothScroll.scrollToWithOptions
+                { defaultScroll | speed = 10 }
+                scrollTargetId
+            )
+        , changeQuery model.navigationData newQuery
+        ]
+    )
 
 
 changeQuery : NavigationData -> Query -> Cmd Msg
@@ -326,6 +340,7 @@ viewMain model =
                 Nothing ->
                     model.viewport.width
 
+        worksBlock : Element Msg -> Element Msg
         worksBlock =
             el
                 [ width (px worksBlockWidth)
@@ -334,52 +349,47 @@ viewMain model =
                         Palette.spaceSmall
                         0
                     )
-                    Palette.spaceNormal
+                    0
+                , spacing Palette.spaceNormal
                 , CustomEl.id "works"
                 ]
 
+        content : Element Msg
         content =
             case model.data of
                 DataLoaded data ->
-                    let
-                        works =
-                            Works.ofLanguage model.language data
-                    in
-                    worksBlock <|
-                        viewWorks
-                            { blockWidth =
-                                ifElse (layoutFormat == PhoneLayout)
-                                    (worksBlockWidth - (2 * Palette.spaceSmall))
-                                    worksBlockWidth
-                            , labels = labels
-                            , maybeTag = model.query.tag
-                            , works = works
-                            , settings = settings
-                            }
+                    viewWorks
+                        { blockWidth =
+                            ifElse (layoutFormat == PhoneLayout)
+                                (worksBlockWidth - (2 * Palette.spaceSmall))
+                                worksBlockWidth
+                        , labels = labels
+                        , maybeTag = model.query.tag
+                        , works = Works.ofLanguage model.language data
+                        , settings = settings
+                        }
 
                 DataLoading ->
-                    worksBlock <|
-                        viewLoadMessage labels.loading
+                    viewLoadMessage labels.loading
 
                 DataLoadError err ->
                     case err of
                         Http.BadBody msg ->
-                            worksBlock <|
-                                viewLoadMessage ("Data error!\n\n" ++ msg)
+                            viewLoadMessage (Descriptor.p [ Descriptor.t ("Data error!\n\n" ++ msg) ])
 
                         _ ->
-                            worksBlock <|
-                                viewLoadMessage labels.loadError
+                            viewLoadMessage labels.loadError
     in
     column
         [ width <| Maybe.withDefault fill (settings.worksBlockWidth |> Maybe.map px)
         , centerX
         , inFront <| viewLanguageSelector model.language
         , inFront <| viewBackButton labels.backToHome
-        , paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceNormal }
+        , paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceLarge }
+        , spacing Palette.spaceNormal
         ]
         [ viewTop model.language model.query.tag
-        , content
+        , worksBlock content
         ]
 
 
@@ -466,12 +476,14 @@ viewIntroduction introductionText =
         introductionText
 
 
-viewLoadMessage : String -> Element Msg
+viewLoadMessage : Element Msg -> Element Msg
 viewLoadMessage message =
-    viewMessageBlock <|
-        Descriptor.p
-            [ Descriptor.t message
+    message
+        |> el
+            [ Font.color (Palette.baseColorAt10 |> Color.toElmUi)
+            , width fill
             ]
+        |> viewMessageBlock
 
 
 viewMessageBlock : Element Msg -> Element Msg
@@ -595,7 +607,7 @@ viewPopupVisual viewport visual =
 -- VIEW WORKS
 
 
-viewWorks : { blockWidth : Int, labels : Labels, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Element Msg
+viewWorks : { blockWidth : Int, labels : Labels Msg, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Element Msg
 viewWorks { blockWidth, labels, maybeTag, works, settings } =
     let
         filteredWorks =
@@ -616,14 +628,14 @@ viewWorks { blockWidth, labels, maybeTag, works, settings } =
         viewLoadMessage labels.pleaseSelect
 
     else
-        column
-            [ width fill
-            , spacing Palette.spaceNormal
-            ]
-            (List.map
-                (viewWork blockWidth labels settings)
-                filteredWorks
-            )
+        List.map
+            (viewWork blockWidth labels settings)
+            filteredWorks
+            ++ [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
+            |> column
+                [ width fill
+                , spacing Palette.spaceNormal
+                ]
 
 
 viewWorkBlock : List (Attribute Msg) -> List (Element Msg) -> Element Msg
@@ -637,7 +649,7 @@ viewWorkBlock attrs children =
         children
 
 
-viewWork : Int -> Labels -> Settings -> Work -> Element Msg
+viewWork : Int -> Labels Msg -> Settings -> Work -> Element Msg
 viewWork blockWidth labels settings work =
     viewWorkBlock
         [ inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
@@ -855,7 +867,7 @@ viewWorkDescription color doc =
         (Descriptor.fromDoc color doc)
 
 
-viewWorkReadMore : Labels -> Maybe Work.ReadMore -> Color -> Element Msg
+viewWorkReadMore : Labels Msg -> Maybe Work.ReadMore -> Color -> Element Msg
 viewWorkReadMore labels readMore color =
     case readMore of
         Nothing ->

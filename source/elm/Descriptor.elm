@@ -1,4 +1,16 @@
-module Descriptor exposing (Url(..), bold, d, fromDoc, l, list, makeTag, p, t)
+module Descriptor exposing
+    ( Url(..)
+    , bold
+    , d
+    , fromDoc
+    , icon
+    , l
+    , list
+    , makeTag
+    , onClick
+    , p
+    , t
+    )
 
 import Color exposing (Color)
 import CustomEl
@@ -18,6 +30,7 @@ import Palette
 import Tag exposing (Tag)
 import Util.Color as Color
 import Utils exposing (..)
+import View.Icon
 
 
 type Url
@@ -48,7 +61,7 @@ makeTag messenger selectedTag tag label =
         , paddingXY
             (fraction 0.3 Palette.textSizeNormal)
             (fraction 0.1 Palette.textSizeNormal)
-        , onClick (messenger tag)
+        , Element.Events.onClick (messenger tag)
         , pointer
         , mouseDown
             [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
@@ -82,6 +95,15 @@ l textContent (Url url) =
         }
 
 
+onClick : msg -> Element msg -> Element msg
+onClick msg label =
+    el
+        (linkStyle
+            ++ [ Element.Events.onClick msg ]
+        )
+        label
+
+
 bold : Element msg -> Element msg
 bold child =
     el
@@ -110,6 +132,13 @@ list children =
         , spacing <| Palette.textLineSpacing Palette.textSizeNormal
         ]
         rows
+
+
+icon : View.Icon.IconName -> Element msg
+icon iconName =
+    View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
+        |> View.Icon.view
+        |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
 
 
 fromDoc : Color -> Doc -> Element msg

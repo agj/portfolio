@@ -9,7 +9,7 @@ tags:
   - VideoGame
   - VisualCommunication
   - Web
-date: 2010-2014
+date: 2010–2014
 visuals:
   - type: Video
     host: Youtube

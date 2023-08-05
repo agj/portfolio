@@ -18,6 +18,9 @@ type IconName
     | Learning
     | Play
     | Close
+    | HandUp
+    | Hourglass
+    | LoadError
 
 
 type Icon
@@ -54,6 +57,15 @@ view (Icon { name, size }) =
 
                 Close ->
                     Phosphor.xCircle
+
+                HandUp ->
+                    Phosphor.handPointing
+
+                Hourglass ->
+                    Phosphor.hourglassMedium
+
+                LoadError ->
+                    Phosphor.fileX
     in
     phosphorIcon Phosphor.Fill
         |> Phosphor.toHtml
