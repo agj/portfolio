@@ -1,4 +1,16 @@
-deploy: ## Deploy to server.
+develop: ## Run development server.
+	gulp develop
+
+build: ## Build for deployment.
+	gulp build
+
+build-debug: ## Build for debugging.
+	gulp build
+
+cache: ## Generate media cache.
+	gulp cache
+
+deploy: build ## Build and deploy to server. Needs .env variables to be set.
 	bash ./source/scripts/deploy.sh
 
 
