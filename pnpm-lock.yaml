@@ -12,8 +12,8 @@ devDependencies:
     specifier: ^1.0.2
     version: 1.0.2
   elm-go:
-    specifier: ^5.0.19
-    version: 5.0.19
+    specifier: ^5.0.20
+    version: 5.0.20
   esm:
     specifier: ^3.2.25
     version: 3.2.25
@@ -477,6 +477,7 @@ packages:
 
   /bindings@1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
+    requiresBuild: true
     dependencies:
       file-uri-to-path: 1.0.0
     dev: true
@@ -982,8 +983,8 @@ packages:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
     dev: true
 
-  /elm-go@5.0.19:
-    resolution: {integrity: sha512-qfiYQjmO+WBDKlHTcfnwml628MLMJR4igAdIxmAMtIOiwM80oQ5EkVY8wppaCBfFOPzA8kxGxwRAEf3tv0HlMA==}
+  /elm-go@5.0.20:
+    resolution: {integrity: sha512-3jGCWfYrfgwJ4y2dloPj4eI5I15ubFWH2xa04aVSmT0ZfD7N2tJ9lwOksIRai0yexOLA10hJJml1RwSKB5v8PQ==}
     engines: {node: '>= 10.0.0'}
     hasBin: true
     dependencies:
@@ -992,7 +993,7 @@ packages:
       commander: 2.17.1
       crocks: 0.12.1
       cross-spawn: 5.0.1
-      elm-hot-for-elm-go: 1.1.7
+      elm-hot: 1.1.6
       finalhandler: 1.1.2
       http-proxy: 1.18.1
       internal-ip: 4.3.0
@@ -1010,8 +1011,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /elm-hot-for-elm-go@1.1.7:
-    resolution: {integrity: sha512-w7btmYCD6GLD0lhjwuz9xZNWfZW6nhqWTpGlCJu5PBEsED49gJr2ycKJhCVqlH/G9jQmJcokSQ0/QQNq+SS9AA==}
+  /elm-hot@1.1.6:
+    resolution: {integrity: sha512-zYZJlfs7Gt4BdjA+D+857K+XAWzwwySJmXCgFpHW1dIEfaHSZCIPYPf7/jinZBLfKRkOAlKzI32AA84DY50g7Q==}
     dev: true
 
   /emoji-regex@8.0.0:
@@ -1216,6 +1217,7 @@ packages:
 
   /file-uri-to-path@1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -2295,6 +2297,7 @@ packages:
 
   /nan@2.17.0:
     resolution: {integrity: sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==}
+    requiresBuild: true
     dev: true
     optional: true
 
