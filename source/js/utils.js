@@ -1,9 +1,7 @@
 import { append, tap, curry, uniq, map, set, lensProp, has } from "ramda";
 import ow from "ow";
 import { spawn } from "child_process";
-import dotInto from "dot-into";
-
-dotInto.install();
+import "dot-into";
 
 export const log = tap(console.log);
 

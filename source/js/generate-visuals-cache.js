@@ -6,12 +6,10 @@ import vibrant from "node-vibrant";
 import axios from "axios";
 import stream from "stream";
 import streamToPromise from "stream-to-promise";
-import dotInto from "dot-into";
+import "dot-into";
 
 import cfg from "./config.js";
 import * as _ from "./utils.js";
-
-dotInto.install();
 
 // Utils
 

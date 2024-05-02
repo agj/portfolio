@@ -4,12 +4,10 @@ import path from "path";
 import { glob } from "glob";
 import matter from "gray-matter";
 import ow from "ow";
-import dotInto from "dot-into";
+import "dot-into";
 
 import cfg from "./config.js";
 import { isUrl } from "./utils.js";
-
-dotInto.install();
 
 // Utils
 
