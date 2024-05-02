@@ -21,7 +21,6 @@
             elmPackages.elm-format
             elmPackages.elm-json
             nodejs-slim_20
-            nodePackages.gulp-cli
             nodePackages.pnpm
             nodePackages.prettier
           ];
