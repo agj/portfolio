@@ -19,6 +19,7 @@ import Element.Border as Border
 import Element.Events exposing (..)
 import Element.Font as Font
 import Html exposing (Html)
+import Html.Attributes
 import Http
 import Language exposing (Language(..))
 import LayoutFormat exposing (LayoutFormat(..))
@@ -584,17 +585,24 @@ viewPopupVisual viewport visual showingDegree =
                 ]
                 (case visual of
                     Image desc ->
-                        image
-                            [ width (px visualWidth)
-                            , height (px visualHeight)
-                            , centerX
-                            , centerY
-                            , Background.color (color |> Color.toElmUi)
+                        Html.node "lazy-img"
+                            [ Html.Attributes.style "width" (String.fromInt visualWidth ++ "px")
+                            , Html.Attributes.style "height" (String.fromInt visualHeight ++ "px")
+                            , Html.Attributes.attribute "src" desc.url
                             ]
-                            { src = desc.url
-                            , description = ""
-                            }
+                            []
+                            |> Element.html
 
+                    -- image
+                    --     [ width (px visualWidth)
+                    --     , height (px visualHeight)
+                    --     , centerX
+                    --     , centerY
+                    --     , Background.color (color |> Color.toElmUi)
+                    --     ]
+                    --     { src = desc.url
+                    --     , description = ""
+                    --     }
                     Video desc ->
                         VideoEmbed.get desc visualWidth visualHeight
                 )
