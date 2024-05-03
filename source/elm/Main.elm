@@ -1,5 +1,6 @@
 module Main exposing (Document, Model, init, main, subscriptions, update, view)
 
+import Animator exposing (Animator)
 import AppUrl exposing (QueryParameters)
 import Browser
 import Browser.Events
@@ -12,7 +13,7 @@ import Data.Settings as Settings exposing (Settings)
 import Descriptor
 import Dict
 import Doc exposing (Doc)
-import Element exposing (Attribute, Element, alignBottom, alignLeft, alignRight, alignTop, centerX, centerY, column, el, fill, height, image, inFront, layout, mouseDown, moveDown, moveLeft, newTabLink, none, padding, paddingEach, paddingXY, paragraph, pointer, px, row, spacing, text, width, wrappedRow)
+import Element exposing (Attribute, Element, alignBottom, alignLeft, alignRight, alignTop, centerX, centerY, column, el, fill, height, image, inFront, layout, mouseDown, moveDown, moveLeft, newTabLink, none, padding, paddingEach, paddingXY, paragraph, pointer, px, row, spacing, text, transparent, width, wrappedRow)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (..)
@@ -26,6 +27,7 @@ import Palette
 import Ports
 import SaveState exposing (SaveState)
 import Tag exposing (Tag)
+import Time
 import Url exposing (Url)
 import Util.AppUrl as AppUrl
 import Util.Color as Color
@@ -62,7 +64,7 @@ main =
 type alias Model =
     { language : Language
     , viewport : Viewport
-    , popupVisual : Maybe Visual
+    , popupVisual : Animator.Timeline (Maybe Visual)
     , query : Query
     , data : DataStatus
     , navigationData : NavigationData
@@ -129,7 +131,7 @@ init flags url navKey =
     ( { language = initLanguage
       , query = query
       , viewport = flags.viewport
-      , popupVisual = Nothing
+      , popupVisual = Animator.init Nothing
       , data = DataLoading
       , navigationData = { url = url, key = navKey }
       }
@@ -172,6 +174,7 @@ type Msg
     | Resized
     | GotViewport Viewport
     | GotData (Result Http.Error (List WorkLanguages))
+    | AnimationTick Time.Posix
     | NoOp
 
 
@@ -190,7 +193,7 @@ update msg model =
             updateTag Nothing model
 
         SelectedVisual selection ->
-            ( { model | popupVisual = selection }
+            ( { model | popupVisual = Animator.go Animator.quickly selection model.popupVisual }
             , Cmd.none
             )
 
@@ -220,6 +223,11 @@ update msg model =
                     ( { model | data = DataLoadError err }
                     , Cmd.none
                     )
+
+        AnimationTick time ->
+            ( model |> Animator.update time animator
+            , Cmd.none
+            )
 
         NoOp ->
             ( model, Cmd.none )
@@ -292,12 +300,27 @@ view model =
         globalStyles =
             [ Font.family Palette.font ]
 
-        popupVisual =
-            case model.popupVisual of
-                Just visual ->
-                    [ inFront (viewPopupVisual model.viewport visual) ]
+        popupVisualShowingDegree : Float
+        popupVisualShowingDegree =
+            Animator.move model.popupVisual
+                (\state ->
+                    case state of
+                        Just _ ->
+                            Animator.at 1
 
-                Nothing ->
+                        Nothing ->
+                            Animator.at 0
+                )
+
+        popupVisual =
+            case ( Animator.current model.popupVisual, Animator.previous model.popupVisual ) of
+                ( Just visual, _ ) ->
+                    [ inFront (viewPopupVisual model.viewport visual popupVisualShowingDegree) ]
+
+                ( _, Just visual ) ->
+                    [ inFront (viewPopupVisual model.viewport visual popupVisualShowingDegree) ]
+
+                _ ->
                     []
     in
     { title = labels.title
@@ -492,8 +515,8 @@ viewMessageBlock child =
         ]
 
 
-viewPopupVisual : Viewport -> Visual -> Element Msg
-viewPopupVisual viewport visual =
+viewPopupVisual : Viewport -> Visual -> Float -> Element Msg
+viewPopupVisual viewport visual showingDegree =
     let
         reservedSpace =
             fraction 3 Palette.spaceNormal
@@ -554,6 +577,7 @@ viewPopupVisual viewport visual =
                 , height (px usableHeight)
                 , alignLeft
                 , alignBottom
+                , Element.alpha showingDegree
                 ]
                 (case visual of
                     Image desc ->
@@ -903,6 +927,7 @@ subscriptions model =
         [ Browser.Events.onResize <|
             \w h -> Resized
         , Viewport.got GotViewport NoOp
+        , animator |> Animator.toSubscription AnimationTick model
         ]
 
 
@@ -956,3 +981,13 @@ sortWorks tag works =
                 |> Maybe.withDefault 999
     in
     List.sortBy tagIndex works
+
+
+animator : Animator Model
+animator =
+    Animator.animator
+        |> Animator.watching
+            .popupVisual
+            (\newPopupVisual model ->
+                { model | popupVisual = newPopupVisual }
+            )
