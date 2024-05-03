@@ -990,8 +990,9 @@ sortWorks tag works =
 animator : Animator Model
 animator =
     Animator.animator
-        |> Animator.watching
+        |> Animator.watchingWith
             .popupVisual
-            (\newPopupVisual model ->
-                { model | popupVisual = newPopupVisual }
+            (\newState model ->
+                { model | popupVisual = newState }
             )
+            (always False)
