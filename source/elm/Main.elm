@@ -580,7 +580,7 @@ viewPopupVisual viewport visual showingDegree =
                 , height (px usableHeight)
                 , alignLeft
                 , alignBottom
-                , Element.alpha showingDegree
+                , Element.scale (0.8 + showingDegree * 0.2)
                 ]
                 (case visual of
                     Image desc ->
@@ -620,6 +620,7 @@ viewPopupVisual viewport visual showingDegree =
         , onClick (SelectedVisual Nothing)
         , pointer
         , inFront closeButton
+        , Element.alpha showingDegree
         ]
         visualEl
 
