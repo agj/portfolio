@@ -1,8 +1,6 @@
 import gulp from "gulp";
 import elm from "gulp-elm";
 import rename from "gulp-rename";
-import { promisify } from "util";
-import { exec as exec_ } from "child_process";
 import path from "path";
 
 import retrieveWorks from "./source/js/retrieve-works.js";
