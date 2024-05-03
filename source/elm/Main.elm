@@ -299,34 +299,11 @@ view model =
 
         globalStyles =
             [ Font.family Palette.font ]
-
-        popupVisualShowingDegree : Float
-        popupVisualShowingDegree =
-            Animator.move model.popupVisual
-                (\state ->
-                    case state of
-                        Just _ ->
-                            Animator.at 1
-
-                        Nothing ->
-                            Animator.at 0
-                )
-
-        popupVisual =
-            case ( Animator.current model.popupVisual, Animator.previous model.popupVisual ) of
-                ( Just visual, _ ) ->
-                    [ inFront (viewPopupVisual model.viewport visual popupVisualShowingDegree) ]
-
-                ( _, Just visual ) ->
-                    [ inFront (viewPopupVisual model.viewport visual popupVisualShowingDegree) ]
-
-                _ ->
-                    []
     in
     { title = labels.title
     , body =
         [ viewMain model
-            |> layout (globalStyles ++ popupVisual)
+            |> layout (globalStyles ++ viewPopupVisualAttr model.viewport model.popupVisual)
         , Html.node "style"
             []
             [ "body { background-color: {color}; }"
@@ -513,6 +490,32 @@ viewMessageBlock child =
             ]
             child
         ]
+
+
+viewPopupVisualAttr : Viewport -> Animator.Timeline (Maybe Visual) -> List (Element.Attribute Msg)
+viewPopupVisualAttr viewport popupVisualTimeline =
+    let
+        popupVisualShowingDegree : Float
+        popupVisualShowingDegree =
+            Animator.move popupVisualTimeline
+                (\state ->
+                    case state of
+                        Just _ ->
+                            Animator.at 1
+
+                        Nothing ->
+                            Animator.at 0
+                )
+    in
+    case ( Animator.current popupVisualTimeline, Animator.previous popupVisualTimeline ) of
+        ( Just visual, _ ) ->
+            [ inFront (viewPopupVisual viewport visual popupVisualShowingDegree) ]
+
+        ( _, Just visual ) ->
+            [ inFront (viewPopupVisual viewport visual popupVisualShowingDegree) ]
+
+        _ ->
+            []
 
 
 viewPopupVisual : Viewport -> Visual -> Float -> Element Msg
