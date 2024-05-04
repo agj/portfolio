@@ -34,6 +34,28 @@
             url("//agj.cl/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-700.woff")
             format("woff");
       }
+
+      .popup-visual img,
+      .popup-visual iframe {
+        --popup-visual-loading-image-size: 5em;
+
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path d="M 0,6 L 12,0 L 12,6 L 0,12 Z" fill="rgb(0, 0, 0, 0.2)" /></svg>');
+        background-size: var(--popup-visual-loading-image-size);
+        animation-name: loading;
+        animation-timing-function: linear;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes loading {
+        from {
+          background-position: top 0 left 0;
+        }
+        to {
+          background-position: top var(--popup-visual-loading-image-size) left
+            var(--popup-visual-loading-image-size);
+        }
+      }
     </style>
   </head>
   <body>

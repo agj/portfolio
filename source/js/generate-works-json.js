@@ -1,11 +1,9 @@
-import R from "ramda";
+import * as R from "ramda";
 import fs from "fs-extra";
-import dotInto from "dot-into";
+import "dot-into";
 
 import { isUrl, toJson } from "./utils.js";
 import cfg from "./config.js";
-
-dotInto.install();
 
 // Utils
 

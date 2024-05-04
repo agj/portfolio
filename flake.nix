@@ -2,7 +2,7 @@
   description = "agj portfolio";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/23.11";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -21,7 +21,6 @@
             elmPackages.elm-format
             elmPackages.elm-json
             nodejs-slim_20
-            nodePackages.gulp-cli
             nodePackages.pnpm
             nodePackages.prettier
           ];

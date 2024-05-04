@@ -1,17 +1,20 @@
-develop: ## Run development server.
-	gulp develop
+develop: install ## Run development server.
+	pnpm exec gulp develop
 
-build: ## Build for deployment.
-	gulp build
+build: install ## Build for deployment.
+	pnpm exec gulp build
 
-build-debug: ## Build for debugging.
-	gulp build
+build-debug: install ## Build for debugging.
+	pnpm exec gulp build
 
-cache: ## Generate media cache.
-	gulp cache
+cache: install ## Generate media cache.
+	pnpm exec gulp cache
 
 deploy: build ## Build and deploy to server. Needs .env variables to be set.
 	bash ./source/scripts/deploy.sh
+
+install:
+	pnpm install
 
 
 
