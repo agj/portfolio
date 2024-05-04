@@ -19,6 +19,7 @@ import Element.Border as UiBorder
 import Element.Events as UiEvents
 import Element.Font as UiFont
 import Html exposing (Html)
+import Html.Attributes
 import Http
 import Language exposing (Language(..))
 import LayoutFormat exposing (LayoutFormat(..))
@@ -621,6 +622,8 @@ viewPopupVisual viewport visual showingDegree =
         , Ui.pointer
         , Ui.inFront closeButton
         , Ui.alpha showingDegree
+        , Html.Attributes.class "popup-visual"
+            |> Ui.htmlAttribute
         ]
         visualEl
 
