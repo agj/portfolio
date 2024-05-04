@@ -13,11 +13,11 @@ import Data.Settings as Settings exposing (Settings)
 import Descriptor
 import Dict
 import Doc exposing (Doc)
-import Element exposing (Attribute, Element, alignBottom, alignLeft, alignRight, alignTop, centerX, centerY, column, el, fill, height, image, inFront, layout, mouseDown, moveDown, moveLeft, newTabLink, none, padding, paddingEach, paddingXY, paragraph, pointer, px, row, spacing, text, transparent, width, wrappedRow)
-import Element.Background as Background
-import Element.Border as Border
-import Element.Events exposing (..)
-import Element.Font as Font
+import Element as Ui
+import Element.Background as UiBackground
+import Element.Border as UiBorder
+import Element.Events as UiEvents
+import Element.Font as UiFont
 import Html exposing (Html)
 import Http
 import Language exposing (Language(..))
@@ -298,12 +298,12 @@ view model =
             Labels.ofLanguage model.language
 
         globalStyles =
-            [ Font.family Palette.font ]
+            [ UiFont.family Palette.font ]
     in
     { title = labels.title
     , body =
         [ viewMain model
-            |> layout (globalStyles ++ viewPopupVisualAttr model.viewport model.popupVisual)
+            |> Ui.layout (globalStyles ++ viewPopupVisualAttr model.viewport model.popupVisual)
         , Html.node "style"
             []
             [ "body { background-color: {color}; }"
@@ -314,7 +314,7 @@ view model =
     }
 
 
-viewMain : Model -> Element Msg
+viewMain : Model -> Ui.Element Msg
 viewMain model =
     let
         labels =
@@ -334,21 +334,21 @@ viewMain model =
                 Nothing ->
                     model.viewport.width
 
-        worksBlock : Element Msg -> Element Msg
+        worksBlock : Ui.Element Msg -> Ui.Element Msg
         worksBlock =
-            el
-                [ width (px worksBlockWidth)
-                , paddingXY
+            Ui.el
+                [ Ui.width (Ui.px worksBlockWidth)
+                , Ui.paddingXY
                     (ifElse (layoutFormat == PhoneLayout)
                         Palette.spaceSmall
                         0
                     )
                     0
-                , spacing Palette.spaceNormal
+                , Ui.spacing Palette.spaceNormal
                 , CustomEl.id "works"
                 ]
 
-        content : Element Msg
+        content : Ui.Element Msg
         content =
             case model.data of
                 DataLoaded data ->
@@ -374,36 +374,36 @@ viewMain model =
                         _ ->
                             viewLoadMessage labels.loadError
     in
-    column
-        [ width <| Maybe.withDefault fill (settings.worksBlockWidth |> Maybe.map px)
-        , centerX
-        , inFront <| viewLanguageSelector model.language
-        , inFront <| viewBackButton labels.backToHome
-        , paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceLarge }
-        , spacing Palette.spaceNormal
+    Ui.column
+        [ Ui.width <| Maybe.withDefault Ui.fill (settings.worksBlockWidth |> Maybe.map Ui.px)
+        , Ui.centerX
+        , Ui.inFront <| viewLanguageSelector model.language
+        , Ui.inFront <| viewBackButton labels.backToHome
+        , Ui.paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceLarge }
+        , Ui.spacing Palette.spaceNormal
         ]
         [ viewTop model.language model.query.tag
         , worksBlock content
         ]
 
 
-viewTop : Language -> Maybe Tag -> Element Msg
+viewTop : Language -> Maybe Tag -> Ui.Element Msg
 viewTop language selectedTag =
-    column
-        [ Font.color (Palette.baseColorAt10 |> Color.toElmUi)
-        , Background.color (Palette.baseColorAt90 |> Color.toElmUi)
-        , paddingEach { sides | top = Palette.spaceNormal, bottom = Palette.spaceSmall }
+    Ui.column
+        [ UiFont.color (Palette.baseColorAt10 |> Color.toElmUi)
+        , UiBackground.color (Palette.baseColorAt90 |> Color.toElmUi)
+        , Ui.paddingEach { sides | top = Palette.spaceNormal, bottom = Palette.spaceSmall }
         ]
         [ viewIntroduction (Introduction.ofLanguage SelectedTag selectedTag language)
         ]
 
 
-viewLanguageSelector : Language -> Element Msg
+viewLanguageSelector : Language -> Ui.Element Msg
 viewLanguageSelector language =
-    row
-        [ spacing Palette.spaceSmallest
-        , alignRight
-        , paddingEach { sides | right = Palette.spaceSmall }
+    Ui.row
+        [ Ui.spacing Palette.spaceSmallest
+        , Ui.alignRight
+        , Ui.paddingEach { sides | right = Palette.spaceSmall }
         ]
         [ viewLanguageButton "EN" English language
         , viewLanguageButton "ES" Spanish language
@@ -411,88 +411,88 @@ viewLanguageSelector language =
         ]
 
 
-viewBackButton : String -> Element Msg
+viewBackButton : String -> Ui.Element Msg
 viewBackButton label =
-    el [ centerX, centerY ] (text label)
-        |> el
-            [ alignLeft
-            , paddingXY Palette.spaceSmall 0
-            , Font.size Palette.textSizeNormal
-            , height (px (fraction 2.3 Palette.textSizeNormal))
-            , pointer
-            , Background.color (Palette.baseColorAt90 |> Color.toElmUi)
-            , Border.color (Palette.baseColorAt50 |> Color.toElmUi)
-            , Border.widthEach { left = 1, right = 1, bottom = 1, top = 0 }
-            , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
-            , mouseDown
-                [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
-                , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
+    Ui.el [ Ui.centerX, Ui.centerY ] (Ui.text label)
+        |> Ui.el
+            [ Ui.alignLeft
+            , Ui.paddingXY Palette.spaceSmall 0
+            , UiFont.size Palette.textSizeNormal
+            , Ui.height (Ui.px (fraction 2.3 Palette.textSizeNormal))
+            , Ui.pointer
+            , UiBackground.color (Palette.baseColorAt90 |> Color.toElmUi)
+            , UiBorder.color (Palette.baseColorAt50 |> Color.toElmUi)
+            , UiBorder.widthEach { left = 1, right = 1, bottom = 1, top = 0 }
+            , UiFont.color (Palette.baseColorAt10 |> Color.toElmUi)
+            , Ui.mouseDown
+                [ UiBackground.color (Palette.baseColorAt10 |> Color.toElmUi)
+                , UiFont.color (Palette.baseColorAt90 |> Color.toElmUi)
                 ]
-            , onClick SelectedGoHome
+            , UiEvents.onClick SelectedGoHome
             ]
-        |> el [ paddingEach { sides | left = Palette.spaceSmall } ]
+        |> Ui.el [ Ui.paddingEach { sides | left = Palette.spaceSmall } ]
 
 
-viewLanguageButton : String -> Language -> Language -> Element Msg
+viewLanguageButton : String -> Language -> Language -> Ui.Element Msg
 viewLanguageButton label language selectedLanguage =
     if language == selectedLanguage then
-        none
+        Ui.none
 
     else
-        el
-            [ onClick (SelectedLanguage language)
-            , Font.size Palette.textSizeNormal
-            , width (px (fraction 2.9 Palette.textSizeNormal))
-            , height (px (fraction 2.3 Palette.textSizeNormal))
-            , pointer
-            , Background.color (Palette.baseColorAt50 |> Color.toElmUi)
-            , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
-            , mouseDown
-                [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
-                , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
+        Ui.el
+            [ UiEvents.onClick (SelectedLanguage language)
+            , UiFont.size Palette.textSizeNormal
+            , Ui.width (Ui.px (fraction 2.9 Palette.textSizeNormal))
+            , Ui.height (Ui.px (fraction 2.3 Palette.textSizeNormal))
+            , Ui.pointer
+            , UiBackground.color (Palette.baseColorAt50 |> Color.toElmUi)
+            , UiFont.color (Palette.baseColorAt10 |> Color.toElmUi)
+            , Ui.mouseDown
+                [ UiBackground.color (Palette.baseColorAt10 |> Color.toElmUi)
+                , UiFont.color (Palette.baseColorAt90 |> Color.toElmUi)
                 ]
             ]
-            (el
-                [ centerX
-                , centerY
+            (Ui.el
+                [ Ui.centerX
+                , Ui.centerY
                 ]
-                (text label)
+                (Ui.text label)
             )
 
 
-viewIntroduction : Element Msg -> Element Msg
+viewIntroduction : Ui.Element Msg -> Ui.Element Msg
 viewIntroduction introductionText =
-    el
-        [ width fill
-        , paddingXY Palette.spaceNormal Palette.spaceNormal
-        , Font.size Palette.textSizeNormal
+    Ui.el
+        [ Ui.width Ui.fill
+        , Ui.paddingXY Palette.spaceNormal Palette.spaceNormal
+        , UiFont.size Palette.textSizeNormal
         ]
         introductionText
 
 
-viewLoadMessage : Element Msg -> Element Msg
+viewLoadMessage : Ui.Element Msg -> Ui.Element Msg
 viewLoadMessage message =
     message
-        |> el
-            [ Font.color (Palette.baseColorAt10 |> Color.toElmUi)
-            , width fill
+        |> Ui.el
+            [ UiFont.color (Palette.baseColorAt10 |> Color.toElmUi)
+            , Ui.width Ui.fill
             ]
         |> viewMessageBlock
 
 
-viewMessageBlock : Element Msg -> Element Msg
+viewMessageBlock : Ui.Element Msg -> Ui.Element Msg
 viewMessageBlock child =
     viewWorkBlock [] <|
-        [ el
-            [ paddingXY Palette.spaceNormal Palette.spaceNormal
-            , width fill
-            , Font.center
+        [ Ui.el
+            [ Ui.paddingXY Palette.spaceNormal Palette.spaceNormal
+            , Ui.width Ui.fill
+            , UiFont.center
             ]
             child
         ]
 
 
-viewPopupVisualAttr : Viewport -> Animator.Timeline (Maybe Visual) -> List (Element.Attribute Msg)
+viewPopupVisualAttr : Viewport -> Animator.Timeline (Maybe Visual) -> List (Ui.Attribute Msg)
 viewPopupVisualAttr viewport popupVisualTimeline =
     let
         popupVisualShowingDegree : Float
@@ -509,16 +509,16 @@ viewPopupVisualAttr viewport popupVisualTimeline =
     in
     case ( Animator.current popupVisualTimeline, Animator.previous popupVisualTimeline ) of
         ( Just visual, _ ) ->
-            [ inFront (viewPopupVisual viewport visual popupVisualShowingDegree) ]
+            [ Ui.inFront (viewPopupVisual viewport visual popupVisualShowingDegree) ]
 
         ( _, Just visual ) ->
-            [ inFront (viewPopupVisual viewport visual popupVisualShowingDegree) ]
+            [ Ui.inFront (viewPopupVisual viewport visual popupVisualShowingDegree) ]
 
         _ ->
             []
 
 
-viewPopupVisual : Viewport -> Visual -> Float -> Element Msg
+viewPopupVisual : Viewport -> Visual -> Float -> Ui.Element Msg
 viewPopupVisual viewport visual showingDegree =
     let
         reservedSpace =
@@ -575,21 +575,21 @@ viewPopupVisual viewport visual showingDegree =
                     desc.color
 
         visualEl =
-            el
-                [ width (px usableWidth)
-                , height (px usableHeight)
-                , alignLeft
-                , alignBottom
-                , Element.scale (0.8 + showingDegree * 0.2)
+            Ui.el
+                [ Ui.width (Ui.px usableWidth)
+                , Ui.height (Ui.px usableHeight)
+                , Ui.alignLeft
+                , Ui.alignBottom
+                , Ui.scale (0.8 + showingDegree * 0.2)
                 ]
                 (case visual of
                     Image desc ->
-                        image
-                            [ width (px visualWidth)
-                            , height (px visualHeight)
-                            , centerX
-                            , centerY
-                            , Background.color (color |> Color.toElmUi)
+                        Ui.image
+                            [ Ui.width (Ui.px visualWidth)
+                            , Ui.height (Ui.px visualHeight)
+                            , Ui.centerX
+                            , Ui.centerY
+                            , UiBackground.color (color |> Color.toElmUi)
                             ]
                             { src = desc.url
                             , description = ""
@@ -600,27 +600,27 @@ viewPopupVisual viewport visual showingDegree =
                 )
 
         closeButton =
-            el
-                [ width (px reservedSpace)
-                , height (px reservedSpace)
-                , padding <| fraction 0.3 reservedSpace
-                , alignRight
-                , alignTop
-                , pointer
-                , Font.color (color |> Palette.colorAt10 |> Color.toElmUi)
+            Ui.el
+                [ Ui.width (Ui.px reservedSpace)
+                , Ui.height (Ui.px reservedSpace)
+                , Ui.padding <| fraction 0.3 reservedSpace
+                , Ui.alignRight
+                , Ui.alignTop
+                , Ui.pointer
+                , UiFont.color (color |> Palette.colorAt10 |> Color.toElmUi)
                 ]
                 (View.Icon.icon View.Icon.Close (fraction 0.4 reservedSpace)
                     |> View.Icon.view
                 )
     in
-    el
-        [ width fill
-        , height fill
-        , Background.color (color |> Palette.colorAt70 |> Color.setOpacity 0.8 |> Color.toElmUi)
-        , onClick (SelectedVisual Nothing)
-        , pointer
-        , inFront closeButton
-        , Element.alpha showingDegree
+    Ui.el
+        [ Ui.width Ui.fill
+        , Ui.height Ui.fill
+        , UiBackground.color (color |> Palette.colorAt70 |> Color.setOpacity 0.8 |> Color.toElmUi)
+        , UiEvents.onClick (SelectedVisual Nothing)
+        , Ui.pointer
+        , Ui.inFront closeButton
+        , Ui.alpha showingDegree
         ]
         visualEl
 
@@ -629,7 +629,7 @@ viewPopupVisual viewport visual showingDegree =
 -- VIEW WORKS
 
 
-viewWorks : { blockWidth : Int, labels : Labels Msg, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Element Msg
+viewWorks : { blockWidth : Int, labels : Labels Msg, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Ui.Element Msg
 viewWorks { blockWidth, labels, maybeTag, works, settings } =
     let
         filteredWorks =
@@ -654,30 +654,30 @@ viewWorks { blockWidth, labels, maybeTag, works, settings } =
             (viewWork blockWidth labels settings)
             filteredWorks
             ++ [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
-            |> column
-                [ width fill
-                , spacing Palette.spaceNormal
+            |> Ui.column
+                [ Ui.width Ui.fill
+                , Ui.spacing Palette.spaceNormal
                 ]
 
 
-viewWorkBlock : List (Attribute Msg) -> List (Element Msg) -> Element Msg
+viewWorkBlock : List (Ui.Attribute Msg) -> List (Ui.Element Msg) -> Ui.Element Msg
 viewWorkBlock attrs children =
-    column
-        ([ width fill
-         , Font.size Palette.textSizeNormal
+    Ui.column
+        ([ Ui.width Ui.fill
+         , UiFont.size Palette.textSizeNormal
          ]
             ++ attrs
         )
         children
 
 
-viewWork : Int -> Labels Msg -> Settings -> Work -> Element Msg
+viewWork : Int -> Labels Msg -> Settings -> Work -> Ui.Element Msg
 viewWork blockWidth labels settings work =
     viewWorkBlock
-        [ inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
-        , paddingEach { sides | bottom = Palette.spaceNormal }
-        , Font.color (work.mainVisualColor |> Palette.colorAt10 |> Color.toElmUi)
-        , Background.color (work.mainVisualColor |> Palette.colorAt90 |> Color.toElmUi)
+        [ Ui.inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
+        , Ui.paddingEach { sides | bottom = Palette.spaceNormal }
+        , UiFont.color (work.mainVisualColor |> Palette.colorAt10 |> Color.toElmUi)
+        , UiBackground.color (work.mainVisualColor |> Palette.colorAt90 |> Color.toElmUi)
         ]
         [ viewWorkTitle blockWidth
             { title = work.name
@@ -709,23 +709,23 @@ viewWorkTitle :
         , icons :
             { visualCommunication : Bool, programming : Bool, language : Bool, learning : Bool }
         }
-    -> Element Msg
+    -> Ui.Element Msg
 viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, settings } =
     let
         colorAt70 =
             Palette.colorAt70 mainVisualColor
 
         mainBlock =
-            column
-                [ width (px blockWidth)
-                , height (px (round (toFloat blockWidth / settings.mainVisualAspectRatio)))
-                , Background.image mainVisualUrl
+            Ui.column
+                [ Ui.width (Ui.px blockWidth)
+                , Ui.height (Ui.px (round (toFloat blockWidth / settings.mainVisualAspectRatio)))
+                , UiBackground.image mainVisualUrl
                 , CustomEl.backgroundColor colorAt70
                 ]
 
         iconsBlock =
-            row
-                [ paddingXY Palette.spaceNormal Palette.spaceSmall
+            Ui.row
+                [ Ui.paddingXY Palette.spaceNormal Palette.spaceSmall
                 , CustomEl.style "flex-basis" "auto"
                 ]
                 [ viewIcon mainVisualColor View.Icon.VisualCommunication icons.visualCommunication
@@ -735,11 +735,11 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 ]
 
         gradientBlock =
-            column
-                [ width fill
-                , alignBottom
-                , paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = fraction 1 Palette.textSizeLarge, bottom = 0 }
-                , Background.gradient
+            Ui.column
+                [ Ui.width Ui.fill
+                , Ui.alignBottom
+                , Ui.paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = fraction 1 Palette.textSizeLarge, bottom = 0 }
+                , UiBackground.gradient
                     { angle = 0
                     , steps =
                         [ colorAt70 |> Color.setOpacity 0.9 |> Color.toElmUi
@@ -750,11 +750,11 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 ]
 
         yearBlock =
-            el
-                [ alignBottom
-                , paddingXY 0 0
-                , Font.size Palette.textSizeSmall
-                , Font.bold
+            Ui.el
+                [ Ui.alignBottom
+                , Ui.paddingXY 0 0
+                , UiFont.size Palette.textSizeSmall
+                , UiFont.bold
                 , CustomEl.glow
                     { color = mainVisualColor |> Palette.colorAt70
                     , strength = 5.0
@@ -763,10 +763,10 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 ]
 
         titleBlock =
-            el
-                [ alignBottom
-                , paddingXY 0 Palette.spaceSmaller
-                , Font.size Palette.textSizeLarge
+            Ui.el
+                [ Ui.alignBottom
+                , Ui.paddingXY 0 Palette.spaceSmaller
+                , UiFont.size Palette.textSizeLarge
                 , CustomEl.glow
                     { color = mainVisualColor |> Palette.colorAt70
                     , strength = 5.0
@@ -777,14 +777,14 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
     mainBlock
         [ iconsBlock
         , gradientBlock
-            [ yearBlock (text <| Date.toString date)
+            [ yearBlock (Ui.text <| Date.toString date)
             , titleBlock <|
-                paragraph [] [ text title ]
+                Ui.paragraph [] [ Ui.text title ]
             ]
         ]
 
 
-viewIcon : Color -> IconName -> Bool -> Element msg
+viewIcon : Color -> IconName -> Bool -> Ui.Element msg
 viewIcon color iconName isVisible =
     let
         size =
@@ -794,10 +794,10 @@ viewIcon color iconName isVisible =
         icon size color iconName
 
     else
-        none
+        Ui.none
 
 
-viewWorkVisuals : Int -> Settings -> Color -> List Visual -> Element Msg
+viewWorkVisuals : Int -> Settings -> Color -> List Visual -> Ui.Element Msg
 viewWorkVisuals blockWidth settings mainVisualColor visuals =
     let
         perRow =
@@ -812,18 +812,18 @@ viewWorkVisuals blockWidth settings mainVisualColor visuals =
                 |> floor
     in
     if List.isEmpty visuals then
-        none
+        Ui.none
 
     else
-        wrappedRow
-            [ spacing spaceBetween
-            , width fill
-            , paddingEach { sides | top = spaceBetween }
+        Ui.wrappedRow
+            [ Ui.spacing spaceBetween
+            , Ui.width Ui.fill
+            , Ui.paddingEach { sides | top = spaceBetween }
             ]
             (List.map (viewVisualThumbnail mainVisualColor thumbnailSize) visuals)
 
 
-viewVisualThumbnail : Color -> Int -> Visual -> Element Msg
+viewVisualThumbnail : Color -> Int -> Visual -> Ui.Element Msg
 viewVisualThumbnail mainVisualColor size visual =
     let
         ( thumbnailUrl, color, isVideo ) =
@@ -834,26 +834,26 @@ viewVisualThumbnail mainVisualColor size visual =
                 Video desc ->
                     ( desc.thumbnailUrl, desc.color, True )
     in
-    el
-        ([ width (px size)
-         , height (px size)
-         , onClick (SelectedVisual (Just visual))
-         , pointer
-         , Background.color (color |> Color.toElmUi)
+    Ui.el
+        ([ Ui.width (Ui.px size)
+         , Ui.height (Ui.px size)
+         , UiEvents.onClick (SelectedVisual (Just visual))
+         , Ui.pointer
+         , UiBackground.color (color |> Color.toElmUi)
          ]
             ++ ifElse isVideo
-                [ inFront <|
-                    el
-                        [ alignRight
-                        , alignBottom
+                [ Ui.inFront <|
+                    Ui.el
+                        [ Ui.alignRight
+                        , Ui.alignBottom
                         ]
                         (icon (fraction 0.3 size) mainVisualColor View.Icon.Play)
                 ]
                 []
         )
-        (image
-            [ width (px size)
-            , height (px size)
+        (Ui.image
+            [ Ui.width (Ui.px size)
+            , Ui.height (Ui.px size)
             ]
             { src = thumbnailUrl
             , description = " "
@@ -861,39 +861,39 @@ viewVisualThumbnail mainVisualColor size visual =
         )
 
 
-viewWorkLinks : Color -> List Link -> Element Msg
+viewWorkLinks : Color -> List Link -> Ui.Element Msg
 viewWorkLinks color links =
     let
         makeLink link =
-            newTabLink
-                (centerX :: linkStyle color)
+            Ui.newTabLink
+                (Ui.centerX :: linkStyle color)
                 { url = link.url
-                , label = text link.label
+                , label = Ui.text link.label
                 }
     in
     if List.isEmpty links then
-        none
+        Ui.none
 
     else
-        wrappedRow
-            [ paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = Palette.spaceNormal, bottom = 0 }
-            , width fill
+        Ui.wrappedRow
+            [ Ui.paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = Palette.spaceNormal, bottom = 0 }
+            , Ui.width Ui.fill
             ]
         <|
             List.map makeLink links
 
 
-viewWorkDescription : Color -> Doc -> Element Msg
+viewWorkDescription : Color -> Doc -> Ui.Element Msg
 viewWorkDescription color doc =
-    el [ paddingXY Palette.spaceNormal Palette.spaceSmall ]
+    Ui.el [ Ui.paddingXY Palette.spaceNormal Palette.spaceSmall ]
         (Descriptor.fromDoc color doc)
 
 
-viewWorkReadMore : Labels Msg -> Maybe Work.ReadMore -> Color -> Element Msg
+viewWorkReadMore : Labels Msg -> Maybe Work.ReadMore -> Color -> Ui.Element Msg
 viewWorkReadMore labels readMore color =
     case readMore of
         Nothing ->
-            none
+            Ui.none
 
         Just desc ->
             let
@@ -908,16 +908,16 @@ viewWorkReadMore labels readMore color =
                         Spanish ->
                             labels.readMoreSpanish
             in
-            el
-                [ alignRight
-                , alignBottom
-                , moveDown <| 0.3 * toFloat Palette.textSizeNormal
-                , moveLeft <| toFloat Palette.spaceNormal
+            Ui.el
+                [ Ui.alignRight
+                , Ui.alignBottom
+                , Ui.moveDown <| 0.3 * toFloat Palette.textSizeNormal
+                , Ui.moveLeft <| toFloat Palette.spaceNormal
                 ]
             <|
-                newTabLink (linkStyle color)
+                Ui.newTabLink (linkStyle color)
                     { url = desc.url
-                    , label = text label
+                    , label = Ui.text label
                     }
 
 
@@ -939,17 +939,17 @@ subscriptions model =
 -- OTHER
 
 
-linkStyle : Color -> List (Element.Attribute Msg)
+linkStyle : Color -> List (Ui.Attribute Msg)
 linkStyle color =
-    [ Background.color (color |> Color.toElmUi)
-    , paddingXY
+    [ UiBackground.color (color |> Color.toElmUi)
+    , Ui.paddingXY
         (fraction 0.6 Palette.textSizeNormal)
         (fraction 0.4 Palette.textSizeNormal)
-    , centerX
-    , pointer
-    , mouseDown
-        [ Background.color (color |> Palette.colorAt10 |> Color.toElmUi)
-        , Font.color (color |> Palette.colorAt90 |> Color.toElmUi)
+    , Ui.centerX
+    , Ui.pointer
+    , Ui.mouseDown
+        [ UiBackground.color (color |> Palette.colorAt10 |> Color.toElmUi)
+        , UiFont.color (color |> Palette.colorAt90 |> Color.toElmUi)
         ]
     ]
 
@@ -963,10 +963,10 @@ getLanguageFromPreferred codes =
         |> Maybe.withDefault English
 
 
-icon : Int -> Color -> IconName -> Element msg
+icon : Int -> Color -> IconName -> Ui.Element msg
 icon size color iconName =
-    el
-        [ Element.padding <| fraction 0.1 size
+    Ui.el
+        [ Ui.padding <| fraction 0.1 size
         , CustomEl.radialGradient
             [ ( 0.5, color |> Palette.colorAt70 |> Color.setOpacity 0.9 )
             , ( 1, color |> Palette.colorAt70 |> Color.setOpacity 0 )
