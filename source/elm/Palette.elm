@@ -3,10 +3,12 @@ module Palette exposing
     , baseColorAt10
     , baseColorAt50
     , baseColorAt70
+    , baseColorAt80
     , baseColorAt90
     , colorAt10
     , colorAt50
     , colorAt70
+    , colorAt80
     , colorAt90
     , font
     , spaceLarge
@@ -47,6 +49,12 @@ colorAt70 col =
         |> darken 0.5
 
 
+colorAt80 : Color -> Color
+colorAt80 col =
+    col
+        |> darken 0.65
+
+
 colorAt90 : Color -> Color
 colorAt90 col =
     col
@@ -71,6 +79,11 @@ baseColorAt50 =
 baseColorAt70 : Color
 baseColorAt70 =
     colorAt70 baseColor
+
+
+baseColorAt80 : Color
+baseColorAt80 =
+    colorAt80 baseColor
 
 
 baseColorAt90 : Color

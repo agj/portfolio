@@ -129,13 +129,20 @@
               const bounds = element.getBoundingClientRect();
               return {
                 index,
-                topInView: bounds.top >= 0,
-                bottomInView: bounds.bottom < document.clientHeight,
+                visibleArea:
+                  Math.min(
+                    bounds.bottom,
+                    document.documentElement.clientHeight
+                  ) - Math.max(bounds.top, 0),
               };
             })
-            .filter(({ topInView, bottomInView }) => topInView || bottomInView)
-            .reduce((selected, current) =>
-              selected?.topInView ? selected : current
+            .filter(({ visibleArea }) => visibleArea > 0)
+            .reduce(
+              (selected, current) =>
+                current.visibleArea >= (selected?.visibleArea ?? 0)
+                  ? current
+                  : selected,
+              { visibleArea: -1, index: null }
             );
 
           app.ports.scrolledOverWorkPort.send(visibleWork?.index);

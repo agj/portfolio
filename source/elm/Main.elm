@@ -322,8 +322,8 @@ view model =
 
         backgroundColor =
             highlightedWork
-                |> Maybe.map (\work -> Palette.colorAt70 work.mainVisualColor)
-                |> Maybe.withDefault Palette.baseColorAt70
+                |> Maybe.map (\work -> Palette.colorAt80 work.mainVisualColor)
+                |> Maybe.withDefault Palette.baseColorAt80
     in
     { title = labels.title
     , body =
