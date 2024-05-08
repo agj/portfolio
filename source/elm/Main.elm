@@ -67,6 +67,7 @@ type alias Model =
     { language : Language
     , viewport : Viewport
     , popupVisual : Animator.Timeline (Maybe Visual)
+    , highlightedWorkIndex : Maybe Int
     , query : Query
     , data : DataStatus
     , navigationData : NavigationData
@@ -134,6 +135,7 @@ init flags url navKey =
       , query = query
       , viewport = flags.viewport
       , popupVisual = Animator.init Nothing
+      , highlightedWorkIndex = Nothing
       , data = DataLoading
       , navigationData = { url = url, key = navKey }
       }
@@ -177,6 +179,7 @@ type Msg
     | GotViewport Viewport
     | GotData (Result Http.Error (List WorkLanguages))
     | AnimationTick Time.Posix
+    | ScrolledOverWork (Maybe Int)
     | NoOp
 
 
@@ -228,6 +231,11 @@ update msg model =
 
         AnimationTick time ->
             ( model |> Animator.update time animator
+            , Cmd.none
+            )
+
+        ScrolledOverWork maybeWorkIndex ->
+            ( { model | highlightedWorkIndex = maybeWorkIndex }
             , Cmd.none
             )
 
@@ -301,6 +309,28 @@ view model =
 
         globalStyles =
             [ UiFont.family Palette.font ]
+
+        highlightedWork : Maybe Work
+        highlightedWork =
+            case ( model.highlightedWorkIndex, model.data ) of
+                ( Just workIndex, DataLoaded data ) ->
+                    Works.ofLanguage model.language data
+                        |> List.Extra.getAt workIndex
+
+                _ ->
+                    Nothing
+
+        ( backgroundColorA, backgroundColorB ) =
+            highlightedWork
+                |> Maybe.map
+                    (\work ->
+                        ( work.mainVisualColor
+                            |> Palette.colorAt70
+                        , work.mainVisualColor
+                            |> Palette.colorAt90
+                        )
+                    )
+                |> Maybe.withDefault ( Palette.baseColorAt70, Palette.baseColorAt90 )
     in
     { title = labels.title
     , body =
@@ -314,8 +344,8 @@ view model =
                     background-image: {background-image};
                 }
               """
-                |> String.replace "{color}" (Color.toCssString Palette.baseColorAt90)
-                |> String.replace "{background-image}" (CssSvg.patternOverlappingCircles Palette.baseColorAt70)
+                |> String.replace "{color}" (Color.toCssString backgroundColorB)
+                |> String.replace "{background-image}" (CssSvg.patternOverlappingCircles backgroundColorA)
                 |> Html.text
             ]
         ]
@@ -675,6 +705,8 @@ viewWorkBlock attrs children =
     Ui.column
         ([ Ui.width Ui.fill
          , UiFont.size Palette.textSizeNormal
+         , Html.Attributes.class "work"
+            |> Ui.htmlAttribute
          ]
             ++ attrs
         )
@@ -942,6 +974,7 @@ subscriptions model =
             \w h -> Resized
         , Viewport.got GotViewport NoOp
         , animator |> Animator.toSubscription AnimationTick model
+        , Ports.scrolledOverWork (Just >> ScrolledOverWork) (ScrolledOverWork Nothing)
         ]
 
 

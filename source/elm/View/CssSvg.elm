@@ -47,10 +47,12 @@ wrap : String -> String
 wrap svg =
     let
         svgEncoded =
-            Url.percentEncode svg
+            svg
+                |> String.trim
+                |> regexReplace "\\s+" " "
+                |> Url.percentEncode
     in
     "url('data:image/svg+xml,{svg}')"
-        |> regexReplace "\\s+" " "
         |> String.replace "{svg}" svgEncoded
 
 
