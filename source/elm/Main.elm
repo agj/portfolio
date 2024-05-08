@@ -34,6 +34,7 @@ import Util.AppUrl as AppUrl
 import Util.Color as Color
 import Utils exposing (..)
 import VideoEmbed
+import View.CssSvg as CssSvg
 import View.Icon exposing (IconName)
 import Viewport exposing (Viewport)
 import Work exposing (..)
@@ -307,8 +308,14 @@ view model =
             |> Ui.layout (globalStyles ++ viewPopupVisualAttr model.viewport model.popupVisual)
         , Html.node "style"
             []
-            [ "body { background-color: {color}; }"
-                |> String.replace "{color}" (Color.toCssString Palette.baseColorAt70)
+            [ """
+                body {
+                    background-color: {color};
+                    background-image: {background-image};
+                }
+              """
+                |> String.replace "{color}" (Color.toCssString Palette.baseColorAt90)
+                |> String.replace "{background-image}" (CssSvg.patternOverlappingCircles Palette.baseColorAt70)
                 |> Html.text
             ]
         ]
