@@ -4,7 +4,6 @@ import path from "path";
 import sharp from "sharp";
 import vibrant from "node-vibrant";
 import axios from "axios";
-import stream from "stream";
 import streamToPromise from "stream-to-promise";
 import "dot-into";
 
@@ -13,7 +12,6 @@ import * as _ from "./utils.js";
 
 // Utils
 
-const getFile = async (filename) => fs.readFile(filename, "utf-8");
 const awaitAll = Promise.all.bind(Promise);
 const getVideoMetadata = async (host, id) => {
   if (host === cfg.hostType.youtube) {
@@ -41,14 +39,6 @@ const getVideoMetadata = async (host, id) => {
     };
   }
 };
-const jsonStream = (data) => {
-  const Readable = stream.Readable;
-  const input = new Readable();
-  input._read = () => {};
-  input.push(JSON.stringify(data, null, "\t"));
-  input.push(null);
-  return input;
-};
 const fileExists = fs.pathExistsSync;
 const filesExist = R.all(fileExists);
 const ensureFolder = (filename) => {
@@ -58,9 +48,6 @@ const ensureFolder = (filename) => {
 
 // Process
 
-const logSkipped = (name) => {
-  _.log(`Skipped existing: ${name}`);
-};
 const generateVisualsCache = async (work, workName) => {
   // Main visual.
 
@@ -180,15 +167,6 @@ const generateVisualsCache = async (work, workName) => {
     await awaitAll(promises);
   }
 };
-
-const onFinished = (str) =>
-  new Promise((resolve) => {
-    const done = (err, done) => {
-      resolve(true);
-    };
-    str.on("finish", done);
-    str.on("end", done);
-  });
 
 const getImageDimensions = async (image) => {
   const metadata = await sharp(image).metadata();
