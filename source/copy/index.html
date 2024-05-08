@@ -40,6 +40,8 @@
         background-size: 8em;
         background-attachment: fixed;
         background-position: top 1.5em center;
+        transition-duration: 1s;
+        transition-property: all;
       }
 
       .popup-visual img,
@@ -107,20 +109,36 @@
         }, 0);
       });
 
-      const debounce = (secs, fn) => {
-        const delay = secs * 1000;
-        let timeoutID;
-        const exec = (args) => fn.apply(null, args);
+      const throttle = (secs, fn) => {
+        const waitTime = secs * 1000;
+        let last = 0;
         return (...args) => {
-          clearTimeout(timeoutID);
-          timeoutID = setTimeout(exec, delay, args);
+          const now = Date.now();
+          if (now > last + waitTime) {
+            last = now;
+            fn(...args);
+          }
         };
       };
 
       document.addEventListener(
         "scroll",
-        debounce(0.5, () => {
-          app.ports.scrolledOverWorkPort.send(0);
+        throttle(0.1, () => {
+          const visibleWork = Array.from(document.querySelectorAll("div.work"))
+            .map((element, index) => {
+              const bounds = element.getBoundingClientRect();
+              return {
+                index,
+                topInView: bounds.top >= 0,
+                bottomInView: bounds.bottom < document.clientHeight,
+              };
+            })
+            .filter(({ topInView, bottomInView }) => topInView || bottomInView)
+            .reduce((selected, current) =>
+              selected?.topInView ? selected : current
+            );
+
+          app.ports.scrolledOverWorkPort.send(visibleWork?.index);
         })
       );
     </script>

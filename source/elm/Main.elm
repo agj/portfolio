@@ -320,17 +320,10 @@ view model =
                 _ ->
                     Nothing
 
-        ( backgroundColorA, backgroundColorB ) =
+        backgroundColor =
             highlightedWork
-                |> Maybe.map
-                    (\work ->
-                        ( work.mainVisualColor
-                            |> Palette.colorAt70
-                        , work.mainVisualColor
-                            |> Palette.colorAt90
-                        )
-                    )
-                |> Maybe.withDefault ( Palette.baseColorAt70, Palette.baseColorAt90 )
+                |> Maybe.map (\work -> Palette.colorAt70 work.mainVisualColor)
+                |> Maybe.withDefault Palette.baseColorAt70
     in
     { title = labels.title
     , body =
@@ -344,8 +337,8 @@ view model =
                     background-image: {background-image};
                 }
               """
-                |> String.replace "{color}" (Color.toCssString backgroundColorB)
-                |> String.replace "{background-image}" (CssSvg.patternOverlappingCircles backgroundColorA)
+                |> String.replace "{color}" (Color.toCssString backgroundColor)
+                |> String.replace "{background-image}" (CssSvg.patternOverlappingCircles Palette.baseColorAt90)
                 |> Html.text
             ]
         ]
