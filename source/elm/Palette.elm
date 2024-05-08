@@ -7,6 +7,7 @@ module Palette exposing
     , baseColorAt90
     , colorAt10
     , colorAt50
+    , colorAt60
     , colorAt70
     , colorAt80
     , colorAt90
@@ -41,6 +42,12 @@ colorAt10 col =
 colorAt50 : Color -> Color
 colorAt50 col =
     col
+
+
+colorAt60 : Color -> Color
+colorAt60 col =
+    col
+        |> darken 0.2
 
 
 colorAt70 : Color -> Color

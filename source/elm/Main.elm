@@ -620,6 +620,10 @@ viewPopupVisual viewport visual showingDegree =
                             , Ui.centerX
                             , Ui.centerY
                             , UiBackground.color (color |> Color.toElmUi)
+                            , Html.Attributes.class "popup-visual"
+                                |> Ui.htmlAttribute
+                            , Html.Attributes.style "background-image" (CssSvg.patternAngles (Palette.colorAt60 desc.color))
+                                |> Ui.htmlAttribute
                             ]
                             { src = desc.url
                             , description = ""
@@ -651,8 +655,6 @@ viewPopupVisual viewport visual showingDegree =
         , Ui.pointer
         , Ui.inFront closeButton
         , Ui.alpha showingDegree
-        , Html.Attributes.class "popup-visual"
-            |> Ui.htmlAttribute
         ]
         visualEl
 

@@ -1,4 +1,4 @@
-module View.CssSvg exposing (patternOverlappingCircles)
+module View.CssSvg exposing (patternAngles, patternOverlappingCircles)
 
 import Color exposing (Color)
 import Regex exposing (Regex)
@@ -10,7 +10,8 @@ patternOverlappingCircles color =
     """
     <path
         fill="{color}"
-        d="M 0,6
+        d="
+            M 0,6
             A 6,6 0,0,0 6,0
             A 6,6 0,0,0 0,6
             M 6,0
@@ -21,7 +22,26 @@ patternOverlappingCircles color =
             A 6,6 0,0,0 12,6
             M 6,12
             A 6,6 0,0,0 0,6
-            A 6,6 0,0,0 6,12"
+            A 6,6 0,0,0 6,12
+        "
+    />
+    """
+        |> String.replace "{color}" (Color.toCssString color)
+        |> in12x12Svg
+
+
+patternAngles : Color -> String
+patternAngles color =
+    """
+    <path
+        fill="{color}"
+        d="
+            M 0,6
+            L 12,0
+            L 12,6
+            L 0,12
+            Z
+        "
     />
     """
         |> String.replace "{color}" (Color.toCssString color)
