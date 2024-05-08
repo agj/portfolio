@@ -314,7 +314,7 @@ view model =
         highlightedWork =
             case ( model.highlightedWorkIndex, model.data ) of
                 ( Just workIndex, DataLoaded data ) ->
-                    Works.ofLanguage model.language data
+                    getCurrentWorks model.language model.query data
                         |> List.Extra.getAt workIndex
 
                 _ ->
@@ -389,8 +389,7 @@ viewMain model =
                                 (worksBlockWidth - (2 * Palette.spaceSmall))
                                 worksBlockWidth
                         , labels = labels
-                        , maybeTag = model.query.tag
-                        , works = Works.ofLanguage model.language data
+                        , works = getCurrentWorks model.language model.query data
                         , settings = settings
                         }
 
@@ -662,31 +661,17 @@ viewPopupVisual viewport visual showingDegree =
 -- VIEW WORKS
 
 
-viewWorks : { blockWidth : Int, labels : Labels Msg, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Ui.Element Msg
-viewWorks { blockWidth, labels, maybeTag, works, settings } =
-    let
-        filteredWorks =
-            case maybeTag of
-                Nothing ->
-                    []
-
-                Just Tag.Any ->
-                    works
-
-                Just tag ->
-                    List.filter
-                        (\w -> List.member tag w.tags)
-                        works
-                        |> sortWorks tag
-    in
-    if List.isEmpty filteredWorks then
+viewWorks : { blockWidth : Int, labels : Labels Msg, works : List Work, settings : Settings } -> Ui.Element Msg
+viewWorks { blockWidth, labels, works, settings } =
+    if List.isEmpty works then
         viewLoadMessage labels.pleaseSelect
 
     else
-        List.map
-            (viewWork blockWidth labels settings)
-            filteredWorks
-            ++ [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
+        [ works
+            |> List.map (viewWork blockWidth labels settings)
+        , [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
+        ]
+            |> List.concat
             |> Ui.column
                 [ Ui.width Ui.fill
                 , Ui.spacing Palette.spaceNormal
@@ -1011,6 +996,25 @@ icon size color iconName =
         (View.Icon.icon iconName (fraction 0.8 size)
             |> View.Icon.view
         )
+
+
+getCurrentWorks : Language -> Query -> List WorkLanguages -> List Work
+getCurrentWorks language query data =
+    let
+        works =
+            Works.ofLanguage language data
+    in
+    case query.tag of
+        Nothing ->
+            []
+
+        Just Tag.Any ->
+            works
+
+        Just tag ->
+            works
+                |> List.filter (\w -> List.member tag w.tags)
+                |> sortWorks tag
 
 
 sortWorks : Tag -> List Work -> List Work
