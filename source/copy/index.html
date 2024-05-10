@@ -35,24 +35,33 @@
             format("woff");
       }
 
+      :root {
+        --background-image-size: 8em;
+        --popup-visual-loading-image-size: 5em;
+      }
+
       body {
         background-color: black;
-        background-size: 8em;
+        background-size: var(--background-image-size);
         background-attachment: fixed;
-        background-position: top 1.5em center;
+        background-position: top calc(var(--background-image-size) * 0.2) center;
         transition-duration: 1.5s;
         transition-property: all;
         transition-timing-function: linear;
       }
 
       .popup-visual {
-        --popup-visual-loading-image-size: 5em;
-
         background-size: var(--popup-visual-loading-image-size);
         animation-name: loading;
         animation-timing-function: linear;
         animation-duration: 3s;
         animation-iteration-count: infinite;
+      }
+
+      @media (max-width: 600px) {
+        :root {
+          --background-image-size: 2.2em;
+        }
       }
 
       @keyframes loading {
