@@ -34,6 +34,7 @@ import Util.AppUrl as AppUrl
 import Util.Color as Color
 import Utils exposing (..)
 import VideoEmbed
+import View.CssSvg as CssSvg
 import View.Icon exposing (IconName)
 import Viewport exposing (Viewport)
 import Work exposing (..)
@@ -66,6 +67,7 @@ type alias Model =
     { language : Language
     , viewport : Viewport
     , popupVisual : Animator.Timeline (Maybe Visual)
+    , highlightedWorkIndex : Maybe Int
     , query : Query
     , data : DataStatus
     , navigationData : NavigationData
@@ -133,6 +135,7 @@ init flags url navKey =
       , query = query
       , viewport = flags.viewport
       , popupVisual = Animator.init Nothing
+      , highlightedWorkIndex = Nothing
       , data = DataLoading
       , navigationData = { url = url, key = navKey }
       }
@@ -176,6 +179,7 @@ type Msg
     | GotViewport Viewport
     | GotData (Result Http.Error (List WorkLanguages))
     | AnimationTick Time.Posix
+    | ScrolledOverWork (Maybe Int)
     | NoOp
 
 
@@ -227,6 +231,11 @@ update msg model =
 
         AnimationTick time ->
             ( model |> Animator.update time animator
+            , Cmd.none
+            )
+
+        ScrolledOverWork maybeWorkIndex ->
+            ( { model | highlightedWorkIndex = maybeWorkIndex }
             , Cmd.none
             )
 
@@ -300,6 +309,21 @@ view model =
 
         globalStyles =
             [ UiFont.family Palette.font ]
+
+        highlightedWork : Maybe Work
+        highlightedWork =
+            case ( model.highlightedWorkIndex, model.data ) of
+                ( Just workIndex, DataLoaded data ) ->
+                    getCurrentWorks model.language model.query data
+                        |> List.Extra.getAt workIndex
+
+                _ ->
+                    Nothing
+
+        backgroundColor =
+            highlightedWork
+                |> Maybe.map (\work -> Palette.colorAt80 work.mainVisualColor)
+                |> Maybe.withDefault Palette.baseColorAt80
     in
     { title = labels.title
     , body =
@@ -307,8 +331,14 @@ view model =
             |> Ui.layout (globalStyles ++ viewPopupVisualAttr model.viewport model.popupVisual)
         , Html.node "style"
             []
-            [ "body { background-color: {color}; }"
-                |> String.replace "{color}" (Color.toCssString Palette.baseColorAt70)
+            [ """
+                body {
+                    background-color: {color};
+                    background-image: {background-image};
+                }
+              """
+                |> String.replace "{color}" (Color.toCssString backgroundColor)
+                |> String.replace "{background-image}" (CssSvg.patternOverlappingCircles Palette.baseColorAt90)
                 |> Html.text
             ]
         ]
@@ -359,8 +389,7 @@ viewMain model =
                                 (worksBlockWidth - (2 * Palette.spaceSmall))
                                 worksBlockWidth
                         , labels = labels
-                        , maybeTag = model.query.tag
-                        , works = Works.ofLanguage model.language data
+                        , works = getCurrentWorks model.language model.query data
                         , settings = settings
                         }
 
@@ -591,6 +620,10 @@ viewPopupVisual viewport visual showingDegree =
                             , Ui.centerX
                             , Ui.centerY
                             , UiBackground.color (color |> Color.toElmUi)
+                            , Html.Attributes.class "popup-visual"
+                                |> Ui.htmlAttribute
+                            , Html.Attributes.style "background-image" (CssSvg.patternAngles (Palette.colorAt60 desc.color))
+                                |> Ui.htmlAttribute
                             ]
                             { src = desc.url
                             , description = ""
@@ -622,8 +655,6 @@ viewPopupVisual viewport visual showingDegree =
         , Ui.pointer
         , Ui.inFront closeButton
         , Ui.alpha showingDegree
-        , Html.Attributes.class "popup-visual"
-            |> Ui.htmlAttribute
         ]
         visualEl
 
@@ -632,31 +663,17 @@ viewPopupVisual viewport visual showingDegree =
 -- VIEW WORKS
 
 
-viewWorks : { blockWidth : Int, labels : Labels Msg, maybeTag : Maybe Tag, works : List Work, settings : Settings } -> Ui.Element Msg
-viewWorks { blockWidth, labels, maybeTag, works, settings } =
-    let
-        filteredWorks =
-            case maybeTag of
-                Nothing ->
-                    []
-
-                Just Tag.Any ->
-                    works
-
-                Just tag ->
-                    List.filter
-                        (\w -> List.member tag w.tags)
-                        works
-                        |> sortWorks tag
-    in
-    if List.isEmpty filteredWorks then
+viewWorks : { blockWidth : Int, labels : Labels Msg, works : List Work, settings : Settings } -> Ui.Element Msg
+viewWorks { blockWidth, labels, works, settings } =
+    if List.isEmpty works then
         viewLoadMessage labels.pleaseSelect
 
     else
-        List.map
-            (viewWork blockWidth labels settings)
-            filteredWorks
-            ++ [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
+        [ works
+            |> List.map (viewWork blockWidth labels settings)
+        , [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
+        ]
+            |> List.concat
             |> Ui.column
                 [ Ui.width Ui.fill
                 , Ui.spacing Palette.spaceNormal
@@ -668,6 +685,8 @@ viewWorkBlock attrs children =
     Ui.column
         ([ Ui.width Ui.fill
          , UiFont.size Palette.textSizeNormal
+         , Html.Attributes.class "work"
+            |> Ui.htmlAttribute
          ]
             ++ attrs
         )
@@ -935,6 +954,7 @@ subscriptions model =
             \w h -> Resized
         , Viewport.got GotViewport NoOp
         , animator |> Animator.toSubscription AnimationTick model
+        , Ports.scrolledOverWork (Just >> ScrolledOverWork) (ScrolledOverWork Nothing)
         ]
 
 
@@ -978,6 +998,25 @@ icon size color iconName =
         (View.Icon.icon iconName (fraction 0.8 size)
             |> View.Icon.view
         )
+
+
+getCurrentWorks : Language -> Query -> List WorkLanguages -> List Work
+getCurrentWorks language query data =
+    let
+        works =
+            Works.ofLanguage language data
+    in
+    case query.tag of
+        Nothing ->
+            []
+
+        Just Tag.Any ->
+            works
+
+        Just tag ->
+            works
+                |> List.filter (\w -> List.member tag w.tags)
+                |> sortWorks tag
 
 
 sortWorks : Tag -> List Work -> List Work

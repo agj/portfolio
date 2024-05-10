@@ -35,16 +35,33 @@
             format("woff");
       }
 
-      .popup-visual img,
-      .popup-visual iframe {
+      :root {
+        --background-image-size: 8em;
         --popup-visual-loading-image-size: 5em;
+      }
 
-        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path d="M 0,6 L 12,0 L 12,6 L 0,12 Z" fill="rgb(0, 0, 0, 0.2)" /></svg>');
+      body {
+        background-color: black;
+        background-size: var(--background-image-size);
+        background-attachment: fixed;
+        background-position: top calc(var(--background-image-size) * 0.2) center;
+        transition-duration: 1.5s;
+        transition-property: all;
+        transition-timing-function: linear;
+      }
+
+      .popup-visual {
         background-size: var(--popup-visual-loading-image-size);
         animation-name: loading;
         animation-timing-function: linear;
         animation-duration: 3s;
         animation-iteration-count: infinite;
+      }
+
+      @media (max-width: 600px) {
+        :root {
+          --background-image-size: 2.2em;
+        }
       }
 
       @keyframes loading {
@@ -99,6 +116,46 @@
           window.scrollTo({ top: elTop, behavior: "smooth" });
         }, 0);
       });
+
+      const throttle = (secs, fn) => {
+        const waitTime = secs * 1000;
+        let last = 0;
+        return (...args) => {
+          const now = Date.now();
+          if (now > last + waitTime) {
+            last = now;
+            fn(...args);
+          }
+        };
+      };
+
+      document.addEventListener(
+        "scroll",
+        throttle(0.1, () => {
+          const visibleWork = Array.from(document.querySelectorAll("div.work"))
+            .map((element, index) => {
+              const bounds = element.getBoundingClientRect();
+              return {
+                index,
+                visibleArea:
+                  Math.min(
+                    bounds.bottom,
+                    document.documentElement.clientHeight
+                  ) - Math.max(bounds.top, 0),
+              };
+            })
+            .filter(({ visibleArea }) => visibleArea > 0)
+            .reduce(
+              (selected, current) =>
+                current.visibleArea >= (selected?.visibleArea ?? 0)
+                  ? current
+                  : selected,
+              { visibleArea: -1, index: null }
+            );
+
+          app.ports.scrolledOverWorkPort.send(visibleWork?.index);
+        })
+      );
     </script>
   </body>
 </html>
