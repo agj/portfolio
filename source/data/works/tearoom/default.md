@@ -7,7 +7,7 @@ tags:
   - VideoGame
   - VisualCommunication
 date: "2017"
-readMore: http://blog.agj.cl/tag/the-tea-room/
+readMore: https://blog.agj.cl/tag/the-tea-room/
 visuals:
   - type: Video
     host: Vimeo

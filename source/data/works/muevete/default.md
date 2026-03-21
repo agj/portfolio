@@ -6,7 +6,7 @@ tags:
   - Digital
   - VisualCommunication
 date: "2011"
-readMore: http://blog.agj.cl/tag/muevete/
+readMore: https://blog.agj.cl/tag/muevete/
 visuals:
   - type: Video
     host: Vimeo

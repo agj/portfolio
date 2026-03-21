@@ -4,7 +4,7 @@ tags:
   - Video
   - VisualCommunication
 date: "2011"
-readMore: http://blog.agj.cl/2011/01/wooden-still/
+readMore: https://blog.agj.cl/2011/01/wooden-still/
 visuals:
   - type: Video
     host: Vimeo
