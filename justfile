@@ -25,6 +25,21 @@ cache: install
 deploy: build
   bash ./source/scripts/deploy.sh
 
+# Saves a Git stash with the current cache.
+save-cache:
+  #!/usr/bin/env nu
+  let gitStageChanges = git diff --cached
+  if $gitStageChanges != "" {
+    print "🛑 Git stage is dirty! Make sure it's clean before running this task."
+    exit 1
+  }
+
+  let today = date now | format date "%Y-%m-%d"
+  git add --force ./cache
+  git stash -m $"🧠 cache ($today)"
+  git stash apply
+  git reset
+
 [private]
 install:
   pnpm install
