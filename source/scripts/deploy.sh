@@ -9,7 +9,7 @@ echo "Logging in to remote host $REMOTE on port $SSH_PORT"
 
 echo
 echo "Uploading to temporary directory $REMOTE_TEMP_DIR"
-scp -P $SSH_PORT -r output "$REMOTE:$REMOTE_TEMP_DIR"
+scp -P "$SSH_PORT" -r output "$REMOTE:$REMOTE_TEMP_DIR"
 
 echo
 echo "Moving old live files to backup directory $REMOTE_CURRENT_BACKUP_DIR"
