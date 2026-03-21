@@ -17,7 +17,7 @@ cache: install
 
 # Build and deploy to server. Needs .env variables to be set.
 deploy: build
-  bash ./source/scripts/deploy.sh
+  nu ./source/scripts/deploy.nu
 
 # Saves a Git stash with the current cache.
 save-cache:
