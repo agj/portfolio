@@ -34,12 +34,12 @@
 }
 
 body {
-  background-color: black;
+  background-color: rgba(22.05%, 22.54%, 26.95%, 1);
   background-size: var(--background-image-size);
   background-attachment: fixed;
   background-position: top calc(var(--background-image-size) * 0.2) center;
   transition-duration: 1.5s;
-  transition-property: all;
+  transition-property: background-color;
   transition-timing-function: linear;
 }
 
