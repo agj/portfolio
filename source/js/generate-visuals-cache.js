@@ -18,7 +18,7 @@ const getVideoMetadata = async (host, id) => {
     const response = (
       await axios.get(
         `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`,
-        { responseType: "json" }
+        { responseType: "json" },
       )
     ).data;
     return {
@@ -65,7 +65,7 @@ const generateVisualsCache = async (work, workName) => {
     fs.ensureDirSync(mvMetaOutputFilenameParsed.dir);
 
     const input = fs.createReadStream(
-      `${cfg.worksDir}${work.default.mainVisualUrl}`
+      `${cfg.worksDir}${work.default.mainVisualUrl}`,
     );
     const image = await streamToPromise(input);
 
@@ -106,7 +106,7 @@ const generateVisualsCache = async (work, workName) => {
             const isLocal = !_.isUrl(visual.retrieveUrl);
             const input = isLocal
               ? fs.createReadStream(
-                  `${cfg.worksDir}${workName}/${visual.retrieveUrl}`
+                  `${cfg.worksDir}${workName}/${visual.retrieveUrl}`,
                 )
               : (
                   await axios.get(visual.retrieveUrl, {
@@ -156,12 +156,12 @@ const generateVisualsCache = async (work, workName) => {
                 height: metaVideo.height,
                 color: color,
               }),
-              "utf-8"
+              "utf-8",
             );
             console.log(`Output: ${metaOutputFilename}`);
           }
         }
-      })
+      }),
     );
 
     await awaitAll(promises);
@@ -197,7 +197,7 @@ const writeImageMetadata = async (image, outputPath) => {
   fs.writeFileSync(
     outputPath,
     _.toJson(await getImageMetadata(image)),
-    "utf-8"
+    "utf-8",
   );
 };
 
@@ -222,8 +222,8 @@ const resizeMainVisual = async (image) => {
     actualAR >= targetAR // Is image more landscapey?
       ? targetAR
       : actualAR > 1 // Is image landscape at all?
-      ? actualAR
-      : 1;
+        ? actualAR
+        : 1;
 
   const croppedSize =
     actualAR >= ar

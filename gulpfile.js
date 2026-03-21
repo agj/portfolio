@@ -17,11 +17,12 @@ const copyCache = () =>
         path.join(cfg.cacheDir, "**/*.*"),
         path.join(`!${cfg.cacheDir}`, "**/*.meta.json"),
       ],
-      { encoding: false }
+      { encoding: false },
     )
     .pipe(gulp.dest(path.join(cfg.outputDir, "works/")));
 
-const watchCopyCache = () => gulp.watch(path.join(cfg.cacheDir, "**"), copyCache);
+const watchCopyCache = () =>
+  gulp.watch(path.join(cfg.cacheDir, "**"), copyCache);
 
 // Data generation
 
@@ -35,17 +36,18 @@ const generateJson = async () => {
   return await generateWorksJson(data);
 };
 
-const watchGenerateJson = () => gulp.watch(path.join(cfg.worksDir, "**"), generateJson);
+const watchGenerateJson = () =>
+  gulp.watch(path.join(cfg.worksDir, "**"), generateJson);
 
 // Vite
 
-const elmDevelop = () => run(`pnpm exec vite --clearScreen false --host`)
+const elmDevelop = () => run(`pnpm exec vite --clearScreen false --host`);
 
 // Tasks
 
 export const develop = gulp.series(
   gulp.parallel(copyCache, generateJson),
-  gulp.parallel(elmDevelop, watchCopyCache, watchGenerateJson)
+  gulp.parallel(elmDevelop, watchCopyCache, watchGenerateJson),
 );
 
 export { generateCache as cache };

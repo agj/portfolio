@@ -16,13 +16,13 @@ export const multiGroupBy = curry((getGroups, list) =>
             set(
               lensProp(group),
               append(item, has(group, r) ? r[group] : []),
-              r
+              r,
             ),
-          r
+          r,
         ),
-      {}
+      {},
     )
-    .into(map(uniq))
+    .into(map(uniq)),
 );
 
 export const toJson = (data) => JSON.stringify(data, null, "\t");
