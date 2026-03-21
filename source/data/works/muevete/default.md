@@ -19,8 +19,8 @@ visuals:
     url: screen02.png
 ---
 
-Interactive artwork commissioned by [Centro Cultural La Moneda]{link| url = http://www.ccplm.cl/}, project for which I was in charge of software programming, and which was featured in the 2013 [Design Biennial]{link| url = http://www.bienaldediseno.cl/ } in Santiago.
-I was in charge of programming the design by [Sebastián Skoknic]{link| url = http://skoknic.weebly.com/ }.
+Interactive artwork commissioned by [Centro Cultural La Moneda]{link| url = https://www.ccplm.cl/}, project for which I was in charge of software programming, and which was featured in the 2013 [Design Biennial]{link| url = https://www.bienaldediseno.cl/ } in Santiago.
+I was in charge of programming the design by [Sebastián Skoknic]{link| url = https://skoknic.weebly.com/ }.
 
 The installation is set up so that visitors can interact with the projection through the movement of their bodies.
 
