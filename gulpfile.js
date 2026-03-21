@@ -1,5 +1,6 @@
 import gulp from "gulp";
 import path from "path";
+import { parseArgs } from "util";
 
 import retrieveWorks from "./source/js/retrieve-works.js";
 import generateWorksJson from "./source/js/generate-works-json.js";
@@ -41,9 +42,23 @@ const watchGenerateJson = () =>
 
 // Elm through Vite
 
-const elmDevelop = () => run("pnpm exec vite --clearScreen false --host");
+const elmDevelop = () => {
+  const args = getElmDevelopArgs();
+  run(`pnpm exec vite --clearScreen false --host --port ${args.port}`);
+};
 
 const elmBuild = () => run("pnpm exec vite build --base ./");
+
+const getElmDevelopArgs = () =>
+  parseArgs({
+    options: {
+      port: {
+        type: "string",
+        default: "1234",
+      },
+    },
+    strict: false,
+  }).values;
 
 // Tasks
 

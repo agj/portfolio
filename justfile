@@ -5,7 +5,7 @@ port := "1237"
 
 # Run development server.
 develop: clean install qr
-  pnpm exec gulp develop
+  pnpm exec gulp develop --port={{port}}
 
 # Build for deployment.
 build: clean install
