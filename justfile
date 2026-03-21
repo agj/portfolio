@@ -9,11 +9,7 @@ develop: clean install qr
 
 # Build for deployment.
 build: clean install
-  pnpm exec vite build --base ./
-
-# Build for debugging.
-build-debug: clean install
-  pnpm exec gulp debug
+  pnpm exec gulp build
 
 # Generate media cache.
 cache: install

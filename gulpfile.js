@@ -39,15 +39,22 @@ const generateJson = async () => {
 const watchGenerateJson = () =>
   gulp.watch(path.join(cfg.worksDir, "**"), generateJson);
 
-// Vite
+// Elm through Vite
 
 const elmDevelop = () => run("pnpm exec vite --clearScreen false --host");
+
+const elmBuild = () => run("pnpm exec vite build --base ./");
 
 // Tasks
 
 export const develop = gulp.series(
   gulp.parallel(copyCache, generateJson),
   gulp.parallel(elmDevelop, watchCopyCache, watchGenerateJson),
+);
+
+export const build = gulp.series(
+  gulp.parallel(copyCache, generateJson),
+  elmBuild,
 );
 
 export { generateCache as cache };
