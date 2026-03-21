@@ -8,4 +8,5 @@ node_modules/
 .direnv/
 .env
 
-.vscode
+.helix/
+.vscode/
