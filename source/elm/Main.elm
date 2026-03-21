@@ -408,7 +408,7 @@ viewMain model =
         [ Ui.width <| Maybe.withDefault Ui.fill (settings.worksBlockWidth |> Maybe.map Ui.px)
         , Ui.centerX
         , Ui.inFront <| viewLanguageSelector model.language
-        , Ui.inFront <| viewBackButton labels.backToHome
+        , Ui.inFront <| viewBackButton
         , Ui.paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceLarge }
         , Ui.spacing Palette.spaceNormal
         ]
@@ -441,9 +441,14 @@ viewLanguageSelector language =
         ]
 
 
-viewBackButton : String -> Ui.Element Msg
-viewBackButton label =
-    Ui.el [ Ui.centerX, Ui.centerY ] (Ui.text label)
+viewBackButton : Ui.Element Msg
+viewBackButton =
+    Ui.row [ Ui.centerX, Ui.centerY, Ui.spacing (fraction 0.5 Palette.textSizeNormal) ]
+        [ View.Icon.icon View.Icon.ArrowLeft (fraction 1.4 Palette.textSizeNormal)
+            |> View.Icon.withStyle View.Icon.StyleStroke
+            |> View.Icon.view
+        , Ui.text "agj.cl"
+        ]
         |> Ui.el
             [ Ui.alignLeft
             , Ui.paddingXY Palette.spaceSmall 0
