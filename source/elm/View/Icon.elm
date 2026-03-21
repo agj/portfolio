@@ -21,6 +21,7 @@ type IconName
     | HandUp
     | Hourglass
     | LoadError
+    | ArrowLeft
 
 
 type Icon
@@ -66,6 +67,9 @@ view (Icon { name, size }) =
 
                 LoadError ->
                     Phosphor.fileX
+
+                ArrowLeft ->
+                    Phosphor.arrowLeft
     in
     phosphorIcon Phosphor.Fill
         |> Phosphor.toHtml
