@@ -11,7 +11,6 @@ import { isUrl } from "./utils.js";
 
 // Utils
 
-const getFile = async (filename) => fs.readFile(filename, "utf-8");
 const awaitAll = Promise.all.bind(Promise);
 const getFileName = (p) => getLastDir(p).split(".").into(R.init).join("");
 const getLastDir = (p) =>

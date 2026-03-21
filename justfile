@@ -5,8 +5,7 @@ port := "1237"
 
 # Run development server.
 develop: install qr
-  node ./source/scripts/generate-json.js
-  pnpm exec vite --port {{port}} --clearScreen false --host
+  pnpm exec gulp develop
 
 # Build for deployment.
 build: install
