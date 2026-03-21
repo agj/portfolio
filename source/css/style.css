@@ -34,7 +34,8 @@
 }
 
 body {
-  background-color: rgba(22.05%, 22.54%, 26.95%, 1);
+  /* Should match Elm `Palette.baseColorAt80`: */
+  background-color: rgba(22.05% 22.54% 26.95% / 1);
   background-size: var(--background-image-size);
   background-attachment: fixed;
   background-position: top calc(var(--background-image-size) * 0.2) center;
