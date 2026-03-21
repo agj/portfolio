@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 
 <html>
   <head>
@@ -13,7 +13,9 @@
         font-family: "mplus-1p";
         font-style: normal;
         font-weight: normal;
-        src: local("M PLUS 1p"), local("MPLUS1p-Regular"),
+        src:
+          local("M PLUS 1p"),
+          local("MPLUS1p-Regular"),
           /* Chrome 26+, Opera 23+, Firefox 39+ */
             url("//agj.cl/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-300.woff2")
             format("woff2"),
@@ -26,7 +28,9 @@
         font-family: "mplus-1p";
         font-style: normal;
         font-weight: bold;
-        src: local("M PLUS 1p ExtraBold"), local("MPLUS1p-ExtraBold"),
+        src:
+          local("M PLUS 1p ExtraBold"),
+          local("MPLUS1p-ExtraBold"),
           /* Chrome 26+, Opera 23+, Firefox 39+ */
             url("//agj.cl/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-700.woff2")
             format("woff2"),
@@ -78,18 +82,19 @@
   <body>
     <div id="elm"></div>
 
-    <script src="js/script.js"></script>
-    <script>
+    <script type="module">
+      import Main from "./source/elm/Main.elm";
+
       const storedState = localStorage.getItem("portfolio-state");
 
-      const app = Elm.Main.init({
+      const app = Main.init({
         node: document.getElementById("elm"),
         flags: {
           languages: window.navigator.languages
             ? window.navigator.languages
             : window.navigator.language
-            ? [window.navigator.language]
-            : [],
+              ? [window.navigator.language]
+              : [],
           viewport: {
             width: window.innerWidth,
             height: window.innerHeight,
@@ -140,7 +145,7 @@
                 visibleArea:
                   Math.min(
                     bounds.bottom,
-                    document.documentElement.clientHeight
+                    document.documentElement.clientHeight,
                   ) - Math.max(bounds.top, 0),
               };
             })
@@ -150,11 +155,11 @@
                 current.visibleArea >= (selected?.visibleArea ?? 0)
                   ? current
                   : selected,
-              { visibleArea: -1, index: null }
+              { visibleArea: -1, index: null },
             );
 
           app.ports.scrolledOverWorkPort.send(visibleWork?.index);
-        })
+        }),
       );
     </script>
   </body>

@@ -4,7 +4,7 @@ tags:
   - Video
   - VisualCommunication
 date: "2015"
-readMore: http://blog.agj.cl/2017/05/where-the-thread-goes/
+readMore: https://blog.agj.cl/2017/05/where-the-thread-goes/
 visuals:
   - type: Video
     host: Vimeo

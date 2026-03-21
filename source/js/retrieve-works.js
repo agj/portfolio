@@ -11,7 +11,6 @@ import { isUrl } from "./utils.js";
 
 // Utils
 
-const getFile = async (filename) => fs.readFile(filename, "utf-8");
 const awaitAll = Promise.all.bind(Promise);
 const getFileName = (p) => getLastDir(p).split(".").into(R.init).join("");
 const getLastDir = (p) =>
@@ -39,14 +38,14 @@ const normalizeWork = R.curry(async (work, workName) => {
     .into(
       R.assoc(
         "mainVisualUrl",
-        `${workName}/${await getMainVisualFilename(workName)}`
-      )
+        `${workName}/${await getMainVisualFilename(workName)}`,
+      ),
     )
     .into(
       R.assoc(
         "mainVisualMetaUrl",
-        `${workName}/${await getMainVisualFilename(workName)}.meta.json`
-      )
+        `${workName}/${await getMainVisualFilename(workName)}.meta.json`,
+      ),
     )
     .into(R.mergeRight({ visuals: [], links: [] }));
 
@@ -55,18 +54,18 @@ const normalizeWork = R.curry(async (work, workName) => {
       language.into(
         R.assoc(
           "readMore",
-          normalizeReadMore(id, def.readMore, language.readMore)
-        )
-      )
-    )
+          normalizeReadMore(id, def.readMore, language.readMore),
+        ),
+      ),
+    ),
   );
   const filled = processedReadMore.into(R.map(R.mergeDeepRight(def))).into(
     R.map(
       R.evolve({
         visuals: R.map(normalizeVisual(workName)),
         date: (date) => (typeof date == "string" ? date : R.toString(date)),
-      })
-    )
+      }),
+    ),
   );
   return filled;
 });
@@ -97,8 +96,8 @@ const normalizeReadMore = R.curry((langId, defUrl, url) => {
   return url
     ? { url: url, language: fileStandardToLanguageId(langId) }
     : defUrl
-    ? { url: defUrl, language: cfg.languages[0] }
-    : undefined;
+      ? { url: defUrl, language: cfg.languages[0] }
+      : undefined;
 });
 const toLocalPath = (workName, url) => {
   const parsedPath = isUrl(url)
@@ -151,7 +150,7 @@ const visualValidation = ow.any(
     host: ow.string.oneOf(R.values(cfg.hostType)),
     id: ow.string.not.url,
     parameters: ow.optional.object.valuesOfType(ow.string),
-  })
+  }),
 );
 const languageValidation = ow.object.exactShape({
   description: ow.string,

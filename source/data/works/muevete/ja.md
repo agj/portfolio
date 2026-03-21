@@ -1,6 +1,6 @@
-[モネダ文化館]{link| url = http://www.ccplm.cl/ }で公開されたインタラクティブ・インスタレーションです。
-[2013 年サンティアゴ・デザイン・ビエンナーレ]{link| url = http://www.bienaldediseno.cl/ }選出作品です。
-この作品は [Sebastián Skoknic]{link| url = http://skoknic.weebly.com/ } のデザインを私がプログラミングした結果です。
+[モネダ文化館]{link| url = https://www.cclm.cl/ }で公開されたインタラクティブ・インスタレーションです。
+2013 年サンティアゴ・デザイン・ビエンナーレ選出作品です。
+この作品は [Sebastián Skoknic]{link| url = https://skoknic.weebly.com/ } のデザインを私がプログラミングした結果です。
 
 来客は体を動かすことによって、壁全面のプロジェクションとインタラクトできるという仕組みになっています。
 

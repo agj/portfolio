@@ -1,12 +1,9 @@
 const worksFolder = "works";
 
 export default {
-  elmDir: "source/elm/",
-  copyDir: "source/copy/",
-  dataDir: "source/data/",
   worksDir: `source/data/${worksFolder}/`,
   cacheDir: `cache/${worksFolder}/`,
-  outputDir: "output/",
+  outputDir: "public/",
   worksFolder: worksFolder,
 
   mainVisualSize: 1200,

@@ -1,8 +1,6 @@
 {
-  description = "agj portfolio";
-
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -16,13 +14,16 @@
         pkgs = import nixpkgs {system = system;};
       in {
         devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            elmPackages.elm
-            elmPackages.elm-format
-            elmPackages.elm-json
-            nodejs-slim_20
-            nodePackages.pnpm
-            nodePackages.prettier
+          buildInputs = [
+            pkgs.elmPackages.elm
+            pkgs.elmPackages.elm-format
+            pkgs.elmPackages.elm-json
+            pkgs.just
+            pkgs.nodePackages.pnpm
+            pkgs.nodePackages.prettier
+            pkgs.nodejs-slim
+            pkgs.nushell
+            pkgs.qrtool
           ];
         };
       }

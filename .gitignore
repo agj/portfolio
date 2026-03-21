@@ -1,5 +1,5 @@
-
-output/
+dist/
+public/
 cache/
 
 elm-stuff/
@@ -8,4 +8,5 @@ node_modules/
 .direnv/
 .env
 
-.vscode
+.helix/
+.vscode/
