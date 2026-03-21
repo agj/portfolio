@@ -41,7 +41,7 @@ const watchGenerateJson = () =>
 
 // Vite
 
-const elmDevelop = () => run(`pnpm exec vite --clearScreen false --host`);
+const elmDevelop = () => run("pnpm exec vite --clearScreen false --host");
 
 // Tasks
 

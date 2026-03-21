@@ -4,16 +4,15 @@ port := "1237"
   just --list --unsorted
 
 # Run development server.
-develop: install qr
+develop: clean install qr
   pnpm exec gulp develop
 
 # Build for deployment.
-build: install
-  rm -rf dist
+build: clean install
   pnpm exec vite build --base ./
 
 # Build for debugging.
-build-debug: install
+build-debug: clean install
   pnpm exec gulp debug
 
 # Generate media cache.
@@ -42,6 +41,11 @@ save-cache:
 [private]
 install:
   pnpm install
+
+[private]
+clean:
+  rm -rf public
+  rm -rf dist
 
 [private]
 qr:
