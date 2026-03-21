@@ -35,6 +35,7 @@ ofLanguage language =
 -- ACTUAL DATA
 
 
+english : Labels msg
 english =
     { title = "Ale Grilli's portfolio"
     , readMoreEnglish = "Read more about it"
@@ -65,6 +66,7 @@ english =
     }
 
 
+japanese : Labels msg
 japanese =
     { title = "アレ・グリリのポートフォリオ"
     , readMoreEnglish = "もっと詳しく（英語）"
@@ -95,6 +97,7 @@ japanese =
     }
 
 
+spanish : Labels msg
 spanish =
     { title = "Portafolio de Ale Grilli"
     , readMoreEnglish = "Lee más al respecto (en inglés)"
