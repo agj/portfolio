@@ -4,6 +4,7 @@ module Descriptor exposing
     , d
     , fromDoc
     , icon
+    , iconStroke
     , l
     , list
     , makeTag
@@ -135,10 +136,13 @@ list children =
 
 
 icon : View.Icon.IconName -> Element msg
-icon iconName =
-    View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
-        |> View.Icon.view
-        |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
+icon =
+    iconWithStyle View.Icon.StyleFilled
+
+
+iconStroke : View.Icon.IconName -> Element msg
+iconStroke =
+    iconWithStyle View.Icon.StyleStroke
 
 
 fromDoc : Color -> Doc -> Element msg
@@ -201,3 +205,11 @@ linkStyle =
     , pointer
     , mouseDown [ Font.color (Palette.baseColorAt10 |> Color.toElmUi) ]
     ]
+
+
+iconWithStyle : View.Icon.Style -> View.Icon.IconName -> Element msg
+iconWithStyle style iconName =
+    View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
+        |> View.Icon.withStyle style
+        |> View.Icon.view
+        |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
