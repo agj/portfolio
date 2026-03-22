@@ -32,6 +32,7 @@ type IconName
     | Hourglass
     | LoadError
     | ArrowLeft
+    | At
 
 
 type Style
@@ -83,6 +84,9 @@ view (Icon config) =
 
                 ArrowLeft ->
                     Phosphor.arrowLeft
+
+                At ->
+                    Phosphor.at
 
         style =
             case config.style of
