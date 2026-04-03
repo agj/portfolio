@@ -1,13 +1,16 @@
+// @ts-check
+
 import * as R from "ramda";
 import fs from "node:fs";
 import path from "path";
 import { glob } from "glob";
 import matter from "gray-matter";
-import ow from "ow";
+import * as z from "zod";
 import "dot-into";
 
 import cfg from "./config.ts";
 import { isUrl } from "./utils.ts";
+import { constant, identity, indexBy, mapValues, values } from "remeda";
 
 // Utils
 
@@ -27,12 +30,14 @@ const parseMarkdown = (text) => {
   const parsed = matter(text);
   return R.mergeRight(parsed.data, { description: parsed.content });
 };
-const normalizeWork = R.curry(async (work, workName) => {
-  try {
-    validateWork(work);
-  } catch (e) {
+const normalizeWork = R.curry(async (workRaw, workName) => {
+  const workParseResult = workSchema.safeParse(workRaw);
+
+  if (!workParseResult.success) {
     throw `Error in work '${workName}'\n` + e.message;
   }
+
+  const work = workParseResult.data;
 
   const def = work.default
     .into(
@@ -133,51 +138,56 @@ const retrieveWork = async (workName) => {
   return normalizeWork(work, workName);
 };
 
-// Validation
+// Schemas
 
-const pathValidation = ow.any(ow.string.url, ow.string.not.includes(path.sep));
-const linkValidation = ow.object.exactShape({
-  label: ow.string,
-  url: ow.string.url,
+const pathSchema = z.union([
+  z.url(),
+  z.string().refine((s) => !s.includes(path.sep)),
+]);
+
+const linkSchema = z.object({
+  label: z.string(),
+  url: z.url(),
 });
-const visualValidation = ow.any(
-  ow.object.exactShape({
-    type: ow.string.equals(cfg.visualType.image),
-    url: pathValidation,
+
+const visualSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal(cfg.visualType.image),
+    url: pathSchema,
   }),
-  ow.object.exactShape({
-    type: ow.string.equals(cfg.visualType.video),
-    host: ow.string.oneOf(R.values(cfg.hostType)),
-    id: ow.string.not.url,
-    parameters: ow.optional.object.valuesOfType(ow.string),
+  z.object({
+    type: z.literal(cfg.visualType.video),
+    host: z.enum(values(cfg.hostType)),
+    id: z.string(),
+    parameters: z.record(z.string(), z.string()).optional(),
   }),
-);
-const languageValidation = ow.object.exactShape({
-  description: ow.string,
-  name: ow.optional.string,
-  readMore: ow.optional.string,
-  visuals: ow.optional.array.ofType(visualValidation),
-  links: ow.optional.array.ofType(linkValidation),
+]);
+
+const languageSchema = z.object({
+  description: z.string(),
+  name: z.string().optional(),
+  readMore: z.string().optional(),
+  visuals: z.array(visualSchema).optional(),
+  links: z.array(linkSchema).optional(),
 });
-const defaultLanguageValidation = ow.object.exactShape({
-  description: ow.string,
-  name: ow.string,
-  tags: ow.array.ofType(ow.string).minLength(1),
-  date: ow.any(ow.string, ow.number.integer),
-  readMore: ow.optional.string,
-  visuals: ow.optional.array.ofType(visualValidation),
-  links: ow.optional.array.ofType(linkValidation),
+
+const defaultLanguageSchema = z.object({
+  description: z.string(),
+  name: z.string(),
+  tags: z.array(z.string()).min(1),
+  date: z.union([z.string(), z.int()]),
+  readMore: z.string().optional(),
+  visuals: z.array(visualSchema).optional(),
+  links: z.array(linkSchema).optional(),
 });
-const workValidation = (() => {
+
+const workSchema = (() => {
   const languages = cfg.languages.map(languageIdToFileStandard);
-  const validations = languages
-    .into(R.indexBy(R.identity))
-    .into(R.map(R.always(languageValidation)))
-    .into(R.assoc("default", defaultLanguageValidation));
-  return ow.object.exactShape(validations);
+  return z.object({
+    ...indexBy(languages, identity()).into(mapValues(constant(languageSchema))),
+    default: defaultLanguageSchema,
+  });
 })();
-
-const validateWork = ow.create(workValidation);
 
 // API
 
