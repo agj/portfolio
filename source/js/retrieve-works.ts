@@ -1,79 +1,114 @@
-// @ts-check
-
 import * as R from "ramda";
+import {
+  constant,
+  fromEntries,
+  identity,
+  indexBy,
+  last,
+  mapValues,
+  mergeDeep,
+  values,
+} from "remeda";
 import fs from "node:fs";
 import path from "path";
 import { glob } from "glob";
 import matter from "gray-matter";
 import * as z from "zod";
 import "dot-into";
-
 import cfg from "./config.ts";
 import { isUrl } from "./utils.ts";
-import { constant, identity, indexBy, mapValues, values } from "remeda";
+
+// Types
+
+type Work = z.output<typeof workSchema>;
+
+type NormalizedWork = Work & {
+  mainVisualUrl: string;
+  mainVisualMetaUrl: string;
+  visuals: NormalizedVisual[];
+  links: [];
+};
+
+type DefaultLanguage = z.output<typeof defaultLanguageSchema>;
+
+type Language = z.output<typeof languageSchema>;
+
+type Visual = z.output<typeof visualSchema>;
+
+type NormalizedVisual =
+  | {
+      url: string;
+      thumbnailUrl: string;
+      retrieveUrl: string;
+      metaUrl: string;
+    }
+  | {
+      thumbnailUrl: string;
+      metaUrl: string;
+    };
 
 // Utils
 
 const awaitAll = Promise.all.bind(Promise);
-const getFileName = (p) => getLastDir(p).split(".").into(R.init).join("");
-const getLastDir = (p) =>
-  p.split(path.sep).filter(R.complement(R.isEmpty)).into(R.last);
 
-const languageIdToFileStandard = (id) =>
+const getFileName = (p: string): string =>
+  getLastDir(p)?.split(".").into(R.init).join("") ?? "";
+
+const getLastDir = (p: string): string | undefined =>
+  p
+    .split(path.sep)
+    .filter((s) => s !== "")
+    .into(last());
+
+const languageIdToFileStandard = (id: string) =>
   id === cfg.languages[0] ? "default" : id;
-const fileStandardToLanguageId = (id) =>
+
+const fileStandardToLanguageId = (id: string) =>
   id === "default" ? cfg.languages[0] : id;
 
 // Process
 
-const parseMarkdown = (text) => {
+const parseMarkdown = (text: string) => {
   const parsed = matter(text);
   return R.mergeRight(parsed.data, { description: parsed.content });
 };
-const normalizeWork = R.curry(async (workRaw, workName) => {
+
+const normalizeWork = async (
+  workRaw: unknown,
+  workName: string,
+): Promise<NormalizedWork> => {
   const workParseResult = workSchema.safeParse(workRaw);
 
   if (!workParseResult.success) {
-    throw `Error in work '${workName}'\n` + e.message;
+    throw `Error in work '${workName}'`;
   }
 
   const work = workParseResult.data;
 
-  const def = work.default
-    .into(
-      R.assoc(
-        "mainVisualUrl",
-        `${workName}/${await getMainVisualFilename(workName)}`,
-      ),
-    )
-    .into(
-      R.assoc(
-        "mainVisualMetaUrl",
-        `${workName}/${await getMainVisualFilename(workName)}.meta.json`,
-      ),
-    )
-    .into(R.mergeRight({ visuals: [], links: [] }));
+  const def = {
+    ...work.default,
+    mainVisualUrl: `${workName}/${await getMainVisualFilename(workName)}`,
+    mainVisualMetaUrl: `${workName}/${await getMainVisualFilename(workName)}.meta.json`,
+    visuals: [],
+    links: [],
+  };
 
-  const processedReadMore = work.into(
-    R.mapObjIndexed((language, id) =>
-      language.into(
-        R.assoc(
-          "readMore",
-          normalizeReadMore(id, def.readMore, language.readMore),
-        ),
-      ),
-    ),
+  const processedReadMore = mapValues(work, (language, id) => ({
+    ...language,
+    readMore: normalizeReadMore(id, def.readMore, language.readMore),
+  }));
+
+  const filled = mapValues(processedReadMore, mergeDeep(def)).into(
+    mapValues((o) => ({
+      ...o,
+      visuals: o.visuals.map(normalizeVisual(workName)),
+      date: o.date.toString(),
+    })),
   );
-  const filled = processedReadMore.into(R.map(R.mergeDeepRight(def))).into(
-    R.map(
-      R.evolve({
-        visuals: R.map(normalizeVisual(workName)),
-        date: (date) => (typeof date == "string" ? date : R.toString(date)),
-      }),
-    ),
-  );
+
   return filled;
-});
+};
+
 const getMainVisualFilename = async (workName) => {
   const mainFiles = await glob(`${cfg.worksDir}${workName}/main.*`);
   if (mainFiles.length === 0)
