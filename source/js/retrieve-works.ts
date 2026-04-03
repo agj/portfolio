@@ -5,7 +5,12 @@ import { glob } from "glob";
 import matter from "gray-matter";
 import * as z from "zod";
 import "dot-into";
-import cfg, { defaultLanguageId, type LanguageId } from "./config.ts";
+import cfg, {
+  defaultLanguageId,
+  type HostType,
+  type LanguageId,
+  type VisualType,
+} from "./config.ts";
 import { isUrl } from "./utils.ts";
 
 // Types
@@ -35,19 +40,22 @@ export type Language = {
 
 type RawVisual = z.output<typeof visualSchema>;
 
-export type Visual = RawVisual &
-  (
-    | {
-        url: string;
-        thumbnailUrl: string;
-        retrieveUrl: string;
-        metaUrl: string;
-      }
-    | {
-        thumbnailUrl: string;
-        metaUrl: string;
-      }
-  );
+export type Visual =
+  | {
+      type: "Image" & VisualType;
+      url: string;
+      thumbnailUrl: string;
+      retrieveUrl: string;
+      metaUrl: string;
+    }
+  | {
+      type: "Video" & VisualType;
+      host: HostType;
+      id: string;
+      parameters?: Record<string, string> | undefined;
+      thumbnailUrl: string;
+      metaUrl: string;
+    };
 
 export type Link = z.output<typeof linkSchema>;
 

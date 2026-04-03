@@ -3,7 +3,7 @@ import * as z from "zod";
 import "dot-into";
 
 import { ensureDirForFile, isUrl, toJson } from "./utils.ts";
-import cfg, { type LanguageId } from "./config.ts";
+import cfg, { type LanguageId, type VisualType } from "./config.ts";
 import type {
   Language,
   Link,
@@ -31,14 +31,14 @@ type NormalizedLanguage = {
 
 type NormalizedVisual =
   | {
-      type: "Image";
+      type: "Image" & VisualType;
       url: string;
       thumbnailUrl: string;
       aspectRatio: number;
       color: VisualMetadataColor;
     }
   | {
-      type: "Video";
+      type: "Video" & VisualType;
       host: string;
       id: string;
       thumbnailUrl: string;

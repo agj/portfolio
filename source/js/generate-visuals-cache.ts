@@ -1,46 +1,80 @@
 import * as R from "ramda";
 import fs from "node:fs";
 import fsPromises from "node:fs/promises";
+import * as z from "zod";
 import sharp from "sharp";
 import vibrant from "node-vibrant";
 import axios from "axios";
 import "dot-into";
 
-import cfg from "./config.ts";
+import cfg, { type HostType } from "./config.ts";
 import * as _ from "./utils.ts";
 import type { Work } from "./retrieve-works.ts";
 import { flat, mapValues, unique, values } from "remeda";
 
+// Types
+
+type VideoMeta = {
+  width: number;
+  height: number;
+  thumbnailUrl: string;
+};
+
 // Utils
 
 const awaitAll = Promise.all.bind(Promise);
-const getVideoMetadata = async (host, id) => {
-  if (host === cfg.hostType.youtube) {
+
+const getVideoMetadata = async (
+  host: HostType,
+  id: string,
+): Promise<VideoMeta> => {
+  if (host === "Youtube") {
     const response = (
       await axios.get(
         `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`,
         { responseType: "json" },
       )
     ).data;
+    const parsed = youtubeVideoMetaResponseSchema.parse(response);
+
     return {
-      width: response.width,
-      height: response.height,
-      thumbnailUrl: response.thumbnail_url,
+      width: parsed.width,
+      height: parsed.height,
+      thumbnailUrl: parsed.thumbnail_url,
     };
-  } else if (host === cfg.hostType.vimeo) {
+  } else if (host === "Vimeo") {
     const response = (
       await axios.get(`http://vimeo.com/api/v2/video/${id}.json`, {
         responseType: "json",
       })
     ).data[0];
+    const parsed = vimeoVideoMetaResponseSchema.parse(response);
+
     return {
-      width: response.width,
-      height: response.height,
-      thumbnailUrl: response.thumbnail_large,
+      width: parsed.width,
+      height: parsed.height,
+      thumbnailUrl: parsed.thumbnail_large,
     };
   }
+
+  throw new Error(`Video ID "${id}" has wrong host: ${host}`);
 };
+
 const filesExist = R.all(fs.existsSync);
+
+// Schemas
+
+const youtubeVideoMetaResponseSchema = z.object({
+  width: z.int(),
+  height: z.int(),
+  thumbnail_url: z.string(),
+});
+
+const vimeoVideoMetaResponseSchema = z.object({
+  width: z.int(),
+  height: z.int(),
+  thumbnail_large: z.string(),
+});
 
 // Process
 
@@ -80,7 +114,7 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
     const promises = allVisuals.into(
       R.map(async (visual) => {
         const visualLogReference = `${workName} -> ${
-          visual.retrieveUrl ? visual.retrieveUrl : visual.id
+          visual.type === "Image" ? visual.retrieveUrl : visual.id
         }`;
 
         // Filenames.
@@ -168,7 +202,12 @@ const getImageDimensions = async (image: Buffer) => {
 };
 const getImageColor = async (image: Buffer) => {
   const colors = await vibrant.from(image).getPalette();
-  const color = colors.Vibrant.rgb;
+  const color = colors.Vibrant?.rgb;
+
+  if (!color) {
+    throw new Error("Could not get color for image");
+  }
+
   return {
     red: color[0] / 0xff,
     green: color[1] / 0xff,
@@ -265,7 +304,10 @@ const resizeImage = async (image: Buffer) => {
   }
 };
 
-const resizeTo = (dimensions, image: Buffer) =>
+const resizeTo = (
+  dimensions: { width: number; height: number },
+  image: Buffer,
+) =>
   sharp(image)
     .resize(Math.round(dimensions.width), Math.round(dimensions.height), {
       fit: "cover",
