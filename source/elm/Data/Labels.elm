@@ -44,17 +44,17 @@ english =
     , loading =
         p
             [ icon View.Icon.Hourglass
-            , t "Loading…"
+            , t " Loading…"
             ]
     , loadError =
         p
             [ icon View.Icon.LoadError
-            , t "Failed loading the data. Please try refreshing the page."
+            , t " Failed loading the data. Please try refreshing the page."
             ]
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t "Select a keyword from above."
+            , t " Select a keyword from above."
             ]
     , thatsAll =
         \{ onClearTag } ->
@@ -75,17 +75,17 @@ japanese =
     , loading =
         p
             [ icon View.Icon.Hourglass
-            , t "読み込み中…"
+            , t " 読み込み中…"
             ]
     , loadError =
         p
             [ icon View.Icon.LoadError
-            , t "データの読み込みが失敗しました。リロードを試してください。"
+            , t " データの読み込みが失敗しました。リロードを試してください。"
             ]
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t "上からキーワードを選択してください。"
+            , t " 上からキーワードを選択してください。"
             ]
     , thatsAll =
         \{ onClearTag } ->
@@ -106,17 +106,17 @@ spanish =
     , loading =
         p
             [ icon View.Icon.Hourglass
-            , t "Cargando…"
+            , t " Cargando…"
             ]
     , loadError =
         p
             [ icon View.Icon.LoadError
-            , t "Error cargando datos. Por favor intenta cargar la página otra vez."
+            , t " Error cargando datos. Por favor intenta cargar la página otra vez."
             ]
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t "Elige alguna palabra clave de arriba."
+            , t " Elige alguna palabra clave de arriba."
             ]
     , thatsAll =
         \{ onClearTag } ->
