@@ -1,14 +1,15 @@
 import * as R from "ramda";
 import fs from "node:fs";
-import path from "path";
+import fsPromises from "node:fs/promises";
 import sharp from "sharp";
 import vibrant from "node-vibrant";
 import axios from "axios";
-import streamToPromise from "stream-to-promise";
 import "dot-into";
 
 import cfg from "./config.ts";
 import * as _ from "./utils.ts";
+import type { Work } from "./retrieve-works.ts";
+import { flat, mapValues, unique, values } from "remeda";
 
 // Utils
 
@@ -43,7 +44,7 @@ const filesExist = R.all(fs.existsSync);
 
 // Process
 
-const generateVisualsCache = async (work, workName) => {
+const generateVisualsCacheForWork = async (work: Work, workName: string) => {
   // Main visual.
 
   const mvLogReference = `${workName} -> main visual`;
@@ -58,13 +59,12 @@ const generateVisualsCache = async (work, workName) => {
     // Create folders.
     _.ensureDirForFile(mvMetaOutputFilename);
 
-    const input = fs.createReadStream(
+    const image = await fsPromises.readFile(
       `${cfg.worksDir}${work.default.mainVisualUrl}`,
     );
-    const image = await streamToPromise(input);
 
     const resized = await resizeMainVisual(image);
-    fs.writeFile(mvOutputFilename, resized);
+    await fsPromises.writeFile(mvOutputFilename, resized);
     console.log(`Output: ${mvOutputFilename}`);
     await writeImageMetadata(resized, mvMetaOutputFilename);
   }
@@ -72,11 +72,10 @@ const generateVisualsCache = async (work, workName) => {
   // Visuals.
 
   if (work.default.visuals) {
-    const allVisuals = work
-      .into(R.map(R.prop("visuals")))
-      .into(R.values)
-      .into(R.unnest)
-      .into(R.uniq);
+    const allVisuals = mapValues(work, (lang) => lang.visuals)
+      .into(values())
+      .into(flat(1))
+      .into(unique());
 
     const promises = allVisuals.into(
       R.map(async (visual) => {
@@ -98,19 +97,18 @@ const generateVisualsCache = async (work, workName) => {
           // Images.
           if (visual.type === cfg.visualType.image) {
             const isLocal = !_.isUrl(visual.retrieveUrl);
-            const input = isLocal
-              ? fs.createReadStream(
+            const image: Buffer = isLocal
+              ? await fsPromises.readFile(
                   `${cfg.worksDir}${workName}/${visual.retrieveUrl}`,
                 )
               : (
                   await axios.get(visual.retrieveUrl, {
-                    responseType: "stream",
+                    responseType: "arraybuffer",
                   })
                 ).data;
-            const image = await streamToPromise(input);
 
             const thumbnail = await toThumbnail(image);
-            fs.writeFile(thumbOutputFilename, thumbnail);
+            await fsPromises.writeFile(thumbOutputFilename, thumbnail);
             console.log(`Output: ${thumbOutputFilename}`);
 
             if (isLocal) {
@@ -118,7 +116,7 @@ const generateVisualsCache = async (work, workName) => {
               _.ensureDirForFile(outputFilename);
 
               const resized = await resizeImage(image);
-              await fs.writeFile(outputFilename, resized);
+              await fsPromises.writeFile(outputFilename, resized);
               console.log(`Output: ${outputFilename}`);
               await writeImageMetadata(resized, metaOutputFilename);
             } else {
@@ -130,15 +128,14 @@ const generateVisualsCache = async (work, workName) => {
           } else if (visual.type === cfg.visualType.video) {
             const metaVideo = await getVideoMetadata(visual.host, visual.id);
 
-            const input = (
+            const image: Buffer = (
               await axios.get(metaVideo.thumbnailUrl, {
-                responseType: "stream",
+                responseType: "arraybuffer",
               })
             ).data;
-            const image = await streamToPromise(input);
 
             const thumbnail = await toThumbnail(image);
-            fs.writeFile(thumbOutputFilename, thumbnail);
+            await fsPromises.writeFile(thumbOutputFilename, thumbnail);
             console.log(`Output: ${thumbOutputFilename}`);
 
             const color = await getImageColor(thumbnail);
@@ -162,14 +159,14 @@ const generateVisualsCache = async (work, workName) => {
   }
 };
 
-const getImageDimensions = async (image) => {
+const getImageDimensions = async (image: Buffer) => {
   const metadata = await sharp(image).metadata();
   return {
     width: metadata.width,
     height: metadata.height,
   };
 };
-const getImageColor = async (image) => {
+const getImageColor = async (image: Buffer) => {
   const colors = await vibrant.from(image).getPalette();
   const color = colors.Vibrant.rgb;
   return {
@@ -178,7 +175,7 @@ const getImageColor = async (image) => {
     blue: color[2] / 0xff,
   };
 };
-const getImageMetadata = async (image) => {
+const getImageMetadata = async (image: Buffer) => {
   const dimensions = await getImageDimensions(image);
   const color = await getImageColor(image);
   return {
@@ -187,7 +184,7 @@ const getImageMetadata = async (image) => {
     color,
   };
 };
-const writeImageMetadata = async (image, outputPath) => {
+const writeImageMetadata = async (image: Buffer, outputPath: string) => {
   fs.writeFileSync(
     outputPath,
     _.toJson(await getImageMetadata(image)),
@@ -195,7 +192,8 @@ const writeImageMetadata = async (image, outputPath) => {
   );
 };
 
-const toThumbnail = async (image) => {
+const toThumbnail = async (image: Buffer) => {
+  // console.log("toThumbnail", image);
   const thumbnail = await sharp(image)
     .resize(cfg.thumbnailSize, cfg.thumbnailSize, { fit: "cover" })
     .jpeg({
@@ -206,7 +204,7 @@ const toThumbnail = async (image) => {
     .toBuffer();
   return thumbnail;
 };
-const resizeMainVisual = async (image) => {
+const resizeMainVisual = async (image: Buffer) => {
   const actual = await getImageMetadata(image);
   const targetSize = cfg.mainVisualSize;
   const actualAR = actual.width / actual.height;
@@ -243,7 +241,7 @@ const resizeMainVisual = async (image) => {
   return resizeTo(scaledSize, image);
 };
 
-const resizeImage = async (image) => {
+const resizeImage = async (image: Buffer) => {
   const actual = await getImageMetadata(image);
   const actualAR = actual.width / actual.height;
 
@@ -267,7 +265,7 @@ const resizeImage = async (image) => {
   }
 };
 
-const resizeTo = (dimensions, image) =>
+const resizeTo = (dimensions, image: Buffer) =>
   sharp(image)
     .resize(Math.round(dimensions.width), Math.round(dimensions.height), {
       fit: "cover",
@@ -281,11 +279,9 @@ const resizeTo = (dimensions, image) =>
 
 // API
 
-const generateCache = async (works) => {
+export const generateVisualsCache = async (works: Record<string, Work>) => {
   const promises = works
-    .into(R.mapObjIndexed(generateVisualsCache))
+    .into(R.mapObjIndexed(generateVisualsCacheForWork))
     .into(R.values);
   await awaitAll(promises);
 };
-
-export default generateCache;
