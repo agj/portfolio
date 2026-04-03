@@ -2,7 +2,7 @@ import gulp from "gulp";
 import path from "path";
 import { parseArgs } from "util";
 
-import retrieveWorks from "./source/js/retrieve-works.js";
+import retrieveWorks from "./source/js/retrieve-works.ts";
 import generateWorksJson from "./source/js/generate-works-json.js";
 import generateVisualsCache from "./source/js/generate-visuals-cache.js";
 

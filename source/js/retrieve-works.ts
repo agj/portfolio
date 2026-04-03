@@ -109,29 +109,38 @@ const normalizeWork = async (
   return filled;
 };
 
-const getMainVisualFilename = async (workName) => {
+const getMainVisualFilename = async (workName: string) => {
   const mainFiles = await glob(`${cfg.worksDir}${workName}/main.*`);
-  if (mainFiles.length === 0)
+  if (!mainFiles[0]) {
     throw `No main visual file (main.jpg/.png) for work ${workName}!`;
+  }
   return path.parse(mainFiles[0]).base;
 };
-const normalizeVisual = R.curry((workName, visual) => {
-  if (visual.type === cfg.visualType.image) {
-    const localPath = toLocalPath(workName, visual.url);
-    return R.mergeRight(visual, {
-      url: isUrl(visual.url) ? visual.url : localPath,
-      thumbnailUrl: toThumbnailPath(workName, visual.url),
-      retrieveUrl: visual.url,
-      metaUrl: `${localPath}.meta.json`,
-    });
-  } else if (visual.type === cfg.visualType.video) {
-    return R.mergeRight(visual, {
-      thumbnailUrl: `${workName}/${visual.host}-${visual.id}-thumb.jpg`,
-      metaUrl: `${workName}/${visual.host}-${visual.id}.meta.json`,
-    });
-  }
-  throw `Visual for work '${workName}' has wrong type: ${visual.type}`;
-});
+
+const normalizeVisual =
+  (workName: string) =>
+  (visual: Visual): NormalizedVisual => {
+    if (visual.type === cfg.visualType.image) {
+      const localPath = toLocalPath(workName, visual.url);
+      return R.mergeRight(visual, {
+        url:
+          "url" in visual && isUrl(visual.url)
+            ? visual.url
+            : toLocalPath(workName, visual.url),
+        thumbnailUrl: toThumbnailPath(workName, visual.url),
+        retrieveUrl: visual.url,
+        metaUrl: `${localPath}.meta.json`,
+      });
+    } else if (visual.type === cfg.visualType.video) {
+      return R.mergeRight(visual, {
+        thumbnailUrl: `${workName}/${visual.host}-${visual.id}-thumb.jpg`,
+        metaUrl: `${workName}/${visual.host}-${visual.id}.meta.json`,
+      });
+    }
+
+    throw `Visual for work '${workName}' has wrong type`;
+  };
+
 const normalizeReadMore = R.curry((langId, defUrl, url) => {
   return url
     ? { url: url, language: fileStandardToLanguageId(langId) }
@@ -139,37 +148,40 @@ const normalizeReadMore = R.curry((langId, defUrl, url) => {
       ? { url: defUrl, language: cfg.languages[0] }
       : undefined;
 });
-const toLocalPath = (workName, url) => {
+
+const toLocalPath = (workName: string, url: string) => {
   const parsedPath = isUrl(url)
-    ? path.parse(url.split("/").into(R.last))
+    ? path.parse(url.split("/")?.into(last()) ?? "")
     : path.parse(`${url}`);
   return `${workName}/${parsedPath.dir}${parsedPath.dir ? "/" : ""}${
     parsedPath.base
   }`;
 };
-const toThumbnailPath = (workName, url) => {
+
+const toThumbnailPath = (workName: string, url: string) => {
   const parsedPath = isUrl(url)
-    ? path.parse(url.split("/").into(R.last))
+    ? path.parse(url.split("/").into(last()) ?? "")
     : path.parse(`${url}`);
   return `${workName}/${parsedPath.dir}${parsedPath.dir ? "/" : ""}${
     parsedPath.name
   }-thumb${parsedPath.ext}`;
 };
-const retrieveWorkAsPair = async (workName) => [
+
+const retrieveWorkAsPair = async (workName: string) => [
   workName,
   await retrieveWork(workName),
 ];
-const retrieveWork = async (workName) => {
+
+const retrieveWork = async (workName: string) => {
   const folder = `${cfg.worksDir}${workName}/`;
   const languageFiles = await glob(`${folder}*.md`);
-  const languagePairs = await languageFiles
+  const languagePairs = languageFiles
     .map(getFileName)
-    .map(async (language) => [
+    .map((language): [string, string] => [
       language,
       fs.readFileSync(`${folder}${language}.md`, "utf-8"),
-    ])
-    .into(awaitAll);
-  const work = languagePairs.into(R.fromPairs).into(R.map(parseMarkdown));
+    ]);
+  const work = fromEntries(languagePairs).into(mapValues(parseMarkdown));
   return normalizeWork(work, workName);
 };
 
@@ -227,7 +239,9 @@ const workSchema = (() => {
 // API
 
 const retrieveWorks = async () => {
-  const workNames = (await glob(`${cfg.worksDir}*/`)).map(getLastDir);
+  const workNames = (await glob(`${cfg.worksDir}*/`))
+    .map(getLastDir)
+    .filter((s): s is string => !!s);
 
   const workPairs = await workNames.map(retrieveWorkAsPair).into(awaitAll);
   const works = workPairs.into(R.fromPairs);
