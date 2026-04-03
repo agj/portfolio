@@ -1,5 +1,4 @@
-import * as R from "ramda";
-import { fromEntries, last, mapValues, mergeDeep, values } from "remeda";
+import { dropLast, fromEntries, last, mapValues, merge, values } from "remeda";
 import fs from "node:fs";
 import path from "path";
 import { glob } from "glob";
@@ -16,36 +15,26 @@ type NormalizedLanguageId = Exclude<
   typeof defaultLanguageId
 >;
 
-type Work = z.output<typeof workSchema>;
+type RawWork = z.output<typeof workSchema>;
 
-type NormalizedWork = {
-  [key in NormalizedLanguageId]: key extends "default"
-    ? NormalizedDefaultLanguage
-    : NormalizedLanguage;
+type Work = {
+  [key in NormalizedLanguageId]: Language;
 };
 
-type DefaultLanguage = z.output<typeof defaultLanguageSchema>;
-
-type NormalizedDefaultLanguage = DefaultLanguage & {
+type Language = {
+  description: string;
+  name: string;
+  readMore: ReadMore | undefined;
   mainVisualUrl: string;
   mainVisualMetaUrl: string;
-  visuals: NormalizedVisual[];
-  date: string;
-};
-
-type Language = z.output<typeof languageSchema>;
-
-type NormalizedLanguage = Language & {
-  mainVisualUrl: string;
-  mainVisualMetaUrl: string;
-  visuals: NormalizedVisual[];
+  visuals: Visual[];
   links: Link[];
   date: string;
 };
 
-type Visual = z.output<typeof visualSchema>;
+type RawVisual = z.output<typeof visualSchema>;
 
-type NormalizedVisual = Visual &
+type Visual = RawVisual &
   (
     | {
         url: string;
@@ -61,10 +50,15 @@ type NormalizedVisual = Visual &
 
 type Link = z.output<typeof linkSchema>;
 
+type ReadMore = {
+  url: string;
+  language: LanguageId;
+};
+
 // Utils
 
 const getFileName = (p: string): string =>
-  getLastDir(p)?.split(".").into(R.init).join("") ?? "";
+  getLastDir(p)?.split(".").into(dropLast(1)).join("") ?? "";
 
 const getLastDir = (p: string): string | undefined =>
   p
@@ -72,8 +66,8 @@ const getLastDir = (p: string): string | undefined =>
     .filter((s) => s !== "")
     .into(last());
 
-const fileStandardToLanguageId = (id: string) =>
-  id === "default" ? cfg.languages[0] : id;
+const fileStandardToLanguageId = (id: NormalizedLanguageId): LanguageId =>
+  id === "default" ? defaultLanguageId : id;
 
 // Schemas
 
@@ -128,43 +122,39 @@ const workSchema = z.object({
 
 const parseMarkdown = (text: string) => {
   const parsed = matter(text);
-  return R.mergeRight(parsed.data, { description: parsed.content });
+  return merge(parsed.data, { description: parsed.content });
 };
 
 const normalizeWork = async (
   workRaw: unknown,
   workName: string,
-): Promise<NormalizedWork> => {
+): Promise<Work> => {
   const workParseResult = workSchema.safeParse(workRaw);
 
   if (!workParseResult.success) {
     throw `Error in work '${workName}'`;
   }
 
-  const work: Work = workParseResult.data;
+  const work: RawWork = workParseResult.data;
 
-  const def = {
-    ...work.default,
-    mainVisualUrl: `${workName}/${await getMainVisualFilename(workName)}`,
-    mainVisualMetaUrl: `${workName}/${await getMainVisualFilename(workName)}.meta.json`,
-    visuals: [],
-    links: [],
-  };
+  const mainVisualUrl = `${workName}/${await getMainVisualFilename(workName)}`;
+  const mainVisualMetaUrl = `${workName}/${await getMainVisualFilename(workName)}.meta.json`;
 
-  const processedReadMore = mapValues(
+  return mapValues(
     work,
-    (language, id): Language & { readMore: string } => ({
-      ...language,
-      readMore: normalizeReadMore(id, def.readMore, language.readMore),
+    (language, langId): Language => ({
+      ...work.default,
+      mainVisualUrl,
+      mainVisualMetaUrl,
+      readMore: normalizeReadMore(
+        langId,
+        work.default.readMore,
+        language.readMore,
+      ),
+      visuals: language.visuals?.map(normalizeVisual(workName)) ?? [],
+      links: language.links ?? [],
+      date: work.default.date.toString(),
     }),
-  );
-
-  return mapValues(processedReadMore, mergeDeep(def)).into(
-    mapValues((o) => ({
-      ...o,
-      visuals: o.visuals.map(normalizeVisual(workName)),
-      date: o.date.toString(),
-    })),
   );
 };
 
@@ -178,10 +168,10 @@ const getMainVisualFilename = async (workName: string) => {
 
 const normalizeVisual =
   (workName: string) =>
-  (visual: Visual): NormalizedVisual => {
+  (visual: RawVisual): Visual => {
     if (visual.type === cfg.visualType.image) {
       const localPath = toLocalPath(workName, visual.url);
-      return R.mergeRight(visual, {
+      return merge(visual, {
         url:
           "url" in visual && isUrl(visual.url)
             ? visual.url
@@ -191,7 +181,7 @@ const normalizeVisual =
         metaUrl: `${localPath}.meta.json`,
       });
     } else if (visual.type === cfg.visualType.video) {
-      return R.mergeRight(visual, {
+      return merge(visual, {
         thumbnailUrl: `${workName}/${visual.host}-${visual.id}-thumb.jpg`,
         metaUrl: `${workName}/${visual.host}-${visual.id}.meta.json`,
       });
@@ -200,13 +190,17 @@ const normalizeVisual =
     throw `Visual for work '${workName}' has wrong type`;
   };
 
-const normalizeReadMore = R.curry((langId, defUrl, url) => {
+const normalizeReadMore = (
+  langId: NormalizedLanguageId,
+  defaultUrl: string | undefined,
+  url: string | undefined,
+): ReadMore | undefined => {
   return url
     ? { url: url, language: fileStandardToLanguageId(langId) }
-    : defUrl
-      ? { url: defUrl, language: cfg.languages[0] }
+    : defaultUrl
+      ? { url: defaultUrl, language: defaultLanguageId }
       : undefined;
-});
+};
 
 const toLocalPath = (workName: string, url: string) => {
   const parsedPath = isUrl(url)
@@ -228,12 +222,9 @@ const toThumbnailPath = (workName: string, url: string) => {
 
 const retrieveWorkAsPair = async (
   workName: string,
-): Promise<[string, NormalizedWork]> => [
-  workName,
-  await retrieveWork(workName),
-];
+): Promise<[string, Work]> => [workName, await retrieveWork(workName)];
 
-const retrieveWork = async (workName: string): Promise<NormalizedWork> => {
+const retrieveWork = async (workName: string): Promise<Work> => {
   const folder = `${cfg.worksDir}${workName}/`;
   const languageFiles = await glob(`${folder}*.md`);
   const languagePairs = languageFiles
@@ -248,9 +239,7 @@ const retrieveWork = async (workName: string): Promise<NormalizedWork> => {
 
 // API
 
-export const retrieveWorks = async (): Promise<
-  Record<string, NormalizedWork>
-> => {
+export const retrieveWorks = async (): Promise<Record<string, Work>> => {
   const workNames = (await glob(`${cfg.worksDir}*/`))
     .map(getLastDir)
     .filter((s): s is string => !!s);
