@@ -1,6 +1,8 @@
 const worksFolder = "works";
 
-export default {
+export type LanguageId = (typeof config)["languages"][number];
+
+const config = {
   worksDir: `source/data/${worksFolder}/`,
   cacheDir: `cache/${worksFolder}/`,
   outputDir: "public/",
@@ -22,3 +24,7 @@ export default {
 
   languages: ["en", "es", "ja"], // First one maps to `default`.
 } as const;
+
+export const defaultLanguageId = config.languages[0];
+
+export default config;
