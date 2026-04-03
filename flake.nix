@@ -19,9 +19,9 @@
             pkgs.elmPackages.elm-format
             pkgs.elmPackages.elm-json
             pkgs.just
-            pkgs.nodePackages.pnpm
-            pkgs.nodePackages.prettier
-            pkgs.nodejs-slim
+            pkgs.pnpm
+            pkgs.prettier
+            pkgs.nodejs-slim_24
             pkgs.nushell
             pkgs.qrtool
           ];
