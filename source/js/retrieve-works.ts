@@ -144,6 +144,8 @@ const normalizeWork = async (
     work,
     (language, langId): Language => ({
       ...work.default,
+      ...language,
+      name: language.name ?? work.default.name,
       mainVisualUrl,
       mainVisualMetaUrl,
       readMore: normalizeReadMore(
@@ -151,7 +153,10 @@ const normalizeWork = async (
         work.default.readMore,
         language.readMore,
       ),
-      visuals: language.visuals?.map(normalizeVisual(workName)) ?? [],
+      visuals:
+        (language.visuals ?? work.default.visuals)?.map(
+          normalizeVisual(workName),
+        ) ?? [],
       links: language.links ?? [],
       date: work.default.date.toString(),
     }),
