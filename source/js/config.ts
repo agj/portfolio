@@ -21,4 +21,4 @@ export default {
   },
 
   languages: ["en", "es", "ja"], // First one maps to `default`.
-};
+} as const;

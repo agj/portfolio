@@ -6,8 +6,8 @@ import matter from "gray-matter";
 import ow from "ow";
 import "dot-into";
 
-import cfg from "./config.js";
-import { isUrl } from "./utils.js";
+import cfg from "./config.ts";
+import { isUrl } from "./utils.ts";
 
 // Utils
 

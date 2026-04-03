@@ -6,8 +6,8 @@ import retrieveWorks from "./source/js/retrieve-works.js";
 import generateWorksJson from "./source/js/generate-works-json.js";
 import generateVisualsCache from "./source/js/generate-visuals-cache.js";
 
-import cfg from "./source/js/config.js";
-import { run } from "./source/js/utils.js";
+import cfg from "./source/js/config.ts";
+import { run } from "./source/js/utils.ts";
 
 // Static files copy
 

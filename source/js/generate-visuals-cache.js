@@ -7,8 +7,8 @@ import axios from "axios";
 import streamToPromise from "stream-to-promise";
 import "dot-into";
 
-import cfg from "./config.js";
-import * as _ from "./utils.js";
+import cfg from "./config.ts";
+import * as _ from "./utils.ts";
 
 // Utils
 

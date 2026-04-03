@@ -2,8 +2,8 @@ import * as R from "ramda";
 import fs from "fs-extra";
 import "dot-into";
 
-import { isUrl, toJson } from "./utils.js";
-import cfg from "./config.js";
+import { isUrl, toJson } from "./utils.ts";
+import cfg from "./config.ts";
 
 // Utils
 
