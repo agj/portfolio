@@ -1,3 +1,5 @@
+import path from "node:path";
+import fs from "node:fs";
 import { tap } from "remeda";
 import * as z from "zod";
 import { spawn } from "child_process";
@@ -15,4 +17,9 @@ export const run = (command: string) => {
     throw new Error("No command specified");
   }
   return spawn(cmd, args, { stdio: "inherit" });
+};
+
+export const ensureDirForFile = (filePath: string): void => {
+  const { dir } = path.parse(filePath);
+  fs.mkdirSync(dir, { recursive: true });
 };

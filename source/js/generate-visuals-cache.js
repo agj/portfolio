@@ -40,10 +40,6 @@ const getVideoMetadata = async (host, id) => {
   }
 };
 const filesExist = R.all(fs.existsSync);
-const ensureFolder = (filename) => {
-  const parsed = path.parse(filename);
-  fs.ensureDirSync(parsed.dir);
-};
 
 // Process
 
@@ -60,8 +56,7 @@ const generateVisualsCache = async (work, workName) => {
     console.log(`Processing: ${mvLogReference}`);
 
     // Create folders.
-    const mvMetaOutputFilenameParsed = path.parse(mvMetaOutputFilename);
-    fs.ensureDirSync(mvMetaOutputFilenameParsed.dir);
+    _.ensureDirForFile(mvMetaOutputFilename);
 
     const input = fs.createReadStream(
       `${cfg.worksDir}${work.default.mainVisualUrl}`,
@@ -98,7 +93,7 @@ const generateVisualsCache = async (work, workName) => {
         } else {
           console.log(`Processing: ${visualLogReference}`);
 
-          [thumbOutputFilename, metaOutputFilename].forEach(ensureFolder);
+          [thumbOutputFilename, metaOutputFilename].forEach(_.ensureDirForFile);
 
           // Images.
           if (visual.type === cfg.visualType.image) {
@@ -120,7 +115,7 @@ const generateVisualsCache = async (work, workName) => {
 
             if (isLocal) {
               const outputFilename = `${cfg.cacheDir}${visual.url}`;
-              ensureFolder(outputFilename);
+              _.ensureDirForFile(outputFilename);
 
               const resized = await resizeImage(image);
               await fs.writeFile(outputFilename, resized);

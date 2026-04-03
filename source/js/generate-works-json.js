@@ -2,7 +2,7 @@ import * as R from "ramda";
 import fs from "node:fs";
 import "dot-into";
 
-import { isUrl, toJson } from "./utils.ts";
+import { ensureDirForFile, isUrl, toJson } from "./utils.ts";
 import cfg from "./config.ts";
 
 // Utils
@@ -61,12 +61,12 @@ const getVisualMetadata = (visual) =>
 // API
 
 const generateWorksJson = async (works) => {
-  fs.ensureDirSync(cfg.outputDir);
+  fs.mkdirSync(cfg.outputDir, { recursive: true });
 
   const worksArray = R.values(works).map(normalizeWork);
 
   const filename = `${cfg.outputDir}${cfg.worksFolder}/data.json`;
-  fs.ensureFileSync(filename);
+  ensureDirForFile(filename, { recursive: true });
   fs.writeFileSync(filename, toJson(worksArray), "utf-8");
 };
 
