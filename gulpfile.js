@@ -3,7 +3,7 @@ import path from "path";
 import { parseArgs } from "util";
 
 import { retrieveWorks } from "./source/js/retrieve-works.ts";
-import generateWorksJson from "./source/js/generate-works-json.js";
+import { generateWorksJson } from "./source/js/generate-works-json.ts";
 import generateVisualsCache from "./source/js/generate-visuals-cache.js";
 
 import cfg from "./source/js/config.ts";

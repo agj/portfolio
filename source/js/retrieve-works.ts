@@ -17,16 +17,17 @@ type NormalizedLanguageId = Exclude<
 
 type RawWork = z.output<typeof workSchema>;
 
-type Work = {
+export type Work = {
   [key in NormalizedLanguageId]: Language;
 };
 
-type Language = {
+export type Language = {
   description: string;
   name: string;
   readMore: ReadMore | undefined;
   mainVisualUrl: string;
   mainVisualMetaUrl: string;
+  tags: [string, ...string[]];
   visuals: Visual[];
   links: Link[];
   date: string;
@@ -34,7 +35,7 @@ type Language = {
 
 type RawVisual = z.output<typeof visualSchema>;
 
-type Visual = RawVisual &
+export type Visual = RawVisual &
   (
     | {
         url: string;
@@ -48,9 +49,9 @@ type Visual = RawVisual &
       }
   );
 
-type Link = z.output<typeof linkSchema>;
+export type Link = z.output<typeof linkSchema>;
 
-type ReadMore = {
+export type ReadMore = {
   url: string;
   language: LanguageId;
 };
@@ -105,7 +106,9 @@ const languageSchema = z.object({
 const defaultLanguageSchema = z.object({
   description: z.string(),
   name: z.string(),
-  tags: z.array(z.string()).min(1),
+  tags: z
+    .array(z.string())
+    .refine((tags): tags is [string, ...string[]] => tags.length >= 1),
   date: z.union([z.string(), z.int()]),
   readMore: z.string().optional(),
   visuals: z.array(visualSchema).optional(),
