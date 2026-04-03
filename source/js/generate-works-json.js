@@ -1,5 +1,5 @@
 import * as R from "ramda";
-import fs from "fs-extra";
+import fs from "node:fs";
 import "dot-into";
 
 import { isUrl, toJson } from "./utils.ts";

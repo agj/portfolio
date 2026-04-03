@@ -1,5 +1,5 @@
 import * as R from "ramda";
-import fs from "fs-extra";
+import fs from "node:fs";
 import path from "path";
 import { glob } from "glob";
 import matter from "gray-matter";

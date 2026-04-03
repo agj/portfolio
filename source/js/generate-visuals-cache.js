@@ -1,5 +1,5 @@
 import * as R from "ramda";
-import fs from "fs-extra";
+import fs from "node:fs";
 import path from "path";
 import sharp from "sharp";
 import vibrant from "node-vibrant";
@@ -39,8 +39,7 @@ const getVideoMetadata = async (host, id) => {
     };
   }
 };
-const fileExists = fs.pathExistsSync;
-const filesExist = R.all(fileExists);
+const filesExist = R.all(fs.existsSync);
 const ensureFolder = (filename) => {
   const parsed = path.parse(filename);
   fs.ensureDirSync(parsed.dir);
@@ -70,7 +69,7 @@ const generateVisualsCache = async (work, workName) => {
     const image = await streamToPromise(input);
 
     const resized = await resizeMainVisual(image);
-    await fs.writeFile(mvOutputFilename, resized);
+    fs.writeFile(mvOutputFilename, resized);
     console.log(`Output: ${mvOutputFilename}`);
     await writeImageMetadata(resized, mvMetaOutputFilename);
   }
@@ -116,7 +115,7 @@ const generateVisualsCache = async (work, workName) => {
             const image = await streamToPromise(input);
 
             const thumbnail = await toThumbnail(image);
-            await fs.writeFile(thumbOutputFilename, thumbnail);
+            fs.writeFile(thumbOutputFilename, thumbnail);
             console.log(`Output: ${thumbOutputFilename}`);
 
             if (isLocal) {
@@ -144,7 +143,7 @@ const generateVisualsCache = async (work, workName) => {
             const image = await streamToPromise(input);
 
             const thumbnail = await toThumbnail(image);
-            await fs.writeFile(thumbOutputFilename, thumbnail);
+            fs.writeFile(thumbOutputFilename, thumbnail);
             console.log(`Output: ${thumbOutputFilename}`);
 
             const color = await getImageColor(thumbnail);
