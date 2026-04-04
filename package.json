@@ -3,20 +3,20 @@
     "build": "gulp build"
   },
   "devDependencies": {
-    "@types/node": "^25.5.2",
-    "axios": "^1.14.0",
-    "dot-into": "^3.0.0",
-    "gray-matter": "^4.0.3",
-    "gulp": "^5.0.1",
-    "gulp-cli": "^3.1.0",
-    "node-vibrant": "^3.1.6",
-    "node-watch": "^0.7.4",
-    "remeda": "^2.33.7",
-    "sharp": "^0.34.5",
+    "@types/node": "25.5.2",
+    "axios": "1.14.0",
+    "dot-into": "3.0.0",
+    "gray-matter": "4.0.3",
+    "gulp": "5.0.1",
+    "gulp-cli": "3.1.0",
+    "node-vibrant": "3.1.6",
+    "node-watch": "0.7.4",
+    "remeda": "2.33.7",
+    "sharp": "0.34.5",
     "tinyglobby": "0.2.15",
-    "vite": "^8.0.3",
-    "vite-plugin-elm-watch": "^1.4.4",
-    "zod": "^4.3.6"
+    "vite": "8.0.3",
+    "vite-plugin-elm-watch": "1.4.4",
+    "zod": "4.3.6"
   },
   "type": "module",
   "private": true

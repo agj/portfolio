@@ -9,46 +9,46 @@ importers:
   .:
     devDependencies:
       '@types/node':
-        specifier: ^25.5.2
+        specifier: 25.5.2
         version: 25.5.2
       axios:
-        specifier: ^1.14.0
+        specifier: 1.14.0
         version: 1.14.0
       dot-into:
-        specifier: ^3.0.0
+        specifier: 3.0.0
         version: 3.0.0
       gray-matter:
-        specifier: ^4.0.3
+        specifier: 4.0.3
         version: 4.0.3
       gulp:
-        specifier: ^5.0.1
+        specifier: 5.0.1
         version: 5.0.1
       gulp-cli:
-        specifier: ^3.1.0
+        specifier: 3.1.0
         version: 3.1.0
       node-vibrant:
-        specifier: ^3.1.6
+        specifier: 3.1.6
         version: 3.1.6
       node-watch:
-        specifier: ^0.7.4
+        specifier: 0.7.4
         version: 0.7.4
       remeda:
-        specifier: ^2.33.7
+        specifier: 2.33.7
         version: 2.33.7
       sharp:
-        specifier: ^0.34.5
+        specifier: 0.34.5
         version: 0.34.5
       tinyglobby:
         specifier: 0.2.15
         version: 0.2.15
       vite:
-        specifier: ^8.0.3
+        specifier: 8.0.3
         version: 8.0.3(@types/node@25.5.2)(terser@5.39.0)
       vite-plugin-elm-watch:
-        specifier: ^1.4.4
+        specifier: 1.4.4
         version: 1.4.4
       zod:
-        specifier: ^4.3.6
+        specifier: 4.3.6
         version: 4.3.6
 
 packages:
