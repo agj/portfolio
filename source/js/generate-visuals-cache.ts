@@ -5,7 +5,15 @@ import sharp from "sharp";
 import vibrant from "node-vibrant";
 import { flat, mapValues, unique, values } from "remeda";
 import "dot-into";
-import cfg, { type HostType } from "./config.ts";
+import {
+  cacheDir,
+  mainVisualAR,
+  mainVisualSize,
+  thumbnailSize,
+  visualMaxSize,
+  worksDir,
+  type HostType,
+} from "./constants.ts";
 import {
   ensureDirForFile,
   fetchBufferUrl,
@@ -100,8 +108,8 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
   // Main visual.
 
   const mvLogReference = `${workName} -> main visual`;
-  const mvOutputFilename = `${cfg.cacheDir}${work.default.mainVisualUrl}`;
-  const mvMetaOutputFilename = `${cfg.cacheDir}${work.default.mainVisualMetaUrl}`;
+  const mvOutputFilename = `${cacheDir}${work.default.mainVisualUrl}`;
+  const mvMetaOutputFilename = `${cacheDir}${work.default.mainVisualMetaUrl}`;
 
   if (filesExist([mvOutputFilename, mvMetaOutputFilename])) {
     console.log(`Skipped: ${mvLogReference}`);
@@ -112,7 +120,7 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
     ensureDirForFile(mvMetaOutputFilename);
 
     const image = await fsPromises.readFile(
-      `${cfg.worksDir}${work.default.mainVisualUrl}`,
+      `${worksDir}${work.default.mainVisualUrl}`,
     );
 
     const resized = await resizeMainVisual(image);
@@ -135,8 +143,8 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
       }`;
 
       // Filenames.
-      const thumbOutputFilename = `${cfg.cacheDir}${visual.thumbnailUrl}`;
-      const metaOutputFilename = `${cfg.cacheDir}${visual.metaUrl}`;
+      const thumbOutputFilename = `${cacheDir}${visual.thumbnailUrl}`;
+      const metaOutputFilename = `${cacheDir}${visual.metaUrl}`;
 
       if (filesExist([thumbOutputFilename, metaOutputFilename])) {
         console.log(`Skipped: ${visualLogReference}`);
@@ -146,11 +154,11 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
         [thumbOutputFilename, metaOutputFilename].forEach(ensureDirForFile);
 
         // Images.
-        if (visual.type === cfg.visualType.image) {
+        if (visual.type === "Image") {
           const isLocal = !isUrl(visual.retrieveUrl);
           const image: Buffer = isLocal
             ? await fsPromises.readFile(
-                `${cfg.worksDir}${workName}/${visual.retrieveUrl}`,
+                `${worksDir}${workName}/${visual.retrieveUrl}`,
               )
             : await fetchBufferUrl(visual.retrieveUrl);
 
@@ -159,7 +167,7 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
           console.log(`Output: ${thumbOutputFilename}`);
 
           if (isLocal) {
-            const outputFilename = `${cfg.cacheDir}${visual.url}`;
+            const outputFilename = `${cacheDir}${visual.url}`;
             ensureDirForFile(outputFilename);
 
             const resized = await resizeImage(image);
@@ -172,7 +180,7 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
           console.log(`Output: ${metaOutputFilename}`);
 
           // Videos.
-        } else if (visual.type === cfg.visualType.video) {
+        } else if (visual.type === "Video") {
           const metaVideo = await getVideoMetadata(visual.host, visual.id);
 
           const image: Buffer = await fetchBufferUrl(metaVideo.thumbnailUrl);
@@ -243,7 +251,7 @@ const writeImageMetadata = async (
 
 const toThumbnail = async (image: Buffer): Promise<Buffer> => {
   const thumbnail = await sharp(image)
-    .resize(cfg.thumbnailSize, cfg.thumbnailSize, { fit: "cover" })
+    .resize(thumbnailSize, thumbnailSize, { fit: "cover" })
     .jpeg({
       force: false,
       quality: 80,
@@ -255,9 +263,9 @@ const toThumbnail = async (image: Buffer): Promise<Buffer> => {
 
 const resizeMainVisual = async (image: Buffer): Promise<Buffer> => {
   const actual = await getImageMetadata(image);
-  const targetSize = cfg.mainVisualSize;
+  const targetSize = mainVisualSize;
   const actualAR = actual.width / actual.height;
-  const targetAR = cfg.mainVisualAR;
+  const targetAR = mainVisualAR;
 
   const ar =
     actualAR >= targetAR // Is image more landscapey?
@@ -294,18 +302,18 @@ const resizeImage = async (image: Buffer): Promise<Buffer> => {
   const actual = await getImageMetadata(image);
   const actualAR = actual.width / actual.height;
 
-  if (actual.width > cfg.visualMaxSize || actual.height > cfg.visualMaxSize) {
+  if (actual.width > visualMaxSize || actual.height > visualMaxSize) {
     const targetSize =
       actual.width > actual.height
         ? {
             // Wider
-            width: cfg.visualMaxSize,
-            height: cfg.visualMaxSize / actualAR,
+            width: visualMaxSize,
+            height: visualMaxSize / actualAR,
           }
         : {
             // Taller
-            width: cfg.visualMaxSize * actualAR,
-            height: cfg.visualMaxSize,
+            width: visualMaxSize * actualAR,
+            height: visualMaxSize,
           };
 
     return resizeTo(targetSize, image);

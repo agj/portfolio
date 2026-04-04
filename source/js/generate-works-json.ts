@@ -2,7 +2,13 @@ import fs from "node:fs";
 import * as z from "zod";
 import "dot-into";
 import { ensureDirForFile, isUrl, toJson } from "./utils.ts";
-import cfg, { type LanguageId, type VisualType } from "./config.ts";
+import {
+  cacheDir,
+  outputDir,
+  worksFolder,
+  type LanguageId,
+  type VisualType,
+} from "./constants.ts";
 import type {
   Language,
   Link,
@@ -78,7 +84,7 @@ const normalizeLanguage = (language: Language): NormalizedLanguage => {
     description: language.description,
     date: language.date,
     tags: language.tags,
-    mainVisualUrl: `${cfg.worksFolder}/${language.mainVisualUrl}`,
+    mainVisualUrl: `${worksFolder}/${language.mainVisualUrl}`,
     mainVisualColor: mvMeta.color,
     visuals: language.visuals ? language.visuals.map(normalizeVisual) : [],
     links: language.links ? language.links : [],
@@ -89,20 +95,20 @@ const normalizeLanguage = (language: Language): NormalizedLanguage => {
 const normalizeVisual = (visual: Visual): NormalizedVisual => {
   const meta = getVisualMetadata(visual.metaUrl);
 
-  if (visual.type === cfg.visualType.image) {
+  if (visual.type === "Image") {
     return {
       type: visual.type,
-      url: isUrl(visual.url) ? visual.url : `${cfg.worksFolder}/${visual.url}`,
-      thumbnailUrl: `${cfg.worksFolder}/${visual.thumbnailUrl}`,
+      url: isUrl(visual.url) ? visual.url : `${worksFolder}/${visual.url}`,
+      thumbnailUrl: `${worksFolder}/${visual.thumbnailUrl}`,
       aspectRatio: meta.width / meta.height,
       color: meta.color,
     };
-  } else if (visual.type === cfg.visualType.video) {
+  } else if (visual.type === "Video") {
     return {
       type: visual.type,
       host: visual.host,
       id: visual.id,
-      thumbnailUrl: `${cfg.worksFolder}/${visual.thumbnailUrl}`,
+      thumbnailUrl: `${worksFolder}/${visual.thumbnailUrl}`,
       aspectRatio: meta.width / meta.height,
       color: meta.color,
       parameters: visual.parameters ? visual.parameters : {},
@@ -113,9 +119,7 @@ const normalizeVisual = (visual: Visual): NormalizedVisual => {
 };
 
 const getVisualMetadata = (url: String): VisualMetadata => {
-  const raw = fs
-    .readFileSync(`${cfg.cacheDir}${url}`, "utf-8")
-    .into(JSON.parse);
+  const raw = fs.readFileSync(`${cacheDir}${url}`, "utf-8").into(JSON.parse);
   const parsed = visualMetaSchema.safeParse(raw);
 
   if (!parsed.success) {
@@ -130,11 +134,11 @@ const getVisualMetadata = (url: String): VisualMetadata => {
 export const generateWorksJson = async (
   works: Record<string, Work>,
 ): Promise<void> => {
-  fs.mkdirSync(cfg.outputDir, { recursive: true });
+  fs.mkdirSync(outputDir, { recursive: true });
 
   const worksArray = values(works).map(normalizeWork);
 
-  const filename = `${cfg.outputDir}${cfg.worksFolder}/data.json`;
+  const filename = `${outputDir}${worksFolder}/data.json`;
   ensureDirForFile(filename);
   fs.writeFileSync(filename, toJson(worksArray), "utf-8");
 };

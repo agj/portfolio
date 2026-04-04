@@ -4,7 +4,7 @@ import { parseArgs } from "util";
 import { retrieveWorks } from "./source/js/retrieve-works.ts";
 import { generateWorksJson } from "./source/js/generate-works-json.ts";
 import { generateVisualsCache } from "./source/js/generate-visuals-cache.ts";
-import cfg from "./source/js/config.ts";
+import { cacheDir, outputDir, worksDir } from "./source/js/constants.ts";
 import { run } from "./source/js/utils.ts";
 
 // Static files copy
@@ -13,15 +13,14 @@ const copyCache = () =>
   gulp
     .src(
       [
-        path.join(cfg.cacheDir, "**/*.*"),
-        path.join(`!${cfg.cacheDir}`, "**/*.meta.json"),
+        path.join(cacheDir, "**/*.*"),
+        path.join(`!${cacheDir}`, "**/*.meta.json"),
       ],
       { encoding: false },
     )
-    .pipe(gulp.dest(path.join(cfg.outputDir, "works/")));
+    .pipe(gulp.dest(path.join(outputDir, "works/")));
 
-const watchCopyCache = () =>
-  gulp.watch(path.join(cfg.cacheDir, "**"), copyCache);
+const watchCopyCache = () => gulp.watch(path.join(cacheDir, "**"), copyCache);
 
 // Data generation
 
@@ -36,7 +35,7 @@ const generateJson = async () => {
 };
 
 const watchGenerateJson = () =>
-  gulp.watch(path.join(cfg.worksDir, "**"), generateJson);
+  gulp.watch(path.join(worksDir, "**"), generateJson);
 
 // Elm through Vite
 

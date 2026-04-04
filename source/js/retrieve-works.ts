@@ -1,16 +1,18 @@
-import { dropLast, fromEntries, last, mapValues, merge, values } from "remeda";
+import { dropLast, fromEntries, last, mapValues, merge } from "remeda";
 import fs from "node:fs";
 import path from "path";
 import { glob } from "glob";
 import matter from "gray-matter";
 import * as z from "zod";
 import "dot-into";
-import cfg, {
+import {
   defaultLanguageId,
+  hostTypes,
+  worksDir,
   type HostType,
   type LanguageId,
   type VisualType,
-} from "./config.ts";
+} from "./constants.ts";
 import { isUrl } from "./utils.ts";
 
 // Types
@@ -92,12 +94,12 @@ const linkSchema = z.object({
 
 const visualSchema = z.discriminatedUnion("type", [
   z.object({
-    type: z.literal(cfg.visualType.image),
+    type: z.literal("Image" satisfies VisualType),
     url: pathSchema,
   }),
   z.object({
-    type: z.literal(cfg.visualType.video),
-    host: z.enum(values(cfg.hostType)),
+    type: z.literal("Video" satisfies VisualType),
+    host: z.enum(hostTypes),
     id: z.string(),
     parameters: z.record(z.string(), z.string()).optional(),
   }),
@@ -175,7 +177,7 @@ const normalizeWork = async (
 };
 
 const getMainVisualFilename = async (workName: string) => {
-  const mainFiles = await glob(`${cfg.worksDir}${workName}/main.*`);
+  const mainFiles = await glob(`${worksDir}${workName}/main.*`);
   if (!mainFiles[0]) {
     throw `No main visual file (main.jpg/.png) for work ${workName}!`;
   }
@@ -185,7 +187,7 @@ const getMainVisualFilename = async (workName: string) => {
 const normalizeVisual =
   (workName: string) =>
   (visual: RawVisual): Visual => {
-    if (visual.type === cfg.visualType.image) {
+    if (visual.type === "Image") {
       const localPath = toLocalPath(workName, visual.url);
       return merge(visual, {
         url:
@@ -196,7 +198,7 @@ const normalizeVisual =
         retrieveUrl: visual.url,
         metaUrl: `${localPath}.meta.json`,
       });
-    } else if (visual.type === cfg.visualType.video) {
+    } else if (visual.type === "Video") {
       return merge(visual, {
         thumbnailUrl: `${workName}/${visual.host}-${visual.id}-thumb.jpg`,
         metaUrl: `${workName}/${visual.host}-${visual.id}.meta.json`,
@@ -241,7 +243,7 @@ const retrieveWorkAsPair = async (
 ): Promise<[string, Work]> => [workName, await retrieveWork(workName)];
 
 const retrieveWork = async (workName: string): Promise<Work> => {
-  const folder = `${cfg.worksDir}${workName}/`;
+  const folder = `${worksDir}${workName}/`;
   const languageFiles = await glob(`${folder}*.md`);
   const languagePairs = languageFiles
     .map(getFileName)
@@ -256,7 +258,7 @@ const retrieveWork = async (workName: string): Promise<Work> => {
 // API
 
 export const retrieveWorks = async (): Promise<Record<string, Work>> => {
-  const workNames = (await glob(`${cfg.worksDir}*/`))
+  const workNames = (await glob(`${worksDir}*/`))
     .map(getLastDir)
     .filter((s): s is string => !!s);
 
