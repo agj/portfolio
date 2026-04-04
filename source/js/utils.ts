@@ -5,7 +5,12 @@ import * as z from "zod";
 import { spawn } from "child_process";
 import "dot-into";
 
-export const log = tap(console.log);
+export const log =
+  (label?: string) =>
+  <T,>(value: T): T => {
+    console.log(`${label ? label + ": " : ""}${value}`);
+    return value;
+  };
 
 export const toJson = (data: unknown) => JSON.stringify(data, null, "\t");
 
