@@ -4,7 +4,6 @@ import { tap } from "remeda";
 import * as z from "zod";
 import { spawn } from "child_process";
 import "dot-into";
-import axios from "axios";
 
 export const log = tap(console.log);
 
@@ -29,29 +28,36 @@ export const fetchJsonUrl = async <T,>(
   url: string,
   schema: z.ZodType<T>,
 ): Promise<T> => {
-  const response = await axios.get(url, { responseType: "json" });
+  const response = await fetch(
+    new Request(url, {
+      method: "GET",
+      headers: { "Response-Type": "application/json" },
+    }),
+  );
+  const data = await response.json();
 
-  if (!response.data) {
+  if (!data) {
     throw new Error(`Fetch failed for: ${url}`);
   }
 
-  const parsed = schema.safeParse(response.data);
+  const parsed = schema.safeParse(data);
 
   if (!parsed.success) {
     throw new Error(
-      `Failed to parse response from: ${url}\n${JSON.stringify(response.data)}\n${JSON.stringify(z.formatError(parsed.error))}`,
+      `Failed to parse response from: ${url}\n${JSON.stringify(data)}\n${JSON.stringify(z.formatError(parsed.error))}`,
     );
   }
 
   return parsed.data;
 };
 
-export const fetchBufferUrl = async (url: string) => {
-  const response = await axios.get(url, { responseType: "arraybuffer" });
+export const fetchBufferUrl = async (url: string): Promise<Buffer> => {
+  const response = await fetch(new Request(url, { method: "GET" }));
+  const data = await response.arrayBuffer();
 
-  if (!(response.data instanceof Buffer)) {
+  if (!data) {
     throw new Error(`Fetch failed for: ${url}`);
   }
 
-  return response.data;
+  return Buffer.from(data);
 };
