@@ -1,7 +1,7 @@
 import { dropLast, fromEntries, last, mapValues, merge } from "remeda";
 import fs from "node:fs";
 import path from "path";
-import { glob } from "glob";
+import { glob } from "tinyglobby";
 import matter from "gray-matter";
 import * as z from "zod";
 import "dot-into";
