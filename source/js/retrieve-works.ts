@@ -258,7 +258,7 @@ const retrieveWork = async (workName: string): Promise<Work> => {
 // API
 
 export const retrieveWorks = async (): Promise<Record<string, Work>> => {
-  const workNames = (await glob(`${worksDir}*/`))
+  const workNames = (await glob(`${worksDir}*/`, { onlyDirectories: true }))
     .map(getLastDir)
     .filter((s): s is string => !!s);
 
