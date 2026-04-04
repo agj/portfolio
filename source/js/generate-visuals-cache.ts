@@ -1,23 +1,43 @@
-import * as R from "ramda";
 import fs from "node:fs";
 import fsPromises from "node:fs/promises";
 import * as z from "zod";
 import sharp from "sharp";
 import vibrant from "node-vibrant";
-import axios from "axios";
-import "dot-into";
-
-import cfg, { type HostType } from "./config.ts";
-import * as _ from "./utils.ts";
-import type { Work } from "./retrieve-works.ts";
 import { flat, mapValues, unique, values } from "remeda";
+import "dot-into";
+import cfg, { type HostType } from "./config.ts";
+import {
+  ensureDirForFile,
+  fetchBufferUrl,
+  fetchJsonUrl,
+  isUrl,
+  toJson,
+} from "./utils.ts";
+import type { Work } from "./retrieve-works.ts";
 
 // Types
+
+type ImageMeta = {
+  width: number;
+  height: number;
+  color: Color;
+};
 
 type VideoMeta = {
   width: number;
   height: number;
   thumbnailUrl: string;
+};
+
+type Color = {
+  red: number;
+  green: number;
+  blue: number;
+};
+
+type Dimensions = {
+  width: number;
+  height: number;
 };
 
 // Utils
@@ -29,38 +49,34 @@ const getVideoMetadata = async (
   id: string,
 ): Promise<VideoMeta> => {
   if (host === "Youtube") {
-    const response = (
-      await axios.get(
-        `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`,
-        { responseType: "json" },
-      )
-    ).data;
-    const parsed = youtubeVideoMetaResponseSchema.parse(response);
+    const data = await fetchJsonUrl(
+      `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`,
+      youtubeVideoMetaResponseSchema,
+    );
 
     return {
-      width: parsed.width,
-      height: parsed.height,
-      thumbnailUrl: parsed.thumbnail_url,
+      width: data.width,
+      height: data.height,
+      thumbnailUrl: data.thumbnail_url,
     };
   } else if (host === "Vimeo") {
-    const response = (
-      await axios.get(`http://vimeo.com/api/v2/video/${id}.json`, {
-        responseType: "json",
-      })
-    ).data[0];
-    const parsed = vimeoVideoMetaResponseSchema.parse(response);
+    const [data] = await fetchJsonUrl(
+      `http://vimeo.com/api/v2/video/${id}.json`,
+      vimeoVideoMetaResponseSchema,
+    );
 
     return {
-      width: parsed.width,
-      height: parsed.height,
-      thumbnailUrl: parsed.thumbnail_large,
+      width: data.width,
+      height: data.height,
+      thumbnailUrl: data.thumbnail_large,
     };
   }
 
   throw new Error(`Video ID "${id}" has wrong host: ${host}`);
 };
 
-const filesExist = R.all(fs.existsSync);
+const filesExist = (filenames: string[]): boolean =>
+  filenames.every(fs.existsSync);
 
 // Schemas
 
@@ -70,11 +86,13 @@ const youtubeVideoMetaResponseSchema = z.object({
   thumbnail_url: z.string(),
 });
 
-const vimeoVideoMetaResponseSchema = z.object({
-  width: z.int(),
-  height: z.int(),
-  thumbnail_large: z.string(),
-});
+const vimeoVideoMetaResponseSchema = z.tuple([
+  z.object({
+    width: z.int(),
+    height: z.int(),
+    thumbnail_large: z.string(),
+  }),
+]);
 
 // Process
 
@@ -91,7 +109,7 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
     console.log(`Processing: ${mvLogReference}`);
 
     // Create folders.
-    _.ensureDirForFile(mvMetaOutputFilename);
+    ensureDirForFile(mvMetaOutputFilename);
 
     const image = await fsPromises.readFile(
       `${cfg.worksDir}${work.default.mainVisualUrl}`,
@@ -111,96 +129,87 @@ const generateVisualsCacheForWork = async (work: Work, workName: string) => {
       .into(flat(1))
       .into(unique());
 
-    const promises = allVisuals.into(
-      R.map(async (visual) => {
-        const visualLogReference = `${workName} -> ${
-          visual.type === "Image" ? visual.retrieveUrl : visual.id
-        }`;
+    const promises = allVisuals.map(async (visual) => {
+      const visualLogReference = `${workName} -> ${
+        visual.type === "Image" ? visual.retrieveUrl : visual.id
+      }`;
 
-        // Filenames.
-        const thumbOutputFilename = `${cfg.cacheDir}${visual.thumbnailUrl}`;
-        const metaOutputFilename = `${cfg.cacheDir}${visual.metaUrl}`;
+      // Filenames.
+      const thumbOutputFilename = `${cfg.cacheDir}${visual.thumbnailUrl}`;
+      const metaOutputFilename = `${cfg.cacheDir}${visual.metaUrl}`;
 
-        if (filesExist([thumbOutputFilename, metaOutputFilename])) {
-          console.log(`Skipped: ${visualLogReference}`);
-        } else {
-          console.log(`Processing: ${visualLogReference}`);
+      if (filesExist([thumbOutputFilename, metaOutputFilename])) {
+        console.log(`Skipped: ${visualLogReference}`);
+      } else {
+        console.log(`Processing: ${visualLogReference}`);
 
-          [thumbOutputFilename, metaOutputFilename].forEach(_.ensureDirForFile);
+        [thumbOutputFilename, metaOutputFilename].forEach(ensureDirForFile);
 
-          // Images.
-          if (visual.type === cfg.visualType.image) {
-            const isLocal = !_.isUrl(visual.retrieveUrl);
-            const image: Buffer = isLocal
-              ? await fsPromises.readFile(
-                  `${cfg.worksDir}${workName}/${visual.retrieveUrl}`,
-                )
-              : (
-                  await axios.get(visual.retrieveUrl, {
-                    responseType: "arraybuffer",
-                  })
-                ).data;
+        // Images.
+        if (visual.type === cfg.visualType.image) {
+          const isLocal = !isUrl(visual.retrieveUrl);
+          const image: Buffer = isLocal
+            ? await fsPromises.readFile(
+                `${cfg.worksDir}${workName}/${visual.retrieveUrl}`,
+              )
+            : await fetchBufferUrl(visual.retrieveUrl);
 
-            const thumbnail = await toThumbnail(image);
-            await fsPromises.writeFile(thumbOutputFilename, thumbnail);
-            console.log(`Output: ${thumbOutputFilename}`);
+          const thumbnail = await toThumbnail(image);
+          await fsPromises.writeFile(thumbOutputFilename, thumbnail);
+          console.log(`Output: ${thumbOutputFilename}`);
 
-            if (isLocal) {
-              const outputFilename = `${cfg.cacheDir}${visual.url}`;
-              _.ensureDirForFile(outputFilename);
+          if (isLocal) {
+            const outputFilename = `${cfg.cacheDir}${visual.url}`;
+            ensureDirForFile(outputFilename);
 
-              const resized = await resizeImage(image);
-              await fsPromises.writeFile(outputFilename, resized);
-              console.log(`Output: ${outputFilename}`);
-              await writeImageMetadata(resized, metaOutputFilename);
-            } else {
-              await writeImageMetadata(image, metaOutputFilename);
-            }
-            console.log(`Output: ${metaOutputFilename}`);
-
-            // Videos.
-          } else if (visual.type === cfg.visualType.video) {
-            const metaVideo = await getVideoMetadata(visual.host, visual.id);
-
-            const image: Buffer = (
-              await axios.get(metaVideo.thumbnailUrl, {
-                responseType: "arraybuffer",
-              })
-            ).data;
-
-            const thumbnail = await toThumbnail(image);
-            await fsPromises.writeFile(thumbOutputFilename, thumbnail);
-            console.log(`Output: ${thumbOutputFilename}`);
-
-            const color = await getImageColor(thumbnail);
-
-            fs.writeFileSync(
-              metaOutputFilename,
-              _.toJson({
-                width: metaVideo.width,
-                height: metaVideo.height,
-                color: color,
-              }),
-              "utf-8",
-            );
-            console.log(`Output: ${metaOutputFilename}`);
+            const resized = await resizeImage(image);
+            await fsPromises.writeFile(outputFilename, resized);
+            console.log(`Output: ${outputFilename}`);
+            await writeImageMetadata(resized, metaOutputFilename);
+          } else {
+            await writeImageMetadata(image, metaOutputFilename);
           }
+          console.log(`Output: ${metaOutputFilename}`);
+
+          // Videos.
+        } else if (visual.type === cfg.visualType.video) {
+          const metaVideo = await getVideoMetadata(visual.host, visual.id);
+
+          const image: Buffer = await fetchBufferUrl(metaVideo.thumbnailUrl);
+
+          const thumbnail = await toThumbnail(image);
+          await fsPromises.writeFile(thumbOutputFilename, thumbnail);
+          console.log(`Output: ${thumbOutputFilename}`);
+
+          const color = await getImageColor(thumbnail);
+
+          fs.writeFileSync(
+            metaOutputFilename,
+            toJson({
+              width: metaVideo.width,
+              height: metaVideo.height,
+              color: color,
+            }),
+            "utf-8",
+          );
+          console.log(`Output: ${metaOutputFilename}`);
         }
-      }),
-    );
+      }
+    });
 
     await awaitAll(promises);
   }
 };
 
-const getImageDimensions = async (image: Buffer) => {
+const getImageDimensions = async (image: Buffer): Promise<Dimensions> => {
   const metadata = await sharp(image).metadata();
   return {
     width: metadata.width,
     height: metadata.height,
   };
 };
-const getImageColor = async (image: Buffer) => {
+
+const getImageColor = async (image: Buffer): Promise<Color> => {
   const colors = await vibrant.from(image).getPalette();
   const color = colors.Vibrant?.rgb;
 
@@ -214,7 +223,8 @@ const getImageColor = async (image: Buffer) => {
     blue: color[2] / 0xff,
   };
 };
-const getImageMetadata = async (image: Buffer) => {
+
+const getImageMetadata = async (image: Buffer): Promise<ImageMeta> => {
   const dimensions = await getImageDimensions(image);
   const color = await getImageColor(image);
   return {
@@ -223,16 +233,15 @@ const getImageMetadata = async (image: Buffer) => {
     color,
   };
 };
-const writeImageMetadata = async (image: Buffer, outputPath: string) => {
-  fs.writeFileSync(
-    outputPath,
-    _.toJson(await getImageMetadata(image)),
-    "utf-8",
-  );
+
+const writeImageMetadata = async (
+  image: Buffer,
+  outputPath: string,
+): Promise<void> => {
+  fs.writeFileSync(outputPath, toJson(await getImageMetadata(image)), "utf-8");
 };
 
-const toThumbnail = async (image: Buffer) => {
-  // console.log("toThumbnail", image);
+const toThumbnail = async (image: Buffer): Promise<Buffer> => {
   const thumbnail = await sharp(image)
     .resize(cfg.thumbnailSize, cfg.thumbnailSize, { fit: "cover" })
     .jpeg({
@@ -243,7 +252,8 @@ const toThumbnail = async (image: Buffer) => {
     .toBuffer();
   return thumbnail;
 };
-const resizeMainVisual = async (image: Buffer) => {
+
+const resizeMainVisual = async (image: Buffer): Promise<Buffer> => {
   const actual = await getImageMetadata(image);
   const targetSize = cfg.mainVisualSize;
   const actualAR = actual.width / actual.height;
@@ -280,7 +290,7 @@ const resizeMainVisual = async (image: Buffer) => {
   return resizeTo(scaledSize, image);
 };
 
-const resizeImage = async (image: Buffer) => {
+const resizeImage = async (image: Buffer): Promise<Buffer> => {
   const actual = await getImageMetadata(image);
   const actualAR = actual.width / actual.height;
 
@@ -304,10 +314,7 @@ const resizeImage = async (image: Buffer) => {
   }
 };
 
-const resizeTo = (
-  dimensions: { width: number; height: number },
-  image: Buffer,
-) =>
+const resizeTo = (dimensions: Dimensions, image: Buffer): Promise<Buffer> =>
   sharp(image)
     .resize(Math.round(dimensions.width), Math.round(dimensions.height), {
       fit: "cover",
@@ -321,9 +328,11 @@ const resizeTo = (
 
 // API
 
-export const generateVisualsCache = async (works: Record<string, Work>) => {
+export const generateVisualsCache = async (
+  works: Record<string, Work>,
+): Promise<void> => {
   const promises = works
-    .into(R.mapObjIndexed(generateVisualsCacheForWork))
-    .into(R.values);
+    .into(mapValues(generateVisualsCacheForWork))
+    .into(values());
   await awaitAll(promises);
 };

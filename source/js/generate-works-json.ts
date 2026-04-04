@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import * as z from "zod";
 import "dot-into";
-
 import { ensureDirForFile, isUrl, toJson } from "./utils.ts";
 import cfg, { type LanguageId, type VisualType } from "./config.ts";
 import type {
