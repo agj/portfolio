@@ -1,6 +1,5 @@
 import path from "node:path";
 import fs from "node:fs";
-import { tap } from "remeda";
 import * as z from "zod";
 import { spawn } from "child_process";
 import "dot-into";
