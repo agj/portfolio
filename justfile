@@ -4,16 +4,20 @@ port := "1237"
   just --list --unsorted
 
 # Run development server.
-develop: clean install qr
+develop: clean install check-types qr
   pnpm exec gulp develop --port={{port}}
 
 # Build for deployment.
-build: clean install
+build: clean install check-types
   pnpm exec gulp build
 
 # Generate media cache.
-cache: install
+cache: install check-types
   pnpm exec gulp cache
+
+# Confirm that TypeScript files typecheck.
+check-types: install
+  tsc --noEmit
 
 # Build and deploy to server. Needs .env variables to be set.
 deploy: build
