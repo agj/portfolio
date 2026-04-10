@@ -2,7 +2,7 @@ import fs from "node:fs";
 import fsPromises from "node:fs/promises";
 import * as z from "zod";
 import sharp from "sharp";
-import vibrant from "node-vibrant";
+import { Vibrant } from "node-vibrant/node";
 import { flat, mapValues, unique, values } from "remeda";
 import "dot-into";
 import {
@@ -218,7 +218,7 @@ const getImageDimensions = async (image: Buffer): Promise<Dimensions> => {
 };
 
 const getImageColor = async (image: Buffer): Promise<Color> => {
-  const colors = await vibrant.from(image).getPalette();
+  const colors = await Vibrant.from(image).getPalette();
   const color = colors.Vibrant?.rgb;
 
   if (!color) {
