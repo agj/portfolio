@@ -2,7 +2,6 @@ module Utils exposing
     ( fraction
     , ifElse
     , sides
-    , unnest
     )
 
 
@@ -20,11 +19,7 @@ ifElse check yes no =
         no
 
 
-unnest : List (List a) -> List a
-unnest list =
-    List.concat list
-
-
+sides : { left : number, right : number, top : number, bottom : number }
 sides =
     { left = 0
     , right = 0

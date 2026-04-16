@@ -1,4 +1,4 @@
-module Main exposing (Document, Model, main)
+module Main exposing (main)
 
 import Animator exposing (Animator)
 import AppUrl exposing (QueryParameters)
@@ -156,12 +156,12 @@ getData =
 
 
 onUrlChange : Url -> Msg
-onUrlChange url =
+onUrlChange _ =
     NoOp
 
 
 onUrlRequest : Browser.UrlRequest -> Msg
-onUrlRequest urlRequest =
+onUrlRequest _ =
     NoOp
 
 
@@ -813,11 +813,11 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
 
 viewIcon : Color -> IconName -> Bool -> Ui.Element msg
 viewIcon color iconName isVisible =
-    let
-        size =
-            fraction 1.5 Palette.spaceNormal
-    in
     if isVisible then
+        let
+            size =
+                fraction 1.5 Palette.spaceNormal
+        in
         icon size color iconName
 
     else
@@ -826,22 +826,22 @@ viewIcon color iconName isVisible =
 
 viewWorkVisuals : Int -> Settings -> Color -> List Visual -> Ui.Element Msg
 viewWorkVisuals blockWidth settings mainVisualColor visuals =
-    let
-        perRow =
-            settings.thumbnailsPerRow
-
-        spaceBetween =
-            Palette.spaceSmallest
-
-        thumbnailSize =
-            toFloat (blockWidth - (spaceBetween * (perRow - 1)))
-                / toFloat perRow
-                |> floor
-    in
     if List.isEmpty visuals then
         Ui.none
 
     else
+        let
+            perRow =
+                settings.thumbnailsPerRow
+
+            spaceBetween =
+                Palette.spaceSmallest
+
+            thumbnailSize =
+                toFloat (blockWidth - (spaceBetween * (perRow - 1)))
+                    / toFloat perRow
+                    |> floor
+        in
         Ui.wrappedRow
             [ Ui.spacing spaceBetween
             , Ui.width Ui.fill
@@ -955,8 +955,7 @@ viewWorkReadMore labels readMore color =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Browser.Events.onResize <|
-            \w h -> Resized
+        [ Browser.Events.onResize (\_ _ -> Resized)
         , Viewport.got GotViewport NoOp
         , animator |> Animator.toSubscription AnimationTick model
         , Ports.scrolledOverWork (Just >> ScrolledOverWork) (ScrolledOverWork Nothing)

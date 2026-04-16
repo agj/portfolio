@@ -5,7 +5,6 @@ import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import Language exposing (Language)
 import Ports
-import Tag exposing (Tag)
 
 
 type alias SaveState =

@@ -1,4 +1,4 @@
-module Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter, Visual(..), colorDecoder, decoder, videoHostDecoder)
+module Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter, Visual(..), colorDecoder, decoder)
 
 import Color exposing (Color)
 import Json.Decode as Decode exposing (Decoder, andThen, float, oneOf, string)
@@ -43,6 +43,7 @@ type alias VideoParameter =
 decoder : Decoder Visual
 decoder =
     let
+        imageDecoder : Decoder Visual
         imageDecoder =
             Decode.succeed (\tUrl url ar color -> Image { thumbnailUrl = tUrl, url = url, aspectRatio = ar, color = color })
                 |> required "thumbnailUrl" string
@@ -50,6 +51,7 @@ decoder =
                 |> required "aspectRatio" float
                 |> required "color" colorDecoder
 
+        videoDecoder : Decoder Visual
         videoDecoder =
             Decode.succeed (\tUrl id ar host color params -> Video { thumbnailUrl = tUrl, id = id, aspectRatio = ar, host = host, color = color, parameters = params })
                 |> required "thumbnailUrl" string

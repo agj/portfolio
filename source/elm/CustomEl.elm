@@ -21,12 +21,7 @@ import Html.Attributes as Attributes
 
 imageInline : List (Element.Attribute msg) -> { src : String, description : String } -> Element msg
 imageInline attrs desc =
-    image
-        ([ style "display" "inline-flex"
-         ]
-            ++ attrs
-        )
-        desc
+    image (style "display" "inline-flex" :: attrs) desc
 
 
 

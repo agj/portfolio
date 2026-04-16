@@ -1,4 +1,4 @@
-module Viewport exposing (Viewport, decoder, get, got)
+module Viewport exposing (Viewport, get, got)
 
 import Json.Decode as Decode exposing (Decoder, int)
 import Json.Decode.Pipeline exposing (required)

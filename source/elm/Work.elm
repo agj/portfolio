@@ -12,17 +12,19 @@ import Language exposing (Language(..))
 import Mark
 import Mark.Error
 import Tag exposing (Tag)
-import Utils exposing (unnest)
 import Work.Date as Date exposing (Date)
 import Work.Visual as Visual exposing (Visual)
 
 
 type WorkLanguages
-    = WorkLanguages
-        { english : Work
-        , japanese : Work
-        , spanish : Work
-        }
+    = WorkLanguages WorkLanguagesInternal
+
+
+type alias WorkLanguagesInternal =
+    { english : Work
+    , japanese : Work
+    , spanish : Work
+    }
 
 
 type alias Work =
@@ -62,6 +64,7 @@ languages data =
 ofLanguage : Language -> WorkLanguages -> Work
 ofLanguage language workLanguages =
     let
+        data : WorkLanguagesInternal
         data =
             case workLanguages of
                 WorkLanguages d ->
@@ -132,6 +135,7 @@ emuDecoder =
 renderEmu : String -> Doc
 renderEmu raw =
     let
+        withErrors : List Mark.Error.Error -> Doc
         withErrors errors =
             List.map errorToParagraph errors
                 -- |> unnest
@@ -151,6 +155,7 @@ renderEmu raw =
 errorToParagraph : Mark.Error.Error -> Paragraph
 errorToParagraph error =
     let
+        doit : String -> Paragraph
         doit string =
             Text.create (Format.empty |> Format.setCode True) string
                 |> List.singleton
@@ -163,7 +168,7 @@ emuDocument : Mark.Document Doc
 emuDocument =
     Mark.document emuWrapper <|
         Mark.manyOf
-            [ Mark.map (unnest >> Paragraph.create) inlineParser
+            [ Mark.map (List.concat >> Paragraph.create) inlineParser
             ]
 
 
@@ -198,6 +203,7 @@ toFormattedText styles str =
 toLinkedText : List ( Mark.Styles, String ) -> String -> List Text
 toLinkedText strings url =
     let
+        process : ( Mark.Styles, String ) -> Text
         process ( styles, str ) =
             Text.create
                 (toFormat styles |> Format.setLink (Just (Doc.Link.create url)))

@@ -24,6 +24,7 @@ ofLanguage tagMessenger selectedTag language =
 -- ACTUAL DATA
 
 
+english : (Tag -> String -> Element msg) -> Element msg
 english tag =
     d
         [ p
@@ -95,6 +96,7 @@ english tag =
         ]
 
 
+japanese : (Tag -> String -> Element msg) -> Element msg
 japanese tag =
     d
         [ p
@@ -165,6 +167,7 @@ japanese tag =
         ]
 
 
+spanish : (Tag -> String -> Element msg) -> Element msg
 spanish tag =
     d
         [ p

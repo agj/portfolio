@@ -53,6 +53,7 @@ withStyle style (Icon config) =
 view : Icon -> Element msg
 view (Icon config) =
     let
+        phosphorIcon : Phosphor.Icon
         phosphorIcon =
             case config.name of
                 Language ->
@@ -88,6 +89,7 @@ view (Icon config) =
                 At ->
                     Phosphor.at
 
+        style : Phosphor.IconWeight
         style =
             case config.style of
                 StyleFilled ->

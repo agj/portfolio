@@ -1,6 +1,6 @@
 module Language exposing (Language(..), decoder, encoder, fromCode)
 
-import Dict
+import Dict exposing (Dict)
 import Dict.Extra
 import Json.Decode as Decode exposing (Decoder, andThen, string)
 import Json.Encode as Encode exposing (Value)
@@ -12,6 +12,7 @@ type Language
     | Japanese
 
 
+languageCodes : Dict String Language
 languageCodes =
     Dict.fromList
         [ ( "en", English )
