@@ -1,4 +1,4 @@
-module Work.Date exposing (Date, decoder, fromString, toString)
+module Work.Date exposing (Date, decoder, toString)
 
 import Json.Decode as Decode exposing (Decoder, string)
 

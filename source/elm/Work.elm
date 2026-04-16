@@ -1,4 +1,4 @@
-module Work exposing (Link, ReadMore, Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
+module Work exposing (Link, ReadMore, Work, WorkLanguages, allWorksDecoder, ofLanguage)
 
 import Color exposing (Color)
 import Doc exposing (Doc)
@@ -56,11 +56,6 @@ type alias Link =
 -- ACCESSORS
 
 
-languages : { english : Work, japanese : Work, spanish : Work } -> WorkLanguages
-languages data =
-    WorkLanguages data
-
-
 ofLanguage : Language -> WorkLanguages -> Work
 ofLanguage language workLanguages =
     let
@@ -106,7 +101,7 @@ workDecoder =
         |> required "mainVisualUrl" string
         |> required "mainVisualColor" Visual.colorDecoder
         |> required "date" Date.decoder
-        |> required "tags" (list <| Tag.decoder Tag.DisallowsAny)
+        |> required "tags" (list Tag.decoder)
         |> required "visuals" (list Visual.decoder)
         |> required "links" (list linkDecoder)
         |> optional "readMore" (maybe readMoreDecoder) Nothing
