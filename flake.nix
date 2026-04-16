@@ -22,6 +22,7 @@
             pkgs.just
             pkgs.nodejs-slim_24
             pkgs.nushell
+            pkgs.optipng
             pkgs.pnpm
             pkgs.prettier
             pkgs.qrtool
