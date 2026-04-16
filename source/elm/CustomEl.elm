@@ -46,12 +46,14 @@ inlineCenter =
 radialGradient : List ( Float, Color ) -> Element.Attribute msg
 radialGradient colors =
     let
+        process : ( Float, Color ) -> String
         process ( position, color ) =
             Color.toCssString color
                 ++ " "
                 ++ String.fromFloat (position * 100.0)
                 ++ "%"
 
+        processedColors : List String
         processedColors =
             List.map process colors
     in
@@ -64,9 +66,11 @@ radialGradient colors =
 glow : { color : Color, strength : Float, size : Float } -> Element.Attribute msg
 glow { color, strength, size } =
     let
+        colorCss : String
         colorCss =
             Color.toCssString color
 
+        value : String
         value =
             "0 0 "
                 ++ String.fromFloat size

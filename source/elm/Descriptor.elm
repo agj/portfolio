@@ -45,6 +45,7 @@ d =
 makeTag : (Tag -> msg) -> Maybe Tag -> Tag -> String -> Element msg
 makeTag messenger selectedTag tag label =
     let
+        isSelectedTag : Bool
         isSelectedTag =
             case selectedTag of
                 Just st ->
@@ -161,9 +162,11 @@ fromParagraph color par =
 fromText : Color -> Text -> Element msg
 fromText color txt =
     let
+        textContent : String
         textContent =
             Text.content txt
 
+        format : Format
         format =
             Text.format txt
     in
