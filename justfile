@@ -4,7 +4,7 @@ port := "1237"
   just --list --unsorted
 
 # Run development server.
-develop: clean install check qr
+develop: clean install qr
   pnpm exec gulp develop --port={{port}}
 
 # Build for deployment.
