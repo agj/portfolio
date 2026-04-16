@@ -17,6 +17,7 @@ import NoDebug.Log
 import NoDebug.TodoOrToString
 import NoExposingEverything
 import NoImportingEverything
+import NoLeftPizza
 import NoMissingTypeAnnotation
 import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
@@ -42,6 +43,7 @@ config =
     , NoDebug.TodoOrToString.rule
     , NoExposingEverything.rule
     , NoImportingEverything.rule []
+    , NoLeftPizza.rule NoLeftPizza.Any
     , NoMissingTypeAnnotation.rule
     , NoMissingTypeAnnotationInLetIn.rule
     , NoMissingTypeExpose.rule
