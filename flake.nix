@@ -18,6 +18,7 @@
             pkgs.elmPackages.elm
             pkgs.elmPackages.elm-format
             pkgs.elmPackages.elm-json
+            pkgs.elmPackages.elm-review
             pkgs.just
             pkgs.nodejs-slim_24
             pkgs.nushell
