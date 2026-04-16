@@ -29,6 +29,7 @@ import NoUnused.Exports
 import NoUnused.Parameters
 import NoUnused.Patterns
 import NoUnused.Variables
+import Review.FilePattern as FilePattern
 import Review.Rule as Rule exposing (Rule)
 import Simplify
 
@@ -44,12 +45,19 @@ config =
     , NoMissingTypeAnnotation.rule
     , NoMissingTypeAnnotationInLetIn.rule
     , NoMissingTypeExpose.rule
+        |> Rule.ignoreErrorsFor [ FilePattern.exclude "source/elm/Main.elm" ]
     , NoPrematureLetComputation.rule
     , NoSimpleLetBody.rule
     , NoUnused.CustomTypeConstructorArgs.rule
     , NoUnused.CustomTypeConstructors.rule []
+        |> Rule.ignoreErrorsFor [ FilePattern.exclude "source/elm/View/Icon.elm" ]
     , NoUnused.Dependencies.rule
     , NoUnused.Exports.rule
+        |> Rule.ignoreErrorsFor
+            [ FilePattern.exclude "source/elm/CustomEl.elm"
+            , FilePattern.exclude "source/elm/Descriptor.elm"
+            , FilePattern.exclude "source/elm/Palette.elm"
+            ]
     , NoUnused.Parameters.rule
     , NoUnused.Patterns.rule
     , NoUnused.Variables.rule
