@@ -22,7 +22,7 @@ ifElse check yes no =
 
 unnest : List (List a) -> List a
 unnest list =
-    List.concatMap identity list
+    List.concat list
 
 
 sides =

@@ -1,7 +1,7 @@
 module View.CssSvg exposing (patternAngles, patternOverlappingCircles)
 
 import Color exposing (Color)
-import Regex exposing (Regex)
+import Regex
 import Url
 
 

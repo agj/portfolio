@@ -2,7 +2,7 @@ module Data.Labels exposing (Labels, ofLanguage)
 
 import Descriptor exposing (icon, p, t)
 import Element exposing (Element)
-import Language exposing (..)
+import Language exposing (Language(..))
 import View.Icon
 
 

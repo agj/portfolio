@@ -1,8 +1,8 @@
 module Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter, Visual(..), colorDecoder, decoder, videoHostDecoder)
 
 import Color exposing (Color)
-import Json.Decode as Decode exposing (Decoder, andThen, float, list, maybe, oneOf, string)
-import Json.Decode.Pipeline exposing (optional, required)
+import Json.Decode as Decode exposing (Decoder, andThen, float, oneOf, string)
+import Json.Decode.Pipeline exposing (required)
 
 
 type Visual
@@ -93,8 +93,7 @@ colorDecoder =
 parametersDecoder : Decoder (List VideoParameter)
 parametersDecoder =
     Decode.keyValuePairs string
-        |> andThen
+        |> Decode.map
             (\list ->
                 List.map (\( key, value ) -> { key = key, value = value }) list
-                    |> Decode.succeed
             )

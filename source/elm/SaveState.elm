@@ -1,7 +1,7 @@
 module SaveState exposing (SaveState, load, save)
 
-import Json.Decode as Decode exposing (Decoder, maybe)
-import Json.Decode.Pipeline exposing (optional, required)
+import Json.Decode as Decode exposing (Decoder)
+import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import Language exposing (Language)
 import Ports

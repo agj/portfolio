@@ -2,11 +2,10 @@ module VideoEmbed exposing (get)
 
 import Element as Ui exposing (Element)
 import Element.Background as UiBackground
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html exposing (iframe)
+import Html.Attributes exposing (attribute, src, style)
 import Palette
 import Util.Color as Color
-import Utils exposing (..)
 import View.CssSvg as CssSvg
 import Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter)
 

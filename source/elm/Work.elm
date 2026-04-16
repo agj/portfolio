@@ -6,14 +6,13 @@ import Doc.Format as Format exposing (Format)
 import Doc.Link
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
-import Element
-import Json.Decode as Decode exposing (Decoder, andThen, float, list, maybe, oneOf, string)
+import Json.Decode as Decode exposing (Decoder, list, maybe, string)
 import Json.Decode.Pipeline exposing (optional, required)
-import Language exposing (..)
+import Language exposing (Language(..))
 import Mark
 import Mark.Error
 import Tag exposing (Tag)
-import Utils exposing (..)
+import Utils exposing (unnest)
 import Work.Date as Date exposing (Date)
 import Work.Visual as Visual exposing (Visual)
 
@@ -127,7 +126,7 @@ readMoreDecoder =
 emuDecoder : Decoder Doc
 emuDecoder =
     string
-        |> andThen (\raw -> Decode.succeed (renderEmu raw))
+        |> Decode.map (\raw -> renderEmu raw)
 
 
 renderEmu : String -> Doc
@@ -142,7 +141,7 @@ renderEmu raw =
         Mark.Success result ->
             result
 
-        Mark.Almost { result, errors } ->
+        Mark.Almost { errors } ->
             withErrors errors
 
         Mark.Failure errors ->

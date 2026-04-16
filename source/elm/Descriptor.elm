@@ -17,20 +17,19 @@ import Color exposing (Color)
 import CustomEl
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
-import Doc.Link as Link exposing (Link)
+import Doc.Link as Link
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
 import Element exposing (Element, column, el, fill, html, mouseDown, newTabLink, paddingXY, paragraph, pointer, row, spacing, text, textColumn, width)
 import Element.Background as Background
-import Element.Border as Border
-import Element.Events exposing (..)
+import Element.Events
 import Element.Font as Font
 import Html
 import Html.Attributes
 import Palette
 import Tag exposing (Tag)
 import Util.Color as Color
-import Utils exposing (..)
+import Utils exposing (fraction, ifElse)
 import View.Icon
 
 

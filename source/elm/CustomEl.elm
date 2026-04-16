@@ -13,7 +13,6 @@ module CustomEl exposing
 import Color exposing (Color)
 import Element exposing (Element, image)
 import Html.Attributes as Attributes
-import Utils exposing (..)
 
 
 

@@ -1,7 +1,7 @@
 module Works exposing (ofLanguage)
 
-import Language exposing (..)
-import Work exposing (..)
+import Language exposing (Language)
+import Work exposing (Work, WorkLanguages)
 
 
 ofLanguage : Language -> List WorkLanguages -> List Work

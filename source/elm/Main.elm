@@ -1,4 +1,4 @@
-module Main exposing (Document, Model, init, main, subscriptions, update, view)
+module Main exposing (Document, Model, main)
 
 import Animator exposing (Animator)
 import AppUrl exposing (QueryParameters)
@@ -26,20 +26,20 @@ import LayoutFormat exposing (LayoutFormat(..))
 import List.Extra
 import Palette
 import Ports
-import SaveState exposing (SaveState)
+import SaveState
 import Tag exposing (Tag)
 import Time
 import Url exposing (Url)
 import Util.AppUrl as AppUrl
 import Util.Color as Color
-import Utils exposing (..)
+import Utils exposing (fraction, ifElse, sides)
 import VideoEmbed
 import View.CssSvg as CssSvg
 import View.Icon exposing (IconName)
 import Viewport exposing (Viewport)
-import Work exposing (..)
+import Work exposing (Link, Work, WorkLanguages)
 import Work.Date as Date exposing (Date)
-import Work.Visual as Visual exposing (Visual(..))
+import Work.Visual exposing (Visual(..))
 import Works
 
 

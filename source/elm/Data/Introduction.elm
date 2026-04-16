@@ -1,12 +1,10 @@
 module Data.Introduction exposing (ofLanguage)
 
-import Descriptor exposing (..)
+import Descriptor exposing (Url(..), bold, d, icon, l, makeTag, p, t)
 import Element exposing (Element)
-import Language exposing (..)
-import Palette
+import Language exposing (Language(..))
 import Tag exposing (Tag)
-import Utils exposing (..)
-import View.Icon exposing (IconName)
+import View.Icon
 
 
 ofLanguage : (Tag -> msg) -> Maybe Tag -> Language -> Element msg
