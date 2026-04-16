@@ -133,7 +133,6 @@ renderEmu raw =
         withErrors : List Mark.Error.Error -> Doc
         withErrors errors =
             List.map errorToParagraph errors
-                -- |> unnest
                 |> Doc.create
     in
     case Mark.compile emuDocument raw of
@@ -149,14 +148,10 @@ renderEmu raw =
 
 errorToParagraph : Mark.Error.Error -> Paragraph
 errorToParagraph error =
-    let
-        doit : String -> Paragraph
-        doit string =
-            Text.create (Format.empty |> Format.setCode True) string
-                |> List.singleton
-                |> Paragraph.create
-    in
-    Mark.Error.toString error |> doit
+    Mark.Error.toString error
+        |> Text.create (Format.empty |> Format.setCode True)
+        |> List.singleton
+        |> Paragraph.create
 
 
 emuDocument : Mark.Document Doc

@@ -211,7 +211,8 @@ linkStyle =
 
 iconWithStyle : View.Icon.Style -> View.Icon.IconName -> Element msg
 iconWithStyle style iconName =
-    View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
-        |> View.Icon.withStyle style
-        |> View.Icon.view
-        |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
+    Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
+        (View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
+            |> View.Icon.withStyle style
+            |> View.Icon.view
+        )

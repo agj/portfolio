@@ -98,10 +98,8 @@ view (Icon config) =
                 StyleStroke ->
                     Phosphor.Bold
     in
-    phosphorIcon style
-        |> Phosphor.toHtml
-            [ Html.Attributes.style "vertical-align" "middle"
-            ]
-        |> Element.html
-        |> Element.el
-            [ Element.Font.size config.size ]
+    Element.el [ Element.Font.size config.size ]
+        (phosphorIcon style
+            |> Phosphor.toHtml [ Html.Attributes.style "vertical-align" "middle" ]
+            |> Element.html
+        )

@@ -460,13 +460,8 @@ viewLanguageSelector language =
 
 viewBackButton : Ui.Element Msg
 viewBackButton =
-    Ui.row [ Ui.centerX, Ui.centerY, Ui.spacing (fraction 0.5 Palette.textSizeNormal) ]
-        [ View.Icon.icon View.Icon.ArrowLeft (fraction 1.4 Palette.textSizeNormal)
-            |> View.Icon.withStyle View.Icon.StyleStroke
-            |> View.Icon.view
-        , Ui.text "agj.cl"
-        ]
-        |> Ui.el
+    Ui.el [ Ui.paddingEach { sides | left = Palette.spaceSmall } ]
+        (Ui.el
             [ Ui.alignLeft
             , Ui.paddingXY Palette.spaceSmall 0
             , UiFont.size Palette.textSizeNormal
@@ -482,7 +477,14 @@ viewBackButton =
                 ]
             , UiEvents.onClick SelectedGoHome
             ]
-        |> Ui.el [ Ui.paddingEach { sides | left = Palette.spaceSmall } ]
+            (Ui.row [ Ui.centerX, Ui.centerY, Ui.spacing (fraction 0.5 Palette.textSizeNormal) ]
+                [ View.Icon.icon View.Icon.ArrowLeft (fraction 1.4 Palette.textSizeNormal)
+                    |> View.Icon.withStyle View.Icon.StyleStroke
+                    |> View.Icon.view
+                , Ui.text "agj.cl"
+                ]
+            )
+        )
 
 
 viewLanguageButton : String -> Language -> Language -> Ui.Element Msg
@@ -524,12 +526,13 @@ viewIntroduction introductionText =
 
 viewLoadMessage : Ui.Element Msg -> Ui.Element Msg
 viewLoadMessage message =
-    message
-        |> Ui.el
+    viewMessageBlock
+        (Ui.el
             [ UiFont.color (Palette.baseColorAt10 |> Color.toElmUi)
             , Ui.width Ui.fill
             ]
-        |> viewMessageBlock
+            message
+        )
 
 
 viewMessageBlock : Ui.Element Msg -> Ui.Element Msg
@@ -702,15 +705,16 @@ viewWorks { blockWidth, labels, works, settings } =
         viewLoadMessage labels.pleaseSelect
 
     else
-        [ works
-            |> List.map (viewWork blockWidth labels settings)
-        , [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
-        ]
-            |> List.concat
-            |> Ui.column
-                [ Ui.width Ui.fill
-                , Ui.spacing Palette.spaceNormal
+        Ui.column
+            [ Ui.width Ui.fill
+            , Ui.spacing Palette.spaceNormal
+            ]
+            (List.concat
+                [ works
+                    |> List.map (viewWork blockWidth labels settings)
+                , [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
                 ]
+            )
 
 
 viewWorkBlock : List (Ui.Attribute Msg) -> List (Ui.Element Msg) -> Ui.Element Msg
