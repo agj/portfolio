@@ -1066,7 +1066,7 @@ getCurrentWorks language query data =
 sortWorks : Tag -> List Work -> List Work
 sortWorks tag works =
     let
-        tagIndex : Work -> number
+        tagIndex : Work -> Int
         tagIndex work =
             List.Extra.elemIndex tag work.tags
                 |> Maybe.withDefault 999
