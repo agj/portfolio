@@ -47,6 +47,7 @@ export const fetchJsonUrl = async <T,>(
   const parsed = schema.safeParse(data);
 
   if (!parsed.success) {
+    console.error(z.prettifyError(parsed.error));
     throw new Error(
       `Failed to parse response from: ${url}\n${JSON.stringify(data)}\n${JSON.stringify(z.formatError(parsed.error))}`,
     );

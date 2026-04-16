@@ -123,6 +123,7 @@ const getVisualMetadata = (url: String): VisualMetadata => {
   const parsed = visualMetaSchema.safeParse(raw);
 
   if (!parsed.success) {
+    console.error(z.prettifyError(parsed.error));
     throw new Error(`Visual meta "${url}" has the wrong format`);
   }
 

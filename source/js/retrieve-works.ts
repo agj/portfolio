@@ -145,7 +145,8 @@ const normalizeWork = async (
   const workParseResult = workSchema.safeParse(workRaw);
 
   if (!workParseResult.success) {
-    throw `Error in work '${workName}'`;
+    console.error(z.prettifyError(workParseResult.error));
+    throw `Failed to parse work "${workName}"`;
   }
 
   const work: RawWork = workParseResult.data;
