@@ -7,7 +7,7 @@ module Tag exposing
     , toString
     )
 
-import Dict
+import Dict exposing (Dict)
 import Dict.Extra
 import Json.Decode as Decode exposing (Decoder, andThen, string)
 import Json.Encode as Encode exposing (Value)
@@ -32,6 +32,7 @@ type Tag
     | Interactive
 
 
+tagCodes : Dict String Tag
 tagCodes =
     Dict.fromList
         [ ( "Any", Any )
