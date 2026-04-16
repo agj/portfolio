@@ -6,7 +6,7 @@ import "dot-into";
 
 export const log =
   (label?: string) =>
-  <T,>(value: T): T => {
+  <T>(value: T): T => {
     console.log(`${label ? label + ": " : ""}${value}`);
     return value;
   };
@@ -28,7 +28,7 @@ export const ensureDirForFile = (filePath: string): void => {
   fs.mkdirSync(dir, { recursive: true });
 };
 
-export const fetchJsonUrl = async <T,>(
+export const fetchJsonUrl = async <T>(
   url: string,
   schema: z.ZodType<T>,
 ): Promise<T> => {
