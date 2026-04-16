@@ -932,15 +932,6 @@ viewVisualThumbnail mainVisualColor size visual =
 
 viewWorkLinks : Color -> List Link -> Ui.Element Msg
 viewWorkLinks color links =
-    let
-        makeLink : Link -> Ui.Element Msg
-        makeLink link =
-            Ui.newTabLink
-                (Ui.centerX :: linkStyle color)
-                { url = link.url
-                , label = Ui.text link.label
-                }
-    in
     if List.isEmpty links then
         Ui.none
 
@@ -948,8 +939,17 @@ viewWorkLinks color links =
         Ui.wrappedRow
             [ Ui.paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = Palette.spaceNormal, bottom = 0 }
             , Ui.width Ui.fill
+            , Ui.spacing Palette.spaceSmaller
             ]
-            (List.map makeLink links)
+            (List.map (viewWorkLink color) links)
+
+
+viewWorkLink : Color -> Link -> Ui.Element Msg
+viewWorkLink color link =
+    Ui.newTabLink (Ui.centerX :: linkStyle color)
+        { url = link.url
+        , label = Ui.text link.label
+        }
 
 
 viewWorkDescription : Color -> Doc -> Ui.Element Msg
