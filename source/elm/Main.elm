@@ -422,10 +422,10 @@ viewMain model =
                             viewLoadMessage labels.loadError
     in
     Ui.column
-        [ Ui.width <| Maybe.withDefault Ui.fill (settings.worksBlockWidth |> Maybe.map Ui.px)
+        [ Ui.width (Maybe.withDefault Ui.fill (settings.worksBlockWidth |> Maybe.map Ui.px))
         , Ui.centerX
-        , Ui.inFront <| viewLanguageSelector model.language
-        , Ui.inFront <| viewBackButton
+        , Ui.inFront (viewLanguageSelector model.language)
+        , Ui.inFront viewBackButton
         , Ui.paddingEach { sides | top = Palette.spaceSmall, bottom = Palette.spaceLarge }
         , Ui.spacing Palette.spaceNormal
         ]
@@ -534,7 +534,7 @@ viewLoadMessage message =
 
 viewMessageBlock : Ui.Element Msg -> Ui.Element Msg
 viewMessageBlock child =
-    viewWorkBlock [] <|
+    viewWorkBlock []
         [ Ui.el
             [ Ui.paddingXY Palette.spaceNormal Palette.spaceNormal
             , Ui.width Ui.fill
@@ -670,7 +670,7 @@ viewPopupVisual viewport visual showingDegree =
             Ui.el
                 [ Ui.width (Ui.px reservedSpace)
                 , Ui.height (Ui.px reservedSpace)
-                , Ui.padding <| fraction 0.3 reservedSpace
+                , Ui.padding (fraction 0.3 reservedSpace)
                 , Ui.alignRight
                 , Ui.alignTop
                 , Ui.pointer
@@ -729,7 +729,7 @@ viewWorkBlock attrs children =
 viewWork : Int -> Labels Msg -> Settings -> Work -> Ui.Element Msg
 viewWork blockWidth labels settings work =
     viewWorkBlock
-        [ Ui.inFront <| viewWorkReadMore labels work.readMore work.mainVisualColor
+        [ Ui.inFront (viewWorkReadMore labels work.readMore work.mainVisualColor)
         , Ui.paddingEach { sides | bottom = Palette.spaceNormal }
         , UiFont.color (work.mainVisualColor |> Palette.colorAt10 |> Color.toElmUi)
         , UiBackground.color (work.mainVisualColor |> Palette.colorAt90 |> Color.toElmUi)
@@ -838,9 +838,8 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
     mainBlock
         [ iconsBlock
         , gradientBlock
-            [ yearBlock (Ui.text <| Date.toString date)
-            , titleBlock <|
-                Ui.paragraph [] [ Ui.text title ]
+            [ yearBlock (Ui.text (Date.toString date))
+            , titleBlock (Ui.paragraph [] [ Ui.text title ])
             ]
         ]
 
@@ -907,12 +906,13 @@ viewVisualThumbnail mainVisualColor size visual =
          , UiBackground.color (color |> Color.toElmUi)
          ]
             ++ ifElse isVideo
-                [ Ui.inFront <|
-                    Ui.el
+                [ Ui.inFront
+                    (Ui.el
                         [ Ui.alignRight
                         , Ui.alignBottom
                         ]
                         (icon (fraction 0.3 size) mainVisualColor View.Icon.Play)
+                    )
                 ]
                 []
         )
@@ -945,8 +945,7 @@ viewWorkLinks color links =
             [ Ui.paddingEach { left = Palette.spaceNormal, right = Palette.spaceNormal, top = Palette.spaceNormal, bottom = 0 }
             , Ui.width Ui.fill
             ]
-        <|
-            List.map makeLink links
+            (List.map makeLink links)
 
 
 viewWorkDescription : Color -> Doc -> Ui.Element Msg
@@ -978,14 +977,14 @@ viewWorkReadMore labels readMore color =
             Ui.el
                 [ Ui.alignRight
                 , Ui.alignBottom
-                , Ui.moveDown <| 0.3 * toFloat Palette.textSizeNormal
-                , Ui.moveLeft <| toFloat Palette.spaceNormal
+                , Ui.moveDown (0.3 * toFloat Palette.textSizeNormal)
+                , Ui.moveLeft (toFloat Palette.spaceNormal)
                 ]
-            <|
-                Ui.newTabLink (linkStyle color)
+                (Ui.newTabLink (linkStyle color)
                     { url = desc.url
                     , label = Ui.text label
                     }
+                )
 
 
 
@@ -1033,7 +1032,7 @@ getLanguageFromPreferred codes =
 icon : Int -> Color -> IconName -> Ui.Element msg
 icon size color iconName =
     Ui.el
-        [ Ui.padding <| fraction 0.1 size
+        [ Ui.padding (fraction 0.1 size)
         , CustomEl.radialGradient
             [ ( 0.5, color |> Palette.colorAt70 |> Color.setOpacity 0.9 )
             , ( 1, color |> Palette.colorAt70 |> Color.setOpacity 0 )

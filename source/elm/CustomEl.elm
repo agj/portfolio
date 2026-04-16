@@ -57,10 +57,11 @@ radialGradient colors =
         processedColors =
             List.map process colors
     in
-    style "background" <|
-        "radial-gradient(closest-side, "
+    style "background"
+        ("radial-gradient(closest-side, "
             ++ String.join ", " processedColors
             ++ ")"
+        )
 
 
 glow : { color : Color, strength : Float, size : Float } -> Element.Attribute msg
@@ -77,9 +78,10 @@ glow { color, strength, size } =
                 ++ "px "
                 ++ colorCss
     in
-    style "text-shadow" <|
-        String.join ", "
+    style "text-shadow"
+        (String.join ", "
             (List.repeat (max 1 (round strength)) value)
+        )
 
 
 iOsTextScalingFix : Element.Attribute msg
@@ -89,9 +91,9 @@ iOsTextScalingFix =
 
 style : String -> String -> Element.Attribute msg
 style attribute value =
-    Element.htmlAttribute <| Attributes.style attribute value
+    Element.htmlAttribute (Attributes.style attribute value)
 
 
 id : String -> Element.Attribute msg
 id name =
-    Element.htmlAttribute <| Attributes.id name
+    Element.htmlAttribute (Attributes.id name)

@@ -80,7 +80,7 @@ videoHostDecoder =
                         Decode.succeed Vimeo
 
                     other ->
-                        Decode.fail <| "Video host unknown: " ++ other
+                        Decode.fail ("Video host unknown: " ++ other)
             )
 
 

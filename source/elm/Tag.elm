@@ -62,7 +62,7 @@ decoder =
                                     Decode.succeed tag
 
                                 Nothing ->
-                                    Decode.fail <| "Tag unknown: " ++ code
+                                    Decode.fail ("Tag unknown: " ++ code)
                        )
             )
 

@@ -36,7 +36,7 @@ decoder =
                         Decode.succeed language
 
                     Nothing ->
-                        Decode.fail <| "Language code unknown: " ++ code
+                        Decode.fail ("Language code unknown: " ++ code)
             )
 
 

@@ -161,10 +161,7 @@ errorToParagraph error =
 
 emuDocument : Mark.Document Doc
 emuDocument =
-    Mark.document emuWrapper <|
-        Mark.manyOf
-            [ Mark.map (List.concat >> Paragraph.create) inlineParser
-            ]
+    Mark.document emuWrapper (Mark.manyOf [ Mark.map (List.concat >> Paragraph.create) inlineParser ])
 
 
 emuWrapper : List Paragraph -> Doc

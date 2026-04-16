@@ -29,9 +29,9 @@ english tag =
     d
         [ p
             [ t "My name is "
-            , bold <| t "Ale Grilli"
+            , bold (t "Ale Grilli")
             , t ". Thank you for taking a look at my "
-            , bold <| t "portfolio"
+            , bold (t "portfolio")
             , t "!"
             ]
         , p
@@ -88,7 +88,7 @@ english tag =
             , tag Tag.Any "all"
             , t " of them at once. "
             , t "Get in touch via email at "
-            , bold <| t "ale¶agj.cl"
+            , bold (t "ale¶agj.cl")
             , t " (¶\u{00A0}=\u{00A0}@), or "
             , l "Mastodon" (Url "https://mstdn.social/@agj")
             , t "!"
@@ -100,9 +100,9 @@ japanese : (Tag -> String -> Element msg) -> Element msg
 japanese tag =
     d
         [ p
-            [ bold <| t "アレ・グリリ（Ale Grilli）"
+            [ bold (t "アレ・グリリ（Ale Grilli）")
             , t "の"
-            , bold <| t "ポートフォリオ"
+            , bold (t "ポートフォリオ")
             , t "をご覧いただきありがとうございます！"
             ]
         , p
@@ -158,7 +158,7 @@ japanese tag =
             , tag Tag.Any "全て"
             , t "を一気に見ることも可能です。"
             , t "連絡はＥメール（"
-            , bold <| t "ale¶agj.cl"
+            , bold (t "ale¶agj.cl")
             , t "；¶\u{00A0}=\u{00A0}@）、あるいは"
             , l "マストドン" (Url "https://mstdn.social/@agj")
             , t "よりお願いします。"
@@ -172,9 +172,9 @@ spanish tag =
     d
         [ p
             [ t "Me llamo "
-            , bold <| t "Ale Grilli"
+            , bold (t "Ale Grilli")
             , t ". ¡Gracias por revisar mi "
-            , bold <| t "portafolio"
+            , bold (t "portafolio")
             , t "!"
             ]
         , p
@@ -226,7 +226,7 @@ spanish tag =
             , tag Tag.Any "todos"
             , t " juntos. "
             , t "Contáctame por correo a "
-            , bold <| t "ale¶agj.cl"
+            , bold (t "ale¶agj.cl")
             , t " (¶\u{00A0}=\u{00A0}@), o por "
             , l "Mastodon" (Url "https://mstdn.social/@agj")
             , t "."

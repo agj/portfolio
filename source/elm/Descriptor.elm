@@ -58,7 +58,7 @@ makeTag messenger selectedTag tag label =
         [ ifElse isSelectedTag
             (Background.color (Palette.baseColorAt10 |> Color.toElmUi))
             (Background.color (Palette.baseColorAt70 |> Color.toElmUi))
-        , Font.color <| ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi)
+        , Font.color (ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi))
         , paddingXY
             (fraction 0.3 Palette.textSizeNormal)
             (fraction 0.1 Palette.textSizeNormal)
@@ -77,7 +77,7 @@ p children =
     paragraph
         [ Font.size Palette.textSizeNormal
         , paddingXY 0 10
-        , spacing <| Palette.textLineSpacing Palette.textSizeNormal
+        , spacing (Palette.textLineSpacing Palette.textSizeNormal)
         , CustomEl.iOsTextScalingFix
         ]
         children
@@ -130,7 +130,7 @@ list children =
     in
     column
         [ paddingXY 0 (fraction 0.5 Palette.textSizeNormal)
-        , spacing <| Palette.textLineSpacing Palette.textSizeNormal
+        , spacing (Palette.textLineSpacing Palette.textSizeNormal)
         ]
         rows
 
@@ -147,7 +147,7 @@ iconStroke =
 
 fromDoc : Color -> Doc -> Element msg
 fromDoc color doc =
-    textColumn [ width fill ] <| List.map (fromParagraph color) (Doc.content doc)
+    textColumn [ width fill ] (List.map (fromParagraph color) (Doc.content doc))
 
 
 
@@ -156,7 +156,7 @@ fromDoc color doc =
 
 fromParagraph : Color -> Paragraph -> Element msg
 fromParagraph color par =
-    p <| List.map (fromText color) (Paragraph.content par)
+    p (List.map (fromText color) (Paragraph.content par))
 
 
 fromText : Color -> Text -> Element msg

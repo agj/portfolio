@@ -18,14 +18,15 @@ get =
 
 got : (Viewport -> msg) -> msg -> Sub msg
 got success error =
-    Ports.gotViewport <|
-        \v ->
+    Ports.gotViewport
+        (\v ->
             case Decode.decodeValue decoder v of
                 Ok vp ->
                     success vp
 
                 Err _ ->
                     error
+        )
 
 
 decoder : Decoder Viewport
