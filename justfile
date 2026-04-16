@@ -26,6 +26,11 @@ check: install
 deploy: build
   nu ./source/scripts/deploy.nu
 
+# Formats source code.
+format:
+  elm-format --yes ./source/elm/ ./review/src/
+  prettier --write '**/*.{ts,md,html,json}'
+
 # Saves a Git stash with the current cache.
 save-cache:
   #!/usr/bin/env nu
