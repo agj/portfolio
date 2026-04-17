@@ -649,18 +649,8 @@ viewPopupVisual viewport visual showingDegree =
                             , Html.Attributes.attribute "src" desc.url
                             ]
                             []
-                            |> Element.html
+                            |> Ui.html
 
-                    -- image
-                    --     [ width (px visualWidth)
-                    --     , height (px visualHeight)
-                    --     , centerX
-                    --     , centerY
-                    --     , Background.color (color |> Color.toElmUi)
-                    --     ]
-                    --     { src = desc.url
-                    --     , description = ""
-                    --     }
                     Video desc ->
                         VideoEmbed.get desc visualWidth visualHeight
                 )
