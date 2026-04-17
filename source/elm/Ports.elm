@@ -6,14 +6,15 @@ import Json.Encode exposing (Value)
 
 scrolledOverWork : (Int -> msg) -> msg -> Sub msg
 scrolledOverWork success error =
-    scrolledOverWorkPort <|
-        \value ->
+    scrolledOverWorkPort
+        (\value ->
             case Decode.decodeValue Decode.int value of
                 Ok workIndex ->
                     success workIndex
 
                 Err _ ->
                     error
+        )
 
 
 

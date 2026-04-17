@@ -1,8 +1,8 @@
-module Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter, Visual(..), colorDecoder, decoder, videoHostDecoder)
+module Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter, Visual(..), colorDecoder, decoder)
 
 import Color exposing (Color)
-import Json.Decode as Decode exposing (Decoder, andThen, float, list, maybe, oneOf, string)
-import Json.Decode.Pipeline exposing (optional, required)
+import Json.Decode as Decode exposing (Decoder, andThen, float, oneOf, string)
+import Json.Decode.Pipeline exposing (required)
 
 
 type Visual
@@ -43,6 +43,7 @@ type alias VideoParameter =
 decoder : Decoder Visual
 decoder =
     let
+        imageDecoder : Decoder Visual
         imageDecoder =
             Decode.succeed (\tUrl url ar color -> Image { thumbnailUrl = tUrl, url = url, aspectRatio = ar, color = color })
                 |> required "thumbnailUrl" string
@@ -50,6 +51,7 @@ decoder =
                 |> required "aspectRatio" float
                 |> required "color" colorDecoder
 
+        videoDecoder : Decoder Visual
         videoDecoder =
             Decode.succeed (\tUrl id ar host color params -> Video { thumbnailUrl = tUrl, id = id, aspectRatio = ar, host = host, color = color, parameters = params })
                 |> required "thumbnailUrl" string
@@ -78,7 +80,7 @@ videoHostDecoder =
                         Decode.succeed Vimeo
 
                     other ->
-                        Decode.fail <| "Video host unknown: " ++ other
+                        Decode.fail ("Video host unknown: " ++ other)
             )
 
 
@@ -93,8 +95,7 @@ colorDecoder =
 parametersDecoder : Decoder (List VideoParameter)
 parametersDecoder =
     Decode.keyValuePairs string
-        |> andThen
+        |> Decode.map
             (\list ->
                 List.map (\( key, value ) -> { key = key, value = value }) list
-                    |> Decode.succeed
             )

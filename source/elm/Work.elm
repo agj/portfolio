@@ -1,4 +1,4 @@
-module Work exposing (Link, ReadMore, Work, WorkLanguages, allWorksDecoder, languages, ofLanguage)
+module Work exposing (Link, ReadMore, Work, WorkLanguages, allWorksDecoder, ofLanguage)
 
 import Color exposing (Color)
 import Doc exposing (Doc)
@@ -6,24 +6,25 @@ import Doc.Format as Format exposing (Format)
 import Doc.Link
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
-import Element
-import Json.Decode as Decode exposing (Decoder, andThen, float, list, maybe, oneOf, string)
+import Json.Decode as Decode exposing (Decoder, list, maybe, string)
 import Json.Decode.Pipeline exposing (optional, required)
-import Language exposing (..)
+import Language exposing (Language(..))
 import Mark
 import Mark.Error
 import Tag exposing (Tag)
-import Utils exposing (..)
 import Work.Date as Date exposing (Date)
 import Work.Visual as Visual exposing (Visual)
 
 
 type WorkLanguages
-    = WorkLanguages
-        { english : Work
-        , japanese : Work
-        , spanish : Work
-        }
+    = WorkLanguages WorkLanguagesInternal
+
+
+type alias WorkLanguagesInternal =
+    { english : Work
+    , japanese : Work
+    , spanish : Work
+    }
 
 
 type alias Work =
@@ -55,14 +56,10 @@ type alias Link =
 -- ACCESSORS
 
 
-languages : { english : Work, japanese : Work, spanish : Work } -> WorkLanguages
-languages data =
-    WorkLanguages data
-
-
 ofLanguage : Language -> WorkLanguages -> Work
 ofLanguage language workLanguages =
     let
+        data : WorkLanguagesInternal
         data =
             case workLanguages of
                 WorkLanguages d ->
@@ -104,7 +101,7 @@ workDecoder =
         |> required "mainVisualUrl" string
         |> required "mainVisualColor" Visual.colorDecoder
         |> required "date" Date.decoder
-        |> required "tags" (list <| Tag.decoder Tag.DisallowsAny)
+        |> required "tags" (list Tag.decoder)
         |> required "visuals" (list Visual.decoder)
         |> required "links" (list linkDecoder)
         |> optional "readMore" (maybe readMoreDecoder) Nothing
@@ -127,22 +124,22 @@ readMoreDecoder =
 emuDecoder : Decoder Doc
 emuDecoder =
     string
-        |> andThen (\raw -> Decode.succeed (renderEmu raw))
+        |> Decode.map (\raw -> renderEmu raw)
 
 
 renderEmu : String -> Doc
 renderEmu raw =
     let
+        withErrors : List Mark.Error.Error -> Doc
         withErrors errors =
             List.map errorToParagraph errors
-                -- |> unnest
                 |> Doc.create
     in
     case Mark.compile emuDocument raw of
         Mark.Success result ->
             result
 
-        Mark.Almost { result, errors } ->
+        Mark.Almost { errors } ->
             withErrors errors
 
         Mark.Failure errors ->
@@ -151,21 +148,15 @@ renderEmu raw =
 
 errorToParagraph : Mark.Error.Error -> Paragraph
 errorToParagraph error =
-    let
-        doit string =
-            Text.create (Format.empty |> Format.setCode True) string
-                |> List.singleton
-                |> Paragraph.create
-    in
-    Mark.Error.toString error |> doit
+    Mark.Error.toString error
+        |> Text.create (Format.empty |> Format.setCode True)
+        |> List.singleton
+        |> Paragraph.create
 
 
 emuDocument : Mark.Document Doc
 emuDocument =
-    Mark.document emuWrapper <|
-        Mark.manyOf
-            [ Mark.map (unnest >> Paragraph.create) inlineParser
-            ]
+    Mark.document emuWrapper (Mark.manyOf [ Mark.map (List.concat >> Paragraph.create) inlineParser ])
 
 
 emuWrapper : List Paragraph -> Doc
@@ -199,6 +190,7 @@ toFormattedText styles str =
 toLinkedText : List ( Mark.Styles, String ) -> String -> List Text
 toLinkedText strings url =
     let
+        process : ( Mark.Styles, String ) -> Text
         process ( styles, str ) =
             Text.create
                 (toFormat styles |> Format.setLink (Just (Doc.Link.create url)))

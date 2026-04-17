@@ -66,6 +66,7 @@ in12x12Svg nodes =
 wrap : String -> String
 wrap svg =
     let
+        svgEncoded : String
         svgEncoded =
             svg
                 |> String.trim
@@ -79,6 +80,7 @@ wrap svg =
 regexReplace : String -> String -> String -> String
 regexReplace regexString replacement text =
     let
+        regex : Regex
         regex =
             Regex.fromString regexString
                 |> Maybe.withDefault Regex.never

@@ -26,7 +26,6 @@ module Palette exposing
 import Color exposing (Color)
 import Color.Manipulate
 import Element.Font as Font exposing (Font)
-import Util.Color as Color
 
 
 

@@ -18,12 +18,15 @@
             pkgs.elmPackages.elm
             pkgs.elmPackages.elm-format
             pkgs.elmPackages.elm-json
+            pkgs.elmPackages.elm-review
             pkgs.just
-            pkgs.nodePackages.pnpm
-            pkgs.nodePackages.prettier
-            pkgs.nodejs-slim
+            pkgs.nodejs-slim_24
             pkgs.nushell
+            pkgs.optipng
+            pkgs.pnpm
+            pkgs.prettier
             pkgs.qrtool
+            pkgs.typescript
           ];
         };
       }

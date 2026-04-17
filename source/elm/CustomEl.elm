@@ -13,7 +13,6 @@ module CustomEl exposing
 import Color exposing (Color)
 import Element exposing (Element, image)
 import Html.Attributes as Attributes
-import Utils exposing (..)
 
 
 
@@ -22,12 +21,7 @@ import Utils exposing (..)
 
 imageInline : List (Element.Attribute msg) -> { src : String, description : String } -> Element msg
 imageInline attrs desc =
-    image
-        ([ style "display" "inline-flex"
-         ]
-            ++ attrs
-        )
-        desc
+    image (style "display" "inline-flex" :: attrs) desc
 
 
 
@@ -52,36 +46,42 @@ inlineCenter =
 radialGradient : List ( Float, Color ) -> Element.Attribute msg
 radialGradient colors =
     let
+        process : ( Float, Color ) -> String
         process ( position, color ) =
             Color.toCssString color
                 ++ " "
                 ++ String.fromFloat (position * 100.0)
                 ++ "%"
 
+        processedColors : List String
         processedColors =
             List.map process colors
     in
-    style "background" <|
-        "radial-gradient(closest-side, "
+    style "background"
+        ("radial-gradient(closest-side, "
             ++ String.join ", " processedColors
             ++ ")"
+        )
 
 
 glow : { color : Color, strength : Float, size : Float } -> Element.Attribute msg
 glow { color, strength, size } =
     let
+        colorCss : String
         colorCss =
             Color.toCssString color
 
+        value : String
         value =
             "0 0 "
                 ++ String.fromFloat size
                 ++ "px "
                 ++ colorCss
     in
-    style "text-shadow" <|
-        String.join ", "
+    style "text-shadow"
+        (String.join ", "
             (List.repeat (max 1 (round strength)) value)
+        )
 
 
 iOsTextScalingFix : Element.Attribute msg
@@ -91,9 +91,9 @@ iOsTextScalingFix =
 
 style : String -> String -> Element.Attribute msg
 style attribute value =
-    Element.htmlAttribute <| Attributes.style attribute value
+    Element.htmlAttribute (Attributes.style attribute value)
 
 
 id : String -> Element.Attribute msg
 id name =
-    Element.htmlAttribute <| Attributes.id name
+    Element.htmlAttribute (Attributes.id name)

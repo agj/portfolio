@@ -1,0 +1,69 @@
+@font-face {
+  font-family: "mplus-1p";
+  font-style: normal;
+  font-weight: normal;
+  src:
+    local("M PLUS 1p"),
+    local("MPLUS1p-Regular"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("//agj.cl/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-300.woff2")
+      format("woff2"),
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url("//agj.cl/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-300.woff")
+      format("woff");
+}
+
+@font-face {
+  font-family: "mplus-1p";
+  font-style: normal;
+  font-weight: bold;
+  src:
+    local("M PLUS 1p ExtraBold"),
+    local("MPLUS1p-ExtraBold"),
+    /* Chrome 26+, Opera 23+, Firefox 39+ */
+      url("//agj.cl/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-700.woff2")
+      format("woff2"),
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url("//agj.cl/fonts/mplus2/m-plus-1p-v19-latin-ext_japanese_latin-700.woff")
+      format("woff");
+}
+
+:root {
+  --background-image-size: 8em;
+  --popup-visual-loading-image-size: 5em;
+}
+
+body {
+  /* Should match Elm `Palette.baseColorAt80`: */
+  background-color: rgba(22.05% 22.54% 26.95% / 1);
+  background-size: var(--background-image-size);
+  background-attachment: fixed;
+  background-position: top calc(var(--background-image-size) * 0.2) center;
+  transition-duration: 1.5s;
+  transition-property: background-color;
+  transition-timing-function: linear;
+}
+
+.popup-visual {
+  background-size: var(--popup-visual-loading-image-size);
+  animation-name: loading;
+  animation-timing-function: linear;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --background-image-size: 2.2em;
+  }
+}
+
+@keyframes loading {
+  from {
+    background-position: top 0 left 0;
+  }
+  to {
+    background-position: top var(--popup-visual-loading-image-size) left
+      var(--popup-visual-loading-image-size);
+  }
+}

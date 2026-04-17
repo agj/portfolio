@@ -4,6 +4,7 @@ module Descriptor exposing
     , d
     , fromDoc
     , icon
+    , iconStroke
     , l
     , list
     , makeTag
@@ -16,20 +17,19 @@ import Color exposing (Color)
 import CustomEl
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
-import Doc.Link as Link exposing (Link)
+import Doc.Link as Link
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
 import Element exposing (Element, column, el, fill, html, mouseDown, newTabLink, paddingXY, paragraph, pointer, row, spacing, text, textColumn, width)
 import Element.Background as Background
-import Element.Border as Border
-import Element.Events exposing (..)
+import Element.Events
 import Element.Font as Font
 import Html
 import Html.Attributes
 import Palette
 import Tag exposing (Tag)
 import Util.Color as Color
-import Utils exposing (..)
+import Utils exposing (fraction, ifElse)
 import View.Icon
 
 
@@ -45,6 +45,7 @@ d =
 makeTag : (Tag -> msg) -> Maybe Tag -> Tag -> String -> Element msg
 makeTag messenger selectedTag tag label =
     let
+        isSelectedTag : Bool
         isSelectedTag =
             case selectedTag of
                 Just st ->
@@ -57,7 +58,7 @@ makeTag messenger selectedTag tag label =
         [ ifElse isSelectedTag
             (Background.color (Palette.baseColorAt10 |> Color.toElmUi))
             (Background.color (Palette.baseColorAt70 |> Color.toElmUi))
-        , Font.color <| ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi)
+        , Font.color (ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi))
         , paddingXY
             (fraction 0.3 Palette.textSizeNormal)
             (fraction 0.1 Palette.textSizeNormal)
@@ -76,7 +77,7 @@ p children =
     paragraph
         [ Font.size Palette.textSizeNormal
         , paddingXY 0 10
-        , spacing <| Palette.textLineSpacing Palette.textSizeNormal
+        , spacing (Palette.textLineSpacing Palette.textSizeNormal)
         , CustomEl.iOsTextScalingFix
         ]
         children
@@ -129,21 +130,24 @@ list children =
     in
     column
         [ paddingXY 0 (fraction 0.5 Palette.textSizeNormal)
-        , spacing <| Palette.textLineSpacing Palette.textSizeNormal
+        , spacing (Palette.textLineSpacing Palette.textSizeNormal)
         ]
         rows
 
 
 icon : View.Icon.IconName -> Element msg
-icon iconName =
-    View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
-        |> View.Icon.view
-        |> Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
+icon =
+    iconWithStyle View.Icon.StyleFilled
+
+
+iconStroke : View.Icon.IconName -> Element msg
+iconStroke =
+    iconWithStyle View.Icon.StyleStroke
 
 
 fromDoc : Color -> Doc -> Element msg
 fromDoc color doc =
-    textColumn [ width fill ] <| List.map (fromParagraph color) (Doc.content doc)
+    textColumn [ width fill ] (List.map (fromParagraph color) (Doc.content doc))
 
 
 
@@ -152,15 +156,17 @@ fromDoc color doc =
 
 fromParagraph : Color -> Paragraph -> Element msg
 fromParagraph color par =
-    p <| List.map (fromText color) (Paragraph.content par)
+    p (List.map (fromText color) (Paragraph.content par))
 
 
 fromText : Color -> Text -> Element msg
 fromText color txt =
     let
+        textContent : String
         textContent =
             Text.content txt
 
+        format : Format
         format =
             Text.format txt
     in
@@ -201,3 +207,12 @@ linkStyle =
     , pointer
     , mouseDown [ Font.color (Palette.baseColorAt10 |> Color.toElmUi) ]
     ]
+
+
+iconWithStyle : View.Icon.Style -> View.Icon.IconName -> Element msg
+iconWithStyle style iconName =
+    Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
+        (View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
+            |> View.Icon.withStyle style
+            |> View.Icon.view
+        )

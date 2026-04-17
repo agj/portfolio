@@ -1,8 +1,10 @@
 module View.Icon exposing
     ( Icon
     , IconName(..)
+    , Style(..)
     , icon
     , view
+    , withStyle
     )
 
 import Element exposing (Element)
@@ -11,49 +13,59 @@ import Html.Attributes
 import Phosphor
 
 
-type IconName
-    = Language
-    | VisualCommunication
-    | Programming
-    | Learning
-    | Play
-    | Close
-    | HandUp
-    | Hourglass
-    | LoadError
-
-
 type Icon
     = Icon
         { name : IconName
         , size : Int
+        , style : Style
         }
+
+
+type IconName
+    = ArrowLeft
+    | At
+    | Check
+    | Close
+    | HandUp
+    | Hourglass
+    | Language
+    | Learning
+    | LoadError
+    | Play
+    | Programming
+    | Star
+    | VisualCommunication
+
+
+type Style
+    = StyleFilled
+    | StyleStroke
 
 
 icon : IconName -> Int -> Icon
 icon name size =
-    Icon { name = name, size = size }
+    Icon { name = name, size = size, style = StyleFilled }
+
+
+withStyle : Style -> Icon -> Icon
+withStyle style (Icon config) =
+    Icon { config | style = style }
 
 
 view : Icon -> Element msg
-view (Icon { name, size }) =
+view (Icon config) =
     let
+        phosphorIcon : Phosphor.Icon
         phosphorIcon =
-            case name of
-                Language ->
-                    Phosphor.chatCircle
+            case config.name of
+                ArrowLeft ->
+                    Phosphor.arrowLeft
 
-                VisualCommunication ->
-                    Phosphor.eye
+                At ->
+                    Phosphor.at
 
-                Programming ->
-                    Phosphor.bracketsCurly
-
-                Learning ->
-                    Phosphor.brain
-
-                Play ->
-                    Phosphor.playCircle
+                Check ->
+                    Phosphor.checkCircle
 
                 Close ->
                     Phosphor.xCircle
@@ -64,14 +76,38 @@ view (Icon { name, size }) =
                 Hourglass ->
                     Phosphor.hourglassMedium
 
+                Language ->
+                    Phosphor.chatCircle
+
+                Learning ->
+                    Phosphor.brain
+
                 LoadError ->
                     Phosphor.fileX
+
+                Play ->
+                    Phosphor.playCircle
+
+                Programming ->
+                    Phosphor.bracketsCurly
+
+                Star ->
+                    Phosphor.star
+
+                VisualCommunication ->
+                    Phosphor.eye
+
+        style : Phosphor.IconWeight
+        style =
+            case config.style of
+                StyleFilled ->
+                    Phosphor.Fill
+
+                StyleStroke ->
+                    Phosphor.Bold
     in
-    phosphorIcon Phosphor.Fill
-        |> Phosphor.toHtml
-            [ Html.Attributes.style "vertical-align" "middle"
-            ]
-        |> Element.html
-        |> Element.el
-            [ Element.Font.size size
-            ]
+    Element.el [ Element.Font.size config.size ]
+        (phosphorIcon style
+            |> Phosphor.toHtml [ Html.Attributes.style "vertical-align" "middle" ]
+            |> Element.html
+        )

@@ -8,16 +8,28 @@ develop: clean install qr
   pnpm exec gulp develop --port={{port}}
 
 # Build for deployment.
-build: clean install
+build: clean install check
   pnpm exec gulp build
 
 # Generate media cache.
-cache: install
+cache: install check
   pnpm exec gulp cache
+
+# Run type-checks and elm-review.
+check: install
+  echo "ℹ️ Checking TypeScript types…"
+  tsc --noEmit
+  echo "ℹ️ Running elm-review…"
+  elm-review
 
 # Build and deploy to server. Needs .env variables to be set.
 deploy: build
   nu ./source/scripts/deploy.nu
+
+# Formats source code.
+format:
+  elm-format --yes ./source/elm/ ./review/src/
+  prettier --write '**/*.{ts,js,md,html,json}'
 
 # Saves a Git stash with the current cache.
 save-cache:

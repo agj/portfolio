@@ -1,4 +1,4 @@
-module Util.Color exposing (..)
+module Util.Color exposing (setOpacity, toElmUi)
 
 import Color exposing (Color)
 import Element
