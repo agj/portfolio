@@ -29,7 +29,7 @@ deploy: build
 # Formats source code.
 format:
   elm-format --yes ./source/elm/ ./review/src/
-  prettier --write '**/*.{ts,md,html,json}'
+  prettier --write '**/*.{ts,js,md,html,json}'
 
 # Saves a Git stash with the current cache.
 save-cache:
