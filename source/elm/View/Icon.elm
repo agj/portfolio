@@ -33,6 +33,7 @@ type IconName
     | LoadError
     | Play
     | Programming
+    | Star
     | VisualCommunication
 
 
@@ -89,6 +90,9 @@ view (Icon config) =
 
                 Programming ->
                     Phosphor.bracketsCurly
+
+                Star ->
+                    Phosphor.star
 
                 VisualCommunication ->
                     Phosphor.eye
