@@ -1,17 +1,19 @@
 module VideoEmbed exposing (get)
 
-import Element exposing (Element)
-import Element.Background as Background
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Element as Ui exposing (Element)
+import Element.Background as UiBackground
+import Html exposing (iframe)
+import Html.Attributes exposing (attribute, src, style)
+import Palette
 import Util.Color as Color
-import Utils exposing (..)
+import View.CssSvg as CssSvg
 import Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter)
 
 
 get : VideoDescription -> Int -> Int -> Element msg
 get desc width height =
     let
+        makeElement : String -> Element msg
         makeElement theSrc =
             iframe
                 [ src theSrc
@@ -21,18 +23,23 @@ get desc width height =
                 , style "height" "100%"
                 ]
                 []
-                |> Element.html
+                |> Ui.html
     in
-    Element.el
-        [ Element.centerX
-        , Element.centerY
-        , Element.width (Element.px width)
-        , Element.height (Element.px height)
-        , Background.color (desc.color |> Color.toElmUi)
+    Ui.el
+        [ Ui.centerX
+        , Ui.centerY
+        , Ui.width (Ui.px width)
+        , Ui.height (Ui.px height)
+        , UiBackground.color (desc.color |> Color.toElmUi)
+        , Html.Attributes.class "popup-visual"
+            |> Ui.htmlAttribute
+        , Html.Attributes.style "background-image" (CssSvg.patternAngles (Palette.colorAt60 desc.color))
+            |> Ui.htmlAttribute
         ]
         (case desc.host of
             Vimeo ->
                 let
+                    params : List VideoParameter
                     params =
                         [ { key = "color", value = "ffffff" }
                         , { key = "title", value = "0" }
@@ -50,6 +57,7 @@ get desc width height =
 
             Youtube ->
                 let
+                    params : List VideoParameter
                     params =
                         [ { key = "rel", value = "0" }
                         , { key = "autoplay", value = "1" }
@@ -72,6 +80,7 @@ get desc width height =
 parseParameters : List VideoParameter -> String
 parseParameters params =
     let
+        toString : VideoParameter -> String
         toString param =
             param.key
                 ++ "="

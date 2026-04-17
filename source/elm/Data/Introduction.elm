@@ -1,12 +1,10 @@
 module Data.Introduction exposing (ofLanguage)
 
-import Descriptor exposing (..)
+import Descriptor exposing (Url(..), bold, d, icon, iconStroke, l, makeTag, p, t)
 import Element exposing (Element)
-import Language exposing (..)
-import Palette
+import Language exposing (Language(..))
 import Tag exposing (Tag)
-import Utils exposing (..)
-import View.Icon exposing (IconName)
+import View.Icon
 
 
 ofLanguage : (Tag -> msg) -> Maybe Tag -> Language -> Element msg
@@ -26,208 +24,248 @@ ofLanguage tagMessenger selectedTag language =
 -- ACTUAL DATA
 
 
+english : (Tag -> String -> Element msg) -> Element msg
 english tag =
     d
         [ p
             [ t "My name is "
-            , bold <| t "Ale Grilli"
+            , bold (t "Ale Grilli")
             , t ". Thank you for taking a look at my "
-            , bold <| t "portfolio"
+            , bold (t "portfolio")
             , t "!"
             ]
         , p
             [ t "I’m based in Santiago, Chile. "
-            , t "My work is concerned with various intersections of four areas—"
-            , tag Tag.VisualCommunication "Visual Communication"
-            , icon View.Icon.VisualCommunication
-            , t ", "
+            , t "I’ve mostly done work in various intersections of four areas: "
             , tag Tag.Programming "Programming"
             , icon View.Icon.Programming
+            , t ", "
+            , tag Tag.VisualCommunication "Visual Communication"
+            , icon View.Icon.VisualCommunication
             , t ", "
             , tag Tag.Language "Language"
             , icon View.Icon.Language
             , t ", and "
             , tag Tag.Learning "Learning"
             , icon View.Icon.Learning
-            , t ". "
-            , t "I'm a master in new media from Tokyo Geidai (Japan), graphic designer from U. Diego Portales (Chile), and a self-taught programmer."
+            , t "."
             ]
         , p
-            [ t "I’m a creator. I make "
+            [ t "I’m a master in new media art from Tokyo Geidai (Japan, 2017,) graphic designer from U. Diego Portales (Chile, 2009,) "
+            , t "and a self-taught programmer from a young age, starting with web and Flash stuff."
+            ]
+        , p
+            [ t "I’m a creator. I’ve made "
             , tag Tag.Digital "digital things"
             , t ", such as "
-            , tag Tag.VideoGame "games"
-            , t " and "
             , tag Tag.Web "web stuff"
-            , t ". I design "
+            , t " and "
+            , tag Tag.VideoGame "games"
+            , t ". I’ve designed "
             , tag Tag.UserInterface "user interfaces"
             , t " and other "
             , tag Tag.Interactive "interactive things"
             , t ", as well as "
             , tag Tag.Graphic "graphics"
-            , t ". I shoot and edit "
+            , t ". I’ve shot and edited "
             , tag Tag.Video "videos"
             , t "."
             ]
         , p
-            [ t "I’m a languages nerd, fluent in English and Japanese, apart from my native Spanish, and also working on my Mandarin Chinese currently. "
-            , t "I do "
+            [ t "I’m a languages nerd, fluent in English and Japanese, apart from my native Spanish, and currently working on my Mandarin Chinese. "
+            , t "I have done "
             , tag Tag.Translation "translation"
-            , t " work occasionally; subtitling too."
+            , t " and subtitling."
             ]
         , p
             [ t "I think a lot about learning. "
-            , t "I’ve worked for ed-tech companies programming "
+            , t "I’ve worked for ed-tech companies, programming "
             , tag Tag.EducationalSoftware "educational software"
-            , t ". I occasionally "
-            , tag Tag.LanguageTeaching "teach languages"
-            , t " as well."
+            , t ". I have also "
+            , tag Tag.LanguageTeaching "taught languages"
+            , t "."
             ]
         , p
-            [ t "To see examples of my work, choose any of the highlighted keywords above. "
-            , t "Or you can choose to see "
-            , tag Tag.Any "all"
-            , t " of them at once. "
-            , t "Get in touch via email at "
-            , bold <| t "ale¶agj.cl"
-            , t " (¶\u{00A0}=\u{00A0}@), or "
+            [ t "You will see a selection of my personal, student and work projects if you "
+            , bold (t "press any of the highlighted keywords above.")
+            , t " Or you can choose to see "
+            , tag Tag.Any "all of them"
+            , t " at once, regardless of category."
+            ]
+        , p
+            [ t "Get in touch! Send me an email at "
+            , bold (t "ale")
+            , iconStroke View.Icon.At
+            , bold (t "agj.cl")
+            , t ", or message me on "
             , l "Mastodon" (Url "https://mstdn.social/@agj")
-            , t "!"
+            , t ". "
+            , icon View.Icon.Star
             ]
         ]
 
 
+japanese : (Tag -> String -> Element msg) -> Element msg
 japanese tag =
     d
         [ p
-            [ bold <| t "アレ・グリリ（Ale Grilli）"
+            [ bold (t "アレ・グリリ（Ale Grilli）")
             , t "の"
-            , bold <| t "ポートフォリオ"
+            , bold (t "ポートフォリオ")
             , t "をご覧いただきありがとうございます！"
             ]
         , p
-            [ t "拠点をチリのサンティアゴにしている者です。"
-            , tag Tag.VisualCommunication "視覚コミュニケーション"
-            , icon View.Icon.VisualCommunication
-            , t "、"
+            [ t "私は拠点を南米チリのサンティアゴにする者です。"
             , tag Tag.Programming "プログラミング"
             , icon View.Icon.Programming
+            , t "、"
+            , tag Tag.VisualCommunication "ビジュアルコミュニケーション"
+            , icon View.Icon.VisualCommunication
             , t "、"
             , tag Tag.Language "言語"
             , icon View.Icon.Language
             , t "、"
-            , tag Tag.Learning "習得"
+            , tag Tag.Learning "学習"
             , icon View.Icon.Learning
-            , t "という４つのエリアの組み合わせで活動してきました。"
-            , t "東京芸術大学大学院のメディア映像専攻や、チリ Diego Portales 大学グラフィックデザイン学部の卒業生です。"
-            , t "プログラミングを独学しました。"
+            , t "という４つのエリアで主に活動してきました。"
             ]
         , p
-            [ t "クリエイターです。"
+            [ t "正規教育は東京藝術大学大学院メディア映像専攻（2017年卒）と、"
+            , t "ディエゴ・ポルタレス大学グラフィックデザイン学部（チリ・2009年卒）です。"
+            , t "プログラミングは独学として身についたもので、幼い頃から Web・スクリプト・フラッシュ等で遊んで覚え始めました。"
+            ]
+        , p
+            [ t "クリエイターとして主に生み出してきたのは "
+            , tag Tag.Web "Web"
+            , t "・"
             , tag Tag.VideoGame "ゲーム"
-            , t "や"
-            , tag Tag.Web "ウェブ"
-            , t "など、"
+            , t "など、とにかく"
             , tag Tag.Digital "デジタル"
-            , t "の何かしらを作ることが多いです。"
-            , tag Tag.UserInterface "ユーザーインタフェース"
-            , t "などいった"
-            , tag Tag.Interactive "インタラクティブ"
-            , t "や"
+            , t "領域の物です。"
+            , t "デザイナーとして"
             , tag Tag.Graphic "グラフィック"
-            , t "をデザインしたりします。"
+            , t "がもちろんありますが、主に"
+            , tag Tag.UserInterface "ＵＩデザイン"
+            , t "や他に"
+            , tag Tag.Interactive "インタラクティブ"
+            , t "系の物に手掛けてきました。"
             , tag Tag.Video "映像"
-            , t "作成にも手を組んだりします。"
+            , t "の制作にも手をつけたことがあります。"
             ]
         , p
-            [ t "言語オタクだと言っても過言ではないほど言語が好きです。"
-            , t "ネイティブのスペイン語に加えて英語と日本語が（未熟な点が多々ありながら）流暢で、現在中国語能力を上げることに集中しています。"
+            [ t "言語オタクだと宣言します。"
+            , t "ネイティブのスペイン語に加えて英語と日本語が（未熟な点が多々ありながら）流暢です。"
+            , t "現在中国語能力を向上させている最中です。"
             , tag Tag.Translation "翻訳"
-            , t "や字幕の仕事をすることもあります。"
+            , t "や字幕を作る経験があります。"
             ]
         , p
-            [ t "「習得」について頻繁に考えます。"
-            , t "教育テクノロジーの会社で"
+            [ t "「学習」という概念について常々考えます。"
+            , t "教育工学の会社で"
             , tag Tag.EducationalSoftware "教育ソフト"
-            , t "を開発する経験があります。時折"
-            , tag Tag.LanguageTeaching "言語を教える"
+            , t "を開発する経験があります。"
+            , tag Tag.LanguageTeaching "言語を教えた"
             , t "こともあります。"
             ]
         , p
-            [ t "作ってきた作品や仕事の例を見るには上のキーワードから一つ選択してから閲覧できます。"
-            , tag Tag.Any "全て"
-            , t "を一気に見ることも可能です。"
-            , t "連絡はＥメール（"
-            , bold <| t "ale¶agj.cl"
-            , t "；¶\u{00A0}=\u{00A0}@）、あるいは"
+            [ bold (t "上記に強調表示されたキーワードを一つ押して")
+            , t "おけば、関連する私の作ってきた作品やプロジェクトをいくつかご覧いただけます。"
+            , t "分類を問わず"
+            , tag Tag.Any "全てを一気に"
+            , t "見ることもできます。"
+            ]
+        , p
+            [ t "気楽にご連絡ください！連絡先はＥメールの "
+            , bold (t "ale")
+            , iconStroke View.Icon.At
+            , bold (t "agj.cl")
+            , t "、または"
             , l "マストドン" (Url "https://mstdn.social/@agj")
-            , t "よりお願いします。"
-            , t "ご連絡をお待ちしております！"
+            , t "よりお願いします。お待ちしております！"
+            , icon View.Icon.Star
             ]
         ]
 
 
+spanish : (Tag -> String -> Element msg) -> Element msg
 spanish tag =
     d
         [ p
             [ t "Me llamo "
-            , bold <| t "Ale Grilli"
+            , bold (t "Ale Grilli")
             , t ". ¡Gracias por revisar mi "
-            , bold <| t "portafolio"
+            , bold (t "portafolio")
             , t "!"
             ]
         , p
-            [ t "Vivo en Santiago de Chile. Mi trabajo coincide con diversas intersecciones de cuatro áreas: "
-            , tag Tag.VisualCommunication "Comunicación Visual"
-            , icon View.Icon.VisualCommunication
-            , t ", "
+            [ t "Vivo en Santiago de Chile. "
+            , t "He operado principalmente en cuatro áreas: "
             , tag Tag.Programming "Programación"
             , icon View.Icon.Programming
             , t ", "
+            , tag Tag.VisualCommunication "Comunicación Visual"
+            , icon View.Icon.VisualCommunication
+            , t ", "
             , tag Tag.Language "Idiomas"
             , icon View.Icon.Language
-            , t ", y "
+            , t " y "
             , tag Tag.Learning "Aprendizaje"
             , icon View.Icon.Learning
-            , t ". Soy magíster en nuevos medios de Tokyo Geidai (Japón), diseñador gráfico de U. Diego Portales (Chile), y programador autoenseñado."
+            , t "."
             ]
         , p
-            [ t "Soy un creador. Hago cosas "
+            [ t "Soy magíster en nuevos medios de Tokyo Geidai (Japón, 2017), "
+            , t "diseñador gráfico de U. Diego Portales (Chile, 2009), "
+            , t "y programador autodidacta desde niño. Di mis primeros pasos con cosas para la web y Flash."
+            ]
+        , p
+            [ t "Soy un creador. He hecho cosas "
             , tag Tag.Digital "digitales"
             , t ", como "
             , tag Tag.VideoGame "videojuegos"
-            , t " y otras para la "
-            , tag Tag.Web "web"
-            , t ". Diseño "
+            , t " y "
+            , tag Tag.Web "cosas web"
+            , t ". He diseñado "
             , tag Tag.UserInterface "interfaces de usuario"
-            , t " y otros "
-            , tag Tag.Interactive "interactivos"
+            , t " y otras "
+            , tag Tag.Interactive "cosas interactivas"
             , t ", además de "
             , tag Tag.Graphic "gráfica"
-            , t ". Creo y edito "
+            , t ". He grabado y editado "
             , tag Tag.Video "videos"
             , t "."
             ]
         , p
-            [ t "Soy fanático de los idiomas. Además de mi español nativo, hablo fluído inglés y japonés, y estoy aprendiendo chino mandarín. En ocasiones trabajo "
+            [ t "Soy fanático de los idiomas. "
+            , t "Además de mi español nativo, hablo fluído inglés y japonés, y estoy aprendiendo chino mandarín. "
+            , t "He trabajado "
             , tag Tag.Translation "traduciendo"
-            , t " y subtitulando también."
+            , t " y subtitulando videos."
             ]
         , p
-            [ t "Pienso mucho sobre el aprendizaje. He trabajado para compañías de tecnología y educación, programando "
+            [ t "El aprendizaje es un tema sobre el que pienso mucho. "
+            , t "He trabajado para compañías de tecnología para la educación, programando "
             , tag Tag.EducationalSoftware "software educativo"
-            , t ". A veces "
-            , tag Tag.LanguageTeaching "enseño idiomas"
+            , t ". También me ha tocado "
+            , tag Tag.LanguageTeaching "enseñar idiomas"
             , t "."
             ]
         , p
-            [ t "Para ver ejemplos de mi trabajo, elige alguna de las palabras destacadas de arriba. También puedes elegir verlos "
-            , tag Tag.Any "todos"
-            , t " juntos. "
-            , t "Contáctame por correo a "
-            , bold <| t "ale¶agj.cl"
-            , t " (¶\u{00A0}=\u{00A0}@), o por "
+            [ t "Si "
+            , bold (t "apretas alguna de las palabras destacadas de arriba")
+            , t " verás algunos ejemplos de cosas relacionadas que hecho. "
+            , t "También puedes elegir verlos "
+            , tag Tag.Any "todos juntos"
+            , t ", sin distinguir por categoría."
+            ]
+        , p
+            [ t "¡Contáctame! Me puedes mandar un correo a "
+            , bold (t "ale")
+            , iconStroke View.Icon.At
+            , bold (t "agj.cl")
+            , t ", o me puedes escribir en "
             , l "Mastodon" (Url "https://mstdn.social/@agj")
-            , t "."
+            , t ". "
+            , icon View.Icon.Star
             ]
         ]

@@ -9,7 +9,7 @@ tags:
   - Digital
   - Web
 date: "2008"
-readMore: http://blog.agj.cl/tag/campodecolor/
+readMore: https://blog.agj.cl/tag/campodecolor/
 visuals:
   - type: Video
     host: Vimeo

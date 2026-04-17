@@ -4,7 +4,7 @@ tags:
   - Video
   - VisualCommunication
 date: "2015"
-readMore: http://blog.agj.cl/2016/01/video-work-at-school/
+readMore: https://blog.agj.cl/2016/01/video-work-at-school/
 visuals:
   - type: Video
     host: Vimeo

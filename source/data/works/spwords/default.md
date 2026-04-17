@@ -8,10 +8,10 @@ tags:
   - Web
   - Language
 date: 2012/2023
-readMore: http://blog.agj.cl/tag/spwords/
+readMore: https://blog.agj.cl/tag/spwords/
 links:
   - label: Play
-    url: http://www.agj.cl/files/games/spwords/
+    url: https://www.agj.cl/files/games/spwords/
 visuals:
   - type: Image
     url: midgame1.png

@@ -6,7 +6,7 @@ tags:
   - Video
   - Language
 date: "2017"
-readMore: http://blog.agj.cl/tag/come-to-think-of-language/
+readMore: https://blog.agj.cl/tag/come-to-think-of-language/
 visuals:
   - type: Video
     host: Vimeo

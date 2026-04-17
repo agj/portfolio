@@ -6,7 +6,7 @@ tags:
   - Digital
   - VisualCommunication
 date: 2015
-readMore: http://blog.agj.cl/2017/05/several-installations/
+readMore: https://blog.agj.cl/2017/05/several-installations/
 visuals:
   - type: Video
     host: Vimeo

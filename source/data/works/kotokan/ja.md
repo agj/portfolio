@@ -1,6 +1,6 @@
 ---
 name: ことばから考えてみると
-readMore: http://blog.agj.cl/2017/04/kotoba-kara-kangaete-miru-to/
+readMore: https://blog.agj.cl/2017/04/kotoba-kara-kangaete-miru-to/
 visuals:
   - type: Video
     host: Vimeo

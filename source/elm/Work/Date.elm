@@ -1,6 +1,6 @@
-module Work.Date exposing (Date, decoder, fromString, toString)
+module Work.Date exposing (Date, decoder, toString)
 
-import Json.Decode as Decode exposing (Decoder, andThen, string)
+import Json.Decode as Decode exposing (Decoder, string)
 
 
 type Date
@@ -19,4 +19,4 @@ toString (Date string) =
 
 decoder : Decoder Date
 decoder =
-    string |> andThen (fromString >> Decode.succeed)
+    string |> Decode.map fromString

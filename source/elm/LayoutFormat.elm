@@ -1,4 +1,4 @@
-module LayoutFormat exposing (..)
+module LayoutFormat exposing (LayoutFormat(..), fromDimensions)
 
 
 type LayoutFormat

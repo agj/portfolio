@@ -8,7 +8,7 @@ tags:
   - Interactive
   - Digital
 date: "2013"
-readMore: http://blog.agj.cl/2013/10/tiles-visualizer/
+readMore: https://blog.agj.cl/2013/10/tiles-visualizer/
 visuals:
   - type: Video
     host: Vimeo

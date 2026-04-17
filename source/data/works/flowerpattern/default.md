@@ -9,10 +9,10 @@ tags:
   - VisualCommunication
   - Digital
 date: "2012"
-readMore: http://blog.agj.cl/tag/flower-pattern/
+readMore: https://blog.agj.cl/tag/flower-pattern/
 links:
   - label: Play
-    url: http://www.agj.cl/files/games/flowerpattern/
+    url: https://www.agj.cl/files/games/flowerpattern/
 visuals:
   - type: Video
     host: Youtube
@@ -29,4 +29,4 @@ visuals:
 
 A drawing toy that forms beautiful patterns upon input, created for touch screens (although it also works with the mouse). Try it by visiting this web address:
 
-`http://agj.cl/ip/fp`{code}
+`https://agj.cl/ip/fp`{code}

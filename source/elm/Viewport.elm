@@ -1,4 +1,4 @@
-module Viewport exposing (..)
+module Viewport exposing (Viewport, get, got)
 
 import Json.Decode as Decode exposing (Decoder, int)
 import Json.Decode.Pipeline exposing (required)
@@ -18,14 +18,15 @@ get =
 
 got : (Viewport -> msg) -> msg -> Sub msg
 got success error =
-    Ports.gotViewport <|
-        \v ->
+    Ports.gotViewport
+        (\v ->
             case Decode.decodeValue decoder v of
                 Ok vp ->
                     success vp
 
                 Err _ ->
                     error
+        )
 
 
 decoder : Decoder Viewport

@@ -1,7 +1,7 @@
 ---
 links:
   - label: 遊んでみる（英語）
-    url: http://www.agj.cl/files/games/spwords/
+    url: https://www.agj.cl/files/games/spwords/
 ---
 
 タイトルを『スポワード』と翻字してもいいかどうか…？

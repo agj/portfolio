@@ -1,7 +1,7 @@
 ---
 links:
   - label: Jugar (en inglés)
-    url: http://www.agj.cl/files/games/spwords/
+    url: https://www.agj.cl/files/games/spwords/
 ---
 
 Si metes “deportes” y “palabras” en una juguera, tal vez el resultado sea este juego web,

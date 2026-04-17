@@ -1,16 +1,12 @@
 module Tag exposing
-    ( Codification(..)
-    , Tag(..)
+    ( Tag(..)
     , decoder
-    , encoder
     , fromString
     , toString
     )
 
-import Dict
-import Dict.Extra
+import Dict exposing (Dict)
 import Json.Decode as Decode exposing (Decoder, andThen, string)
-import Json.Encode as Encode exposing (Value)
 import Maybe.Extra
 
 
@@ -32,6 +28,7 @@ type Tag
     | Interactive
 
 
+tagCodes : Dict String Tag
 tagCodes =
     Dict.fromList
         [ ( "Any", Any )
@@ -52,42 +49,22 @@ tagCodes =
         ]
 
 
-type Codification
-    = AllowsAny
-    | DisallowsAny
-
-
-decoder : Codification -> Decoder Tag
-decoder codification =
+decoder : Decoder Tag
+decoder =
     string
         |> andThen
             (\code ->
                 Dict.get code tagCodes
-                    |> Maybe.Extra.filter (\tag -> codification == AllowsAny || tag /= Any)
+                    |> Maybe.Extra.filter (\tag -> tag /= Any)
                     |> (\maybeTag ->
                             case maybeTag of
                                 Just tag ->
                                     Decode.succeed tag
 
                                 Nothing ->
-                                    Decode.fail <| "Tag unknown: " ++ code
+                                    Decode.fail ("Tag unknown: " ++ code)
                        )
             )
-
-
-encoder : Maybe Tag -> Value
-encoder maybeTag =
-    case maybeTag of
-        Just tag ->
-            case Dict.Extra.find (\_ t -> tag == t) tagCodes of
-                Just ( code, _ ) ->
-                    Encode.string code
-
-                Nothing ->
-                    Encode.null
-
-        Nothing ->
-            Encode.null
 
 
 toString : Tag -> String
