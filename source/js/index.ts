@@ -19,7 +19,7 @@ const app = Main.init({
   },
 });
 
-app.ports.saveState.subscribe((state) => {
+app.ports.saveState.subscribe((state: string) => {
   localStorage.setItem("portfolio-state", state);
 });
 
@@ -30,7 +30,7 @@ app.ports.getViewport.subscribe(() => {
   });
 });
 
-app.ports.scrollTo.subscribe((targetId) => {
+app.ports.scrollTo.subscribe((targetId: string) => {
   setTimeout(() => {
     const el = document.getElementById(targetId);
     const targetPosition = Math.max(0, (el?.offsetTop ?? 0) - 30);
@@ -38,7 +38,13 @@ app.ports.scrollTo.subscribe((targetId) => {
   }, 0);
 });
 
-const throttle = (secs, fn) => {
+/**
+ * Makes a function trigger at most every `secs` seconds.
+ */
+const throttle = <Args extends any[]>(
+  secs: number,
+  fn: (...args: Args) => void,
+): ((...args: Args) => void) => {
   const waitTime = secs * 1000;
   let last = 0;
   return (...args) => {
@@ -53,8 +59,13 @@ const throttle = (secs, fn) => {
 document.addEventListener(
   "scroll",
   throttle(0.1, () => {
+    type Work = {
+      index: number | null;
+      visibleArea: number;
+    };
+
     const visibleWork = Array.from(document.querySelectorAll("div.work"))
-      .map((element, index) => {
+      .map((element, index): Work => {
         const bounds = element.getBoundingClientRect();
         return {
           index,
@@ -65,7 +76,7 @@ document.addEventListener(
       })
       .filter(({ visibleArea }) => visibleArea > 0)
       .reduce(
-        (selected, current) =>
+        (selected: Work, current: Work): Work =>
           current.visibleArea >= (selected?.visibleArea ?? 0)
             ? current
             : selected,
