@@ -54,7 +54,7 @@ english =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t " Press on a keyword from above."
+            , t " Press on a keyword from above!"
             ]
     , thatsAll =
         \{ onClearTag } ->
@@ -87,7 +87,7 @@ japanese =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t " 上からキーワードを押してください。"
+            , t " 上からキーワードを押してみてください！"
             ]
     , thatsAll =
         \{ onClearTag } ->
@@ -120,7 +120,7 @@ spanish =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t " Aprieta alguna palabra clave de arriba."
+            , t " ¡Aprieta alguna palabra clave de arriba!"
             ]
     , thatsAll =
         \{ onClearTag } ->
