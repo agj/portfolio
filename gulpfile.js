@@ -1,3 +1,5 @@
+// @ts-check
+
 import gulp from "gulp";
 import path from "path";
 import { parseArgs } from "util";
