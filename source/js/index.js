@@ -32,8 +32,8 @@ app.ports.getViewport.subscribe(() => {
 app.ports.scrollTo.subscribe((targetId) => {
   setTimeout(() => {
     const el = document.getElementById(targetId);
-    const elTop = el ? el.offsetTop : 0;
-    window.scrollTo({ top: elTop, behavior: "smooth" });
+    const targetPosition = Math.max(0, (el?.offsetTop ?? 0) - 30);
+    window.scrollTo({ top: targetPosition, behavior: "smooth" });
   }, 0);
 });
 
