@@ -18,6 +18,7 @@ import Element.Background as UiBackground
 import Element.Border as UiBorder
 import Element.Events as UiEvents
 import Element.Font as UiFont
+import Element.Lazy
 import Html exposing (Html)
 import Html.Attributes
 import Http
@@ -643,17 +644,21 @@ viewPopupVisual viewport visual showingDegree =
                 ]
                 (case visual of
                     Image desc ->
-                        Html.node "lazy-img"
-                            [ Html.Attributes.style "width" (String.fromInt visualWidth ++ "px")
-                            , Html.Attributes.style "height" (String.fromInt visualHeight ++ "px")
-                            , Html.Attributes.attribute "src" desc.url
-                            , Html.Attributes.style "background-color" (color |> Color.toCssString)
-                            , Html.Attributes.style "margin" "auto"
-                            , Html.Attributes.class "popup-visual"
-                            , Html.Attributes.style "background-image" (CssSvg.patternAngles (Palette.colorAt60 desc.color))
-                            ]
-                            []
-                            |> Ui.html
+                        Element.Lazy.lazy
+                            (\url ->
+                                Html.node "lazy-img"
+                                    [ Html.Attributes.style "width" (String.fromInt visualWidth ++ "px")
+                                    , Html.Attributes.style "height" (String.fromInt visualHeight ++ "px")
+                                    , Html.Attributes.attribute "src" url
+                                    , Html.Attributes.style "margin" "auto"
+                                    , Html.Attributes.class "popup-visual"
+                                    , Html.Attributes.style "background-color" (color |> Color.toCssString)
+                                    , Html.Attributes.style "background-image" (CssSvg.patternAngles (Palette.colorAt60 desc.color))
+                                    ]
+                                    []
+                                    |> Ui.html
+                            )
+                            desc.url
 
                     Video desc ->
                         VideoEmbed.get desc visualWidth visualHeight

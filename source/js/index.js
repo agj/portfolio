@@ -76,14 +76,12 @@ document.addEventListener(
 );
 
 class LazyImgElement extends HTMLElement {
-  img;
-
   static get observedAttributes() {
     return ["src"];
   }
 
   connectedCallback() {
-    if (this.img) {
+    if (this.getImg()) {
       return;
     }
 
@@ -91,33 +89,33 @@ class LazyImgElement extends HTMLElement {
 
     const style = document.createElement("style");
     style.textContent = `
-            img {
-              width: 100%;
-              height: 100%;
-              opacity: 0;
-            }
+      img {
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+      }
 
-            img.loaded {
-              animation-name: fade-in;
-              animation-duration: 200ms;
-              animation-timing-function: linear;
-              animation-fill-mode: forwards;
-            }
+      img.loaded {
+        animation-name: fade-in;
+        animation-duration: 200ms;
+        animation-timing-function: linear;
+        animation-fill-mode: forwards;
+      }
 
-            @keyframes fade-in {
-              from {
-                opacity: 0;
-              }
-              to {
-                opacity: 1;
-              }
-            }
-          `;
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      `;
     this.shadowRoot.appendChild(style);
 
     const img = new Image();
-    this.img = img;
     img.addEventListener("load", this.loadImage.bind(this));
+    img.src = this.getAttribute("src");
     this.shadowRoot.appendChild(img);
 
     this.loadImage();
@@ -130,20 +128,25 @@ class LazyImgElement extends HTMLElement {
   }
 
   loadImage() {
-    if (!this.img) {
+    const img = this.getImg();
+
+    if (!img) {
       return;
     }
 
-    this.img.classList.remove("loaded");
-    this.img.src = this.getAttribute("src");
-
-    if (this.img.complete) {
+    if (img.complete) {
       this.onLoaded();
+    } else {
+      img.classList.remove("loaded");
     }
   }
 
   onLoaded() {
-    this.img.classList.add("loaded");
+    this.getImg()?.classList.add("loaded");
+  }
+
+  getImg() {
+    return this.shadowRoot?.querySelector("img");
   }
 }
 
