@@ -8,6 +8,6 @@ links:
     url: https://guide.elm-lang.org/
 ---
 
-Traducción del inglés al español del libro digital escrito como recurso educativo al lenguaje de programación Elm, cuyo autor es el mismo creador del lenguaje.
+Traducción del inglés al español del libro digital “Introducción a Elm”, el principal recurso para aprender a programar usando el lenguaje Elm. Su autor es el mismo creador del lenguaje.
 
-Hay dos razones principales por las que decidí tomar este proyecto. La primera es que tengo interés por la traducción técnica, y este parecía un buen reto para desarrollarme como traductor. Pero más allá de eso, yo mismo soy usuario del lenguaje, y siento que durante el proceso en que lo aprendí desarrollé mucho mis habilidades como programador. Con algo de suerte, disponibilizar esta fuente de aprendizaje en español contribuirá un poquito a esparcir el uso de la programación funcional, y ayudará a otros programadores del mundo hispanohablante a ser mejores profesionales.
+Hay dos razones principales por las que decidí tomar este proyecto. La primera es que tengo interés por la traducción técnica, y este parecía un buen reto para desarrollarme como traductor. Pero más allá de eso, yo mismo soy usuario del lenguaje, y siento que durante el proceso en que lo aprendí mis habilidades como programador evolucionaron considerablemente. Con algo de suerte, disponibilizar esta fuente de aprendizaje en español contribuirá un poquito a difundir el uso de la programación funcional, e impulsará a otros programadores del mundo hispanohablante a ser mejores profesionales, igual que yo.
