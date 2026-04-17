@@ -1,6 +1,6 @@
 module Data.Labels exposing (Labels, ofLanguage)
 
-import Descriptor exposing (icon, p, t)
+import Descriptor exposing (icon, iconStroke, p, t)
 import Element exposing (Element)
 import Language exposing (Language(..))
 import View.Icon
@@ -54,12 +54,14 @@ english =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t " Select a keyword from above."
+            , t " Press on a keyword from above."
             ]
     , thatsAll =
         \{ onClearTag } ->
             p
                 [ t "That's all for that keyword. "
+                , iconStroke View.Icon.Check
+                , t " "
                 , t "You may go back up and choose another!"
                     |> Descriptor.onClick onClearTag
                 ]
@@ -85,12 +87,14 @@ japanese =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t " 上からキーワードを選択してください。"
+            , t " 上からキーワードを押してください。"
             ]
     , thatsAll =
         \{ onClearTag } ->
             p
                 [ t "以上このキーワードに関連する項目でした。"
+                , iconStroke View.Icon.Check
+                , t " "
                 , t "また別のを選択してみますか？"
                     |> Descriptor.onClick onClearTag
                 ]
@@ -116,12 +120,14 @@ spanish =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
-            , t " Elige alguna palabra clave de arriba."
+            , t " Aprieta alguna palabra clave de arriba."
             ]
     , thatsAll =
         \{ onClearTag } ->
             p
                 [ t "Eso es todo para esta palabra clave. "
+                , iconStroke View.Icon.Check
+                , t " "
                 , t "¿Quieres elegir otra?"
                     |> Descriptor.onClick onClearTag
                 ]

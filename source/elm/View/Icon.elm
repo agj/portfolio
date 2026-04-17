@@ -22,17 +22,18 @@ type Icon
 
 
 type IconName
-    = Language
-    | VisualCommunication
-    | Programming
-    | Learning
-    | Play
+    = ArrowLeft
+    | At
+    | Check
     | Close
     | HandUp
     | Hourglass
+    | Language
+    | Learning
     | LoadError
-    | ArrowLeft
-    | At
+    | Play
+    | Programming
+    | VisualCommunication
 
 
 type Style
@@ -56,20 +57,14 @@ view (Icon config) =
         phosphorIcon : Phosphor.Icon
         phosphorIcon =
             case config.name of
-                Language ->
-                    Phosphor.chatCircle
+                ArrowLeft ->
+                    Phosphor.arrowLeft
 
-                VisualCommunication ->
-                    Phosphor.eye
+                At ->
+                    Phosphor.at
 
-                Programming ->
-                    Phosphor.bracketsCurly
-
-                Learning ->
-                    Phosphor.brain
-
-                Play ->
-                    Phosphor.playCircle
+                Check ->
+                    Phosphor.checkCircle
 
                 Close ->
                     Phosphor.xCircle
@@ -80,14 +75,23 @@ view (Icon config) =
                 Hourglass ->
                     Phosphor.hourglassMedium
 
+                Language ->
+                    Phosphor.chatCircle
+
+                Learning ->
+                    Phosphor.brain
+
                 LoadError ->
                     Phosphor.fileX
 
-                ArrowLeft ->
-                    Phosphor.arrowLeft
+                Play ->
+                    Phosphor.playCircle
 
-                At ->
-                    Phosphor.at
+                Programming ->
+                    Phosphor.bracketsCurly
+
+                VisualCommunication ->
+                    Phosphor.eye
 
         style : Phosphor.IconWeight
         style =
