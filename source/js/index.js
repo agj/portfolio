@@ -1,4 +1,5 @@
 import Main from "../elm/Main.elm";
+import { LazyImgElement } from "./custom-elements/lazy-img.ts";
 
 const storedState = localStorage.getItem("portfolio-state");
 
@@ -74,80 +75,5 @@ document.addEventListener(
     app.ports.scrolledOverWorkPort.send(visibleWork?.index);
   }),
 );
-
-class LazyImgElement extends HTMLElement {
-  static get observedAttributes() {
-    return ["src"];
-  }
-
-  connectedCallback() {
-    if (this.getImg()) {
-      return;
-    }
-
-    this.attachShadow({ mode: "open" });
-
-    const style = document.createElement("style");
-    style.textContent = `
-      img {
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-      }
-
-      img.loaded {
-        animation-name: fade-in;
-        animation-duration: 200ms;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-      }
-
-      @keyframes fade-in {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-      `;
-    this.shadowRoot.appendChild(style);
-
-    const img = new Image();
-    img.addEventListener("load", this.loadImage.bind(this));
-    img.src = this.getAttribute("src");
-    this.shadowRoot.appendChild(img);
-
-    this.loadImage();
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue) {
-      this.loadImage();
-    }
-  }
-
-  loadImage() {
-    const img = this.getImg();
-
-    if (!img) {
-      return;
-    }
-
-    if (img.complete) {
-      this.onLoaded();
-    } else {
-      img.classList.remove("loaded");
-    }
-  }
-
-  onLoaded() {
-    this.getImg()?.classList.add("loaded");
-  }
-
-  getImg() {
-    return this.shadowRoot?.querySelector("img");
-  }
-}
 
 customElements.define("lazy-img", LazyImgElement);
