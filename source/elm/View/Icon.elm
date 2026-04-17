@@ -26,6 +26,7 @@ type IconName
     | At
     | Check
     | Close
+    | Globe
     | HandUp
     | Hourglass
     | Language
@@ -69,6 +70,9 @@ view (Icon config) =
 
                 Close ->
                     Phosphor.xCircle
+
+                Globe ->
+                    Phosphor.globeSimple
 
                 HandUp ->
                     Phosphor.handPointing

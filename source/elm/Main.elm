@@ -448,11 +448,14 @@ viewTop language selectedTag =
 viewLanguageSelector : Language -> Ui.Element Msg
 viewLanguageSelector language =
     Ui.row
-        [ Ui.spacing Palette.spaceSmallest
+        [ UiFont.color (Palette.baseColorAt10 |> Color.toElmUi)
+        , Ui.spacing Palette.spaceSmallest
         , Ui.alignRight
         , Ui.paddingEach { sides | right = Palette.spaceSmall }
         ]
-        [ viewLanguageButton "EN" English language
+        [ Ui.el [ Ui.paddingEach { sides | right = Palette.spaceSmall } ]
+            (Descriptor.iconStroke View.Icon.Globe)
+        , viewLanguageButton "EN" English language
         , viewLanguageButton "ES" Spanish language
         , viewLanguageButton "日" Japanese language
         ]
