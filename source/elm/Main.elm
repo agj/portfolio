@@ -648,6 +648,7 @@ viewPopupVisual viewport visual showingDegree =
                             , Html.Attributes.style "height" (String.fromInt visualHeight ++ "px")
                             , Html.Attributes.attribute "src" desc.url
                             , Html.Attributes.style "background-color" (color |> Color.toCssString)
+                            , Html.Attributes.style "margin" "auto"
                             , Html.Attributes.class "popup-visual"
                             , Html.Attributes.style "background-image" (CssSvg.patternAngles (Palette.colorAt60 desc.color))
                             ]
