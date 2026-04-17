@@ -478,9 +478,7 @@ viewBackButton =
             , UiEvents.onClick SelectedGoHome
             ]
             (Ui.row [ Ui.centerX, Ui.centerY, Ui.spacing (fraction 0.5 Palette.textSizeNormal) ]
-                [ View.Icon.icon View.Icon.ArrowLeft (fraction 1.4 Palette.textSizeNormal)
-                    |> View.Icon.withStyle View.Icon.StyleStroke
-                    |> View.Icon.view
+                [ Descriptor.iconStroke View.Icon.ArrowLeft
                 , Ui.text "agj.cl"
                 ]
             )
