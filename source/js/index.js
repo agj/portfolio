@@ -1,4 +1,5 @@
 import Main from "../elm/Main.elm";
+import { LazyImgElement } from "./custom-elements/lazy-img.ts";
 
 const storedState = localStorage.getItem("portfolio-state");
 
@@ -74,3 +75,5 @@ document.addEventListener(
     app.ports.scrolledOverWorkPort.send(visibleWork?.index);
   }),
 );
+
+customElements.define("lazy-img", LazyImgElement);
