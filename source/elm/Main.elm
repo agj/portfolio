@@ -54,8 +54,8 @@ main =
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , onUrlChange = onUrlChange
-        , onUrlRequest = onUrlRequest
+        , onUrlChange = UrlChanged
+        , onUrlRequest = \_ -> NoOp
         }
 
 
@@ -127,16 +127,9 @@ init flags url navKey =
 
                 Nothing ->
                     getLanguageFromPreferred flags.languages
-
-        query : Query
-        query =
-            url
-                |> AppUrl.fromUrl
-                |> .queryParameters
-                |> queryParser
     in
     ( { language = initLanguage
-      , query = query
+      , query = urlToQuery url
       , viewport = flags.viewport
       , popupVisual = Animator.init Nothing
       , highlightedWorkIndex = Nothing
@@ -147,26 +140,20 @@ init flags url navKey =
     )
 
 
+urlToQuery : Url -> Query
+urlToQuery url =
+    url
+        |> AppUrl.fromUrl
+        |> .queryParameters
+        |> queryParser
+
+
 getData : Cmd Msg
 getData =
     Http.get
         { url = "works/data.json"
         , expect = Http.expectJson GotData Work.allWorksDecoder
         }
-
-
-
--- ROUTING
-
-
-onUrlChange : Url -> Msg
-onUrlChange _ =
-    NoOp
-
-
-onUrlRequest : Browser.UrlRequest -> Msg
-onUrlRequest _ =
-    NoOp
 
 
 
@@ -184,6 +171,7 @@ type Msg
     | GotData (Result Http.Error (List WorkLanguages))
     | AnimationTick Time.Posix
     | ScrolledOverWork (Maybe Int)
+    | UrlChanged Url
     | NoOp
 
 
@@ -240,6 +228,11 @@ update msg model =
 
         ScrolledOverWork maybeWorkIndex ->
             ( { model | highlightedWorkIndex = maybeWorkIndex }
+            , Cmd.none
+            )
+
+        UrlChanged url ->
+            ( { model | query = urlToQuery url }
             , Cmd.none
             )
 
@@ -448,11 +441,14 @@ viewTop language selectedTag =
 viewLanguageSelector : Language -> Ui.Element Msg
 viewLanguageSelector language =
     Ui.row
-        [ Ui.spacing Palette.spaceSmallest
+        [ UiFont.color (Palette.baseColorAt10 |> Color.toElmUi)
+        , Ui.spacing Palette.spaceSmallest
         , Ui.alignRight
         , Ui.paddingEach { sides | right = Palette.spaceSmall }
         ]
-        [ viewLanguageButton "EN" English language
+        [ Ui.el [ Ui.paddingEach { sides | right = Palette.spaceSmall } ]
+            (Descriptor.iconStroke View.Icon.Globe)
+        , viewLanguageButton "EN" English language
         , viewLanguageButton "ES" Spanish language
         , viewLanguageButton "日" Japanese language
         ]
@@ -478,9 +474,7 @@ viewBackButton =
             , UiEvents.onClick SelectedGoHome
             ]
             (Ui.row [ Ui.centerX, Ui.centerY, Ui.spacing (fraction 0.5 Palette.textSizeNormal) ]
-                [ View.Icon.icon View.Icon.ArrowLeft (fraction 1.4 Palette.textSizeNormal)
-                    |> View.Icon.withStyle View.Icon.StyleStroke
-                    |> View.Icon.view
+                [ Descriptor.iconStroke View.Icon.ArrowLeft
                 , Ui.text "agj.cl"
                 ]
             )
