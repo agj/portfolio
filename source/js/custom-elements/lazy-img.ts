@@ -1,3 +1,8 @@
+/**
+ * Element which invisibly loads an `<img>` with a provided `src` attribute,
+ * and once it has fully loaded makes it smoothly appear with a transition
+ * animation.
+ */
 export class LazyImgElement extends HTMLElement {
   connectedCallback(): void {
     if (this.getImg()) {
@@ -12,6 +17,7 @@ export class LazyImgElement extends HTMLElement {
 
     this.attachShadow({ mode: "open" });
 
+    // The styles that make the image smoothly appear when loaded.
     const style = document.createElement("style");
     style.textContent = `
       img {
@@ -38,15 +44,19 @@ export class LazyImgElement extends HTMLElement {
       `;
     this.shadowRoot?.appendChild(style);
 
+    // The `<img>` element that actually loads the image.
     const img = new Image();
-    img.addEventListener("load", this.loadImage.bind(this));
+    img.addEventListener("load", this.updateImageLoaded.bind(this));
     img.src = src;
     this.shadowRoot?.appendChild(img);
 
-    this.loadImage();
+    this.updateImageLoaded();
   }
 
-  loadImage(): void {
+  /**
+   * Checks if the image has loaded, and makes it visible if so.
+   */
+  updateImageLoaded(): void {
     const img = this.getImg();
 
     if (!img) {
@@ -54,12 +64,8 @@ export class LazyImgElement extends HTMLElement {
     }
 
     if (img.complete) {
-      this.onLoaded();
+      img.classList.add("loaded");
     }
-  }
-
-  onLoaded(): void {
-    this.getImg()?.classList.add("loaded");
   }
 
   getImg(): HTMLImageElement | undefined {
