@@ -17,9 +17,9 @@ cache: install check
 
 # Run type-checks and elm-review.
 check: install
-  echo "ℹ️ Checking TypeScript types…"
+  @echo "ℹ️ Checking TypeScript types…"
   tsc --noEmit
-  echo "ℹ️ Running elm-review…"
+  @echo "ℹ️ Running elm-review…"
   elm-review
 
 # Build and deploy to server. Needs .env variables to be set.
