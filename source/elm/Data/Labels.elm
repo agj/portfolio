@@ -60,15 +60,25 @@ english =
             ]
     , thatsAll =
         \{ tag, onClearTag } ->
-            p
-                [ t "That was all related to “"
-                , t (Tag.name English tag)
-                , t ".” "
-                , iconStroke View.Icon.Check
-                , t " "
-                , t "You may go back up and choose another tag!"
-                    |> Descriptor.onClick onClearTag
-                ]
+            if tag == Tag.Any then
+                p
+                    [ t "That was all of them. "
+                    , iconStroke View.Icon.Check
+                    , t " "
+                    , t "You may go back up and filter by a keyword."
+                        |> Descriptor.onClick onClearTag
+                    ]
+
+            else
+                p
+                    [ t "That was all related to “"
+                    , t (Tag.name English tag)
+                    , t ".” "
+                    , iconStroke View.Icon.Check
+                    , t " "
+                    , t "You may go back up and choose another keyword!"
+                        |> Descriptor.onClick onClearTag
+                    ]
     }
 
 
@@ -96,15 +106,25 @@ japanese =
             ]
     , thatsAll =
         \{ tag, onClearTag } ->
-            p
-                [ t "以上「"
-                , t (Tag.name Japanese tag)
-                , t "」に関連する項目でした。"
-                , iconStroke View.Icon.Check
-                , t " "
-                , t "また別のキーワードを選択してみますか？"
-                    |> Descriptor.onClick onClearTag
-                ]
+            if tag == Tag.Any then
+                p
+                    [ t "以上は全ての項目でした。"
+                    , iconStroke View.Icon.Check
+                    , t " "
+                    , t "上に戻りキーワードを選択すればフィルターできます。"
+                        |> Descriptor.onClick onClearTag
+                    ]
+
+            else
+                p
+                    [ t "以上「"
+                    , t (Tag.name Japanese tag)
+                    , t "」に関連する項目でした。"
+                    , iconStroke View.Icon.Check
+                    , t " "
+                    , t "また別のキーワードを選択してみますか？"
+                        |> Descriptor.onClick onClearTag
+                    ]
     }
 
 
@@ -132,13 +152,23 @@ spanish =
             ]
     , thatsAll =
         \{ tag, onClearTag } ->
-            p
-                [ t "Eso fue todo lo relacionado con “"
-                , t (Tag.name Spanish tag)
-                , t "”. "
-                , iconStroke View.Icon.Check
-                , t " "
-                , t "¿Quieres elegir otra palabra clave?"
-                    |> Descriptor.onClick onClearTag
-                ]
+            if tag == Tag.Any then
+                p
+                    [ t "Eso fue todo. "
+                    , iconStroke View.Icon.Check
+                    , t " "
+                    , t "Si quieres, puedes filtrar por una palabra clave."
+                        |> Descriptor.onClick onClearTag
+                    ]
+
+            else
+                p
+                    [ t "Eso fue todo lo relacionado con “"
+                    , t (Tag.name Spanish tag)
+                    , t "”. "
+                    , iconStroke View.Icon.Check
+                    , t " "
+                    , t "¿Quieres elegir otra palabra clave?"
+                        |> Descriptor.onClick onClearTag
+                    ]
     }
