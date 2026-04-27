@@ -6,6 +6,7 @@ module Descriptor exposing
     , icon
     , iconStroke
     , l
+    , lineBreak
     , list
     , makeTag
     , onClick
@@ -134,6 +135,12 @@ list children =
         , spacing (Palette.textLineSpacing Palette.textSizeNormal)
         ]
         rows
+
+
+lineBreak : Element msg
+lineBreak =
+    Html.br [] []
+        |> Element.html
 
 
 icon : View.Icon.IconName -> Element msg

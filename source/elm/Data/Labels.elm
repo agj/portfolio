@@ -1,6 +1,6 @@
 module Data.Labels exposing (Labels, ofLanguage)
 
-import Descriptor exposing (icon, iconStroke, oscillate, p, t)
+import Descriptor exposing (icon, iconStroke, lineBreak, oscillate, p, t)
 import Element exposing (Element)
 import Language exposing (Language(..))
 import Tag exposing (Tag)
@@ -64,7 +64,7 @@ english =
                 p
                     [ t "That was all of them. "
                     , iconStroke View.Icon.Check
-                    , t " "
+                    , lineBreak
                     , t "You may go back up and filter by a keyword."
                         |> Descriptor.onClick onClearTag
                     ]
@@ -75,7 +75,7 @@ english =
                     , t (Tag.name English tag)
                     , t ".” "
                     , iconStroke View.Icon.Check
-                    , t " "
+                    , lineBreak
                     , t "You may go back up and choose another keyword!"
                         |> Descriptor.onClick onClearTag
                     ]
@@ -110,7 +110,7 @@ japanese =
                 p
                     [ t "以上は全ての項目でした。"
                     , iconStroke View.Icon.Check
-                    , t " "
+                    , lineBreak
                     , t "上に戻りキーワードを選択すればフィルターできます。"
                         |> Descriptor.onClick onClearTag
                     ]
@@ -121,7 +121,7 @@ japanese =
                     , t (Tag.name Japanese tag)
                     , t "」に関連する項目でした。"
                     , iconStroke View.Icon.Check
-                    , t " "
+                    , lineBreak
                     , t "また別のキーワードを選択してみますか？"
                         |> Descriptor.onClick onClearTag
                     ]
@@ -156,7 +156,7 @@ spanish =
                 p
                     [ t "Eso fue todo. "
                     , iconStroke View.Icon.Check
-                    , t " "
+                    , lineBreak
                     , t "Si quieres, puedes filtrar por una palabra clave."
                         |> Descriptor.onClick onClearTag
                     ]
@@ -167,7 +167,7 @@ spanish =
                     , t (Tag.name Spanish tag)
                     , t "”. "
                     , iconStroke View.Icon.Check
-                    , t " "
+                    , lineBreak
                     , t "¿Quieres elegir otra palabra clave?"
                         |> Descriptor.onClick onClearTag
                     ]
