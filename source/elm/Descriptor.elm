@@ -9,6 +9,7 @@ module Descriptor exposing
     , list
     , makeTag
     , onClick
+    , oscillate
     , p
     , t
     )
@@ -143,6 +144,17 @@ icon =
 iconStroke : View.Icon.IconName -> Element msg
 iconStroke =
     iconWithStyle View.Icon.StyleStroke
+
+
+oscillate : Element msg -> Element msg
+oscillate el =
+    Element.el
+        [ Html.Attributes.class "oscillate"
+            |> Element.htmlAttribute
+        , Html.Attributes.style "display" "inline-block"
+            |> Element.htmlAttribute
+        ]
+        el
 
 
 fromDoc : Color -> Doc -> Element msg

@@ -45,11 +45,19 @@ body {
 }
 
 .popup-visual {
-  background-size: var(--popup-visual-loading-image-size);
-  animation-name: loading;
-  animation-timing-function: linear;
   animation-duration: 3s;
   animation-iteration-count: infinite;
+  animation-name: loading;
+  animation-timing-function: linear;
+  background-size: var(--popup-visual-loading-image-size);
+}
+
+.oscillate {
+  animation-direction: alternate;
+  animation-duration: 500ms;
+  animation-iteration-count: infinite;
+  animation-name: oscillation;
+  animation-timing-function: ease-in-out;
 }
 
 @media (max-width: 600px) {
@@ -65,5 +73,14 @@ body {
   to {
     background-position: top var(--popup-visual-loading-image-size) left
       var(--popup-visual-loading-image-size);
+  }
+}
+
+@keyframes oscillation {
+  from {
+    transform: translateY(-0.2em);
+  }
+  to {
+    transform: translateY(0.2em);
   }
 }

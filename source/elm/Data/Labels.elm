@@ -1,6 +1,6 @@
 module Data.Labels exposing (Labels, ofLanguage)
 
-import Descriptor exposing (icon, iconStroke, p, t)
+import Descriptor exposing (icon, iconStroke, oscillate, p, t)
 import Element exposing (Element)
 import Language exposing (Language(..))
 import View.Icon
@@ -54,6 +54,7 @@ english =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
+                |> oscillate
             , t " Press on a keyword from above!"
             ]
     , thatsAll =
@@ -87,6 +88,7 @@ japanese =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
+                |> oscillate
             , t " 上からキーワードを押してみてください！"
             ]
     , thatsAll =
@@ -120,6 +122,7 @@ spanish =
     , pleaseSelect =
         p
             [ icon View.Icon.HandUp
+                |> oscillate
             , t " ¡Aprieta alguna palabra clave de arriba!"
             ]
     , thatsAll =
