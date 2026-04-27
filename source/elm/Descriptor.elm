@@ -6,9 +6,11 @@ module Descriptor exposing
     , icon
     , iconStroke
     , l
+    , lineBreak
     , list
     , makeTag
     , onClick
+    , oscillate
     , p
     , t
     )
@@ -135,6 +137,12 @@ list children =
         rows
 
 
+lineBreak : Element msg
+lineBreak =
+    Html.br [] []
+        |> Element.html
+
+
 icon : View.Icon.IconName -> Element msg
 icon =
     iconWithStyle View.Icon.StyleFilled
@@ -143,6 +151,17 @@ icon =
 iconStroke : View.Icon.IconName -> Element msg
 iconStroke =
     iconWithStyle View.Icon.StyleStroke
+
+
+oscillate : Element msg -> Element msg
+oscillate el =
+    Element.el
+        [ Html.Attributes.class "oscillate"
+            |> Element.htmlAttribute
+        , Html.Attributes.style "display" "inline-block"
+            |> Element.htmlAttribute
+        ]
+        el
 
 
 fromDoc : Color -> Doc -> Element msg
