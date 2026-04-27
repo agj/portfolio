@@ -28,25 +28,31 @@ type Tag
     | Interactive
 
 
+all : List Tag
+all =
+    [ Any
+    , VisualCommunication
+    , Programming
+    , Language
+    , Learning
+    , Digital
+    , VideoGame
+    , Web
+    , UserInterface
+    , Graphic
+    , Video
+    , Translation
+    , EducationalSoftware
+    , LanguageTeaching
+    , Interactive
+    ]
+
+
 tagCodes : Dict String Tag
 tagCodes =
-    Dict.fromList
-        [ ( "Any", Any )
-        , ( "VisualCommunication", VisualCommunication )
-        , ( "Programming", Programming )
-        , ( "Language", Language )
-        , ( "Learning", Learning )
-        , ( "Digital", Digital )
-        , ( "VideoGame", VideoGame )
-        , ( "Web", Web )
-        , ( "UserInterface", UserInterface )
-        , ( "Graphic", Graphic )
-        , ( "Video", Video )
-        , ( "Translation", Translation )
-        , ( "EducationalSoftware", EducationalSoftware )
-        , ( "LanguageTeaching", LanguageTeaching )
-        , ( "Interactive", Interactive )
-        ]
+    all
+        |> List.map (\tag -> ( toString tag, tag ))
+        |> Dict.fromList
 
 
 decoder : Decoder Tag
