@@ -55,7 +55,7 @@ english =
         p
             [ icon View.Icon.HandUp
                 |> oscillate
-            , t " Press on a keyword from above!"
+            , t " Press a keyword from above!"
             ]
     , thatsAll =
         \{ onClearTag } ->
@@ -89,7 +89,7 @@ japanese =
         p
             [ icon View.Icon.HandUp
                 |> oscillate
-            , t " 上からキーワードを押してみてください！"
+            , t " 上のキーワードを一つ押してみましょう！"
             ]
     , thatsAll =
         \{ onClearTag } ->
