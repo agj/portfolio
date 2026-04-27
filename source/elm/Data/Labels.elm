@@ -3,6 +3,7 @@ module Data.Labels exposing (Labels, ofLanguage)
 import Descriptor exposing (icon, iconStroke, oscillate, p, t)
 import Element exposing (Element)
 import Language exposing (Language(..))
+import Tag exposing (Tag)
 import View.Icon
 
 
@@ -14,7 +15,7 @@ type alias Labels msg =
     , loading : Element msg
     , loadError : Element msg
     , pleaseSelect : Element msg
-    , thatsAll : { onClearTag : msg } -> Element msg
+    , thatsAll : { tag : Tag, onClearTag : msg } -> Element msg
     }
 
 
@@ -58,12 +59,14 @@ english =
             , t " Press a keyword from above!"
             ]
     , thatsAll =
-        \{ onClearTag } ->
+        \{ tag, onClearTag } ->
             p
-                [ t "That's all for that keyword. "
+                [ t "That was all related to “"
+                , t (Tag.name English tag)
+                , t ".” "
                 , iconStroke View.Icon.Check
                 , t " "
-                , t "You may go back up and choose another!"
+                , t "You may go back up and choose another tag!"
                     |> Descriptor.onClick onClearTag
                 ]
     }
@@ -92,12 +95,14 @@ japanese =
             , t " 上のキーワードを一つ押してみましょう！"
             ]
     , thatsAll =
-        \{ onClearTag } ->
+        \{ tag, onClearTag } ->
             p
-                [ t "以上このキーワードに関連する項目でした。"
+                [ t "以上「"
+                , t (Tag.name Japanese tag)
+                , t "」に関連する項目でした。"
                 , iconStroke View.Icon.Check
                 , t " "
-                , t "また別のを選択してみますか？"
+                , t "また別のキーワードを選択してみますか？"
                     |> Descriptor.onClick onClearTag
                 ]
     }
@@ -126,12 +131,14 @@ spanish =
             , t " ¡Aprieta alguna palabra clave de arriba!"
             ]
     , thatsAll =
-        \{ onClearTag } ->
+        \{ tag, onClearTag } ->
             p
-                [ t "Eso es todo para esta palabra clave. "
+                [ t "Eso fue todo lo relacionado con “"
+                , t (Tag.name Spanish tag)
+                , t "”. "
                 , iconStroke View.Icon.Check
                 , t " "
-                , t "¿Quieres elegir otra?"
+                , t "¿Quieres elegir otra palabra clave?"
                     |> Descriptor.onClick onClearTag
                 ]
     }

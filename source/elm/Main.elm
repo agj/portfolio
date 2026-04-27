@@ -399,6 +399,7 @@ viewMain model =
                             ifElse (layoutFormat == PhoneLayout)
                                 (worksBlockWidth - (2 * Palette.spaceSmall))
                                 worksBlockWidth
+                        , currentTag = model.query.tag
                         , labels = labels
                         , works = getCurrentWorks model.language model.query data
                         , settings = settings
@@ -695,22 +696,30 @@ viewPopupVisual viewport visual showingDegree =
 -- VIEW WORKS
 
 
-viewWorks : { blockWidth : Int, labels : Labels Msg, works : List Work, settings : Settings } -> Ui.Element Msg
-viewWorks { blockWidth, labels, works, settings } =
-    if List.isEmpty works then
-        viewLoadMessage labels.pleaseSelect
-
-    else
-        Ui.column
-            [ Ui.width Ui.fill
-            , Ui.spacing Palette.spaceNormal
-            ]
-            (List.concat
-                [ works
-                    |> List.map (viewWork blockWidth labels settings)
-                , [ viewLoadMessage (labels.thatsAll { onClearTag = ClearedTag }) ]
+viewWorks :
+    { blockWidth : Int
+    , currentTag : Maybe Tag
+    , labels : Labels Msg
+    , works : List Work
+    , settings : Settings
+    }
+    -> Ui.Element Msg
+viewWorks { blockWidth, currentTag, labels, works, settings } =
+    case currentTag of
+        Just tag ->
+            Ui.column
+                [ Ui.width Ui.fill
+                , Ui.spacing Palette.spaceNormal
                 ]
-            )
+                (List.concat
+                    [ works
+                        |> List.map (viewWork blockWidth labels settings)
+                    , [ viewLoadMessage (labels.thatsAll { tag = tag, onClearTag = ClearedTag }) ]
+                    ]
+                )
+
+        Nothing ->
+            viewLoadMessage labels.pleaseSelect
 
 
 viewWorkBlock : List (Ui.Attribute Msg) -> List (Ui.Element Msg) -> Ui.Element Msg
