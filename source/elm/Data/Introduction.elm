@@ -1,6 +1,6 @@
 module Data.Introduction exposing (ofLanguage)
 
-import Descriptor exposing (Url(..), bold, d, icon, iconStroke, l, makeTag, p, t)
+import Descriptor exposing (Url(..), bold, boldItalic, d, icon, iconStroke, italic, l, makeTag, p, t)
 import Element exposing (Element)
 import Language exposing (Language(..))
 import Tag exposing (Tag)
@@ -33,6 +33,13 @@ english tag =
             , t ". Thank you for taking a look at my "
             , bold (t "portfolio")
             , t "!"
+            ]
+        , p
+            [ italic (t "You will see a selection of my personal, student and work projects if you ")
+            , boldItalic (t "press any of the highlighted keywords below.")
+            , italic (t " Or you can choose to see ")
+            , italic (tag Tag.Any "all of them")
+            , italic (t " at once, regardless of category.")
             ]
         , p
             [ t "I’m based in Santiago, Chile. "
@@ -86,13 +93,6 @@ english tag =
             , t "."
             ]
         , p
-            [ t "You will see a selection of my personal, student and work projects if you "
-            , bold (t "press any of the highlighted keywords above.")
-            , t " Or you can choose to see "
-            , tag Tag.Any "all of them"
-            , t " at once, regardless of category."
-            ]
-        , p
             [ t "Get in touch! Send me an email at "
             , bold (t "ale")
             , iconStroke View.Icon.At
@@ -113,6 +113,14 @@ japanese tag =
             , t "の"
             , bold (t "ポートフォリオ")
             , t "をご覧いただきありがとうございます！"
+            ]
+        , p
+            [ t "【注："
+            , bold (t "下記の強調表示されたキーワードを一つ押して")
+            , t "いただければ、関連する私の作ってきた作品やプロジェクトをいくつかご覧いただけます。"
+            , t "分類を問わず"
+            , tag Tag.Any "全てを一気に"
+            , t "見ることもできます。】"
             ]
         , p
             [ t "私は拠点を南米チリのサンティアゴにする者です。"
@@ -168,13 +176,6 @@ japanese tag =
             , t "こともあります。"
             ]
         , p
-            [ bold (t "上記に強調表示されたキーワードを一つ押して")
-            , t "おけば、関連する私の作ってきた作品やプロジェクトをいくつかご覧いただけます。"
-            , t "分類を問わず"
-            , tag Tag.Any "全てを一気に"
-            , t "見ることもできます。"
-            ]
-        , p
             [ t "気楽にご連絡ください！連絡先はＥメールの "
             , bold (t "ale")
             , iconStroke View.Icon.At
@@ -196,6 +197,14 @@ spanish tag =
             , t ". ¡Gracias por revisar mi "
             , bold (t "portafolio")
             , t "!"
+            ]
+        , p
+            [ italic (t "Si ")
+            , boldItalic (t "apretas alguna de las palabras destacadas de abajo")
+            , italic (t " verás algunos ejemplos de cosas relacionadas que hecho. ")
+            , italic (t "También puedes elegir verlas ")
+            , italic (tag Tag.Any "todas juntas")
+            , italic (t ", sin distinguir por categoría.")
             ]
         , p
             [ t "Vivo en Santiago de Chile. "
@@ -249,14 +258,6 @@ spanish tag =
             , t ". También me ha tocado "
             , tag Tag.LanguageTeaching "enseñar idiomas"
             , t "."
-            ]
-        , p
-            [ t "Si "
-            , bold (t "apretas alguna de las palabras destacadas de arriba")
-            , t " verás algunos ejemplos de cosas relacionadas que hecho. "
-            , t "También puedes elegir verlos "
-            , tag Tag.Any "todos juntos"
-            , t ", sin distinguir por categoría."
             ]
         , p
             [ t "¡Contáctame! Me puedes mandar un correo a "

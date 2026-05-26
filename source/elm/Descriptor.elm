@@ -1,10 +1,12 @@
 module Descriptor exposing
     ( Url(..)
     , bold
+    , boldItalic
     , d
     , fromDoc
     , icon
     , iconStroke
+    , italic
     , l
     , lineBreak
     , list
@@ -111,6 +113,25 @@ bold : Element msg -> Element msg
 bold child =
     el
         [ Font.bold
+        , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
+        ]
+        child
+
+
+italic : Element msg -> Element msg
+italic child =
+    el
+        [ Font.italic
+        , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
+        ]
+        child
+
+
+boldItalic : Element msg -> Element msg
+boldItalic child =
+    el
+        [ Font.bold
+        , Font.italic
         , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
         ]
         child
