@@ -31,9 +31,10 @@ import Html
 import Html.Attributes
 import Palette
 import Tag exposing (Tag)
+import Util.Bool as Bool
 import Util.Color as Color
 import Util.Element as Ui
-import Utils exposing (fraction, ifElse)
+import Util.Int as Int
 import View.Icon
 
 
@@ -59,13 +60,13 @@ makeTag messenger selectedTag tag label =
                     False
     in
     el
-        [ ifElse isSelectedTag
+        [ Bool.ifElse isSelectedTag
             (Background.color (Palette.baseColorAt10 |> Color.toElmUi))
             (Background.color (Palette.baseColorAt70 |> Color.toElmUi))
-        , Font.color (ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi))
+        , Font.color (Bool.ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi))
         , paddingXY
-            (fraction 0.3 Palette.textSizeNormal)
-            (fraction 0.1 Palette.textSizeNormal)
+            (Int.fraction 0.3 Palette.textSizeNormal)
+            (Int.fraction 0.1 Palette.textSizeNormal)
         , Element.Events.onClick (messenger tag)
         , pointer
         , mouseDown
@@ -142,7 +143,7 @@ list children =
     let
         toRow : Element msg -> Element msg
         toRow child =
-            row [ spacing (fraction 0.3 Palette.textSizeNormal) ]
+            row [ spacing (Int.fraction 0.3 Palette.textSizeNormal) ]
                 [ text "→"
                 , child
                 ]
@@ -152,7 +153,7 @@ list children =
             List.map toRow children
     in
     column
-        [ paddingXY 0 (fraction 0.5 Palette.textSizeNormal)
+        [ paddingXY 0 (Int.fraction 0.5 Palette.textSizeNormal)
         , spacing (Palette.textLineSpacing Palette.textSizeNormal)
         ]
         rows
@@ -237,8 +238,8 @@ fromText color txt =
 
 getStyle : Format -> List (Element.Attribute msg)
 getStyle format =
-    ifElse (Format.isBold format) [ Font.bold ] []
-        ++ ifElse (Format.isItalic format) [ Font.italic ] []
+    Bool.ifElse (Format.isBold format) [ Font.bold ] []
+        ++ Bool.ifElse (Format.isItalic format) [ Font.italic ] []
 
 
 linkStyle : List (Element.Attribute msg)
@@ -251,8 +252,8 @@ linkStyle =
 
 iconWithStyle : View.Icon.Style -> View.Icon.IconName -> Element msg
 iconWithStyle style iconName =
-    Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
-        (View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
+    Element.el [ Element.paddingXY (Int.fraction 0.1 Palette.textSizeNormal) 0 ]
+        (View.Icon.icon iconName (Int.fraction 1.4 Palette.textSizeNormal)
             |> View.Icon.withStyle style
             |> View.Icon.view
         )

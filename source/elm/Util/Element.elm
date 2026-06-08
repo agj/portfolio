@@ -6,6 +6,7 @@ module Util.Element exposing
     , imageInline
     , inlineCenter
     , radialGradient
+    , sides
     , style
     , svgFilter
     )
@@ -13,6 +14,15 @@ module Util.Element exposing
 import Color exposing (Color)
 import Element exposing (Element, image)
 import Html.Attributes as Attributes
+
+
+sides : { left : number, right : number, top : number, bottom : number }
+sides =
+    { left = 0
+    , right = 0
+    , top = 0
+    , bottom = 0
+    }
 
 
 
