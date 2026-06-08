@@ -1,7 +1,7 @@
 module Data.Labels exposing (Labels, ofLanguage)
 
 import Descriptor exposing (icon, iconStroke, lineBreak, oscillate, p, t)
-import Element exposing (Element)
+import Element as Ui
 import Language exposing (Language(..))
 import Tag exposing (Tag)
 import View.Icon
@@ -12,10 +12,10 @@ type alias Labels msg =
     , readMoreEnglish : String
     , readMoreJapanese : String
     , readMoreSpanish : String
-    , loading : Element msg
-    , loadError : Element msg
-    , pleaseSelect : Element msg
-    , thatsAll : { tag : Tag, onClearTag : msg } -> Element msg
+    , loading : Ui.Element msg
+    , loadError : Ui.Element msg
+    , pleaseSelect : Ui.Element msg
+    , thatsAll : { tag : Tag, onClearTag : msg } -> Ui.Element msg
     }
 
 

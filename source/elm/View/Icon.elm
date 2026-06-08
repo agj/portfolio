@@ -7,7 +7,7 @@ module View.Icon exposing
     , withStyle
     )
 
-import Element exposing (Element)
+import Element as Ui
 import Element.Font
 import Html.Attributes
 import Phosphor
@@ -53,7 +53,7 @@ withStyle style (Icon config) =
     Icon { config | style = style }
 
 
-view : Icon -> Element msg
+view : Icon -> Ui.Element msg
 view (Icon config) =
     let
         phosphorIcon : Phosphor.Icon
@@ -110,8 +110,8 @@ view (Icon config) =
                 StyleStroke ->
                     Phosphor.Bold
     in
-    Element.el [ Element.Font.size config.size ]
+    Ui.el [ Element.Font.size config.size ]
         (phosphorIcon style
             |> Phosphor.toHtml [ Html.Attributes.style "vertical-align" "middle" ]
-            |> Element.html
+            |> Ui.html
         )
