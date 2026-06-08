@@ -1,4 +1,4 @@
-module CustomEl exposing
+module Util.Element exposing
     ( backgroundColor
     , glow
     , iOsTextScalingFix

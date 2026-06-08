@@ -6,7 +6,6 @@ import Browser
 import Browser.Events
 import Browser.Navigation as Navigation
 import Color exposing (Color)
-import CustomEl
 import Data.Introduction as Introduction
 import Data.Labels as Labels exposing (Labels)
 import Data.Settings as Settings exposing (Settings)
@@ -33,6 +32,7 @@ import Time
 import Url exposing (Url)
 import Util.AppUrl as AppUrl
 import Util.Color as Color
+import Util.Element as Ui
 import Utils exposing (fraction, ifElse, sides)
 import VideoEmbed
 import View.CssSvg as CssSvg
@@ -387,7 +387,7 @@ viewMain model =
                     )
                     0
                 , Ui.spacing Palette.spaceNormal
-                , CustomEl.id "works"
+                , Ui.id "works"
                 ]
 
         content : Ui.Element Msg
@@ -786,14 +786,14 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 [ Ui.width (Ui.px blockWidth)
                 , Ui.height (Ui.px (round (toFloat blockWidth / settings.mainVisualAspectRatio)))
                 , UiBackground.image mainVisualUrl
-                , CustomEl.backgroundColor colorAt70
+                , Ui.backgroundColor colorAt70
                 ]
 
         iconsBlock : Ui.Element msg
         iconsBlock =
             Ui.row
                 [ Ui.paddingXY Palette.spaceNormal Palette.spaceSmall
-                , CustomEl.style "flex-basis" "auto"
+                , Ui.style "flex-basis" "auto"
                 ]
                 [ viewIcon mainVisualColor View.Icon.VisualCommunication icons.visualCommunication
                 , viewIcon mainVisualColor View.Icon.Programming icons.programming
@@ -824,7 +824,7 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 , Ui.paddingXY 0 0
                 , UiFont.size Palette.textSizeSmall
                 , UiFont.bold
-                , CustomEl.glow
+                , Ui.glow
                     { color = mainVisualColor |> Palette.colorAt70
                     , strength = 5.0
                     , size = 3.0
@@ -837,7 +837,7 @@ viewWorkTitle blockWidth { title, date, mainVisualUrl, mainVisualColor, icons, s
                 [ Ui.alignBottom
                 , Ui.paddingXY 0 Palette.spaceSmaller
                 , UiFont.size Palette.textSizeLarge
-                , CustomEl.glow
+                , Ui.glow
                     { color = mainVisualColor |> Palette.colorAt70
                     , strength = 5.0
                     , size = 3.0
@@ -1042,7 +1042,7 @@ icon : Int -> Color -> IconName -> Ui.Element msg
 icon size color iconName =
     Ui.el
         [ Ui.padding (fraction 0.1 size)
-        , CustomEl.radialGradient
+        , Ui.radialGradient
             [ ( 0.5, color |> Palette.colorAt70 |> Color.setOpacity 0.9 )
             , ( 1, color |> Palette.colorAt70 |> Color.setOpacity 0 )
             ]

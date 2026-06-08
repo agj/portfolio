@@ -18,7 +18,6 @@ module Descriptor exposing
     )
 
 import Color exposing (Color)
-import CustomEl
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
 import Doc.Link as Link
@@ -33,6 +32,7 @@ import Html.Attributes
 import Palette
 import Tag exposing (Tag)
 import Util.Color as Color
+import Util.Element as Ui
 import Utils exposing (fraction, ifElse)
 import View.Icon
 
@@ -82,7 +82,7 @@ p children =
         [ Font.size Palette.textSizeNormal
         , paddingXY 0 10
         , spacing (Palette.textLineSpacing Palette.textSizeNormal)
-        , CustomEl.iOsTextScalingFix
+        , Ui.iOsTextScalingFix
         ]
         children
 
