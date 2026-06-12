@@ -117,9 +117,9 @@ japanese =
 
             else
                 p
-                    [ t "以上「"
+                    [ t "以上『"
                     , t (Tag.name Japanese tag)
-                    , t "」に関連する項目でした。"
+                    , t "』に関連する項目でした。"
                     , iconStroke View.Icon.Check
                     , lineBreak
                     , t "また別のキーワードを選択してみますか？"
