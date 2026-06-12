@@ -1,16 +1,16 @@
 module Util.Color exposing (setOpacity, toElmUi)
 
 import Color exposing (Color)
-import Element
+import Element as Ui
 
 
-toElmUi : Color -> Element.Color
+toElmUi : Color -> Ui.Color
 toElmUi color =
     let
         { red, green, blue, alpha } =
             Color.toRgba color
     in
-    Element.rgba red green blue alpha
+    Ui.rgba red green blue alpha
 
 
 setOpacity : Float -> Color -> Color

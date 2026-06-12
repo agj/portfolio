@@ -1,13 +1,13 @@
 module Data.Introduction exposing (ofLanguage)
 
 import Descriptor exposing (Url(..), bold, boldItalic, d, icon, iconStroke, italic, l, makeTag, p, t)
-import Element exposing (Element)
+import Element as Ui
 import Language exposing (Language(..))
 import Tag exposing (Tag)
 import View.Icon
 
 
-ofLanguage : (Tag -> msg) -> Maybe Tag -> Language -> Element msg
+ofLanguage : (Tag -> msg) -> Maybe Tag -> Language -> Ui.Element msg
 ofLanguage tagMessenger selectedTag language =
     case language of
         English ->
@@ -24,7 +24,7 @@ ofLanguage tagMessenger selectedTag language =
 -- ACTUAL DATA
 
 
-english : (Tag -> String -> Element msg) -> Element msg
+english : (Tag -> String -> Ui.Element msg) -> Ui.Element msg
 english tag =
     d
         [ p
@@ -105,7 +105,7 @@ english tag =
         ]
 
 
-japanese : (Tag -> String -> Element msg) -> Element msg
+japanese : (Tag -> String -> Ui.Element msg) -> Ui.Element msg
 japanese tag =
     d
         [ p
@@ -115,7 +115,7 @@ japanese tag =
             , t "をご覧いただきありがとうございます！"
             ]
         , p
-            [ t "【注："
+            [ t "【※"
             , bold (t "下記の強調表示されたキーワードを一つ押して")
             , t "いただければ、関連する私の作ってきた作品やプロジェクトをいくつかご覧いただけます。"
             , t "分類を問わず"
@@ -188,7 +188,7 @@ japanese tag =
         ]
 
 
-spanish : (Tag -> String -> Element msg) -> Element msg
+spanish : (Tag -> String -> Ui.Element msg) -> Ui.Element msg
 spanish tag =
     d
         [ p

@@ -1,6 +1,6 @@
 module VideoEmbed exposing (get)
 
-import Element as Ui exposing (Element)
+import Element as Ui
 import Element.Background as UiBackground
 import Html exposing (iframe)
 import Html.Attributes exposing (attribute, src, style)
@@ -10,10 +10,10 @@ import View.CssSvg as CssSvg
 import Work.Visual exposing (VideoDescription, VideoHost(..), VideoParameter)
 
 
-get : VideoDescription -> Int -> Int -> Element msg
+get : VideoDescription -> Int -> Int -> Ui.Element msg
 get desc width height =
     let
-        makeElement : String -> Element msg
+        makeElement : String -> Ui.Element msg
         makeElement theSrc =
             iframe
                 [ src theSrc

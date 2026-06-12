@@ -18,13 +18,12 @@ module Descriptor exposing
     )
 
 import Color exposing (Color)
-import CustomEl
 import Doc exposing (Doc)
 import Doc.Format as Format exposing (Format)
 import Doc.Link as Link
 import Doc.Paragraph as Paragraph exposing (Paragraph)
 import Doc.Text as Text exposing (Text)
-import Element exposing (Element, column, el, fill, html, mouseDown, newTabLink, paddingXY, paragraph, pointer, row, spacing, text, textColumn, width)
+import Element as Ui
 import Element.Background as Background
 import Element.Events
 import Element.Font as Font
@@ -32,8 +31,10 @@ import Html
 import Html.Attributes
 import Palette
 import Tag exposing (Tag)
+import Util.Bool as Bool
 import Util.Color as Color
-import Utils exposing (fraction, ifElse)
+import Util.Element as Ui
+import Util.Int as Int
 import View.Icon
 
 
@@ -41,12 +42,12 @@ type Url
     = Url String
 
 
-d : List (Element msg) -> Element msg
+d : List (Ui.Element msg) -> Ui.Element msg
 d =
-    textColumn [ width fill ]
+    Ui.textColumn [ Ui.width Ui.fill ]
 
 
-makeTag : (Tag -> msg) -> Maybe Tag -> Tag -> String -> Element msg
+makeTag : (Tag -> msg) -> Maybe Tag -> Tag -> String -> Ui.Element msg
 makeTag messenger selectedTag tag label =
     let
         isSelectedTag : Bool
@@ -58,78 +59,78 @@ makeTag messenger selectedTag tag label =
                 Nothing ->
                     False
     in
-    el
-        [ ifElse isSelectedTag
+    Ui.el
+        [ Bool.ifElse isSelectedTag
             (Background.color (Palette.baseColorAt10 |> Color.toElmUi))
             (Background.color (Palette.baseColorAt70 |> Color.toElmUi))
-        , Font.color (ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi))
-        , paddingXY
-            (fraction 0.3 Palette.textSizeNormal)
-            (fraction 0.1 Palette.textSizeNormal)
+        , Font.color (Bool.ifElse isSelectedTag (Palette.baseColorAt90 |> Color.toElmUi) (Palette.baseColorAt10 |> Color.toElmUi))
+        , Ui.paddingXY
+            (Int.fraction 0.3 Palette.textSizeNormal)
+            (Int.fraction 0.1 Palette.textSizeNormal)
         , Element.Events.onClick (messenger tag)
-        , pointer
-        , mouseDown
+        , Ui.pointer
+        , Ui.mouseDown
             [ Background.color (Palette.baseColorAt10 |> Color.toElmUi)
             , Font.color (Palette.baseColorAt90 |> Color.toElmUi)
             ]
         ]
-        (text label)
+        (Ui.text label)
 
 
-p : List (Element msg) -> Element msg
+p : List (Ui.Element msg) -> Ui.Element msg
 p children =
-    paragraph
+    Ui.paragraph
         [ Font.size Palette.textSizeNormal
-        , paddingXY 0 10
-        , spacing (Palette.textLineSpacing Palette.textSizeNormal)
-        , CustomEl.iOsTextScalingFix
+        , Ui.paddingXY 0 10
+        , Ui.spacing (Palette.textLineSpacing Palette.textSizeNormal)
+        , Ui.iOsTextScalingFix
         ]
         children
 
 
-t : String -> Element msg
+t : String -> Ui.Element msg
 t =
-    text
+    Ui.text
 
 
-l : String -> Url -> Element msg
+l : String -> Url -> Ui.Element msg
 l textContent (Url url) =
-    newTabLink linkStyle
+    Ui.newTabLink linkStyle
         { label = t textContent
         , url = url
         }
 
 
-onClick : msg -> Element msg -> Element msg
+onClick : msg -> Ui.Element msg -> Ui.Element msg
 onClick msg label =
-    el
+    Ui.el
         (linkStyle
             ++ [ Element.Events.onClick msg ]
         )
         label
 
 
-bold : Element msg -> Element msg
+bold : Ui.Element msg -> Ui.Element msg
 bold child =
-    el
+    Ui.el
         [ Font.bold
         , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
         ]
         child
 
 
-italic : Element msg -> Element msg
+italic : Ui.Element msg -> Ui.Element msg
 italic child =
-    el
+    Ui.el
         [ Font.italic
         , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
         ]
         child
 
 
-boldItalic : Element msg -> Element msg
+boldItalic : Ui.Element msg -> Ui.Element msg
 boldItalic child =
-    el
+    Ui.el
         [ Font.bold
         , Font.italic
         , Font.color (Palette.baseColorAt10 |> Color.toElmUi)
@@ -137,69 +138,69 @@ boldItalic child =
         child
 
 
-list : List (Element msg) -> Element msg
+list : List (Ui.Element msg) -> Ui.Element msg
 list children =
     let
-        toRow : Element msg -> Element msg
+        toRow : Ui.Element msg -> Ui.Element msg
         toRow child =
-            row [ spacing (fraction 0.3 Palette.textSizeNormal) ]
-                [ text "→"
+            Ui.row [ Ui.spacing (Int.fraction 0.3 Palette.textSizeNormal) ]
+                [ Ui.text "→"
                 , child
                 ]
 
-        rows : List (Element msg)
+        rows : List (Ui.Element msg)
         rows =
             List.map toRow children
     in
-    column
-        [ paddingXY 0 (fraction 0.5 Palette.textSizeNormal)
-        , spacing (Palette.textLineSpacing Palette.textSizeNormal)
+    Ui.column
+        [ Ui.paddingXY 0 (Int.fraction 0.5 Palette.textSizeNormal)
+        , Ui.spacing (Palette.textLineSpacing Palette.textSizeNormal)
         ]
         rows
 
 
-lineBreak : Element msg
+lineBreak : Ui.Element msg
 lineBreak =
     Html.br [] []
-        |> Element.html
+        |> Ui.html
 
 
-icon : View.Icon.IconName -> Element msg
+icon : View.Icon.IconName -> Ui.Element msg
 icon =
     iconWithStyle View.Icon.StyleFilled
 
 
-iconStroke : View.Icon.IconName -> Element msg
+iconStroke : View.Icon.IconName -> Ui.Element msg
 iconStroke =
     iconWithStyle View.Icon.StyleStroke
 
 
-oscillate : Element msg -> Element msg
+oscillate : Ui.Element msg -> Ui.Element msg
 oscillate el =
-    Element.el
+    Ui.el
         [ Html.Attributes.class "oscillate"
-            |> Element.htmlAttribute
+            |> Ui.htmlAttribute
         , Html.Attributes.style "display" "inline-block"
-            |> Element.htmlAttribute
+            |> Ui.htmlAttribute
         ]
         el
 
 
-fromDoc : Color -> Doc -> Element msg
+fromDoc : Color -> Doc -> Ui.Element msg
 fromDoc color doc =
-    textColumn [ width fill ] (List.map (fromParagraph color) (Doc.content doc))
+    Ui.textColumn [ Ui.width Ui.fill ] (List.map (fromParagraph color) (Doc.content doc))
 
 
 
 -- INTERNAL
 
 
-fromParagraph : Color -> Paragraph -> Element msg
+fromParagraph : Color -> Paragraph -> Ui.Element msg
 fromParagraph color par =
     p (List.map (fromText color) (Paragraph.content par))
 
 
-fromText : Color -> Text -> Element msg
+fromText : Color -> Text -> Ui.Element msg
 fromText color txt =
     let
         textContent : String
@@ -212,7 +213,7 @@ fromText color txt =
     in
     case ( Format.link format, getStyle format ) of
         ( Just lnk, style ) ->
-            newTabLink
+            Ui.newTabLink
                 (linkStyle ++ style)
                 { label = t textContent
                 , url = Link.url lnk
@@ -220,7 +221,7 @@ fromText color txt =
 
         ( Nothing, [] ) ->
             if Format.isCode format then
-                html
+                Ui.html
                     (Html.span
                         [ Html.Attributes.style "white-space" "pre"
                         , Html.Attributes.style "font-family" "monospace"
@@ -232,27 +233,27 @@ fromText color txt =
                 t textContent
 
         ( Nothing, style ) ->
-            el style (t textContent)
+            Ui.el style (t textContent)
 
 
-getStyle : Format -> List (Element.Attribute msg)
+getStyle : Format -> List (Ui.Attribute msg)
 getStyle format =
-    ifElse (Format.isBold format) [ Font.bold ] []
-        ++ ifElse (Format.isItalic format) [ Font.italic ] []
+    Bool.ifElse (Format.isBold format) [ Font.bold ] []
+        ++ Bool.ifElse (Format.isItalic format) [ Font.italic ] []
 
 
-linkStyle : List (Element.Attribute msg)
+linkStyle : List (Ui.Attribute msg)
 linkStyle =
     [ Font.underline
-    , pointer
-    , mouseDown [ Font.color (Palette.baseColorAt10 |> Color.toElmUi) ]
+    , Ui.pointer
+    , Ui.mouseDown [ Font.color (Palette.baseColorAt10 |> Color.toElmUi) ]
     ]
 
 
-iconWithStyle : View.Icon.Style -> View.Icon.IconName -> Element msg
+iconWithStyle : View.Icon.Style -> View.Icon.IconName -> Ui.Element msg
 iconWithStyle style iconName =
-    Element.el [ Element.paddingXY (fraction 0.1 Palette.textSizeNormal) 0 ]
-        (View.Icon.icon iconName (fraction 1.4 Palette.textSizeNormal)
+    Ui.el [ Ui.paddingXY (Int.fraction 0.1 Palette.textSizeNormal) 0 ]
+        (View.Icon.icon iconName (Int.fraction 1.4 Palette.textSizeNormal)
             |> View.Icon.withStyle style
             |> View.Icon.view
         )
