@@ -56,9 +56,9 @@ config =
     , NoUnused.Dependencies.rule
     , NoUnused.Exports.rule
         |> Rule.ignoreErrorsFor
-            [ FilePattern.exclude "source/elm/CustomEl.elm"
-            , FilePattern.exclude "source/elm/Descriptor.elm"
+            [ FilePattern.exclude "source/elm/Descriptor.elm"
             , FilePattern.exclude "source/elm/Palette.elm"
+            , FilePattern.exclude "source/elm/Util/**/*.elm"
             ]
     , NoUnused.Parameters.rule
     , NoUnused.Patterns.rule
